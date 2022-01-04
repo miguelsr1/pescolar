@@ -1,0 +1,28 @@
+body .ui-datatable.ui-datatable-striped .ui-datatable-data > tr.ui-datatable-odd {
+    background: #f8f9fa;
+}
+
+@media (max-width: 640px) {
+    .ui-datatable-reflow .ui-datatable-data td[role="gridcell"] .ui-column-title {
+        padding: .4em;
+        min-width: 30%;
+        display: inline-block;
+        margin: -.4em 1em -.4em -.4em;
+        font-weight: bold !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .products-table > .ui-datatable-tablewrapper > table > thead > tr > th:nth-child(2) .ui-column-title,
+    .products-table > .ui-datatable-tablewrapper > table > tbody > tr > td:nth-child(2) .ui-column-title {
+        display: none !important;
+    }
+
+    .products-buttonbar {
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+    .products-buttonbar > div:last-child {
+        margin-top: 0.5rem;
+    }
+}
