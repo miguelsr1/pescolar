@@ -32,6 +32,7 @@ public class DetalleOfertaView implements Serializable {
 
     private int rowEdit = 0;
     private String numItem;
+    private Boolean editable = false;
 
     private BigDecimal montoTotal = BigDecimal.ZERO;
     private BigDecimal cantidadTotal = BigDecimal.ZERO;
@@ -59,6 +60,20 @@ public class DetalleOfertaView implements Serializable {
         params.put("codigoEntidad", resAdj.getIdParticipante().getIdOferta().getCodigoEntidad().getCodigoEntidad());
         params.put("idDetProcesoAdq", resAdj.getIdParticipante().getIdOferta().getIdDetProcesoAdq());
         techo = (TechoRubroEntEdu) detalleOfertaRepo.findListByParam(TechoRubroEntEdu.class, params).get(0);
+        
+        switch(resAdj.getIdEstadoReserva().getId().intValue()){
+            case 1:
+            case 3:
+                editable = true;
+                break;
+            default:
+                editable = false;
+                break;
+        }
+    }
+
+    public Boolean getEditable() {
+        return editable;
     }
 
     public int getRowEdit() {

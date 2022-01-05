@@ -12,7 +12,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import sv.gob.mined.pescolar.model.Participante;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 
 /**
@@ -44,7 +43,7 @@ public class DetalleOfertaRepo {
         
         Query query = em.createQuery(cr);
 
-        return (ResolucionesAdjudicativa) query.getResultList().get(0);
+        return (ResolucionesAdjudicativa) query.getSingleResult();
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Table(name = "PERSONA")
 @Entity
 public class Persona implements Serializable {
+
     @Id
     @Column(name = "ID_PERSONA", nullable = false)
     private Long id;
@@ -115,6 +116,9 @@ public class Persona implements Serializable {
 
     @Column(name = "CODIGO_CANTON", length = 2)
     private String codigoCanton;
+
+    @Transient
+    private String nombreCompleto;
 
     public String getCodigoCanton() {
         return codigoCanton;
@@ -394,5 +398,45 @@ public class Persona implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    private String getApellidos() {
+        if (acasada == null) {
+            if (segundoApellido == null) {
+                if (primerApellido == null) {
+                    return "";
+                } else {
+                    return primerApellido;
+                }
+            } else {
+                return primerApellido + " " + segundoApellido;
+            }
+        } else {
+            return primerApellido + " " + acasada;
+        }
+    }
+
+    private String getNombres() {
+        if (segundoNombre == null) {
+            if (primerNombre == null) {
+                return "";
+            } else {
+                return primerNombre;
+            }
+        } else {
+            return primerNombre + " " + segundoNombre;
+        }
+    }
+
+    public String getNombreCompletoProveedor() {
+        return getNombres() + " " + getApellidos();
+    }
+
+    public String getNombreCompleto() {
+        if (getUsuario().isEmpty()) {
+            return "";
+        } else {
+            return getNombres() + " " + getApellidos() + " (" + getUsuario() + ")";
+        }
     }
 }

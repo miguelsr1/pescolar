@@ -110,7 +110,7 @@
         <h:form id="form" prependId="false">
             <div class="principal" id="principal">
                 <div class="p-grid">
-                    <div class="p-col-12 p-md-8 divSticky">
+                    <div class="p-col-12 p-md-8 ">
                         <div class="card ui-fluid" id="dvDatos">
                             <h5 id="tituloDatos">Datos Generales:</h5>
 
@@ -145,7 +145,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-col-12 p-md-4 divSticky">
+                    <div class="p-col-12 p-md-4 ">
                         <div class="card ui-fluid" id="dvPresupuesto">
                             <h5 id="tituloPresupuesto">Presupuesto del C.E.:</h5>
                             <p:panelGrid id="pnlSaldos" columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank" >
@@ -212,10 +212,10 @@
                                 <h5>Detalle de contratación:</h5>
                                 <p:commandButton id="btnAgregar" value="Agregar" icon="pi pi-plus-circle" styleClass="rounded-button p-mr-2 p-mb-2"
                                                  update="tblDetalleOferta" style="float: right; font-size: 12px; width: 100px"
-                                                 action="#{detalleOfertaView.agregarDetalle()}"/>
+                                                 action="#{detalleOfertaView.agregarDetalle()}" disabled="#{not detalleOfertaView.editable}"/>
                             </div>
                             <p:dataTable id="tblDetalleOferta" value="#{detalleOfertaView.resAdj.idParticipante.detalleOfertasList}" 
-                                         var="detalle" reflow="true" editable="true" editMode="cell" rowIndexVar="rowId"
+                                         var="detalle" reflow="true" editable="#{detalleOfertaView.editable}" editMode="cell" rowIndexVar="rowId"
                                          styleClass="ui-datatable-striped" widgetVar="tblDetalleOferta">
 
                                 <p:ajax id="event" event="cellEdit" onsuccess="updDetalleOferta();"/>
@@ -257,7 +257,8 @@
                                 </p:column>
 
                                 <p:column exportable="false" width="20">
-                                    <p:commandButton class="ui-button-warning rounded-button" update="tblDetalleOferta" icon="pi pi-trash" process="@this" action="#{detalleOfertaView.eliminarDetalle()}">
+                                    <p:commandButton class="ui-button-warning rounded-button" update="tblDetalleOferta" icon="pi pi-trash" process="@this" 
+                                                     action="#{detalleOfertaView.eliminarDetalle()}" disabled="#{not detalleOfertaView.editable}">
                                         <f:setPropertyActionListener value="#{detalle}" target="#{detalleOfertaView.detalleSeleccionado}"/>
                                         <f:setPropertyActionListener value="#{rowId}" target="#{detalleOfertaView.rowEdit}"/>
                                     </p:commandButton>

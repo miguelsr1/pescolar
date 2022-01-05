@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <script type="text/javascript">
+
+        </script>
+
+        <style type="text/css">
+            .layout-wrapper .layout-main .layout-content #principal > div {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .p-field {
+                margin-bottom: 1rem !important;
+            }
+            .p-mb-6 {
+                margin-bottom: 0rem !important;
+            }
+            .p-mb-4 {
+                margin-bottom: 0rem !important;
+            }
+            .p-mb-3 {
+                margin-bottom: 0rem !important;
+            }
+            @media (max-width: 960px) {
+                .p-field {
+                    margin-bottom: 0.5rem !important;
+                }
+                .p-mb-2 {
+                    margin-bottom: 0rem !important;
+                }
+                .p-mb-4 {
+                    margin-bottom: 0rem !important;
+                }
+                .p-mb-6 {
+                    margin-bottom: 0rem !important;
+                }
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">Contrato</ui:define>
+    <ui:define name="content">
+        <h:form id="form" prependId="false">
+            <div class="principal" id="principal">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <div class="card ui-fluid" id="dvDatos">
+                            <h5 id="tituloDatos">Datos Generales:</h5>
+                            <div class="ui-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Centro educativo</p:outputLabel>
+                                        <div class="p-col-12 p-md-9" style="font-weight: bold;">
+                                            <p:outputLabel> #{contratoView.contrato.idResolucionAdj.idParticipante.idOferta.codigoEntidad.codigoEntidad} - #{contratoView.contrato.idResolucionAdj.idParticipante.idOferta.codigoEntidad.nombre}</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Rubro de adquisición</p:outputLabel>
+                                        <div class="p-col-12 p-md-8" style="font-weight: bold;">
+                                            <p:outputLabel>#{contratoView.contrato.idResolucionAdj.idParticipante.idOferta.idDetProcesoAdq.idRubroAdq.descripcionRubro}"</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Proveedor</p:outputLabel>
+                                        <div class="p-col-12 p-md-9" style="font-weight: bold;">
+                                            <p:outputLabel>#{contratoView.contrato.idResolucionAdj.idParticipante.idEmpresa.razonSocial}</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Ciudad de Firma</p:outputLabel>
+                                        <div class="p-col-12 p-md-8" style="font-weight: bold;">
+                                            <p:outputLabel>#{contratoView.contrato.ciudadFirma}</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Repre. del O.A.E.</p:outputLabel>
+                                        <div class="p-col-12 p-md-9" style="font-weight: bold;">
+                                            <p:inputText /> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Repre. Legal del Proveedor</p:outputLabel>
+                                        <div class="p-col-12 p-md-8" style="font-weight: bold;">
+                                            <p:outputLabel>#{contratoView.contrato.idResolucionAdj.idParticipante.idEmpresa.idPersona.nombreCompletoProveedor}</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ui-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-3">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-6 p-md-6 p-mb-md-0">Id. Contrato</p:outputLabel>
+                                        <div class="p-col-12 p-md-6" style="font-weight: bold;">
+                                            <p:inputText value="#{contratoView.contrato.id}" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-1">
+                                </div>
+                                <div class="p-field p-col-12 p-md-2">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-7 p-md-7 p-mb-md-0">Num. Contrato</p:outputLabel>
+                                        <div class="p-col-12 p-md-5" style="font-weight: bold;">
+                                            <p:inputText value="#{contratoView.contrato.numeroContrato}" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-1">
+                                </div>
+                                <div class="p-field p-col-12 p-md-3">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-6 p-md-6 p-mb-md-0">Fecha contrato</p:outputLabel>
+                                        <div class="p-col-12 p-md-6" style="font-weight: bold;">
+                                            <p:calendar value="#{contratoView.contrato.fechaEmision}" pattern="dd/MM/yyyy"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-2">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-8 p-md-8 p-mb-md-0">Plazo de entrega</p:outputLabel>
+                                        <div class="p-col-12 p-md-4" style="font-weight: bold;">
+                                            <p:inputText value="#{contratoView.contrato.plazoPrevistoEntrega}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card ui-fluid" id="dvDatos">
+                            <div class="p-grid">
+                                <div class="p-col-12">
+                                    <p:selectManyCheckbox value="#{contratoView.lstSelectDocumentosImp}" layout="responsive" columns="3" >
+                                        <f:selectItems value="#{contratoView.lstDocumentosImp}" var="doc" itemValue="#{doc.value}" itemLabel="#{doc.label}"/>
+                                    </p:selectManyCheckbox>
+
+                                    <p:separator/>
+
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0" for="@next">Análisis Técnico y Económico: </p:outputLabel>
+                                        <div class="p-col-12 p-md-1" style="font-weight: bold; text-align: left !important">
+                                            <p:commandLink action="#{contratoView.imprimirAnalisisEconomico}">
+                                                <i class="pi pi-download"></i>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        <h:outputStylesheet name="personalizadas.css" library="css"/>
+        <h:outputScript name="default.js" library="js"/>
+    </ui:define>
+</ui:composition>
