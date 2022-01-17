@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.jboss.spec.javax.faces:jboss-jsf-api_2.3_spec:3.0.0.SP04">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/spec/javax/faces/jboss-jsf-api_2.3_spec/3.0.0.SP04/jboss-jsf-api_2.3_spec-3.0.0.SP04.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/spec/javax/faces/jboss-jsf-api_2.3_spec/3.0.0.SP04/jboss-jsf-api_2.3_spec-3.0.0.SP04-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/spec/javax/faces/jboss-jsf-api_2.3_spec/3.0.0.SP04/jboss-jsf-api_2.3_spec-3.0.0.SP04-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

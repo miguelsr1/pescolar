@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <style>
+            .imgCandidato {
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+                margin: 2rem 0;
+            }
+
+            .card {
+                background: var(--surface-e);
+                padding: 0rem;
+                box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+                border-radius: 4px;
+                margin-bottom: 1.5rem;
+            }
+            .p-ai-center {
+                align-items: center;
+            }
+
+            .vertical-container {
+                margin: 0;
+                border-radius: 4px;
+            }
+
+            .imgBlackAndWhite {
+                -webkit-filter: grayscale(200%); /* Safari 6.0 - 9.0 */
+                filter: grayscale(200%);
+            }
+
+            .p-grid {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                margin-right: 0rem;
+                margin-left: 0rem;
+                margin-top: 0rem;
+            }
+
+            .custom-scrolltop.ui-scrolltop {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 4px;
+                outline: 0 none;
+                background-color: var(--primary-color);
+            }
+            .custom-scrolltop.ui-scrolltop:hover {
+                background-color: var(--primary-color);
+            }
+
+            .custom-scrolltop.ui-scrolltop .ui-scrolltop-icon {
+                font-size: 1rem;
+                color: var(--primary-color-text);
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Gestión Educativa - Votación CDE</ui:define>
+
+    <ui:define name="content">
+        <p:scrollTop id="clientId" style="margin-right: 170px; margin-bottom: 25px;" />
+
+        <div class="card">
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <i class="fa fa-user" aria-hidden="true" style="color: #006cd9; font-size: 16px;" />
+                    <p:spacer width="10"/>
+                    <p:outputLabel value="Listado de candidatos" style="color: #006cd9; font-size: 16px;" />
+                </div>
+                <ui:repeat id="proSec" var="candidato" varStatus="status" value="#{detalleVotacionView.lstCandidatos}" >
+                    <div class="p-col-12 p-md-3">
+                        <div class="card overview-box blue" style="position: relative">
+                            <div jsf:id="dvNotifyproSec" style="position: absolute; width: 100%; height: 30%;z-index: 1000" hidden="true">
+                                <p:avatar label="✓" styleClass="p-mr-2" style="background-color:#689F38; color: #ffffff; margin-top: 16px; margin-left: 117px;" shape="circle"  />
+                            </div>
+                            <h:panelGrid columns="2" style="width: 90%; margin: auto; text-align: center;">
+                                <p:graphicImage id="img_proSec" value="/DynamicImageServlet?file=#{candidato.codigoEmpleado}.png" width="100px" styleClass="imgCandidato imgBlackAndWhite"  /> 
+                                <p:outputPanel>
+                                    <p:outputLabel value="#{candidato.nombreEmpleado}"/>
+                                    <br/><br/>
+                                    <p:commandButton id="btn_proSec" value="Votar" iconPos="right" icon="pi pi-thumbs-up"  
+                                                     onclick="marcarEleccion('proSec',#{status.index}, 'success')" class="ui-button-secondary">
+
+                                    </p:commandButton>
+                                </p:outputPanel>
+                            </h:panelGrid>
+
+                        </div>
+                    </div>
+                </ui:repeat>
+            </div>
+
+            <div class="grid p-jc-center">
+                <div class="p-col-12">
+                    <p:commandButton value="Guardar"   onclick="PrimeFaces.scrollTo('clientId');"
+                                     icon="pi pi-save" style="margin-right: .5rem" >
+                    </p:commandButton>
+
+                    <p:commandButton value="Cancelar" icon="pi pi-times" action="inicio"/>
+                </div>
+            </div>
+        </div>
+
+
+
+        <p:remoteCommand name="cambiar" onsuccess="marcarEleccion()"/>
+
+        <p:dialog id="dlgVoto" widgetVar="dlgVoto" header="Información" modal="true" closable="true" resizable="false" width="230">
+            <p:outputPanel id="pnlVoto">
+                <i class="pi pi-info-circle" style="font-size: 18px; color: #006cd9;"></i>
+                <p:spacer width="15"/>
+                <p:outputLabel value="Su voto ha sido procesado" />
+            </p:outputPanel>
+            <f:facet name="footer">
+                <p:commandButton value="Aceptar" action="inicio"/>
+            </f:facet>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
