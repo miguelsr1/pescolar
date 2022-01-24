@@ -88,11 +88,10 @@
                                     <br/><br/>
                                     <p:commandButton id="btn_proSec" value="Votar" iconPos="right" icon="pi pi-thumbs-up"  
                                                      onclick="marcarEleccion('proSec',#{status.index}, 'success')" class="ui-button-secondary">
-
+                                        <f:setPropertyActionListener value="#{candidato.id}" target="#{detalleVotacionView.idPro1}" />
                                     </p:commandButton>
                                 </p:outputPanel>
                             </h:panelGrid>
-
                         </div>
                     </div>
                 </ui:repeat>
@@ -103,13 +102,10 @@
                     <p:commandButton value="Guardar"   onclick="PrimeFaces.scrollTo('clientId');"
                                      icon="pi pi-save" style="margin-right: .5rem" >
                     </p:commandButton>
-
                     <p:commandButton value="Cancelar" icon="pi pi-times" action="inicio"/>
                 </div>
             </div>
         </div>
-
-
 
         <p:remoteCommand name="cambiar" onsuccess="marcarEleccion()"/>
 

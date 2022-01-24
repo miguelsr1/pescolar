@@ -23,6 +23,8 @@ import sv.gob.mined.dhcomitesso.repository.CandidatoRepo;
 @ViewScoped
 public class DetalleVotacionView implements Serializable {
 
+    private String idPro1;
+
     private List<sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView> lstCandidatos = new ArrayList();
 
     @Inject
@@ -37,4 +39,11 @@ public class DetalleVotacionView implements Serializable {
         return lstCandidatos;
     }
 
+    public String getIdPro1() {
+        return idPro1;
+    }
+
+    public void setIdPro1(String idPro1) {
+        this.idPro1 = idPro1;
+    }
 }
