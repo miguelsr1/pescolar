@@ -88,7 +88,7 @@
                                     <br/><br/>
                                     <p:commandButton id="btn_proSec" value="Votar" iconPos="right" icon="pi pi-thumbs-up"  
                                                      onclick="marcarEleccion('proSec',#{status.index}, 'success')" class="ui-button-secondary">
-                                        <f:setPropertyActionListener value="#{candidato.id}" target="#{detalleVotacionView.idPro1}" />
+                                        <f:setPropertyActionListener value="#{candidato.id}" target="#{detalleVotacionView.idCandidato}" />
                                     </p:commandButton>
                                 </p:outputPanel>
                             </h:panelGrid>
@@ -99,7 +99,7 @@
 
             <div class="grid p-jc-center">
                 <div class="p-col-12">
-                    <p:commandButton value="Guardar"   onclick="PrimeFaces.scrollTo('clientId');"
+                    <p:commandButton value="Guardar" action="#{detalleVotacionView.guardar()}" onclick="PrimeFaces.scrollTo('clientId');"
                                      icon="pi pi-save" style="margin-right: .5rem" >
                     </p:commandButton>
                     <p:commandButton value="Cancelar" icon="pi pi-times" action="inicio"/>

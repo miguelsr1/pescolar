@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
@@ -13,6 +12,50 @@
             <meta name="apple-mobile-web-app-capable" content="yes"/>
         </f:facet>
         <title>DH - CSSO</title>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            /**
+             * Faces Validator
+             */
+            PrimeFaces.validator['custom.emailValidator'] = {
+
+                pattern: /\S+@\S+/,
+
+                validate: function (element, value) {
+                    //use element.data() to access validation metadata, in this case there is none.
+                    if (!this.pattern.test(value)) {
+                        throw {
+                            summary: 'Error de validación',
+                            detail: value + ' no es un correo valido.',
+                            severity: 'error'
+                        }
+                    }
+                }
+            };
+
+            /**
+             * Bean validator
+             */
+            PrimeFaces.validator['Email'] = {
+
+                pattern: /\S+@\S+/,
+
+                MESSAGE_ID: 'org.primefaces.examples.validate.email.message',
+
+                validate: function (element, value) {
+                    var vc = PrimeFaces.validation.ValidationContext;
+
+                    if (!this.pattern.test(value)) {
+                        var msgStr = element.data('p-email-msg'),
+                                msg = msgStr ? {summary: 'Validation Error', detail: msgStr, severity: 'error'} : vc.getMessage(this.MESSAGE_ID);
+
+                        throw msg;
+                    }
+                }
+            };
+            //]]>
+        </script>
     </h:head>
 
     <h:body styleClass="login-body">
@@ -44,16 +87,57 @@
                     </div>
                     <div class="p-col-12 chkbox-container">
                         <a href="">¿Olvidó su contraseña?</a>
+                        <p:commandLink value="Activar correo" onclick="PF('dlgActivarCorreo').show();" style="float: right; margin-right:" />
                     </div>
                     <div class="p-col-12 button-container">
                         <p:button value="Entrar" styleClass="ui-button-info ui-button-raised"/>
                     </div>
                 </div>
             </div>
+
+
+            <p:dialog header="Registrar usuario" id="dlgActivarCorreo" widgetVar="dlgActivarCorreo" modal="true" draggable="false" resizable="false" width="500">
+                <p:outputPanel id="pnlCuenta">
+                    <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
+                        <p:autoUpdate />
+                    </p:growl>
+
+                    <div class="p-grid ui-fluid">
+                        <div class="p-col-12">
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtCod" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Código de empleado:</p:outputLabel>
+                                <div class="p-col-12 p-md-8">
+                                    <p:inputText id="txtCod" value="#{loginView.codigoEmpleado}"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtDui" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">DUI de empleado:</p:outputLabel>
+                                <div class="p-col-12 p-md-8">
+                                    <p:inputText id="txtDui" value="#{loginView.duiEmpleado}"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtCorreo" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Cuenta correo:</p:outputLabel>
+                                <div class="p-col-12 p-md-8">
+                                    <p:inputText id="txtCorreo" value="#{loginView.correo}" placeholder="example@dominio.com">
+                                        <f:validator validatorId="custom.emailValidator"/>
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-save" style=" width: 100px" validateClient="true" update="pnlCuenta"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" style="width: 100px" onclick="PF('dlgActivarCorreo').hide();"/>
+                </f:facet>
+            </p:dialog>
         </h:form>
     </h:body>
     <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
+
 
 </html>

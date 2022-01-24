@@ -23,7 +23,7 @@ import sv.gob.mined.dhcomitesso.repository.CandidatoRepo;
 @ViewScoped
 public class DetalleVotacionView implements Serializable {
 
-    private String idPro1;
+    private String idCandidato;
 
     private List<sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView> lstCandidatos = new ArrayList();
 
@@ -39,11 +39,15 @@ public class DetalleVotacionView implements Serializable {
         return lstCandidatos;
     }
 
-    public String getIdPro1() {
-        return idPro1;
+    public String getIdCandidato() {
+        return idCandidato;
     }
 
-    public void setIdPro1(String idPro1) {
-        this.idPro1 = idPro1;
+    public void setIdCandidato(String idCandidato) {
+        this.idCandidato = idCandidato;
+    }
+
+    public void guardar() {
+        candidatoRepo.guardarVoto(1, idCandidato);
     }
 }

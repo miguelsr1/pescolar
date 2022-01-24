@@ -4,6 +4,7 @@
  */
 package sv.gob.mined.dhcomitesso.repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -17,6 +18,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Candidato;
 import sv.gob.mined.dhcomitesso.model.dhcsso.ProcesoEleccion;
+import sv.gob.mined.dhcomitesso.model.dhcsso.Votacion;
 import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView;
 import sv.gob.mined.dhcomitesso.model.dhcsso.view.DataEmpleadoView;
 
@@ -74,6 +76,16 @@ public class CandidatoRepo {
         Query query = em.createQuery(cr);
 
         return query.getResultList();
+    }
+
+    @Transactional
+    public void guardarVoto(Integer idProceso, String idCandidato) {
+        Votacion voto = new Votacion();
+        voto.setFechaInsercion(LocalDate.now());
+        voto.setIdCandidato(em.find(Candidato.class, Integer.parseInt(idCandidato)));
+        voto.setIdProceso(em.find((ProcesoEleccion.class), idProceso));
+
+        em.persist(voto);
     }
 
 }
