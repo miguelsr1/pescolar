@@ -21,6 +21,7 @@
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.Candidato</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.DataEmpleadoView</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.Empleado</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
       <property name="hibernate.show_sql" value="false"/>

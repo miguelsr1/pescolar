@@ -34,32 +34,17 @@
                 }
             };
 
-            /**
-             * Bean validator
-             */
-            PrimeFaces.validator['Email'] = {
 
-                pattern: /\S+@\S+/,
-
-                MESSAGE_ID: 'org.primefaces.examples.validate.email.message',
-
-                validate: function (element, value) {
-                    var vc = PrimeFaces.validation.ValidationContext;
-
-                    if (!this.pattern.test(value)) {
-                        var msgStr = element.data('p-email-msg'),
-                                msg = msgStr ? {summary: 'Validation Error', detail: msgStr, severity: 'error'} : vc.getMessage(this.MESSAGE_ID);
-
-                        throw msg;
-                    }
-                }
-            };
             //]]>
         </script>
     </h:head>
 
     <h:body styleClass="login-body">
         <h:form>
+            <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
+                <p:autoUpdate />
+            </p:growl>
+            
             <div class="login-panel ui-fluid">
                 <div class="p-grid p-nogutter">
                     <div class="p-col-12 logo-container">
@@ -98,10 +83,6 @@
 
             <p:dialog header="Registrar usuario" id="dlgActivarCorreo" widgetVar="dlgActivarCorreo" modal="true" draggable="false" resizable="false" width="500">
                 <p:outputPanel id="pnlCuenta">
-                    <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
-                        <p:autoUpdate />
-                    </p:growl>
-
                     <div class="p-grid ui-fluid">
                         <div class="p-col-12">
                             <div class="p-field p-grid">
@@ -129,7 +110,7 @@
                 </p:outputPanel>
 
                 <f:facet name="footer">
-                    <p:commandButton value="Guardar" icon="pi pi-save" style=" width: 100px" validateClient="true" update="pnlCuenta"/>
+                    <p:commandButton value="Guardar" icon="pi pi-save" style=" width: 100px" validateClient="true" update="pnlCuenta" action="#{loginView.enviarCorreo()}"/>
                     <p:commandButton value="Cancelar" icon="pi pi-times" style="width: 100px" onclick="PF('dlgActivarCorreo').hide();"/>
                 </f:facet>
             </p:dialog>

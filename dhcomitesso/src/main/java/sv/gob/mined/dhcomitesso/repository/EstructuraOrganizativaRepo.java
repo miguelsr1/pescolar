@@ -40,7 +40,7 @@ public class EstructuraOrganizativaRepo {
         lstCondiciones.add(cb.notLike(root.get("inuniorg"), "122%"));
         lstCondiciones.add(cb.like(root.get("nombreEstructura"), "DIRECCION%"));
 
-        cr.select(root).where(lstCondiciones.toArray(new Predicate[]{}));
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
 
         Query query = emEva.createQuery(cr);
 

@@ -17,6 +17,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Candidato;
+import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
 import sv.gob.mined.dhcomitesso.model.dhcsso.ProcesoEleccion;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Votacion;
 import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView;
@@ -57,7 +58,7 @@ public class CandidatoRepo {
         List<Predicate> lstCondiciones = new ArrayList();
         lstCondiciones.add(cb.equal(root.get("inuniorg"), inuniorg));
 
-        cr.select(root).where(lstCondiciones.toArray(new Predicate[]{}));
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
 
         Query query = em.createQuery(cr);
 
@@ -88,4 +89,5 @@ public class CandidatoRepo {
         em.persist(voto);
     }
 
+    
 }
