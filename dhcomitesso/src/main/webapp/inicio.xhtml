@@ -57,7 +57,7 @@
                     <div class="p-col-12">
                         <p:outputLabel for="username" value="Código empleado"/>
                         <div class="input-wrapper">
-                            <p:inputText id="username" placeholder="Código empleado"/>
+                            <p:inputText id="username" placeholder="Código empleado" value="#{loginView.codigoEmpleado}"/>
                             <p:graphicImage name="images/login/user.png" library="paradise-layout"
                                             styleClass="user-icon"/>
                         </div>
@@ -65,7 +65,7 @@
                     <div class="p-col-12">
                         <p:outputLabel for="password" value="Contraseña"/>
                         <div class="input-wrapper">
-                            <p:password id="password" placeholder="Contraseña" feedback="false"/>
+                            <p:password id="password" placeholder="Contraseña" feedback="false" value="#{loginView.claveAcceso}"/>
                             <p:graphicImage name="images/login/lock.png" library="paradise-layout"
                                             styleClass="lock-icon"/>
                         </div>
@@ -75,7 +75,12 @@
                         <p:commandLink value="Activar correo" onclick="PF('dlgActivarCorreo').show();" style="float: right; margin-right:" />
                     </div>
                     <div class="p-col-12 button-container">
-                        <p:button value="Entrar" styleClass="ui-button-info ui-button-raised"/>
+                        
+                        
+                        <p:commandButton id="btnIngresar" value="Ingresar" styleClass="ui-button-info ui-button-raised"
+                                         action="#{loginView.validarUsuario()}" process="@this,username,password"/>
+                        <p:blockUI block="btnIngresar" trigger="btnIngresar" />
+                        <h:outputText value="."/>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,118 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="usuario">
+        <p:outputLabel value="Usuario: &lt;b&gt;#{parametrosSesionView.empleado.codigo}&lt;/b&gt;" escape="false" />
+    </ui:define>
+
+    <ui:define name="head">
+        <style>
+            .imgCandidato {
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+                margin: 2rem 0;
+            }
+
+            .card {
+                background: var(--surface-e);
+                padding: 0rem;
+                box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+                border-radius: 4px;
+                margin-bottom: 1.5rem;
+            }
+            .p-ai-center {
+                align-items: center;
+            }
+
+            .vertical-container {
+                margin: 0;
+                border-radius: 4px;
+            }
+
+            .imgBlackAndWhite {
+                -webkit-filter: grayscale(200%); /* Safari 6.0 - 9.0 */
+                filter: grayscale(200%);
+            }
+
+            .p-grid {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                margin-right: 0rem;
+                margin-left: 0rem;
+                margin-top: 0rem;
+            }
+
+            .custom-scrolltop.ui-scrolltop {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 4px;
+                outline: 0 none;
+                background-color: var(--primary-color);
+            }
+            .custom-scrolltop.ui-scrolltop:hover {
+                background-color: var(--primary-color);
+            }
+
+            .custom-scrolltop.ui-scrolltop .ui-scrolltop-icon {
+                font-size: 1rem;
+                color: var(--primary-color-text);
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Gestión Educativa - Votación CDE</ui:define>
+
+    <ui:define name="content">
+        <p:scrollTop id="clientId" style="margin-right: 170px; margin-bottom: 25px;" />
+
+        <h:form prependId="false">
+            <div class="content-section implementation">
+                <div class="p-grid p-jc-center">
+                    <div class="p-col-3" >
+                        <p:commandLink action="registroCandidato?faces-redirect=true">
+                            <div class="card overview-box" style="text-align: center !important">
+                                <div style="height: 180px; padding-top: 25px;" >
+                                    <h5>Registrar candidato</h5>
+                                    <br/>
+                                    <p:graphicImage name="add-user.png" library="images"  width="80"/>
+                                </div>
+                            </div>
+                        </p:commandLink>
+                    </div>
+                    <div class="p-col-3">
+                        <p:commandLink action="detalleVotacion?faces-redirect=true" disabled="#{parametrosSesionView.votoRealizado}">
+                            <div class="card overview-box"  style="text-align: center !important;" >
+                                <div style="height: 180px; padding-top: 25px;" >
+                                    <h5>Emitir voto</h5>
+                                    <br/>
+                                    <p:graphicImage name="vote.png" library="images" width="80" style="filter: grayscale(#{(parametrosSesionView.votoRealizado)?'200%':'0%'});"/>
+                                </div>
+                            </div>
+                        </p:commandLink>
+                    </div>
+                    <div class="p-col-3">
+                        <p:commandLink action="presentacionResultados?faces-redirect=true" >
+                            <div class="card overview-box" style="text-align: center !important">
+                                <div style="height: 180px; padding-top: 25px;" >
+                                    <h5>Resultados</h5>
+                                    <br/>
+                                    <p:graphicImage name="presentation.png" library="images" width="80" />
+                                </div>
+                            </div>
+                        </p:commandLink>
+                    </div>
+                    <div class="p-col-12" style="display: #{(parametrosSesionView.votoRealizado)?'block':'none'}">
+                        <p:staticMessage severity="warn" summary="Alerta" detail="Usted ya realizo el proceso de votación" style="width: 100%"/>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

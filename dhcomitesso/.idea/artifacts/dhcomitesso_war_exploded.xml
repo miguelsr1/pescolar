@@ -17,6 +17,12 @@
           <element id="library" level="project" name="Maven: org.slf4j:nlog4j:1.2.18" />
           <element id="library" level="project" name="Maven: xerces:xercesImpl:2.0.2" />
           <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: sv.gob.mined:utilitario:1.2.2" />
+          <element id="library" level="project" name="Maven: sv.gob.mined:utils:1.0" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.14" />
+          <element id="library" level="project" name="Maven: javax:javaee-api:7.0" />
+          <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.5.0" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
           <element id="library" level="project" name="Maven: org.primefaces:primefaces:11.0.0-RC2" />
           <element id="library" level="project" name="Maven: org.primefaces:paradise-theme:5.1.0" />
           <element id="library" level="project" name="Maven: com.oracle:ojdbc6:11.2.0.3" />

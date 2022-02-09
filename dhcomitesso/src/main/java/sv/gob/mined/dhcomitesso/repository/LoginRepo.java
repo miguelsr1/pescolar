@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import org.apache.commons.codec.digest.DigestUtils;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
 
 /**
@@ -42,5 +43,53 @@ public class LoginRepo implements Serializable {
 
         Query query = em.createQuery(cr);
         return query.getResultList().isEmpty() ? null : (Empleado) query.getResultList().get(0);
+    }
+
+    @Transactional
+    public Empleado findEmpleadoByCodigo(String codigoEmpleado) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Empleado> cr = cb.createQuery(Empleado.class);
+        Root<Empleado> root = cr.from(Empleado.class);
+
+        List<Predicate> lstCondiciones = new ArrayList();
+        lstCondiciones.add(cb.equal(root.get("codigo"), codigoEmpleado));
+
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+
+        Query query = em.createQuery(cr);
+        return query.getResultList().isEmpty() ? null : (Empleado) query.getResultList().get(0);
+    }
+
+    public Empleado findEmpleadoByCodigo(Integer idEmpleado, String codigoEmpleado) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Empleado> cr = cb.createQuery(Empleado.class);
+        Root<Empleado> root = cr.from(Empleado.class);
+
+        List<Predicate> lstCondiciones = new ArrayList();
+        lstCondiciones.add(cb.equal(root.get("codigo"), codigoEmpleado));
+        lstCondiciones.add(cb.equal(root.get("id"), idEmpleado));
+
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+
+        Query query = em.createQuery(cr);
+        return query.getResultList().isEmpty() ? null : (Empleado) query.getResultList().get(0);
+    }
+    
+    public Empleado findEmpleadoByPk(Integer id){
+        return em.find(Empleado.class, id);
+    }
+
+    @Transactional
+    public void guardar(Empleado emp) {
+        em.merge(emp);
+    }
+
+    public Integer validarUsuario(String codigoEmpleado, String clave) {
+        Empleado empleado = findEmpleadoByCodigo(codigoEmpleado);
+        if (empleado.getClaveAcceso().equals(DigestUtils.md5Hex(clave).toUpperCase())) {
+            return empleado.getId();
+        } else {
+            return null;
+        }
     }
 }

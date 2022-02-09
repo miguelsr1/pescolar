@@ -6,10 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.List;
+import javax.persistence.OneToMany;
 
 @Table(name = "EMPLEADO", schema = "SIECSSO")
 @Entity
 public class Empleado implements Serializable {
+
+    @OneToMany(mappedBy = "idEmpleado")
+    private List<DetalleProceso> detalleProcesoList;
 
     @Id
     @Column(name = "ID_EMPLEADO", nullable = false)
@@ -87,5 +92,13 @@ public class Empleado implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<DetalleProceso> getDetalleProcesoList() {
+        return detalleProcesoList;
+    }
+
+    public void setDetalleProcesoList(List<DetalleProceso> detalleProcesoList) {
+        this.detalleProcesoList = detalleProcesoList;
     }
 }

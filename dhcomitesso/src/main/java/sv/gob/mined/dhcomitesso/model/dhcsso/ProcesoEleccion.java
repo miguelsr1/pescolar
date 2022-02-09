@@ -6,13 +6,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.List;
+import javax.persistence.OneToMany;
 
 @Table(name = "PROCESO_ELECCION", schema = "SIECSSO")
 @Entity
 public class ProcesoEleccion implements Serializable {
+
     @Id
     @Column(name = "ID_PROCESO", nullable = false)
     private Integer id;
+
+    @Column(name = "FECHA_INICIO")
+    private LocalDate fechaInicio;
 
     @Column(name = "HABILITAR_PROCESO")
     private Boolean habilitarProceso;
@@ -20,8 +26,8 @@ public class ProcesoEleccion implements Serializable {
     @Column(name = "HORAS")
     private Boolean horas;
 
-    @Column(name = "FECHA_INICIO")
-    private LocalDate fechaInicio;
+    @OneToMany(mappedBy = "idProceso")
+    private List<DetalleProceso> detalleProcesoList;
 
     @Column(name = "FECHA_INSERCION")
     private LocalDate fechaInsercion;
@@ -64,5 +70,13 @@ public class ProcesoEleccion implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<DetalleProceso> getDetalleProcesoList() {
+        return detalleProcesoList;
+    }
+
+    public void setDetalleProcesoList(List<DetalleProceso> detalleProcesoList) {
+        this.detalleProcesoList = detalleProcesoList;
     }
 }

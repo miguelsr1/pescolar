@@ -17,11 +17,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Candidato;
+import sv.gob.mined.dhcomitesso.model.dhcsso.DetalleProceso;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
 import sv.gob.mined.dhcomitesso.model.dhcsso.ProcesoEleccion;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Votacion;
 import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView;
 import sv.gob.mined.dhcomitesso.model.dhcsso.view.DataEmpleadoView;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.VotanteView;
 
 /**
  *
@@ -80,14 +82,49 @@ public class CandidatoRepo {
     }
 
     @Transactional
-    public void guardarVoto(Integer idProceso, String idCandidato) {
+    public void guardarVoto(Integer idProceso, Integer idCandidato, Empleado empleado) {
+        ProcesoEleccion pe = em.find((ProcesoEleccion.class), idProceso);
+
         Votacion voto = new Votacion();
         voto.setFechaInsercion(LocalDate.now());
-        voto.setIdCandidato(em.find(Candidato.class, Integer.parseInt(idCandidato)));
-        voto.setIdProceso(em.find((ProcesoEleccion.class), idProceso));
+        voto.setIdCandidato(em.find(Candidato.class, idCandidato));
+        voto.setIdProceso(pe);
 
         em.persist(voto);
+
+        DetalleProceso detalleProceso = new DetalleProceso();
+        detalleProceso.setFechaVotacion(LocalDate.now());
+        detalleProceso.setIdEmpleado(empleado);
+        detalleProceso.setIdProceso(pe);
+
+        em.persist(detalleProceso);
     }
 
-    
+    public Boolean isVotoRealizado(Integer idProceso, Integer idEmpleado) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<DetalleProceso> cr = cb.createQuery(DetalleProceso.class);
+        Root<DetalleProceso> root = cr.from(DetalleProceso.class);
+
+        List<Predicate> lstCondiciones = new ArrayList();
+        lstCondiciones.add(cb.equal(root.get("idProceso").get("id"), idProceso));
+        lstCondiciones.add(cb.equal(root.get("idEmpleado").get("id"), idEmpleado));
+
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        Query query = em.createQuery(cr);
+
+        return !query.getResultList().isEmpty();
+    }
+
+    public List<VotanteView> findAllVotantes() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<VotanteView> cr = cb.createQuery(VotanteView.class);
+        Root<VotanteView> root = cr.from(VotanteView.class);
+
+        cr.orderBy(cb.asc(root.get("codigoEmpleado")));
+        cr.select(root);
+
+        Query query = em.createQuery(cr);
+
+        return query.getResultList();
+    }
 }

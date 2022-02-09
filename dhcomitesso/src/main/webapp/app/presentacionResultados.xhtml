@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="head">
+        <style>
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Contrato</ui:define>
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
+                <p:autoUpdate />
+            </p:growl>
+
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <p:toolbar id="tbBotones" styleClass="p-mb-4">
+                        <p:toolbarGroup>
+                            <p:commandButton value="Nuevo"  icon="pi pi-plus" oncomplete="PF('dlgDatos').show();" 
+                                             styleClass="ui-button-success" style="margin-right: .5rem" process="@this" />
+                        </p:toolbarGroup>
+                    </p:toolbar>
+
+                    <div class="card">
+                        <p:dataTable id="tblVotantes" lazy="false" value="#{resultadosView.lstEmpleadosVotantes}" var="votante">
+                            <p:column headerText="Código">
+                                <p:outputLabel value="#{votante.codigoEmpleado}"/>
+                            </p:column>
+                            <p:column headerText="Nombre completo">
+                                <p:outputLabel value="#{votante.nombreEmpleado}"/>
+                            </p:column>
+                            <p:column headerText="DUI">
+                                <p:outputLabel value="#{votante.dui}"/>
+                            </p:column>
+                            <p:column headerText="Dirrección a la cual pertenece">
+                                <p:outputLabel value="#{votante.nombreEstructura}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <div class="card">
+                        <p:dataTable id="tblCandidatos" lazy="false" value="#{candidatoView.lstCandidatos}" var="candidato">
+                            <p:column headerText="Código">
+                                <p:outputLabel value="#{candidato.codigoEmpleado}"/>
+                            </p:column>
+                            <p:column headerText="Nombre Candidato">
+                                <p:outputLabel value="#{candidato.nombreEmpleado}"/>
+                            </p:column>
+                            <p:column headerText="Unidad Orgnizativa">
+                                <p:outputLabel value="#{candidato.nombreEstructura}"/>
+                            </p:column>
+                            <p:column>
+                                <p:graphicImage id="imgUpload" style="width: 120px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);" 
+                                                value="#{candidatoView.getGraphicText(candidato.codigoEmpleado)}" stream="false" cache="false">
+                                </p:graphicImage>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+
+
+            <p:dialog id="dlgDatos" header="Datos Generales" showEffect="fade" hideEffect="fade" modal="true" widgetVar="dlgDatos" responsive="true" closable="false" resizable="false" style="position: fixed !important;" width="1000" height="400">
+                <div class="p-grid">
+                    <div class="p-col-2">
+                        <p:outputLabel value="Unidad organizativa"/>
+                    </div>
+                    <div class="p-col-10">
+                        <p:selectOneMenu id="cboU" value="#{candidatoView.codOrg}">
+                            <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
+                            <f:selectItems value="#{candidatoView.direccionGroup}" var="org" itemLabel="#{org.label}"/>
+                            <p:ajax update="tblEmpleados" listener="#{candidatoView.buscarEmpleados()}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="p-col-12">
+                        <p:dataTable id="tblEmpleados" value="#{candidatoView.lstEmpleados}" var="emp" scrollable="true" scrollRows="10">
+                            <p:column headerText="Código">#{emp.codigoEmpleado}</p:column>
+                            <p:column headerText="Nombre">#{emp.nombreEmpleado}</p:column>
+                            <p:column headerText="DUI">#{emp.dui}</p:column>
+                            <p:column style="text-align: center" width="40">
+                                <p:commandButton icon="pi pi-pencil" update="pnlDetalleDatos" 
+                                                 oncomplete="PF('dlgEmpleado').show(); PF('dlgDatos').hide()" 
+                                                 action="#{candidatoView.cargarImagen()}"
+                                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                    <f:setPropertyActionListener value="#{emp}" target="#{candidatoView.dataEmpleadoView}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div> 
+
+                <f:facet name="footer">
+                    <p:commandButton value="Cancelar" icon="pi pi-times" style="width: 100px" action="#{candidatoView.cancelarEdicion()}" oncomplete="PF('dlgDatos').hide();"/>
+                </f:facet>
+            </p:dialog>
+
+
+            <p:dialog id="dlgEmpleado" header="Agregar candidato" showEffect="fade" hideEffect="fade" modal="true" widgetVar="dlgEmpleado" responsive="true" closable="false" resizable="false" style="position: fixed !important;" width="1000">
+
+                <p:outputPanel id="pnlDetalleDatos" class="ui-fluid" style="text-align: center;">
+                    <!--<p:graphicImage style="width: 120px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);" value="/DynamicImageServlet?file={candidatoView.candidato.pathImagen}" rendered="{candidatoView.candidato.idCandidato ne null}"/>-->
+                    <div class="p-grid">
+                        <div class="p-col-2" style="top: 15%;position: relative;margin: 0 auto;transform: translateY(10%);">
+                            <p:outputPanel id="pnlFoto">
+                                <p:graphicImage id="imgUpload" style="width: 120px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);" value="#{candidatoView.imagen}" stream="false" cache="false" />
+
+                                <br/><br/> 
+                                <h:form enctype="multipart/form-data" prependId="false">
+                                    <p:fileUpload id="flImagen" widgetVar="flImagen" mode="simple" skinSimple="true" auto="true" label="" cancelLabel="" uploadLabel="" style="width: 35px !important;left: -10px;"
+                                                  value="#{candidatoView.file}" listener="#{candidatoView.handleFileUpload}" process="@this" update="pnlFoto">
+                                    </p:fileUpload>
+                                </h:form>
+                            </p:outputPanel>
+                        </div>
+                        <div class="p-col-10" >
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtCod" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Código de empleado:</p:outputLabel>
+                                <div class="p-col-12 p-md-9">
+                                    <p:inputText id="txtCod" value="#{candidatoView.dataEmpleadoView.codigoEmpleado}"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtNom" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Nombre completo:</p:outputLabel>
+                                <div class="p-col-12 p-md-9">
+                                    <p:inputText id="txtNom" value="#{candidatoView.dataEmpleadoView.nombreEmpleado}"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtDui" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">D.U.I.:</p:outputLabel>
+                                <div class="p-col-12 p-md-9">
+                                    <p:inputMask id="txtDui" mask="99999999-9" value="#{candidatoView.dataEmpleadoView.dui}"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtTel" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Teléfono:</p:outputLabel>
+                                <div class="p-col-12 p-md-9">
+                                    <p:inputMask id="txtTel" mask="9999-9999" value="#{candidatoView.dataEmpleadoView.numeroTelefono}"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="cboUorg" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Unidad Organizativa</p:outputLabel>
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu id="cboUorg" value="#{candidatoView.dataEmpleadoView.inuniorg}" disabled="true">
+                                        <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
+                                        <f:selectItems value="#{candidatoView.direccionGroup}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-save" style=" width: 100px" action="#{candidatoView.guardar()}" 
+                                     process="@this,txtCod,txtNom,txtDui,txtTel" update="tblCandidatos"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" style="width: 100px" action="#{candidatoView.cancelarEdicion()}" oncomplete="PF('dlgEmpleado').hide();"/>
+                </f:facet>
+            </p:dialog>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

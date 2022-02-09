@@ -6,6 +6,10 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 template="/WEB-INF/template.xhtml">
 
+    <ui:define name="usuario">
+        <p:outputLabel value="Usuario: &lt;b&gt;#{parametrosSesionView.empleado.codigo}&lt;/b&gt;" escape="false" />
+    </ui:define>
+
     <ui:define name="head">
         <style>
             .imgCandidato {
@@ -66,58 +70,60 @@
     <ui:define name="title">Gestión Educativa - Votación CDE</ui:define>
 
     <ui:define name="content">
-        <p:scrollTop id="clientId" style="margin-right: 170px; margin-bottom: 25px;" />
+        <h:form prependId="false">
+            <p:scrollTop id="clientId" style="margin-right: 170px; margin-bottom: 25px;" />        
 
-        <div class="card">
-            <div class="p-grid">
-                <div class="p-col-12">
-                    <i class="fa fa-user" aria-hidden="true" style="color: #006cd9; font-size: 16px;" />
-                    <p:spacer width="10"/>
-                    <p:outputLabel value="Listado de candidatos" style="color: #006cd9; font-size: 16px;" />
-                </div>
-                <ui:repeat id="proSec" var="candidato" varStatus="status" value="#{detalleVotacionView.lstCandidatos}" >
-                    <div class="p-col-12 p-md-3">
-                        <div class="card overview-box blue" style="position: relative">
-                            <div jsf:id="dvNotifyproSec" style="position: absolute; width: 100%; height: 30%;z-index: 1000" hidden="true">
-                                <p:avatar label="✓" styleClass="p-mr-2" style="background-color:#689F38; color: #ffffff; margin-top: 16px; margin-left: 117px;" shape="circle"  />
-                            </div>
-                            <h:panelGrid columns="2" style="width: 90%; margin: auto; text-align: center;">
-                                <p:graphicImage id="img_proSec" value="/DynamicImageServlet?file=#{candidato.codigoEmpleado}.png" width="100px" styleClass="imgCandidato imgBlackAndWhite"  /> 
-                                <p:outputPanel>
-                                    <p:outputLabel value="#{candidato.nombreEmpleado}"/>
-                                    <br/><br/>
-                                    <p:commandButton id="btn_proSec" value="Votar" iconPos="right" icon="pi pi-thumbs-up"  
-                                                     onclick="marcarEleccion('proSec',#{status.index}, 'success')" class="ui-button-secondary">
-                                        <f:setPropertyActionListener value="#{candidato.id}" target="#{detalleVotacionView.idCandidato}" />
-                                    </p:commandButton>
-                                </p:outputPanel>
-                            </h:panelGrid>
-                        </div>
+            <div class="card">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <i class="fa fa-user" aria-hidden="true" style="color: #006cd9; font-size: 16px;" />
+                        <p:spacer width="10"/>
+                        <p:outputLabel value="Listado de candidatos" style="color: #006cd9; font-size: 16px;" />
                     </div>
-                </ui:repeat>
-            </div>
+                    <ui:repeat id="proSec" var="candidato" varStatus="status" value="#{detalleVotacionView.lstCandidatos}" >
+                        <div class="p-col-12 p-md-3">
+                            <div class="card overview-box blue" style="position: relative">
+                                <div jsf:id="dvNotifyproSec" style="position: absolute; width: 100%; height: 30%;z-index: 1000" hidden="true">
+                                    <p:avatar label="✓" styleClass="p-mr-2" style="background-color:#689F38; color: #ffffff; margin-top: 16px; margin-left: 117px;" shape="circle"  />
+                                </div>
+                                <h:panelGrid columns="2" style="width: 90%; margin: auto; text-align: center;">
+                                    <p:graphicImage id="img_proSec" value="/DynamicImageServlet?file=#{candidato.codigoEmpleado}.png" width="100px" styleClass="imgCandidato imgBlackAndWhite"  /> 
+                                    <p:outputPanel>
+                                        <p:outputLabel value="#{candidato.nombreEmpleado}"/>
+                                        <br/><br/>
+                                        <p:commandButton id="btn_proSec" value="Votar" iconPos="right" icon="pi pi-thumbs-up"  
+                                                         onclick="marcarEleccion('proSec',#{status.index}, 'success')" class="ui-button-secondary">
+                                            <f:setPropertyActionListener value="#{candidato.idCandidato}" target="#{detalleVotacionView.idCandidato}" />
+                                        </p:commandButton>
+                                    </p:outputPanel>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </div>
 
-            <div class="grid p-jc-center">
-                <div class="p-col-12">
-                    <p:commandButton value="Guardar" action="#{detalleVotacionView.guardar()}" onclick="PrimeFaces.scrollTo('clientId');"
-                                     icon="pi pi-save" style="margin-right: .5rem" >
-                    </p:commandButton>
-                    <p:commandButton value="Cancelar" icon="pi pi-times" action="inicio"/>
+                <div class="grid p-jc-center">
+                    <div class="p-col-12">
+                        <p:commandButton value="Guardar" action="#{detalleVotacionView.guardar()}" onclick="PrimeFaces.scrollTo('clientId');"
+                                         icon="pi pi-save" style="margin-right: .5rem" >
+                        </p:commandButton>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" action="principal?faces-redirect=true"/>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <p:remoteCommand name="cambiar" onsuccess="marcarEleccion()"/>
+            <p:remoteCommand name="cambiar" onsuccess="marcarEleccion()"/>
 
-        <p:dialog id="dlgVoto" widgetVar="dlgVoto" header="Información" modal="true" closable="true" resizable="false" width="230">
-            <p:outputPanel id="pnlVoto">
-                <i class="pi pi-info-circle" style="font-size: 18px; color: #006cd9;"></i>
-                <p:spacer width="15"/>
-                <p:outputLabel value="Su voto ha sido procesado" />
-            </p:outputPanel>
-            <f:facet name="footer">
-                <p:commandButton value="Aceptar" action="inicio"/>
-            </f:facet>
-        </p:dialog>
+            <p:dialog id="dlgVoto" widgetVar="dlgVoto" header="Información" modal="true" closable="true" resizable="false" width="230">
+                <p:outputPanel id="pnlVoto">
+                    <i class="pi pi-info-circle" style="font-size: 18px; color: #006cd9;"></i>
+                    <p:spacer width="15"/>
+                    <p:outputLabel value="Su voto ha sido procesado" />
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" action="principal?faces-redirect=true"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </ui:define>
 </ui:composition>
