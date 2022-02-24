@@ -40,7 +40,7 @@
     </h:head>
 
     <h:body styleClass="login-body">
-        <h:form>
+        <h:form id="login" prependId="false">
             <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
                 <p:autoUpdate />
             </p:growl>
@@ -57,7 +57,7 @@
                     <div class="p-col-12">
                         <p:outputLabel for="username" value="Código empleado"/>
                         <div class="input-wrapper">
-                            <p:inputText id="username" placeholder="Código empleado" value="#{loginView.codigoEmpleado}"/>
+                            <p:inputText id="username" widgetVar="username" placeholder="Código empleado" value="#{loginView.codigoEmpleado}"/>
                             <p:graphicImage name="images/login/user.png" library="paradise-layout"
                                             styleClass="user-icon"/>
                         </div>
@@ -65,7 +65,7 @@
                     <div class="p-col-12">
                         <p:outputLabel for="password" value="Contraseña"/>
                         <div class="input-wrapper">
-                            <p:password id="password" placeholder="Contraseña" feedback="false" value="#{loginView.claveAcceso}"/>
+                            <p:password id="password" widgetVar="password" placeholder="Contraseña" feedback="false" value="#{loginView.claveAcceso}"/>
                             <p:graphicImage name="images/login/lock.png" library="paradise-layout"
                                             styleClass="lock-icon"/>
                         </div>
@@ -77,48 +77,16 @@
                     <div class="p-col-12 button-container">
                         
                         
-                        <p:commandButton id="btnIngresar" value="Ingresar" styleClass="ui-button-info ui-button-raised"
-                                         action="#{loginView.validarUsuario()}" process="@this,username,password"/>
-                        <p:blockUI block="btnIngresar" trigger="btnIngresar" />
+                        <p:commandButton id="submit" value="Ingresar" styleClass="ui-button-info ui-button-raised"
+                                         action="#{loginView.validarUsuario()}" update="@form" ajax="false" />
+                        <p:blockUI block="submit" trigger="submit" />
                         <h:outputText value="."/>
                     </div>
                 </div>
             </div>
 
 
-            <p:dialog header="Registrar usuario" id="dlgActivarCorreo" widgetVar="dlgActivarCorreo" modal="true" draggable="false" resizable="false" width="500">
-                <p:outputPanel id="pnlCuenta">
-                    <div class="p-grid ui-fluid">
-                        <div class="p-col-12">
-                            <div class="p-field p-grid">
-                                <p:outputLabel for="txtCod" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Código de empleado:</p:outputLabel>
-                                <div class="p-col-12 p-md-8">
-                                    <p:inputText id="txtCod" value="#{loginView.codigoEmpleado}"/>
-                                </div>
-                            </div>
-                            <div class="p-field p-grid">
-                                <p:outputLabel for="txtDui" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">DUI de empleado:</p:outputLabel>
-                                <div class="p-col-12 p-md-8">
-                                    <p:inputText id="txtDui" value="#{loginView.duiEmpleado}"/>
-                                </div>
-                            </div>
-                            <div class="p-field p-grid">
-                                <p:outputLabel for="txtCorreo" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Cuenta correo:</p:outputLabel>
-                                <div class="p-col-12 p-md-8">
-                                    <p:inputText id="txtCorreo" value="#{loginView.correo}" placeholder="example@dominio.com">
-                                        <f:validator validatorId="custom.emailValidator"/>
-                                    </p:inputText>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </p:outputPanel>
-
-                <f:facet name="footer">
-                    <p:commandButton value="Guardar" icon="pi pi-save" style=" width: 100px" validateClient="true" update="pnlCuenta" action="#{loginView.enviarCorreo()}"/>
-                    <p:commandButton value="Cancelar" icon="pi pi-times" style="width: 100px" onclick="PF('dlgActivarCorreo').hide();"/>
-                </f:facet>
-            </p:dialog>
+            
         </h:form>
     </h:body>
     <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>

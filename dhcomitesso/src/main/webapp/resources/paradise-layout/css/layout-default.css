@@ -1309,7 +1309,7 @@ p:last-child {
   background-image: url("#{resource['paradise-layout:images/exception/error-bg.png']}");
 }
 .exception-body.access {
-  background-image: url("#{resource['paradise-layout:images/exception/access-bg.png']}");
+  background-color: #303845;
 }
 .exception-body.notfound {
   background-image: url("#{resource['paradise-layout:images/exception/404-bg.png']}");

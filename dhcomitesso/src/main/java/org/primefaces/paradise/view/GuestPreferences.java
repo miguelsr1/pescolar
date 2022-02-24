@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 @Named
@@ -41,7 +43,7 @@ public class GuestPreferences implements Serializable {
     private List<FlatLayout> flatLayouts;
 
     private List<SpecialLayout> specialLayouts;
-    
+
     @PostConstruct
     public void init() {
         componentThemes = new ArrayList<>();
@@ -96,7 +98,7 @@ public class GuestPreferences implements Serializable {
     public String getMenuMode() {
         return this.menuMode;
     }
-    
+
     public void setMenuMode(String menuMode) {
         this.menuMode = menuMode;
     }
@@ -134,6 +136,7 @@ public class GuestPreferences implements Serializable {
     }
 
     public class ComponentTheme {
+
         String name;
         String file;
         String color;
@@ -158,6 +161,7 @@ public class GuestPreferences implements Serializable {
     }
 
     public class FlatLayout {
+
         String name;
         String file;
         String color;
@@ -182,6 +186,7 @@ public class GuestPreferences implements Serializable {
     }
 
     public class SpecialLayout {
+
         String name;
         String file;
         String color1;
@@ -209,5 +214,12 @@ public class GuestPreferences implements Serializable {
         public String getColor2() {
             return color2;
         }
+    }
+
+    public String submit() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().clear();
+        context.getExternalContext().invalidateSession();
+        return "/inicio.xhtml?faces-redirect=true";
     }
 }

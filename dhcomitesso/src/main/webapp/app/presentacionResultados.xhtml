@@ -20,47 +20,91 @@
 
             <div class="p-grid">
                 <div class="p-col-12">
-                    <p:toolbar id="tbBotones" styleClass="p-mb-4">
-                        <p:toolbarGroup>
-                            <p:commandButton value="Nuevo"  icon="pi pi-plus" oncomplete="PF('dlgDatos').show();" 
-                                             styleClass="ui-button-success" style="margin-right: .5rem" process="@this" />
-                        </p:toolbarGroup>
-                    </p:toolbar>
+                    <div class="card">
+                        <div class="ui-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-12 p-mb-8 p-md-8 p-mb-md-0">Cantidad de empleados</p:outputLabel>
+                                    <div class="p-col-12 p-md-4" style="font-weight: bold;">
+                                        <p:inputText value="#{resultadosView.cantidadEmpleados}" readonly="true" style="text-align: right"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-12 p-mb-8 p-md-8 p-mb-md-0">Fecha de votación</p:outputLabel>
+                                    <div class="p-col-12 p-md-4" style="font-weight: bold;">
+                                        <p:calendar value="#{resultadosView.idProceso.fechaInicio}" pattern="dd/MM/yyyy" locale="es" readonly="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <p:outputLabel styleClass="p-col-12 p-mb-8 p-md-8 p-mb-md-0">Cantidad de empleados que votarón</p:outputLabel>
+                                    <div class="p-col-12 p-md-4" style="font-weight: bold;">
+                                        <p:inputText value="#{resultadosView.cantidadVotantes}" readonly="true" style="text-align: right"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div class="card">
-                        <p:dataTable id="tblVotantes" lazy="false" value="#{resultadosView.lstEmpleadosVotantes}" var="votante">
-                            <p:column headerText="Código">
-                                <p:outputLabel value="#{votante.codigoEmpleado}"/>
-                            </p:column>
-                            <p:column headerText="Nombre completo">
-                                <p:outputLabel value="#{votante.nombreEmpleado}"/>
-                            </p:column>
-                            <p:column headerText="DUI">
-                                <p:outputLabel value="#{votante.dui}"/>
-                            </p:column>
-                            <p:column headerText="Dirrección a la cual pertenece">
-                                <p:outputLabel value="#{votante.nombreEstructura}"/>
-                            </p:column>
-                        </p:dataTable>
-                    </div>
-                    <div class="card">
-                        <p:dataTable id="tblCandidatos" lazy="false" value="#{candidatoView.lstCandidatos}" var="candidato">
-                            <p:column headerText="Código">
-                                <p:outputLabel value="#{candidato.codigoEmpleado}"/>
-                            </p:column>
-                            <p:column headerText="Nombre Candidato">
-                                <p:outputLabel value="#{candidato.nombreEmpleado}"/>
-                            </p:column>
-                            <p:column headerText="Unidad Orgnizativa">
-                                <p:outputLabel value="#{candidato.nombreEstructura}"/>
-                            </p:column>
-                            <p:column>
-                                <p:graphicImage id="imgUpload" style="width: 120px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);" 
-                                                value="#{candidatoView.getGraphicText(candidato.codigoEmpleado)}" stream="false" cache="false">
-                                </p:graphicImage>
-                            </p:column>
-                        </p:dataTable>
-                    </div>
+                    <p:tabView prependId="false"> 
+                        <p:tab title="Listado de personal votante" titleStyle="font-size: 16px;">
+                            <div class="card">
+                                <p:dataTable id="tblVotantes" lazy="false" value="#{resultadosView.lstEmpleadosVotantes}" var="votante">
+                                    <p:column headerText="Código">
+                                        <p:outputLabel value="#{votante.codigoEmpleado}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre completo">
+                                        <p:outputLabel value="#{votante.nombreEmpleado}"/>
+                                    </p:column>
+                                    <p:column headerText="DUI">
+                                        <p:outputLabel value="#{votante.dui}"/>
+                                    </p:column>
+                                    <p:column headerText="Dirrección a la cual pertenece">
+                                        <p:outputLabel value="#{votante.nombreEstructura}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </p:tab>
+                        <p:tab title="Distribución de votos entre candidatos" titleStyle="font-size: 16px;">
+                            <div class="card">
+                                <p:dataTable id="tblCandidatos" lazy="false" value="#{resultadosView.lstResultado}" var="candidato">
+                                    <p:column headerText="Nombre Candidato">
+                                        <p:outputLabel value="#{candidato.nombreEmpleado}"/>
+                                    </p:column>
+                                    <p:column headerText="Cantidad de votos">
+                                        <p:outputLabel value="#{candidato.votos}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:graphicImage id="imgUpload" style="width: 100px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);" 
+                                                        value="#{resultadosView.getGraphicText(candidato.codigoEmpleado)}" stream="false" cache="false">
+                                        </p:graphicImage>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </p:tab>
+                        <p:tab title="Candidatos electos" titleStyle="font-size: 16px;">
+                            <div class="card">
+                                <p:dataTable id="tblCandidatosElectos" lazy="false" value="#{resultadosView.lstCandidatosElectos}" var="candidato">
+                                    <p:column headerText="Nombre Candidato">
+                                        <p:outputLabel value="#{candidato.nombreEmpleado}"/>
+                                    </p:column>
+                                    <p:column headerText="Cantidad de votos">
+                                        <p:outputLabel value="#{candidato.votos}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:graphicImage id="imgUpload" style="width: 100px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);" 
+                                                        value="#{resultadosView.getGraphicText(candidato.codigoEmpleado)}" stream="false" cache="false">
+                                        </p:graphicImage>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </p:tab>
+                    </p:tabView>
                 </div>
             </div>
 

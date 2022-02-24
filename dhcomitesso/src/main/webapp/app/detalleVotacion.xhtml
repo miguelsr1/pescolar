@@ -71,6 +71,8 @@
 
     <ui:define name="content">
         <h:form prependId="false">
+            <f:event type="preRenderView" listener="#{detalleVotacionView.validarVotoRealizado()}"></f:event>
+            
             <p:scrollTop id="clientId" style="margin-right: 170px; margin-bottom: 25px;" />        
 
             <div class="card">

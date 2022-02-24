@@ -11,7 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import sv.gob.mined.dhcomitesso.model.dhcsso.view.DataEmpleadoView;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.EmpleadoDto;
 import sv.gob.mined.dhcomitesso.model.dhevaluacion.EstOrganizativa;
 
 /**
@@ -60,10 +60,10 @@ public class EstructuraOrganizativaRepo {
     }
 
     @Transactional
-    public List<DataEmpleadoView> findEmpleadosByOrg(String inuniorg) {
+    public List<EmpleadoDto> findEmpleadosByOrg(String inuniorg) {
         CriteriaBuilder cb = emCsso.getCriteriaBuilder();
-        CriteriaQuery<DataEmpleadoView> cr = cb.createQuery(DataEmpleadoView.class);
-        Root<DataEmpleadoView> root = cr.from(DataEmpleadoView.class);
+        CriteriaQuery<EmpleadoDto> cr = cb.createQuery(EmpleadoDto.class);
+        Root<EmpleadoDto> root = cr.from(EmpleadoDto.class);
 
         List<Predicate> lstCondiciones = new ArrayList();
         lstCondiciones.add(cb.equal(root.get("inuniorg"), inuniorg));

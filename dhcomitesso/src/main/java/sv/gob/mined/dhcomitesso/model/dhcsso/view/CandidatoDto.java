@@ -15,9 +15,9 @@ import javax.persistence.Table;
  *
  * @author misanchez
  */
-@Table(name = "VW_EMPLEADOS", schema = "SIECSSO")
+@Table(name = "VW_CANDIDATO", schema = "SIECSSO")
 @Entity
-public class DataEmpleadoView implements Serializable {
+public class CandidatoDto implements Serializable {
 
     @Id
     @Basic(optional = false)
@@ -33,8 +33,12 @@ public class DataEmpleadoView implements Serializable {
     private String nombreEstructura;
     @Column(name = "NUMERO_TELEFONO")
     private String numeroTelefono;
+    @Column(name = "ID_CANDIDATO")
+    private Integer idCandidato;
+    @Column(name = "ID_PROCESO")
+    private Integer idProceso;
 
-    public DataEmpleadoView() {
+    public CandidatoDto() {
     }
 
     public String getCodigoEmpleado() {
@@ -83,6 +87,22 @@ public class DataEmpleadoView implements Serializable {
 
     public void setNumeroTelefono(String numeroTelefono) {
         this.numeroTelefono = numeroTelefono;
+    }
+
+    public Integer getIdCandidato() {
+        return idCandidato;
+    }
+
+    public void setIdCandidato(Integer idCandidato) {
+        this.idCandidato = idCandidato;
+    }
+
+    public Integer getIdProceso() {
+        return idProceso;
+    }
+
+    public void setIdProceso(Integer idProceso) {
+        this.idProceso = idProceso;
     }
 
 }

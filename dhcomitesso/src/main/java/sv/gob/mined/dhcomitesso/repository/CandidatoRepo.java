@@ -21,9 +21,10 @@ import sv.gob.mined.dhcomitesso.model.dhcsso.DetalleProceso;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
 import sv.gob.mined.dhcomitesso.model.dhcsso.ProcesoEleccion;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Votacion;
-import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView;
-import sv.gob.mined.dhcomitesso.model.dhcsso.view.DataEmpleadoView;
-import sv.gob.mined.dhcomitesso.model.dhcsso.view.VotanteView;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.EmpleadoDto;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.ResultadosDto;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.VotanteDto;
 
 /**
  *
@@ -52,10 +53,10 @@ public class CandidatoRepo {
     }
 
     @Transactional
-    public List<DataEmpleadoView> findEmpleadosByOrg(String inuniorg) {
+    public List<EmpleadoDto> findEmpleadosByOrg(String inuniorg) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<DataEmpleadoView> cr = cb.createQuery(DataEmpleadoView.class);
-        Root<DataEmpleadoView> root = cr.from(DataEmpleadoView.class);
+        CriteriaQuery<EmpleadoDto> cr = cb.createQuery(EmpleadoDto.class);
+        Root<EmpleadoDto> root = cr.from(EmpleadoDto.class);
 
         List<Predicate> lstCondiciones = new ArrayList();
         lstCondiciones.add(cb.equal(root.get("inuniorg"), inuniorg));
@@ -68,16 +69,42 @@ public class CandidatoRepo {
     }
 
     @Transactional
-    public List<CandidatoView> findCandidatos() {
+    public List<CandidatoDto> findCandidatosByIdProceso(Integer idProceso) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<CandidatoView> cr = cb.createQuery(CandidatoView.class);
-        Root<CandidatoView> root = cr.from(CandidatoView.class);
+        CriteriaQuery<CandidatoDto> cr = cb.createQuery(CandidatoDto.class);
+        Root<CandidatoDto> root = cr.from(CandidatoDto.class);
+
+        List<Predicate> lstCondiciones = new ArrayList();
+        lstCondiciones.add(cb.equal(root.get("idProceso"), idProceso));
 
         cr.orderBy(cb.asc(root.get("codigoEmpleado")));
-        cr.select(root);
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
 
         Query query = em.createQuery(cr);
 
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<ResultadosDto> findResultadosByIdProceso(Integer idProceso) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ResultadosDto> cr = cb.createQuery(ResultadosDto.class);
+        Root<ResultadosDto> root = cr.from(ResultadosDto.class);
+
+        List<Predicate> lstCondiciones = new ArrayList();
+        lstCondiciones.add(cb.equal(root.get("idProceso"), idProceso));
+
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+
+        Query query = em.createQuery(cr);
+
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<ResultadosDto> findCandidatosElectosByIdProceso(Integer idProceso) {
+        Query query = em.createNamedQuery("candidatosElectos", ResultadosDto.class);
+        query.setParameter("id", idProceso);
         return query.getResultList();
     }
 
@@ -115,12 +142,27 @@ public class CandidatoRepo {
         return !query.getResultList().isEmpty();
     }
 
-    public List<VotanteView> findAllVotantes() {
+    public List<VotanteDto> findAllVotantesByIdProceso(Integer idProceso) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<VotanteView> cr = cb.createQuery(VotanteView.class);
-        Root<VotanteView> root = cr.from(VotanteView.class);
+        CriteriaQuery<VotanteDto> cr = cb.createQuery(VotanteDto.class);
+        Root<VotanteDto> root = cr.from(VotanteDto.class);
+
+        List<Predicate> lstCondiciones = new ArrayList();
+        lstCondiciones.add(cb.equal(root.get("idProceso"), idProceso));
 
         cr.orderBy(cb.asc(root.get("codigoEmpleado")));
+        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+
+        Query query = em.createQuery(cr);
+
+        return query.getResultList();
+    }
+
+    public List<Empleado> findAllEmpleados() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Empleado> cr = cb.createQuery(Empleado.class);
+        Root<Empleado> root = cr.from(Empleado.class);
+
         cr.select(root);
 
         Query query = em.createQuery(cr);

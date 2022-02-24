@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import sv.gob.mined.dhcomitesso.model.dhcsso.DetalleProceso;
-import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto;
 import sv.gob.mined.dhcomitesso.repository.CandidatoRepo;
 
 /**
@@ -24,7 +26,7 @@ public class DetalleVotacionView implements Serializable {
     private Integer idCandidato;
     private DetalleProceso detalleProceso;
 
-    private List<sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView> lstCandidatos = new ArrayList();
+    private List<CandidatoDto> lstCandidatos = new ArrayList();
 
     @Inject
     private CandidatoRepo candidatoRepo;
@@ -33,7 +35,17 @@ public class DetalleVotacionView implements Serializable {
 
     @PostConstruct
     public void init() {
-        lstCandidatos = candidatoRepo.findCandidatos();
+        if (!psv.getVotoRealizado()) {
+            lstCandidatos = candidatoRepo.findCandidatosByIdProceso(1);
+        }
+    }
+
+    public void validarVotoRealizado() {
+        if (psv.getVotoRealizado()) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
+            nav.performNavigation("/app/principal.xhtml?faces-redirect=true");
+        }
     }
 
     public DetalleProceso getDetalleProceso() {
@@ -44,7 +56,7 @@ public class DetalleVotacionView implements Serializable {
         this.detalleProceso = detalleProceso;
     }
 
-    public List<CandidatoView> getLstCandidatos() {
+    public List<CandidatoDto> getLstCandidatos() {
         return lstCandidatos;
     }
 

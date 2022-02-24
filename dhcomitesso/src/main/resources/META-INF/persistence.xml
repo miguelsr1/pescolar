@@ -19,9 +19,10 @@
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.Votacion</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.ProcesoEleccion</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.Candidato</class>
-    <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.DataEmpleadoView</class>
-    <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.Empleado</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.ResultadosDto</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.EmpleadoDto</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
       <property name="hibernate.show_sql" value="false"/>

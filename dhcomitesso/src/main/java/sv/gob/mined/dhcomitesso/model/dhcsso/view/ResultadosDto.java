@@ -9,15 +9,19 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 
 /**
  *
  * @author misanchez
  */
-@Table(name = "VW_VOTANTES", schema = "SIECSSO")
+@Table(name = "VW_RESULTADOS", schema = "SIECSSO")
+@NamedNativeQuery(name="candidatosElectos",
+        query="select v.codigo_empleado, v.nombre_empleado, v.dui, v.inuniorg, v.nombre_estructura, v.numero_telefono, v.id_candidato, v.id_proceso, v.votos from SIECSSO.vw_resultados v where ROWNUM <=5 and v.votos > 0 and v.id_proceso = :id",
+        resultClass = ResultadosDto.class)
 @Entity
-public class VotanteView implements Serializable {
+public class ResultadosDto implements Serializable {
 
     @Id
     @Basic(optional = false)
@@ -33,8 +37,14 @@ public class VotanteView implements Serializable {
     private String nombreEstructura;
     @Column(name = "NUMERO_TELEFONO")
     private String numeroTelefono;
+    @Column(name = "ID_CANDIDATO")
+    private Integer idCandidato;
+    @Column(name = "ID_PROCESO")
+    private Integer idProceso;
+    @Column(name = "VOTOS")
+    private Integer votos;
 
-    public VotanteView() {
+    public ResultadosDto() {
     }
 
     public String getCodigoEmpleado() {
@@ -83,6 +93,30 @@ public class VotanteView implements Serializable {
 
     public void setNumeroTelefono(String numeroTelefono) {
         this.numeroTelefono = numeroTelefono;
+    }
+
+    public Integer getIdCandidato() {
+        return idCandidato;
+    }
+
+    public void setIdCandidato(Integer idCandidato) {
+        this.idCandidato = idCandidato;
+    }
+
+    public Integer getIdProceso() {
+        return idProceso;
+    }
+
+    public void setIdProceso(Integer idProceso) {
+        this.idProceso = idProceso;
+    }
+
+    public Integer getVotos() {
+        return votos;
+    }
+
+    public void setVotos(Integer votos) {
+        this.votos = votos;
     }
 
 }

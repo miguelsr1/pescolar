@@ -50,6 +50,13 @@
             <version>8.0.1</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>javax.security.enterprise</groupId>
+            <artifactId>javax.security.enterprise-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- Import the CDI API, we use provided scope as the API is included in JBoss EAP -->
         <dependency>
             <groupId>jakarta.enterprise</groupId>
@@ -72,12 +79,18 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>org.jboss.spec.javax.servlet</groupId>
             <artifactId>jboss-servlet-api_4.0_spec</artifactId>
             <scope>provided</scope>
         </dependency>
-
+        
+        <dependency>
+            <groupId>org.glassfish.soteria</groupId>
+            <artifactId>javax.security.enterprise</artifactId>
+            <version>1.0</version>
+        </dependency-->
+        
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
@@ -89,6 +102,11 @@
             <version>5.1.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.4</version>
+        </dependency>
 
         <dependency>
             <groupId>com.oracle</groupId>

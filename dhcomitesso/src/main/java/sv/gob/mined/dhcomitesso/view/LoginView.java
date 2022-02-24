@@ -1,21 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.dhcomitesso.view;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.AuthenticationStatus;
+import javax.security.enterprise.SecurityContext;
+import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
+import javax.security.enterprise.credential.UsernamePasswordCredential;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotEmpty;
 import org.primefaces.PrimeFaces;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
 import sv.gob.mined.dhcomitesso.repository.EmailRepo;
 import sv.gob.mined.dhcomitesso.repository.LoginRepo;
 import sv.gob.mined.dhcomitesso.util.RC4Crypter;
-import sv.gob.mined.dhcomitesso.util.VarSession;
 import sv.gob.mined.utils.jsf.JsfUtil;
 import sv.gob.mined.utils.mail.MailSession;
 
@@ -25,20 +29,26 @@ import sv.gob.mined.utils.mail.MailSession;
  */
 @SuppressWarnings("serial")
 @Named
-@ViewScoped
+@RequestScoped
 public class LoginView implements Serializable {
 
     private static final ResourceBundle UTIL_CORREO = ResourceBundle.getBundle("Bundle");
 
+    @NotEmpty
     private String codigoEmpleado;
+    @NotEmpty
+    private String claveAcceso;
+
     private String duiEmpleado;
     private String correo;
-    private String claveAcceso;
 
     @Inject
     private LoginRepo loginRepo;
     @Inject
     private EmailRepo emailRepo;
+
+    @Inject
+    private SecurityContext securityContext;
 
     public String getCodigoEmpleado() {
         return codigoEmpleado;
@@ -104,13 +114,29 @@ public class LoginView implements Serializable {
     }
 
     public String validarUsuario() {
-        Integer idEmpleado = loginRepo.validarUsuario(codigoEmpleado, claveAcceso);
-        if (idEmpleado != null) {
-            VarSession.setVariableSession("idEmpleado", idEmpleado);
-            return "app/principal?faces-redirect=true";
-        } else {
-            JsfUtil.mensajeAlerta("Este código de empleado no existe o no esta habilitado.");
-            return "";
+        switch (processAuthentication()){
+            case SEND_CONTINUE:
+                //facesContext.responseComplete();
+                break;
+            case SEND_FAILURE:
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid user name and/or password.", null));
+                break;
+            case SUCCESS:
+                // It really passes here, but I'm not redirected to the start
+                // page. I keep in the login page.
+                return "/app/principal?faces-redirect=true";
+            default:
+                break;
         }
+        return null;
+    }
+    
+    private AuthenticationStatus processAuthentication() {
+        return securityContext.authenticate(
+                (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
+                (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse(),
+                AuthenticationParameters.withParams().credential(
+                        new UsernamePasswordCredential(codigoEmpleado, claveAcceso))
+        );
     }
 }

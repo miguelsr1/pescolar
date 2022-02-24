@@ -31,7 +31,8 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Candidato;
-import sv.gob.mined.dhcomitesso.model.dhcsso.view.DataEmpleadoView;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto;
+import sv.gob.mined.dhcomitesso.model.dhcsso.view.EmpleadoDto;
 import sv.gob.mined.dhcomitesso.model.dhevaluacion.EstOrganizativa;
 import sv.gob.mined.dhcomitesso.repository.CandidatoRepo;
 import sv.gob.mined.dhcomitesso.repository.EstructuraOrganizativaRepo;
@@ -51,12 +52,12 @@ public class CandidatoView implements Serializable {
     private String codOrg;
 
     private Candidato candidato = new Candidato();
-    private DataEmpleadoView dataEmpleadoView;
+    private EmpleadoDto dataEmpleadoView;
     private List<SelectItem> direccionGroup;
     private List<EstOrganizativa> lstOrg = new ArrayList();
     private List<EstOrganizativa> lstOrgDep;
-    private List<DataEmpleadoView> lstEmpleados = new ArrayList();
-    private List<sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView> lstCandidatos = new ArrayList();
+    private List<EmpleadoDto> lstEmpleados = new ArrayList();
+    private List<CandidatoDto> lstCandidatos = new ArrayList();
 
     private UploadedFile file;
     private StreamedContent sContent;
@@ -90,15 +91,15 @@ public class CandidatoView implements Serializable {
         cargarCandidatos();
     }
 
-    public List<sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoView> getLstCandidatos() {
+    public List<sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto> getLstCandidatos() {
         return lstCandidatos;
     }
 
-    public DataEmpleadoView getDataEmpleadoView() {
+    public EmpleadoDto getDataEmpleadoView() {
         return dataEmpleadoView;
     }
 
-    public void setDataEmpleadoView(DataEmpleadoView dataEmpleadoView) {
+    public void setDataEmpleadoView(EmpleadoDto dataEmpleadoView) {
         this.dataEmpleadoView = dataEmpleadoView;
     }
 
@@ -118,7 +119,7 @@ public class CandidatoView implements Serializable {
         this.codOrg = codOrg;
     }
 
-    public List<DataEmpleadoView> getLstEmpleados() {
+    public List<EmpleadoDto> getLstEmpleados() {
         return lstEmpleados;
     }
 
@@ -139,7 +140,7 @@ public class CandidatoView implements Serializable {
     }
 
     public void cargarCandidatos() {
-        lstCandidatos = candidatoRepo.findCandidatos();
+        lstCandidatos = candidatoRepo.findCandidatosByIdProceso(1);
     }
 
     public void guardar() {

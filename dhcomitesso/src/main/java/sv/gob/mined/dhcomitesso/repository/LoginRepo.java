@@ -84,12 +84,4 @@ public class LoginRepo implements Serializable {
         em.merge(emp);
     }
 
-    public Integer validarUsuario(String codigoEmpleado, String clave) {
-        Empleado empleado = findEmpleadoByCodigo(codigoEmpleado);
-        if (empleado.getClaveAcceso().equals(DigestUtils.md5Hex(clave).toUpperCase())) {
-            return empleado.getId();
-        } else {
-            return null;
-        }
-    }
 }
