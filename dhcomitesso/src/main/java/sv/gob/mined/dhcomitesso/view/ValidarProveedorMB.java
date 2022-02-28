@@ -7,6 +7,7 @@ package sv.gob.mined.dhcomitesso.view;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import org.apache.commons.codec.digest.DigestUtils;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
 import sv.gob.mined.dhcomitesso.repository.LoginRepo;
