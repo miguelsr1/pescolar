@@ -55,9 +55,9 @@
                         <p:outputLabel value="Unidad organizativa"/>
                     </div>
                     <div class="p-col-10">
-                        <p:selectOneMenu id="cboU" value="#{candidatoView.codOrg}">
+                        <p:selectOneMenu id="cboU" value="#{candidatoView.nomOrg}">
                             <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
-                            <f:selectItems value="#{candidatoView.direccionGroup}" var="org" itemLabel="#{org.label}"/>
+                            <f:selectItems value="#{candidatoView.lstUnidadOrg}" />
                             <p:ajax update="tblEmpleados" listener="#{candidatoView.buscarEmpleados()}"/>
                         </p:selectOneMenu>
                     </div>
@@ -131,7 +131,7 @@
                                 <div class="p-col-12 p-md-9">
                                     <p:selectOneMenu id="cboUorg" value="#{candidatoView.dataEmpleadoView.inuniorg}" disabled="true">
                                         <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
-                                        <f:selectItems value="#{candidatoView.direccionGroup}"/>
+                                        <f:selectItems value="#{candidatoView.lstUnidadOrg}"/>
                                     </p:selectOneMenu>
                                 </div>
                             </div>

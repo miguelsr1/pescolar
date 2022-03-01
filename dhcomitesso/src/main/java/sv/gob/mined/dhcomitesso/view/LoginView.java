@@ -115,19 +115,18 @@ public class LoginView implements Serializable {
         }
         PrimeFaces.current().executeScript("PF('dlgActivarCorreo').hide();");
     }
-    
-    @Inject
-    private Pbkdf2PasswordHash passwordHash;
-
-    public String validarUsuario() {
-        
-//        Map<String, String> parameters = new HashMap<>();
+    Map<String, String> parameters = new HashMap<>();
 //        parameters.put("Pbkdf2PasswordHash.Iterations", "3072");
 //        parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
 //        parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
 //        passwordHash.initialize(parameters);
 //
 //        System.out.println(passwordHash.generate(claveAcceso.toCharArray()));
+    @Inject
+    private Pbkdf2PasswordHash passwordHash;
+
+    public String validarUsuario() {
+//        
         
         switch (processAuthentication()){
             case SEND_CONTINUE:

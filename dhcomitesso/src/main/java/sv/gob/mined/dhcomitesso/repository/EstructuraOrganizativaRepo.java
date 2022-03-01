@@ -42,6 +42,13 @@ public class EstructuraOrganizativaRepo {
 
         return query.getResultList();
     }
+    
+    @Transactional
+    public List<String> findDirecciones2() {
+        Query query = emCsso.createQuery("SELECT DISTINCT n.unidadAdministrativa FROM NominaVotacion n ORDER BY n.unidadAdministrativa");
+
+        return query.getResultList();
+    }
 
     @Transactional
     public List<EstOrganizativa> findDependencia(String codigoPadre) {
@@ -66,7 +73,7 @@ public class EstructuraOrganizativaRepo {
         Root<EmpleadoDto> root = cr.from(EmpleadoDto.class);
 
         List<Predicate> lstCondiciones = new ArrayList();
-        lstCondiciones.add(cb.equal(root.get("inuniorg"), inuniorg));
+        lstCondiciones.add(cb.equal(root.get("nombreEstructura"), inuniorg));
 
         cr.select(root).where(lstCondiciones.toArray(new Predicate[]{}));
 

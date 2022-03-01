@@ -15,7 +15,6 @@
   <persistence-unit name="siecssoPU" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:/SieCssoDS</jta-data-source>
-    <class>sv.gob.mined.dhcomitesso.model.dhcsso.ProcesoEleccion</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.Votacion</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.ProcesoEleccion</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.Candidato</class>
@@ -23,6 +22,10 @@
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.ResultadosDto</class>
     <class>sv.gob.mined.dhcomitesso.model.dhcsso.view.EmpleadoDto</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.DetalleProceso</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.NominaVotacion</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.Grupo</class>
+    <class>sv.gob.mined.dhcomitesso.model.dhcsso.Users</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
       <property name="hibernate.show_sql" value="false"/>

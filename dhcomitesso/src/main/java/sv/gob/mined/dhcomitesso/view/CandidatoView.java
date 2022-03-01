@@ -15,7 +15,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,10 +52,12 @@ public class CandidatoView implements Serializable {
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("Bundle");
 
     private String codOrg;
+    private String nomOrg;
 
     private Candidato candidato = new Candidato();
     private EmpleadoDto dataEmpleadoView;
-    private List<SelectItem> direccionGroup;
+//    private List<SelectItem> direccionGroup;
+    private Map<String, String> lstUnidadOrg = new HashMap();
     private List<EstOrganizativa> lstOrg = new ArrayList();
     private List<EstOrganizativa> lstOrgDep;
     private List<EmpleadoDto> lstEmpleados = new ArrayList();
@@ -72,24 +76,40 @@ public class CandidatoView implements Serializable {
 
     @PostConstruct
     public void init() {
-        lstOrg = estOrgRepo.findDirecciones();
+        estOrgRepo.findDirecciones2().forEach(nombreOrg -> {
+            lstUnidadOrg.put(nombreOrg, nombreOrg);
+        });
 
-        direccionGroup = new ArrayList();
-        for (EstOrganizativa est : lstOrg) {
-            SelectItemGroup direccion = new SelectItemGroup(est.getNombreEstructura());
-            lstOrgDep = estOrgRepo.findDependencia(est.getInuniorg());
-
-            SelectItem[] hijo = new SelectItem[lstOrgDep.size()];
-            for (int i = 0; i < lstOrgDep.size(); i++) {
-                hijo[i] = new SelectItem(lstOrgDep.get(i).getInuniorg(), lstOrgDep.get(i).getNombreEstructura());
-            }
-
-            direccion.setSelectItems(hijo);
-            direccionGroup.add(direccion);
-        }
+//        direccionGroup = new ArrayList();
+//        for (EstOrganizativa est : lstOrg) {
+//            SelectItemGroup direccion = new SelectItemGroup(est.getNombreEstructura());
+//            lstOrgDep = estOrgRepo.findDependencia(est.getInuniorg());
+//
+//            SelectItem[] hijo = new SelectItem[lstOrgDep.size()];
+//            for (int i = 0; i < lstOrgDep.size(); i++) {
+//                hijo[i] = new SelectItem(lstOrgDep.get(i).getInuniorg(), lstOrgDep.get(i).getNombreEstructura());
+//            }
+//
+//            direccion.setSelectItems(hijo);
+//            direccionGroup.add(direccion);
+//        }
         cargarImagen();
         cargarCandidatos();
     }
+
+    public String getNomOrg() {
+        return nomOrg;
+    }
+
+    public void setNomOrg(String nomOrg) {
+        this.nomOrg = nomOrg;
+    }
+
+    public Map<String, String> getLstUnidadOrg() {
+        return lstUnidadOrg;
+    }
+
+    
 
     public List<sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto> getLstCandidatos() {
         return lstCandidatos;
@@ -123,12 +143,12 @@ public class CandidatoView implements Serializable {
         return lstEmpleados;
     }
 
-    public List<SelectItem> getDireccionGroup() {
-        return direccionGroup;
-    }
+//    public List<SelectItem> getDireccionGroup() {
+//        return direccionGroup;
+//    }
 
     public void buscarEmpleados() {
-        lstEmpleados = estOrgRepo.findEmpleadosByOrg(codOrg);
+        lstEmpleados = estOrgRepo.findEmpleadosByOrg(nomOrg);
     }
 
     public void inicializarRegistro() {
