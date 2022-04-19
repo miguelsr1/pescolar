@@ -183,7 +183,7 @@ PrimeFaces.widget.Paradise = PrimeFaces.widget.BaseWidget.extend({
                 $this.menuHoverActive = false;
             }
             
-            if(($this.wrapper.hasClass('layout-menu-overlay-active') || $this.wrapper.hasClass('layout-menu-active')) && (!$this.menuClick && !$this.menuButtonClick)) {
+            if(($this.wrapper.hasClass('layout-menu-overlay-active') || $this.wrapper.hasClass('layout-menu-active')) && (!$this.menuClick && !$this.menuButtonClick)) {
                 $this.wrapper.removeClass('layout-menu-overlay-active layout-menu-active');
                 $this.wrapper.children('.layout-mask').remove();
             }
@@ -333,7 +333,13 @@ PrimeFaces.widget.Paradise = PrimeFaces.widget.BaseWidget.extend({
 
     scrollIntoView: function(elem) {
         if (document.documentElement.scrollIntoView) {
-            elem.scrollIntoView();
+            elem.scrollIntoView({ block: "nearest", inline: 'start' });
+
+            var wrapper = $('.layout-menu-wrapper');
+            var scrollTop = wrapper.scrollTop();
+            if (scrollTop > 0) {
+                wrapper.scrollTop(scrollTop + parseFloat(this.topbar.height()));
+            }
         }
     },
 
@@ -581,14 +587,129 @@ PrimeFaces.ParadiseConfigurator = {
 /* Issue #924 is fixed for 5.3+ and 6.0. (compatibility with 5.3) */
 if(window['PrimeFaces'] && window['PrimeFaces'].widget.Dialog) {
     PrimeFaces.widget.Dialog = PrimeFaces.widget.Dialog.extend({
-        
+
         enableModality: function() {
             this._super();
             $(document.body).children(this.jqId + '_modal').addClass('ui-dialog-mask');
         },
-        
+
         syncWindowResize: function() {}
     });
 }
-    
 
+if (PrimeFaces.widget.SelectOneMenu) {
+    PrimeFaces.widget.SelectOneMenu = PrimeFaces.widget.SelectOneMenu.extend({
+        init: function (cfg) {
+            this._super(cfg);
+
+            var $this = this;
+            if (this.jq.parent().hasClass('ui-float-label')) {
+                this.m_panel = $(this.jqId + '_panel');
+                this.m_focusInput = $(this.jqId + '_focus');
+
+                this.m_panel.addClass('ui-input-overlay-panel');
+                this.jq.addClass('ui-inputwrapper');
+
+                if (this.input.val() != '') {
+                    this.jq.addClass('ui-inputwrapper-filled');
+                }
+
+                this.input.off('change').on('change', function () {
+                    $this.inputValueControl($(this));
+                });
+
+                this.m_focusInput.on('focus.ui-selectonemenu', function () {
+                    $this.jq.addClass('ui-inputwrapper-focus');
+                })
+                    .on('blur.ui-selectonemenu', function () {
+                        $this.jq.removeClass('ui-inputwrapper-focus');
+                    });
+
+                if (this.cfg.editable) {
+                    this.label.on('input', function (e) {
+                        $this.inputValueControl($(this));
+                    }).on('focus', function () {
+                        $this.jq.addClass('ui-inputwrapper-focus');
+                    }).on('blur', function () {
+                        $this.jq.removeClass('ui-inputwrapper-focus');
+                        $this.inputValueControl($(this));
+                    });
+                }
+            }
+        },
+
+        inputValueControl: function (input) {
+            if (input.val() != '')
+                this.jq.addClass('ui-inputwrapper-filled');
+            else
+                this.jq.removeClass('ui-inputwrapper-filled');
+        }
+    });
+}
+
+if (PrimeFaces.widget.Chips) {
+    PrimeFaces.widget.Chips = PrimeFaces.widget.Chips.extend({
+        init: function (cfg) {
+            this._super(cfg);
+
+            var $this = this;
+            if (this.jq.parent().hasClass('ui-float-label')) {
+                this.jq.addClass('ui-inputwrapper');
+
+                if ($this.jq.find('.ui-chips-token').length !== 0) {
+                    this.jq.addClass('ui-inputwrapper-filled');
+                }
+
+                this.input.on('focus.ui-chips', function () {
+                    $this.jq.addClass('ui-inputwrapper-focus');
+                }).on('input.ui-chips', function () {
+                    $this.inputValueControl();
+                }).on('blur.ui-chips', function () {
+                    $this.jq.removeClass('ui-inputwrapper-focus');
+                    $this.inputValueControl();
+                });
+
+            }
+        },
+
+        inputValueControl: function () {
+            if (this.jq.find('.ui-chips-token').length !== 0 || this.input.val() != '')
+                this.jq.addClass('ui-inputwrapper-filled');
+            else
+                this.jq.removeClass('ui-inputwrapper-filled');
+        }
+    });
+}
+
+if (PrimeFaces.widget.DatePicker) {
+    PrimeFaces.widget.DatePicker = PrimeFaces.widget.DatePicker.extend({
+        init: function (cfg) {
+            this._super(cfg);
+
+            var $this = this;
+            if (this.jq.parent().hasClass('ui-float-label') && !this.cfg.inline) {
+                if (this.input.val() != '') {
+                    this.jq.addClass('ui-inputwrapper-filled');
+                }
+
+                this.jqEl.off('focus.ui-datepicker blur.ui-datepicker change.ui-datepicker')
+                    .on('focus.ui-datepicker', function () {
+                        $this.jq.addClass('ui-inputwrapper-focus');
+                    })
+                    .on('blur.ui-datepicker', function () {
+                        $this.jq.removeClass('ui-inputwrapper-focus');
+                    })
+                    .on('change.ui-datepicker', function () {
+                        $this.inputValueControl($(this));
+                    });
+            }
+        },
+
+        inputValueControl: function (input) {
+            if (input.val() != '')
+                this.jq.addClass('ui-inputwrapper-filled');
+            else
+                this.jq.removeClass('ui-inputwrapper-filled');
+        }
+    });
+}

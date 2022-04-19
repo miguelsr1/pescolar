@@ -15,6 +15,7 @@ import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.repository.ParticipanteRepo;
 
 @SuppressWarnings("serial")
 @Named
@@ -23,6 +24,8 @@ public class OfertaBienesServiciosView implements Serializable {
 
     @Inject
     private OfertaBienesServiciosRepo ofertaBienesServiciosRepo;
+    @Inject
+    private ParticipanteRepo participanteRepo;
     @Inject
     private CatalogoRepo catalogoRepo;
 
@@ -104,6 +107,6 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     public void buscar() {
-        lstParticipantes = ofertaBienesServiciosRepo.findParticipantesByParam(codigoDepartamento, idMunicipio, codigoEntidad, nombre, idRubro);
+        lstParticipantes = participanteRepo.findParticipantesByParam(codigoDepartamento, idMunicipio, codigoEntidad, nombre, idRubro);
     }
 }

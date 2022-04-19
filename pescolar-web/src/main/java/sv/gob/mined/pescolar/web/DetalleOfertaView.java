@@ -18,7 +18,7 @@ import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.TechoRubroEntEdu;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
-import sv.gob.mined.pescolar.repository.DetalleOfertaRepo;
+import sv.gob.mined.pescolar.repository.ResolucionesAdjudicativasRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
 /**
@@ -46,7 +46,7 @@ public class DetalleOfertaView implements Serializable {
     private TechoRubroEntEdu techo;
 
     @Inject
-    private DetalleOfertaRepo detalleOfertaRepo;
+    private ResolucionesAdjudicativasRepo resolucionRepo;
     @Inject
     private CatalogoRepo catalogoRepo;
 
@@ -55,11 +55,11 @@ public class DetalleOfertaView implements Serializable {
 
     @PostConstruct
     public void init() {
-        resAdj = detalleOfertaRepo.findResolucionAdjudicativa(414136l);
+        resAdj = resolucionRepo.findResolucionAdjudicativa(414136l);
         HashMap<String, Object> params = new HashMap();
         params.put("codigoEntidad", resAdj.getIdParticipante().getIdOferta().getCodigoEntidad().getCodigoEntidad());
         params.put("idDetProcesoAdq", resAdj.getIdParticipante().getIdOferta().getIdDetProcesoAdq());
-        techo = (TechoRubroEntEdu) detalleOfertaRepo.findListByParam(TechoRubroEntEdu.class, params).get(0);
+        techo = (TechoRubroEntEdu) catalogoRepo.findListByParam(TechoRubroEntEdu.class, params).get(0);
         
         switch(resAdj.getIdEstadoReserva().getId().intValue()){
             case 1:

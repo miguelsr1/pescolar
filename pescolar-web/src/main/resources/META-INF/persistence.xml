@@ -1,42 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
-             version="2.2">
-    <persistence-unit name="paquetePU" transaction-type="JTA">
-        <jta-data-source>java:/PaqueteDS</jta-data-source>
-        <class>sv.gob.mined.pescolar.model.Anho</class>
-        <class>sv.gob.mined.pescolar.model.CatalogoProducto</class>
-        <class>sv.gob.mined.pescolar.model.ContratosOrdenesCompra</class>
-        <class>sv.gob.mined.pescolar.model.Departamento</class>
-        <class>sv.gob.mined.pescolar.model.DetalleOferta</class>
-        <class>sv.gob.mined.pescolar.model.DetalleProcesoAdq</class>
-        <class>sv.gob.mined.pescolar.model.Empresa</class>
-        <class>sv.gob.mined.pescolar.model.EstadoRegistro</class>
-        <class>sv.gob.mined.pescolar.model.EstadoReserva</class>
-        <class>sv.gob.mined.pescolar.model.Participante</class>
-        <class>sv.gob.mined.pescolar.model.Genero</class>
-        <class>sv.gob.mined.pescolar.model.Municipio</class>
-        <class>sv.gob.mined.pescolar.model.NivelEducativo</class>
-        <class>sv.gob.mined.pescolar.model.OfertaBienesServicio</class>
-        <class>sv.gob.mined.pescolar.model.Participante</class>
-        <class>sv.gob.mined.pescolar.model.Persona</class>
-        <class>sv.gob.mined.pescolar.model.ProcesoAdquisicion</class>
-        <class>sv.gob.mined.pescolar.model.ResolucionesAdjudicativa</class>
-        <class>sv.gob.mined.pescolar.model.RubrosAmostrarInteres</class>
-        <class>sv.gob.mined.pescolar.model.TipoEmpresa</class>
-        <class>sv.gob.mined.pescolar.model.TipoPersoneria</class>
-        <class>sv.gob.mined.pescolar.model.TiposDocLegal</class>
-        <class>sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa</class>
-        <class>sv.gob.mined.pescolar.model.TechoRubroEntEdu</class>
-        <class>sv.gob.mined.pescolar.model.DisMunicipioIntere</class>
-        <class>sv.gob.mined.pescolar.model.CapaInstPorRubro</class>
-        <class>sv.gob.mined.pescolar.model.DetCapaSegunRubro</class>
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.cache.use_second_level_cache" value="false"/>
-            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
-        </properties>
-    </persistence-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <persistence-unit name="paquetePU" transaction-type="JTA">
+    <jta-data-source>java:/PaqueteDS</jta-data-source>
+    <class>sv.gob.mined.pescolar.model.Anho</class>
+    <class>sv.gob.mined.pescolar.model.CatalogoProducto</class>
+    <class>sv.gob.mined.pescolar.model.ContratosOrdenesCompra</class>
+    <class>sv.gob.mined.pescolar.model.Departamento</class>
+    <class>sv.gob.mined.pescolar.model.DetalleOferta</class>
+    <class>sv.gob.mined.pescolar.model.DetalleProcesoAdq</class>
+    <class>sv.gob.mined.pescolar.model.Empresa</class>
+    <class>sv.gob.mined.pescolar.model.EstadoRegistro</class>
+    <class>sv.gob.mined.pescolar.model.EstadoReserva</class>
+    <class>sv.gob.mined.pescolar.model.Participante</class>
+    <class>sv.gob.mined.pescolar.model.Genero</class>
+    <class>sv.gob.mined.pescolar.model.Municipio</class>
+    <class>sv.gob.mined.pescolar.model.NivelEducativo</class>
+    <class>sv.gob.mined.pescolar.model.OfertaBienesServicio</class>
+    <class>sv.gob.mined.pescolar.model.Participante</class>
+    <class>sv.gob.mined.pescolar.model.Persona</class>
+    <class>sv.gob.mined.pescolar.model.ProcesoAdquisicion</class>
+    <class>sv.gob.mined.pescolar.model.ResolucionesAdjudicativa</class>
+    <class>sv.gob.mined.pescolar.model.RubrosAmostrarInteres</class>
+    <class>sv.gob.mined.pescolar.model.TipoEmpresa</class>
+    <class>sv.gob.mined.pescolar.model.TipoPersoneria</class>
+    <class>sv.gob.mined.pescolar.model.TiposDocLegal</class>
+    <class>sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa</class>
+    <class>sv.gob.mined.pescolar.model.TechoRubroEntEdu</class>
+    <class>sv.gob.mined.pescolar.model.DisMunicipioIntere</class>
+    <class>sv.gob.mined.pescolar.model.CapaInstPorRubro</class>
+    <class>sv.gob.mined.pescolar.model.DetCapaSegunRubro</class>
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.cache.use_second_level_cache" value="false"/>
+      <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+    </properties>
+  </persistence-unit>
 </persistence>

@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Table(name = "PERSONA")
 @Entity
@@ -116,6 +117,9 @@ public class Persona implements Serializable {
 
     @Column(name = "CODIGO_CANTON", length = 2)
     private String codigoCanton;
+
+    @OneToMany(mappedBy = "idPersona", fetch = FetchType.LAZY)
+    private List<Usuario> usuarioList;
 
     @Transient
     private String nombreCompleto;
@@ -438,5 +442,13 @@ public class Persona implements Serializable {
         } else {
             return getNombres() + " " + getApellidos() + " (" + getUsuario() + ")";
         }
+    }
+
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
+    }
+
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 }

@@ -40,18 +40,123 @@
                     font-size: 12px;
                 }
             }
+
+
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul {
+                right: auto;
+                left: 0;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li > a > img,
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li > a > i,
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li > a > .ui-inputswitch {
+                margin-right: 0;
+                margin-left: 6px;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a .profile-info {
+                margin-right: 7px;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a .profile-info h6 {
+                font-weight: 600;
+                margin: 0;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a .profile-info span {
+                display: block;
+                font-size: 10px;
+                font-weight: normal;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-rightpanel-button {
+                -webkit-transform: rotate(-180deg);
+                -moz-transform: rotate(-180deg);
+                -o-transform: rotate(-180deg);
+                -ms-transform: rotate(-180deg);
+                transform: rotate(-180deg);
+            }
+
+
+
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item.search-item {
+                margin: 0;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item.search-item > form {
+                display: none;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item.search-item > a {
+                display: flex;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item > ul {
+                top: 104px;
+                width: 90%;
+                left: 5%;
+                position: fixed;
+            }
+
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right {
+                height: 100%;
+                flex-grow: 1;
+                padding: 10px 32px 10px 12px;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-align: center;
+                align-items: center;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+                border-right: solid 1px transparent;
+            }
+
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-align: center;
+                align-items: center;
+                -ms-flex-pack: end;
+                justify-content: flex-end;
+                flex-grow: 1;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li {
+                position: relative;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-align: center;
+                align-items: center;
+                -ms-flex-pack: center;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a > img {
+                width: 32px;
+                height: 32px;
+            }
+
+
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a {
+                color: #515C66;
+            }
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a {
+                display: -ms-flexbox;
+                display: flex;
+                margin: 0 6px;
+                padding: 10px;
+            }
+
         </style>
     </h:head>
 
     <h:body styleClass="#{guestPreferences.inputStyleClass}" style="background-color: #303845 !important;">
         <div class="layout-wrapper #{guestPreferences.menuMode} ">
             <ui:include src="./topbar.xhtml"/>
+            <ui:include src="./config.xhtml"/>
 
             <div class="layout-main">
                 <div class="layout-content">
                     <ui:insert name="content"/>
                 </div>
-            </div>
+            </div>            
         </div>
 
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">

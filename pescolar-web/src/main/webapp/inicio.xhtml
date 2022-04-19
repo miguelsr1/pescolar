@@ -1,38 +1,95 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<h:head>
-    <f:facet name="first">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-        <meta name="apple-mobile-web-app-capable" content="yes"/>
-    </f:facet>
-    <title><ui:insert name="title">PrimeFaces Paradise</ui:insert></title>
-    <h:outputScript name="js/layout.js" library="paradise-layout"/>
-    <h:outputScript name="js/prism.js" library="paradise-layout"/>
-    <ui:insert name="head"/>
-</h:head>
 
-<h:body styleClass="#{guestPreferences.inputStyleClass}">
-    <div class="layout-wrapper #{guestPreferences.menuMode} ">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+        <title>Paquete Escolar</title>
 
-        <div class="layout-main">
-            <div class="layout-content">
-                <p:panel header="Titulo">
+        <script type="text/javascript">
+            //<![CDATA[
+            /**
+             * Faces Validator
+             */
+            PrimeFaces.validator['custom.emailValidator'] = {
 
-                </p:panel>
+                pattern: /\S+@\S+/,
+
+                validate: function (element, value) {
+                    //use element.data() to access validation metadata, in this case there is none.
+                    if (!this.pattern.test(value)) {
+                        throw {
+                            summary: 'Error de validación',
+                            detail: value + ' no es un correo valido.',
+                            severity: 'error'
+                        }
+                    }
+                }
+            };
+
+
+            //]]>
+        </script>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <h:form id="login" prependId="false">
+            <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
+                <p:autoUpdate />
+            </p:growl>
+
+            <div class="login-panel ui-fluid">
+                <div class="p-grid p-nogutter">
+                    <div class="p-col-12 logo-container">
+                        <h:panelGrid columns="2" width="100%">
+                            <p:graphicImage name="logo_mined.jpg" library="images" width="200"/>
+
+                            <p:outputLabel style="font-size: 18px;">Paquete Escolar</p:outputLabel>
+                        </h:panelGrid>
+                    </div>
+                    <div class="p-col-12">
+                        <p:outputLabel for="username" value="Usuario:"/>
+                        <div class="input-wrapper">
+                            <p:inputText id="username" widgetVar="username" placeholder="Código empleado" value="#{loginView.usuario}"/>
+                            <p:graphicImage name="images/login/user.png" library="paradise-layout" styleClass="user-icon"/>
+                        </div>
+                    </div>
+                    <div class="p-col-12">
+                        <p:outputLabel for="password" value="Clave de acceso:"/>
+                        <div class="input-wrapper">
+                            <p:password id="password" widgetVar="password" placeholder="Contraseña" feedback="false" value="#{loginView.claveAcceso}" />
+                            <p:graphicImage name="images/login/lock.png" library="paradise-layout" styleClass="lock-icon"/>
+                        </div>
+                    </div>
+                    <div class="p-col-12 chkbox-container">
+                        <!--a href="">¿Olvidó su contraseña?</a>
+                        <p:commandLink value="Activar correo" onclick="PF('dlgActivarCorreo').show();" style="float: right; margin-right:" / -->
+                    </div>
+                    <div class="p-col-12 button-container">
+
+
+                        <p:commandButton id="submit" value="Ingresar" styleClass="ui-button-info ui-button-raised"
+                                         action="#{loginView.validarUsuario()}" update="@form" ajax="false" />
+                        <p:blockUI block="submit" trigger="submit" />
+                        <h:outputText value="."/>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
+
+
+        </h:form>
+    </h:body>
     <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
-</h:body>
+
+
 </html>
