@@ -10,13 +10,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.EstadoReserva;
-import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
+import sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto;
 import sv.gob.mined.pescolar.utils.Filtro;
 
 /**
@@ -29,14 +29,15 @@ public class CatalogoRepo {
     @PersistenceContext(unitName = "paquetePU")
     private EntityManager em;
 
-    public List<Departamento> findAllDepartamento() {
-        Query q = em.createQuery("SELECT d FROM Departamento d ORDER BY d.id", Departamento.class);
-        return q.getResultList();
+    public Object findEntityByPk(Class clazz, Object pk) {
+        return em.find(clazz, pk);
     }
 
-    public List<Municipio> findMunicipiosByDepa(String codigoDepartamento) {
-        Query q = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:codDepa ORDER BY m.id", Municipio.class);
-        q.setParameter("codDepa", codigoDepartamento);
+    public List<OpcionMenuUsuarioDto> findAllOpcionMenuByUsuarioAndApp(Long idUsuario, Long idOpcMenu) {
+        Query q = em.createNamedQuery("opcionMenuUsuarioDto", OpcionMenuUsuarioDto.class);
+        q.setParameter(1, idUsuario);
+        q.setParameter(2, idOpcMenu);
+
         return q.getResultList();
     }
 
@@ -83,17 +84,17 @@ public class CatalogoRepo {
     @Transactional
     public List<?> findListByParam(Class<?> arg, Map<String, Object> params) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery cr = cb.createQuery(arg);
-        Root root = cr.from(arg);
+        CriteriaQuery cq = cb.createQuery(arg);
+        Root root = cq.from(arg);
         List<Predicate> lstCondiciones = new ArrayList();
 
         for (String var : params.keySet()) {
             lstCondiciones.add(cb.equal(root.get(var), params.get(var)));
         }
 
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cq.select(root).where(lstCondiciones.toArray(Predicate[]::new));
 
-        Query query = em.createQuery(cr);
+        Query query = em.createQuery(cq);
 
         return query.getResultList();
     }
@@ -107,8 +108,12 @@ public class CatalogoRepo {
         for (Filtro parametro : parametros) {
             switch (parametro.getTipoOperacion()) {
                 case 1://EQUALS
-                    if (parametro.getClave().split(",").length > 1) {
-                        cq.select(root).where(cb.equal(root.get("idPersona").get("usuario"), parametro.getValor()));
+                    if (parametro.getClave().split("\\.").length > 1) {
+                        Path path = root;
+                        for (String clave : parametro.getClave().split("\\.")) {
+                            path = path.get(clave);
+                        }
+                        cq.select(root).where(cb.equal(path, parametro.getValor()));
                     } else {
                         cq.select(root).where(cb.equal(root.get(parametro.getClave()), parametro.getValor()));
                     }
@@ -119,6 +124,67 @@ public class CatalogoRepo {
             }
         }
 
-        return em.createQuery(cq).getResultList().isEmpty() ? null : em.createQuery(cq).getResultList();
+        Query query = em.createQuery(cq);
+
+        return query.getResultList();
+    }
+
+    @Transactional
+    public List<?> findListByParam(Class<?> arg, List<Filtro> parametros, String orderBy, Boolean orderAsc) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery(arg);
+        Root root = cq.from(arg);
+
+        for (Filtro parametro : parametros) {
+            Path path = root;
+            if (parametro.getValor() != null) {
+                switch (parametro.getTipoOperacion()) {
+                    case 1://EQUALS
+
+                        if (parametro.getClave().split("\\.").length > 1) {
+                            for (String clave : parametro.getClave().split("\\.")) {
+                                path = path.get(clave);
+                            }
+                            cq.select(root).where(cb.equal(path, parametro.getValor()));
+                        } else {
+                            cq.select(root).where(cb.equal(path.get(parametro.getClave()), parametro.getValor()));
+                        }
+                        break;
+                    case 2://LIKE
+                        if (parametro.getClave().split("\\.").length > 1) {
+                            for (String clave : parametro.getClave().split("\\.")) {
+                                path = path.get(clave);
+                            }
+                            cq.select(root).where(cb.like(path, "%" + parametro.getValor() + "%"));
+                        } else {
+                            cq.select(root).where(cb.like(path, "%" + parametro.getValor() + "%"));
+                        }
+
+                        //cq.select(root).where(cb.like(root.get(parametro.getClave()), "%" + parametro.getValor() + "%"));
+                        break;
+                }
+            }
+        }
+
+        if (orderBy != null && orderAsc != null) {
+            Path path = root;
+
+            //Adición de campos de ordenamiento
+            if (orderBy.split("\\.").length > 1) {
+                for (String clave : orderBy.split("\\.")) {
+                    path = path.get(clave);
+                }
+            }
+
+            if (orderAsc) {
+                cq.orderBy(cb.asc(path));
+            } else {
+                cq.orderBy(cb.desc(path));
+            }
+        }
+
+        Query query = em.createQuery(cq);
+
+        return query.getResultList();
     }
 }

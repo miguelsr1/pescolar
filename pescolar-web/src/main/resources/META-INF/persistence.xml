@@ -29,6 +29,9 @@
     <class>sv.gob.mined.pescolar.model.DisMunicipioIntere</class>
     <class>sv.gob.mined.pescolar.model.CapaInstPorRubro</class>
     <class>sv.gob.mined.pescolar.model.DetCapaSegunRubro</class>
+    <class>sv.gob.mined.pescolar.model.OpcionMenu</class>
+    <class>sv.gob.mined.pescolar.model.Modulo</class>
+    <class>sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
       <property name="hibernate.show_sql" value="false"/>

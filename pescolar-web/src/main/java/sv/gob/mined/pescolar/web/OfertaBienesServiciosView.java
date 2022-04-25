@@ -16,6 +16,7 @@ import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.ParticipanteRepo;
+import sv.gob.mined.pescolar.utils.Filtro;
 
 @SuppressWarnings("serial")
 @Named
@@ -28,6 +29,8 @@ public class OfertaBienesServiciosView implements Serializable {
     private ParticipanteRepo participanteRepo;
     @Inject
     private CatalogoRepo catalogoRepo;
+    @Inject
+    private SessionView sessionView;
 
     private Integer idDetProcesoAdq;
     private String codigoDepartamento;
@@ -37,6 +40,8 @@ public class OfertaBienesServiciosView implements Serializable {
     private Long idMunicipio;
 
     private List<Participante> lstParticipantes = new ArrayList();
+
+    private List<Filtro> params = new ArrayList();
 
     public OfertaBienesServiciosView() {
     }
@@ -55,13 +60,15 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     public List<Departamento> getLstDepartamento() {
-        return catalogoRepo.findAllDepartamento();
+        return catalogoRepo.findListByParam(Departamento.class, new ArrayList(), "id", false);
     }
 
     public List<Municipio> getLstMunicipio() {
-        return catalogoRepo.findMunicipiosByDepa(codigoDepartamento);
+        params.clear();
+        params.add(new Filtro(Filtro.EQUALS, "codigoDepartamento.id", codigoDepartamento));
+        return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", false);
     }
-    
+
     public List<RubrosAmostrarInteres> getLstRubros() {
         return catalogoRepo.findAllRubrosByIdProceso(20);
     }
@@ -107,6 +114,13 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     public void buscar() {
-        lstParticipantes = participanteRepo.findParticipantesByParam(codigoDepartamento, idMunicipio, codigoEntidad, nombre, idRubro);
+        params.clear();
+        params.add(new Filtro(Filtro.EQUALS, "idOferta.codigoEntidad.codigoDepartamento", codigoDepartamento));
+        params.add(new Filtro(Filtro.EQUALS, "idOferta.codigoEntidad.idMunicipio", idMunicipio));
+        params.add(new Filtro(Filtro.LIKE, "idOferta.codigoEntidad.codigoEntidad", codigoEntidad));
+        params.add(new Filtro(Filtro.LIKE, "idOferta.codigoEntidad.nombre", nombre.isEmpty() ? null : nombre));
+        params.add(new Filtro(Filtro.LIKE, "idOferta.idDetProcesoAdq.idProcesoAdq.id", sessionView.getIdProcesoAdq()));
+        params.add(new Filtro(Filtro.LIKE, "idOferta.idDetProcesoAdq.idRubroAdq.id", idRubro));
+        lstParticipantes = (List<Participante>) catalogoRepo.findListByParam(Participante.class, params, "idOferta.id", Boolean.TRUE);
     }
 }

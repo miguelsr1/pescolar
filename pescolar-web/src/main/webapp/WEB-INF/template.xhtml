@@ -17,7 +17,25 @@
         <h:outputScript name="js/layout.js" library="paradise-layout"/>
         <h:outputScript name="js/prism.js" library="paradise-layout"/>
         <ui:insert name="head"/>
+
+        <script type="text/javascript">
+            function buttonConfig() {
+                if ($('#layout-config').hasClass('layout-config-active')) {
+                    $('#areaTrabajo').removeClass('ui-widget-overlay');
+                } else {
+                    $('#areaTrabajo').addClass('ui-widget-overlay');
+                }
+            }
+
+        </script>
+
         <style type="text/css">
+            .ui-widget-overlay {
+                background-color: #424242;
+                opacity: 0.3;
+                filter: alpha(opacity=70);
+                transition: all 2.5s ease;
+            }
             #ministerio::after{
                 content: "\a";
                 white-space: pre;
@@ -46,20 +64,20 @@
                 right: auto;
                 left: 0;
             }
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li > a > img,
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li > a > i,
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li > a > .ui-inputswitch {
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li > img,
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li >  i,
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > ul > li >  .ui-inputswitch {
                 margin-right: 0;
                 margin-left: 6px;
             }
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a .profile-info {
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > .profile-info {
                 margin-right: 7px;
             }
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a .profile-info h6 {
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > .profile-info h6 {
                 font-weight: 600;
                 margin: 0;
             }
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a .profile-info span {
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > .profile-info span {
                 display: block;
                 font-size: 10px;
                 font-weight: normal;
@@ -80,7 +98,7 @@
             .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item.search-item > form {
                 display: none;
             }
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item.search-item > a {
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item.search-item {
                 display: flex;
             }
             .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item > ul {
@@ -128,16 +146,15 @@
                 height: 100%;
             }
 
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a > img {
-                width: 32px;
-                height: 32px;
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > img {
+                width: 40px;
+                height: 40px;
             }
 
-
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a {
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile  {
                 color: #515C66;
             }
-            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile > a {
+            .layout-wrapper .topbar .topbar-wrapper .layout-topbar-right .layout-topbar-actions > li.user-profile {
                 display: -ms-flexbox;
                 display: flex;
                 margin: 0 6px;
@@ -153,7 +170,10 @@
             <ui:include src="./config.xhtml"/>
 
             <div class="layout-main">
-                <div class="layout-content">
+                <ui:include src="./menu.xhtml"/>
+
+                <div id="areaTrabajo" class="layout-content" >
+
                     <ui:insert name="content"/>
                 </div>
             </div>            

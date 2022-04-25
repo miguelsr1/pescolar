@@ -22,14 +22,14 @@
 
                 <ul class="layout-topbar-actions">
                     <li class="topbar-item user-profile">
-                        <a href="#">
-                            <p:graphicImage name="user.svg" library="images" style="margin-right: 7px !important ;"/>
+                        
+                            <p:graphicImage name="user.svg" library="images" style="margin-right: 7px !important; margin-top: 4px;"/>
                             <div class="profile-info">
-                                <h6>#{sessionView.usuario.idPersona.nombreCompleto}</h6>
-                                <span>#{sessionView.usuario.idTipoUsuario.descripcion}</span>
+                                <h6>#{sessionView.usuario.idPersona.usuario} - #{sessionView.usuario.idTipoUsuario.descripcion}</h6>
+                                <span>#{sessionView.ubicacion}</span>
+                                <span>#{sessionView.anhoProceso}</span>
                             </div>
-
-                        </a>
+                        
                     </li>
                 </ul>
 

@@ -18,21 +18,21 @@
             /**
              * Faces Validator
              */
-            PrimeFaces.validator['custom.emailValidator'] = {
-
-                pattern: /\S+@\S+/,
-
-                validate: function (element, value) {
-                    //use element.data() to access validation metadata, in this case there is none.
-                    if (!this.pattern.test(value)) {
-                        throw {
-                            summary: 'Error de validación',
-                            detail: value + ' no es un correo valido.',
-                            severity: 'error'
-                        }
-                    }
-                }
-            };
+            /*PrimeFaces.validator['custom.emailValidator'] = {
+             
+             pattern: /\S+@\S+/,
+             
+             validate: function (element, value) {
+             //use element.data() to access validation metadata, in this case there is none.
+             if (!this.pattern.test(value)) {
+             throw {
+             summary: 'Error de validación',
+             detail: value + ' no es un correo valido.',
+             severity: 'error'
+             }
+             }
+             }
+             };*/
 
 
             //]]>
@@ -49,7 +49,7 @@
                 <div class="p-grid p-nogutter">
                     <div class="p-col-12 logo-container">
                         <h:panelGrid columns="2" width="100%">
-                            <p:graphicImage name="logo_mined.jpg" library="images" width="200"/>
+                            <p:graphicImage name="logo_mined.png" library="images" width="200"/>
 
                             <p:outputLabel style="font-size: 18px;">Paquete Escolar</p:outputLabel>
                         </h:panelGrid>

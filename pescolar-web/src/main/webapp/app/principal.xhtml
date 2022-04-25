@@ -6,10 +6,6 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="usuario">
-        <p:outputLabel value="Usuario: &lt;b&gt; &lt;/b&gt;" escape="false" />
-    </ui:define>
-
     <ui:define name="head">
         <style>
             .imgCandidato {
@@ -95,7 +91,9 @@
                                 <div class="p-grid dashboard" style="max-width: 900px; margin: 0 auto;">
                                     <div class="p-col-12 p-md-4">
                                         <div class="overview-box" style="text-align: center !important">
-                                            <p:commandLink action="registroCandidato?faces-redirect=true" >
+                                            <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}"
+                                                           onclick="PrimeFaces.ParadiseConfigurator.changeMenuMode('layout-menu-static')" update="menumodes-panel">
+                                                <f:setPropertyActionListener value="31" target="#{menuView.idOpcionMenu}" />
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
                                                     <h5>Contrataciones</h5>
                                                     <br/>

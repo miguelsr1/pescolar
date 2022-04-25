@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .invoice {
+                padding: 2rem;
+            }
+            .invoice-summary {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+            }
+            .invoice-details {
+                width: 15rem;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+            }
+            .invoice-details .invoice-value {
+                text-align: right;
+            }
+            .invoice-details > div {
+                width: 50%;
+                margin-bottom: 0.5rem;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">Listado de ofertas registradas</ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+
+            <div class="card ">
+                <p:toolbar style="margin-bottom: 2rem" rendered="false" >
+                    <p:toolbarGroup>
+                        <p:commandButton value="New" icon="pi pi-plus" styleClass="p-mr-2" style="margin-right: .5rem" />
+                        <p:commandButton value="Buscar" icon="pi pi-search" styleClass="ui-button-success" style="margin-right: .5rem" action="#{ofertaBienesServiciosView.buscar()}" update="tblParticipantes"/>
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        
+                    </p:toolbarGroup>
+                </p:toolbar>
+                
+                <p:menubar>
+                    <p:menuitem value="Nuevo"  icon="pi pi-plus" />
+                    <p:menuitem value="Buscar"  icon="pi pi-search" action="#{ofertaBienesServiciosView.buscar()}" update="tblParticipantes"/>
+                </p:menubar>
+                
+                <div class="card ui-fluid">
+                    <div class="p-field p-grid">
+                        <p:outputLabel for="cboDepa" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento</p:outputLabel>
+                        <div class="p-col-12 p-md-4">
+                            <p:selectOneMenu id="cboDepa" value="#{ofertaBienesServiciosView.codigoDepartamento}">
+                                <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
+                                <f:selectItems value="#{ofertaBienesServiciosView.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombreDepartamento}"/>
+                                <p:ajax update="cboMuni"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <p:outputLabel for="cboMuni" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Municipio</p:outputLabel>
+                        <div class="p-col-12 p-md-4">
+                            <p:selectOneMenu id="cboMuni" value="#{ofertaBienesServiciosView.idMunicipio}">
+                                <f:selectItem itemLabel="Seleccione un valor"/>
+                                <f:selectItems value="#{ofertaBienesServiciosView.lstMunicipio}" var="mun" itemValue="#{mun.id}" itemLabel="#{mun.nombreMunicipio}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid">
+                        <p:outputLabel for="txtCod" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Código de infraestructura</p:outputLabel>
+                        <div class="p-col-12 p-md-4">
+                            <p:inputText id="txtCod" value="#{ofertaBienesServiciosView.codigoEntidad}"/>
+                        </div>
+                        <p:outputLabel for="txtNom" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre</p:outputLabel>
+                        <div class="p-col-12 p-md-4">
+                            <p:inputText id="txtNom" value="#{ofertaBienesServiciosView.nombre}"/>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid">
+                        <p:outputLabel for="cboRubro" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Rubro</p:outputLabel>
+                        <div class="p-col-12 p-md-4">
+                            <p:selectOneMenu id="cboRubro" value="#{ofertaBienesServiciosView.idRubro}">
+                                <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
+                                <f:selectItems value="#{ofertaBienesServiciosView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <br/><br/>
+
+                    <p:dataTable id="tblParticipantes" value="#{ofertaBienesServiciosView.lstParticipantes}" var="participante" reflow="true"
+                                 styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines products-table">
+                        <f:facet name="header">
+                            <div class="customers-table-header">
+                                <span style="font-weight: bold">Listado de ofertas</span>
+                            </div>
+                        </f:facet>
+                        <p:column headerText="C.E.">
+                            <p:outputLabel value="#{participante.idOferta.codigoEntidad.codigoEntidad} - 
+                                           #{participante.idOferta.codigoEntidad.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Rubro">
+                            <p:outputLabel value="#{participante.idOferta.idDetProcesoAdq.idRubroAdq.descripcionRubro}"/>
+                        </p:column>
+                        <p:column headerText="Proveedor">
+                            <p:outputLabel value="#{participante.idEmpresa.razonSocial}"/>
+                        </p:column>
+                        <p:column exportable="false" width="80">
+                            <p:commandButton icon="pi pi-pencil"   
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                <f:setPropertyActionListener value="#{product}" target="#{crudDemoView.selectedProduct}" />
+                            </p:commandButton>
+                            <p:spacer width="10"/>
+                            <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" >
+                                <f:setPropertyActionListener value="#{product}" target="#{crudDemoView.selectedProduct}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+        <h:outputStylesheet name="personalizadas.css" library="css"/>
+    </ui:define>
+</ui:composition>

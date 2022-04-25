@@ -113,6 +113,7 @@ PrimeFaces.widget.Paradise = PrimeFaces.widget.BaseWidget.extend({
         });
 
         this.configButton.off('click.config').on('click.config', function(e) {
+            console.log('ok button');
             $this.configMenuClicked = true;
 
             if ($this.configMenu.hasClass('layout-config-active')) {
@@ -135,6 +136,7 @@ PrimeFaces.widget.Paradise = PrimeFaces.widget.BaseWidget.extend({
         });
         
         this.configMenu.off('click.configMenu').on('click.configMenu', function() {
+            console.log('ok menu');
             $this.configMenuClicked = true;
         });
         
