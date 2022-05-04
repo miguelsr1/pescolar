@@ -58,10 +58,10 @@ public class CandidatoRepo {
         CriteriaQuery<EmpleadoDto> cr = cb.createQuery(EmpleadoDto.class);
         Root<EmpleadoDto> root = cr.from(EmpleadoDto.class);
 
-        List<Predicate> lstCondiciones = new ArrayList();
-        lstCondiciones.add(cb.equal(root.get("inuniorg"), inuniorg));
+        /*List<Predicate> lstCondiciones = new ArrayList();
+        lstCondiciones.add(cb.equal(root.get("inuniorg"), inuniorg));*/
 
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("inuniorg"), inuniorg));
 
         Query query = em.createQuery(cr);
 
@@ -78,7 +78,7 @@ public class CandidatoRepo {
         lstCondiciones.add(cb.equal(root.get("idProceso"), idProceso));
 
         cr.orderBy(cb.asc(root.get("codigoEmpleado")));
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("idProceso"), idProceso));
 
         Query query = em.createQuery(cr);
 
@@ -94,7 +94,7 @@ public class CandidatoRepo {
         List<Predicate> lstCondiciones = new ArrayList();
         lstCondiciones.add(cb.equal(root.get("idProceso"), idProceso));
 
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("idProceso"), idProceso));
 
         Query query = em.createQuery(cr);
 
@@ -104,7 +104,7 @@ public class CandidatoRepo {
     @Transactional
     public List<ResultadosDto> findCandidatosElectosByIdProceso(Integer idProceso) {
         Query query = em.createNamedQuery("candidatosElectos", ResultadosDto.class);
-        query.setParameter("id", idProceso);
+        query.setParameter(1, idProceso);
         return query.getResultList();
     }
 
@@ -136,7 +136,7 @@ public class CandidatoRepo {
         lstCondiciones.add(cb.equal(root.get("idProceso").get("id"), idProceso));
         lstCondiciones.add(cb.equal(root.get("idEmpleado").get("id"), idEmpleado));
 
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("idProceso").get("id"), idProceso), cb.equal(root.get("idEmpleado").get("id"), idEmpleado));
         Query query = em.createQuery(cr);
 
         return !query.getResultList().isEmpty();
@@ -151,7 +151,7 @@ public class CandidatoRepo {
         lstCondiciones.add(cb.equal(root.get("idProceso"), idProceso));
 
         cr.orderBy(cb.asc(root.get("codigoEmpleado")));
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("idProceso"), idProceso));
 
         Query query = em.createQuery(cr);
 

@@ -1,14 +1,22 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "RUBROS_AMOSTRAR_INTERES")
 @Entity
 public class RubrosAmostrarInteres implements Serializable {
+
+    @OneToMany(mappedBy = "idRubroAdq", fetch = FetchType.LAZY)
+    private List<DetalleProcesoAdq> detalleProcesoAdqList;
+    @OneToMany(mappedBy = "idRubroInteres", fetch = FetchType.LAZY)
+    private List<DetRubroMuestraIntere> detRubroMuestraIntereList;
     @Id
     @Column(name = "ID_RUBRO_INTERES", nullable = false)
     private Long id;
@@ -52,5 +60,24 @@ public class RubrosAmostrarInteres implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public RubrosAmostrarInteres() {
+    }
+
+    public List<DetalleProcesoAdq> getDetalleProcesoAdqList() {
+        return detalleProcesoAdqList;
+    }
+
+    public void setDetalleProcesoAdqList(List<DetalleProcesoAdq> detalleProcesoAdqList) {
+        this.detalleProcesoAdqList = detalleProcesoAdqList;
+    }
+
+    public List<DetRubroMuestraIntere> getDetRubroMuestraIntereList() {
+        return detRubroMuestraIntereList;
+    }
+
+    public void setDetRubroMuestraIntereList(List<DetRubroMuestraIntere> detRubroMuestraIntereList) {
+        this.detRubroMuestraIntereList = detRubroMuestraIntereList;
     }
 }

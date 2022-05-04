@@ -91,8 +91,7 @@
                                 <div class="p-grid dashboard" style="max-width: 900px; margin: 0 auto;">
                                     <div class="p-col-12 p-md-4">
                                         <div class="overview-box" style="text-align: center !important">
-                                            <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}"
-                                                           onclick="PrimeFaces.ParadiseConfigurator.changeMenuMode('layout-menu-static')" update="menumodes-panel">
+                                            <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
                                                 <f:setPropertyActionListener value="31" target="#{menuView.idOpcionMenu}" />
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
                                                     <h5>Contrataciones</h5>

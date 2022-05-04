@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.dhcomitesso.view;
 
 import java.io.ByteArrayInputStream;
@@ -22,8 +18,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,7 +38,6 @@ import sv.gob.mined.utils.jsf.JsfUtil;
  *
  * @author misanchez
  */
-@SuppressWarnings("serial")
 @Named
 @ViewScoped
 public class CandidatoView implements Serializable {

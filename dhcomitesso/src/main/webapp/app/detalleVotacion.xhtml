@@ -72,7 +72,7 @@
     <ui:define name="content">
         <h:form prependId="false">
             <f:event type="preRenderView" listener="#{detalleVotacionView.validarVotoRealizado()}"></f:event>
-            
+
             <p:scrollTop id="clientId" style="margin-right: 170px; margin-bottom: 25px;" />        
 
             <div class="card">
@@ -111,6 +111,10 @@
                         </p:commandButton>
                         <p:commandButton value="Cancelar" icon="pi pi-times" action="principal?faces-redirect=true"/>
                     </div>
+                    
+                    <p:messages id="growl" showDetail="true" escape="false" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
 

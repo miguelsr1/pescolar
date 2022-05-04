@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.model.view;
 import java.io.Serializable;
 
 import javax.persistence.*;
+import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Municipio;
 
 @Table(name = "VW_CATALOGO_ENTIDAD_EDUCATIVA")
@@ -25,8 +26,9 @@ public class VwCatalogoEntidadEducativa implements Serializable {
     private String fax;
     @Column(name = "INICIALES_MODALIDAD")
     private String inicialesModalidad;
-    @Column(name = "CODIGO_DEPARTAMENTO")
-    private String codigoDepartamento;
+    @JoinColumn(name = "CODIGO_DEPARTAMENTO", referencedColumnName = "CODIGO_DEPARTAMENTO")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Departamento codigoDepartamento;
     @Basic(optional = false)
     @Column(name = "CODIGO_MUNICIPIO")
     private String codigoMunicipio;
@@ -101,11 +103,11 @@ public class VwCatalogoEntidadEducativa implements Serializable {
         this.inicialesModalidad = inicialesModalidad;
     }
 
-    public String getCodigoDepartamento() {
+    public Departamento getCodigoDepartamento() {
         return codigoDepartamento;
     }
 
-    public void setCodigoDepartamento(String codigoDepartamento) {
+    public void setCodigoDepartamento(Departamento codigoDepartamento) {
         this.codigoDepartamento = codigoDepartamento;
     }
 

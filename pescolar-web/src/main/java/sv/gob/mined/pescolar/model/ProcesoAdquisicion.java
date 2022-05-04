@@ -1,14 +1,24 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Table(name = "PROCESO_ADQUISICION")
 @Entity
 public class ProcesoAdquisicion implements Serializable {
+
+    @OneToMany(mappedBy = "idProcesoAdq", fetch = FetchType.LAZY)
+    private List<DetalleProcesoAdq> detalleProcesoAdqList;
+
+    @OneToMany(mappedBy = "idProcesoAdq", fetch = FetchType.LAZY)
+    private List<EstadisticaCenso> estadisticaCensoList;
+    @OneToMany(mappedBy = "padreIdProcesoAdq", fetch = FetchType.LAZY)
+    private List<ProcesoAdquisicion> procesoAdquisicionList;
     @Id
     @Column(name = "ID_PROCESO_ADQ", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_ANHO")
@@ -45,11 +55,37 @@ public class ProcesoAdquisicion implements Serializable {
         this.idAnho = idAnho;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    @XmlTransient
+    public List<EstadisticaCenso> getEstadisticaCensoList() {
+        return estadisticaCensoList;
+    }
+
+    public void setEstadisticaCensoList(List<EstadisticaCenso> estadisticaCensoList) {
+        this.estadisticaCensoList = estadisticaCensoList;
+    }
+
+    @XmlTransient
+    public List<ProcesoAdquisicion> getProcesoAdquisicionList() {
+        return procesoAdquisicionList;
+    }
+
+    public void setProcesoAdquisicionList(List<ProcesoAdquisicion> procesoAdquisicionList) {
+        this.procesoAdquisicionList = procesoAdquisicionList;
+    }
+
+    public List<DetalleProcesoAdq> getDetalleProcesoAdqList() {
+        return detalleProcesoAdqList;
+    }
+
+    public void setDetalleProcesoAdqList(List<DetalleProcesoAdq> detalleProcesoAdqList) {
+        this.detalleProcesoAdqList = detalleProcesoAdqList;
     }
 }

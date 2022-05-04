@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Table(name = "VW_RESULTADOS", schema = "SIECSSO")
 @NamedNativeQuery(name="candidatosElectos",
-        query="select v.codigo_empleado, v.nombre_empleado, v.dui, v.inuniorg, v.nombre_estructura, v.numero_telefono, v.id_candidato, v.id_proceso, v.votos from SIECSSO.vw_resultados v where ROWNUM <=5 and v.votos > 0 and v.id_proceso = :id",
+        query="select v.codigo_empleado, v.nombre_empleado, v.dui, v.inuniorg, v.nombre_estructura, v.numero_telefono, v.id_candidato, v.id_proceso, v.votos from SIECSSO.vw_resultados v where ROWNUM < 5 and v.votos > 0 and v.id_proceso = ?1",
         resultClass = ResultadosDto.class)
 @Entity
 public class ResultadosDto implements Serializable {

@@ -21,8 +21,9 @@ import org.primefaces.model.menu.MenuModel;
 import sv.gob.mined.pescolar.model.Usuario;
 import sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
-import sv.gob.mined.pescolar.utils.Filtro;
+import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.JsfUtil;
+import sv.gob.mined.pescolar.utils.enums.TipoOperador;
 
 /**
  *
@@ -49,7 +50,7 @@ public class MenuView implements Serializable {
     @PostConstruct
     public void init() {
         params = new ArrayList();
-        params.add(new Filtro(Filtro.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()));
+        params.add(new Filtro(TipoOperador.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()));
         usuario = ((Usuario) catalogoRepo.findListByParam(Usuario.class, params).get(0));
     }
 
@@ -69,14 +70,18 @@ public class MenuView implements Serializable {
         model = new DefaultMenuModel();
         if (idOpcionMenu != null) {
             params.clear();
-            params.add(new Filtro(Filtro.EQUALS, "idOpcMenu", idOpcionMenu));
-            params.add(new Filtro(Filtro.EQUALS, "idUsuario", usuario.getIdUsuario()));
+            params.add(new Filtro(TipoOperador.EQUALS, "idOpcMenu", idOpcionMenu));
+            params.add(new Filtro(TipoOperador.EQUALS, "idUsuario", usuario.getIdUsuario()));
 
             lstOpcionMenu = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), idOpcionMenu);
             
             crearArbolMenu();
         }
     }
+    
+    public void limpiarMenu(){
+        model.getElements().clear();
+    }    
 
     private void crearArbolMenu() {
         DefaultMenuModel menu = new DefaultMenuModel();
@@ -129,7 +134,7 @@ public class MenuView implements Serializable {
         for (OpcionMenuUsuarioDto object : lst) {
 
             params.clear();
-            params.add(new Filtro(Filtro.EQUALS, "opcIdOpcMenu.idOpcMenu", object.getIdOpcMenu()));
+            params.add(new Filtro(TipoOperador.EQUALS, "opcIdOpcMenu.idOpcMenu", object.getIdOpcMenu()));
 
             List lstTemp = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), object.getIdOpcMenu());
 

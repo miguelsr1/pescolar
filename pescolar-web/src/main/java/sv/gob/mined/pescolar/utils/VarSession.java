@@ -5,7 +5,6 @@
 package sv.gob.mined.pescolar.utils;
 
 import java.io.File;
-import java.math.BigDecimal;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -10,178 +10,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e942a60-5b5e-4829-9e95-c90c2ca304d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/component/ParadiseMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/component/ParadiseMenuRenderer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/filter/CharacterEncodingFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/view/GuestPreferences.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/faces-config.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/primefaces-paradise.taglib.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/template.xhtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/topbar.xhtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/css/personalizadas.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/demo.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/demo.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/flags/flags.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/flags/flags_responsive.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_chronoline.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_common.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_crud.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_documentation.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_elevation.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_flexbox.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_floatlabel.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_grid.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_icons.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_list.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_messages.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_misc.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_spacing.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_syntax.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/css/pages/_table.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/amyelsner.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/annafali.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/asiyajavayant.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/bernardodominic.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/elwinsharvill.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/ionibowcher.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/ivanmagalhaes.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/onyamalimba.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/profile.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/stephenshaw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/avatar/xuxuefeng.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature10.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature11.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature12.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature4.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature5.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature6.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature7.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature8.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/nature/nature9.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/bamboo-watch.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/black-watch.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/blue-band.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/blue-t-shirt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/bracelet.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/brown-purse.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/chakra-bracelet.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/galaxy-earrings.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/game-controller.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/gaming-set.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/gold-phone-case.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/green-earbuds.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/green-t-shirt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/grey-t-shirt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/headphones.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/light-green-t-shirt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/lime-band.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/mini-speakers.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/painted-phone-case.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/pink-band.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/pink-purse.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/purple-band.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/purple-gemstone-necklace.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/purple-t-shirt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/shoes.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/sneakers.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/teal-t-shirt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/yellow-earbuds.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/yoga-mat.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/images/product/yoga-set.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/demo/js/chart.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/images/escudo_rpt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/js/default.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-bliss.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-blue.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-cheer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-crimson.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-deeppurple.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-deepsea.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-default.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-disco.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-green.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-horizon.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-lime.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-opa.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-orange.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-purple.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-red.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-smoke.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-sunset.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/layout-turquoise.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/primeflex.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/css/primeicons.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-300.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-300.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-300.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-300.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-300.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-500.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-500.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-500.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-500.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-500.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-700.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-700.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-700.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-700.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-700.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-regular.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-regular.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-regular.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/fonts/roboto-v20-latin-regular.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/icons/primeicons.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/icons/primeicons.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/icons/primeicons.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/icons/primeicons.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/avatar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/avatar1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/avatar2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/avatar3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/avatar4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/bridge.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/flag-belgium.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/flag-brazil.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/flag-china.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/flag-france.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/globe.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/map.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/user-card-header.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/dashboard/verona-photo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/exception/404-bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/exception/404-icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/exception/access-bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/exception/access-icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/exception/error-bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/exception/error-icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/landing/event-image-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/landing/event-image-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/landing/icon-cleancode.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/landing/icon-moderndesign.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/landing/icon-responsivelayout.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/landing/icon-welldocumented.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/landing/logo-landing.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/login/bg-login.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/login/icon-login.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/login/lock.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/login/user.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/logo-black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/logo-gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/logo-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/pages/bg-help.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/pages/help/blog1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/pages/help/blog2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/pages/help/blog3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/images/tth-connector.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/js/layout.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/resources/paradise-layout/js/prism.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/ContratoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/ContratoView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ff6c97cd-b71d-408c-9fbb-29a878bb95a0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ff6c97cd-b71d-408c-9fbb-29a878bb95a0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/dhcomitesso.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/nb-configuration.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/nb-configuration.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/view/GuestPreferences.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/view/GuestPreferences.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/JAXRSConfiguration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/ProcesoEleccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/ProcesoEleccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/view/ResultadosDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/view/ResultadosDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/CandidatoRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/CandidatoRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/EstructuraOrganizativaRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/EstructuraOrganizativaRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/LoginRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/LoginRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/resources/JavaEE8Resource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/AdminServlet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ConfigurationBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ConfigurationBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/UserServlet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/CandidatoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/CandidatoView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/DetalleVotacionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/DetalleVotacionView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/LoginView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ParametrosSesionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ParametrosSesionView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ResultadosView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ResultadosView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ValidarProveedorMB.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/jboss-web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/jboss-web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/topbar.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/topbar.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/detalleVotacion.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/detalleVotacion.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/presentacionResultados.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/presentacionResultados.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/principal.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/principal.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/inicio.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/inicio.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/AbstractRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/AbstractRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/CatalogoRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/CatalogoRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/Filtro.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/db/Filtro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/VarSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/VarSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/DetalleOfertaView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/DetalleOfertaView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/MenuView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/MenuView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/OfertaBienesServiciosView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/OfertaBienesServiciosView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/SessionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/SessionView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/resources/Bundle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/resources/Bundle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/WEB-INF/faces-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/WEB-INF/faces-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02Oferta.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02Oferta.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,6 +80,7 @@
         <entry key="JPA Inspector" value="true" />
         <entry key="JPA Palette" value="true" />
         <entry key="JPA Structure" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
       </map>
     </option>
     <option name="myId2Visible">
@@ -213,13 +88,14 @@
         <entry key="JPA Inspector" value="false" />
         <entry key="JPA Palette" value="true" />
         <entry key="JPA Structure" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
       </map>
     </option>
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="$USER_HOME$/apache-maven-3.5.3" />
+        <option name="mavenHome" value="Use Maven wrapper" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -231,19 +107,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="DatabaseDriversLRU" value="oracle" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="jdk.selected.JAVA_MODULE" value="11" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pescolar-web/target" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.24751244" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.deploy.options" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/misanchez/NetBeansProjects/pescolar&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/pescolar-web/src/main/webapp/WEB-INF" />
@@ -406,10 +279,24 @@
       <workItem from="1640034958462" duration="153000" />
       <workItem from="1640184521988" duration="1101000" />
       <workItem from="1642000905383" duration="3000" />
+      <workItem from="1651157409414" duration="140000" />
+      <workItem from="1651157556029" duration="29000" />
+      <workItem from="1651157587908" duration="40000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

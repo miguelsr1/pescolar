@@ -4,6 +4,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:pa="http://primefaces.org/paradise">
 
     <div class="topbar">
@@ -14,7 +15,7 @@
                 </h:link>
                 <div style="vertical-align: middle; margin-left: 20px;">
                     <span id="ministerio">Ministerio de Educación, Ciencia y Tecnología</span>
-                    <span id="sistema">Comite de Salud y Seguridad Ocupacional</span>
+                    <span id="sistema">Comite de Seguridad y Salud Ocupacional</span>
                 </div>
 
             </div>
@@ -25,6 +26,8 @@
                     </span>
                 </a>
                 <h:form>
+                    <p:outputLabel value="Tiempo restante:"/><p:outputLabel value="PROCESO FINALIZADO" style="color: red; font-weight: bold;"/>
+                    <br/>
                     <p:commandLink action="#{guestPreferences.submit()}">
                         <i class="pi pi pi-fw pi-power-off" style="font-size: 18px;" />
                     </p:commandLink>

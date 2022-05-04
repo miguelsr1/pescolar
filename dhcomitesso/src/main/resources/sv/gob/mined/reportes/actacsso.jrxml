@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="actacsso" pageWidth="612" pageHeight="792" columnWidth="492" leftMargin="60" rightMargin="60" topMargin="20" bottomMargin="20" uuid="423e10dc-d87f-442e-9db8-e70547683a2f">
+	<property name="ireport.zoom" value="1.366026910730141"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="355"/>
+	<parameter name="p_horas" class="java.lang.String"/>
+	<parameter name="p_dias" class="java.lang.String"/>
+	<parameter name="p_mes" class="java.lang.String"/>
+	<parameter name="p_anio" class="java.lang.String"/>
+	<parameter name="p_hora_fin" class="java.lang.String"/>
+	<parameter name="p_titular" class="java.lang.String"/>
+	<parameter name="p_atramec" class="java.lang.String"/>
+	<parameter name="p_ddh" class="java.lang.String"/>
+	<parameter name="p_representante1" class="java.lang.String"/>
+	<parameter name="p_dui1" class="java.lang.String"/>
+	<parameter name="p_representante2" class="java.lang.String"/>
+	<parameter name="p_dui2" class="java.lang.String"/>
+	<parameter name="p_representante3" class="java.lang.String"/>
+	<parameter name="p_dui3" class="java.lang.String"/>
+	<parameter name="p_representante4" class="java.lang.String"/>
+	<parameter name="p_dui4" class="java.lang.String"/>
+	<parameter name="pImagenLogo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement uuid="7a80ff1f-de0a-4562-a737-269d462dff7e" x="1" y="11" width="155" height="68"/>
+				<imageExpression><![CDATA[$P{pImagenLogo} + File.separator + "logo_mined_rpt.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="18ae2ce5-be17-4ac0-b9ab-587e0ab660f5" x="50" y="0" width="390" height="35"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ANEXO 1
+ACTA DEL PROCESO DE ELECCIÓN DE REPRESENTANTES DE LAS PERSONAS TRABAJADORAS.]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="494" splitType="Immediate">
+			<textField>
+				<reportElement uuid="409e554a-7235-4500-9e7e-2cd177d558a5" x="0" y="0" width="492" height="138"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<textFieldExpression><![CDATA["Reunidos a las <b>"+ $P{p_horas} + "</b> horas, del día <b>" + $P{p_dias} + "</b> del mes de <b>" + $P{p_mes} + "</b> del año <b>" + $P{p_anio} + "</b>, con el objeto de elegir a representantes de las personas trabajadoras que formarán parte del Comité de Seguridad y Salud Ocupacional, según artículo 16 del Reglamento de Gestión de Prevención de Riesgos en los lugares de trabajo, previa convocatoria de la persona empleadora, con al menos ocho días a la fecha de su celebración CON UNA PRESENCIA MÍNIMA DEL CINCUENTA POR CIENTO MÁS UNO DEL TOTAL DE TRABAJADORAS Y TRABAJADORES, cuyo registro de votación se respalda con la firma del Titular de esta Cartera de Estado, un representante de la Dirección de Desarrollo Humano y un representante del Sindicato mayoritario. Se procedió a iniciar la elección de sus integrantes, utilizando la metodología siguiente: <b>VOTACIÓN ELECTRÓNICA</b>. Concluido el proceso se procedió a la tabulación de los votos, siendo electos las trabajadoras y trabajadores que integrarán el Comité de Seguridad y Salud Ocupacional:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8dfd56a7-50ab-4b7a-8e8b-1dafd1ae14df" x="17" y="140" width="33" height="39"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e26a9b74-66a7-4b9b-802c-c7851afa5997" x="50" y="140" width="325" height="39"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombres según DUI/Representantes electos por las personas trabajadoras]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4453c875-8914-4ed6-93d2-47e401c7b8a8" x="375" y="140" width="101" height="39"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DUI]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e814c2d4-f0f1-4bbc-8f14-8d1102ca950f" x="50" y="179" width="325" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_representante1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a9dbf3b0-f5d9-49fa-afdc-f2ac607d6517" x="375" y="179" width="101" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_dui1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d70b989f-be5f-4182-86fd-b53156b033f8" x="17" y="179" width="33" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5541e53b-452f-4323-b75e-8b9c6a362ba8" x="375" y="199" width="101" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_dui2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e7fc52bf-1912-4179-99f3-428c83f101b2" x="50" y="199" width="325" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_representante2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6cf5c390-897c-44f0-8334-09346e4f89e8" x="17" y="199" width="33" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1ba2474a-6a1f-4002-9abb-ddecb133a861" x="375" y="219" width="101" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_dui3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a99d4611-ba24-42ed-9b3e-1bef282609ec" x="50" y="219" width="325" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_representante3}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d0834b1d-ff96-4bae-9e81-a595df70af30" x="17" y="219" width="33" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[3]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ba48d3e0-18eb-49de-b19e-5e93b78cfa29" x="375" y="239" width="101" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_dui4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cdd226ac-2d6e-406f-bf23-b4553f64dd34" x="50" y="239" width="325" height="20"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{p_representante4}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="059caef9-b34d-4afa-a975-f6d10e6ce653" x="17" y="239" width="33" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[4]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="0274a483-102c-476f-b9f2-b13b264518b8" x="0" y="265" width="492" height="71"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<textFieldExpression><![CDATA["<i>NOTA: Garantizar la participación de hombres y mujeres dentro del Comité, según proporción de las personas trabajadoras.</i> \n\n"+
+"Por lo que firmamos dando fe de que las empleadas y empleados han participado en el proceso concluido a las " + $P{p_hora_fin} + " horas del <b><u>OCHO DE MARZO DE DOS MIL VEINTIDÓS</u></b> y se adjunta hoja de tabulación generada por el Sistema de Votación para la presente Elección."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="11a4e16c-e468-4fc1-bd64-571af35837f1" x="17" y="383" width="153" height="60"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["___________________________\n"+
+$P{p_titular} +
+"\nMinistro de Educación, Ciencia y Tecnología o su Apoderado"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="403557db-a2c6-49dc-b284-4937c3185f26" x="170" y="447" width="153" height="42"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["___________________________\n"+
+$P{p_atramec} +
+"\nRepresentante del Sindicato ATRAMEC"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="021bdc68-a356-4acc-b2d7-a92891f8901f" x="323" y="383" width="153" height="60"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA["___________________________\n"+
+$P{p_ddh}+
+"\nRepresentante de la Dirección de Desarrollo Humano"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="6" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="4" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
@@ -51,11 +47,9 @@ public class Usuario implements Serializable {
     private Date fechaEliminacion;
     @Column(name = "ESTADO_ELIMINACION")
     private Long estadoEliminacion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2)
-    @Column(name = "CODIGO_DEPARTAMENTO")
-    private String codigoDepartamento;
+    @JoinColumn(name = "CODIGO_DEPARTAMENTO", referencedColumnName = "CODIGO_DEPARTAMENTO")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Departamento codigoDepartamento;
     @Column(name = "FECHA_VENCIMIENTO_CLAVE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaVencimientoClave;
@@ -78,21 +72,12 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "ID_TIPO_USUARIO", referencedColumnName = "ID_TIPO_USUARIO")
     @ManyToOne(fetch = FetchType.EAGER)
     private TipoUsuario idTipoUsuario;
-    
+
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID_PERSONA")
     @ManyToOne(fetch = FetchType.EAGER)
     private Persona idPersona;
 
     public Usuario() {
-    }
-
-    public Usuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Usuario(Long idUsuario, String codigoDepartamento) {
-        this.idUsuario = idUsuario;
-        this.codigoDepartamento = codigoDepartamento;
     }
 
     public Long getIdUsuario() {
@@ -151,11 +136,11 @@ public class Usuario implements Serializable {
         this.estadoEliminacion = estadoEliminacion;
     }
 
-    public String getCodigoDepartamento() {
+    public Departamento getCodigoDepartamento() {
         return codigoDepartamento;
     }
 
-    public void setCodigoDepartamento(String codigoDepartamento) {
+    public void setCodigoDepartamento(Departamento codigoDepartamento) {
         this.codigoDepartamento = codigoDepartamento;
     }
 

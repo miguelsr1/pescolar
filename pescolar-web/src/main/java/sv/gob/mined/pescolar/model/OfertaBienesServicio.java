@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 
 @Table(name = "OFERTA_BIENES_SERVICIOS")
@@ -58,6 +59,10 @@ public class OfertaBienesServicio implements Serializable {
 
     @Column(name = "FECHA_OFERTA")
     private LocalDate fechaOferta;
+    
+    @OneToMany(mappedBy = "idOferta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("idParticipante ASC")
+    private List<Participante> participantesList;
 
     public LocalDate getFechaOferta() {
         return fechaOferta;
@@ -185,6 +190,14 @@ public class OfertaBienesServicio implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Participante> getParticipantesList() {
+        return participantesList;
+    }
+
+    public void setParticipantesList(List<Participante> participantesList) {
+        this.participantesList = participantesList;
     }
 
 }

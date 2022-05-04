@@ -3,10 +3,14 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Table(name = "DET_RUBRO_MUESTRA_INTERES")
 @Entity
 public class DetRubroMuestraIntere implements Serializable {
+
+    @OneToMany(mappedBy = "idMuestraInteres", fetch = FetchType.LAZY)
+    private List<PreciosRefRubroEmp> preciosRefRubroEmpList;
 
     @Id
     @Column(name = "ID_MUESTRA_INTERES", nullable = false)
@@ -165,5 +169,13 @@ public class DetRubroMuestraIntere implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<PreciosRefRubroEmp> getPreciosRefRubroEmpList() {
+        return preciosRefRubroEmpList;
+    }
+
+    public void setPreciosRefRubroEmpList(List<PreciosRefRubroEmp> preciosRefRubroEmpList) {
+        this.preciosRefRubroEmpList = preciosRefRubroEmpList;
     }
 }

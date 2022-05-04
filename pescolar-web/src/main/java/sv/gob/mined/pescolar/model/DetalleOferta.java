@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import org.hibernate.annotations.Filter;
 
@@ -26,8 +27,8 @@ public class DetalleOferta implements Serializable {
     @JoinColumn(name = "ID_PARTICIPANTE")
     private Participante idParticipante;
 
-    @Column(name = "CANTIDAD", nullable = false, precision = 18, scale = 2)
-    private BigDecimal cantidad;
+    @Column(name = "CANTIDAD", nullable = false, precision = 18, scale = 0)
+    private BigInteger cantidad;
 
     @Column(name = "PRECIO_UNITARIO", nullable = false, precision = 18, scale = 2)
     private BigDecimal precioUnitario;
@@ -161,11 +162,11 @@ public class DetalleOferta implements Serializable {
         this.precioUnitario = precioUnitario;
     }
 
-    public BigDecimal getCantidad() {
+    public BigInteger getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(BigDecimal cantidad) {
+    public void setCantidad(BigInteger cantidad) {
         this.cantidad = cantidad;
     }
 

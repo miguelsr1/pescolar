@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tabulacioncsso" pageWidth="612" pageHeight="792" columnWidth="512" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" uuid="423e10dc-d87f-442e-9db8-e70547683a2f">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="130"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="postulantes" uuid="96c52ebd-f741-4ca1-a8c4-3642db5b3222">
+		<field name="correlativo" class="java.lang.Integer"/>
+		<field name="nombre" class="java.lang.String"/>
+		<field name="votos" class="java.lang.Integer"/>
+		<variable name="sumavotos" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{votos}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="p_totalvotantes" class="java.lang.String"/>
+	<parameter name="p_dias" class="java.lang.String"/>
+	<parameter name="p_mes" class="java.lang.String"/>
+	<parameter name="p_anio" class="java.lang.String"/>
+	<parameter name="p_titular" class="java.lang.String"/>
+	<parameter name="p_atramec" class="java.lang.String"/>
+	<parameter name="p_ddh" class="java.lang.String"/>
+	<parameter name="p_PostulantesCollection" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource" isForPrompting="false"/>
+	<parameter name="pImagenLogo" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="280" splitType="Stretch">
+			<image>
+				<reportElement uuid="7a80ff1f-de0a-4562-a737-269d462dff7e" x="-2" y="0" width="143" height="59"/>
+				<imageExpression><![CDATA[$P{pImagenLogo} + File.separator + "logo_mined_rpt.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="18ae2ce5-be17-4ac0-b9ab-587e0ab660f5" x="1" y="62" width="511" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TABULACIÓN DEL SISTEMA DE VOTACIÓN DEL MINEDUCYT]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="409e554a-7235-4500-9e7e-2cd177d558a5" x="1" y="75" width="511" height="59"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["El Ministerio de Educación, Ciencia y Tecnología, tuvo a bien llevar a cabo la VOTACIÓN DIGITAL, a fin de evitar aglomeración de personas por motivo de la pandemia COVID-19, así mismo facilitar al personal una metodología que les permita hacer uso de su derecho al voto en el proceso de <b>\"ELECCIÓN DE 4 REPRESENTANTES DE LAS PERSONAS TRABAJADORAS PARA CONFORMAR EL COMITÉ DE SEGURIDAD Y SALUD OCUPACIONAL DE OFICINAS CENTRALES DEL MINEDUCYT\"</b>\n\n."+
+"El resultado obtenido fue el siguiente:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="11a1988b-8096-4994-976e-5816b2bbdee1" x="1" y="237" width="511" height="43"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Convocatoria ordinaria: 07/03/2022. De 9:00 a.m. a 2:00 p.m. <br>"+
+"Convocatoria  ampliada: 07/03/2022. De 2:00 a.m. a 3:00 p.m. y <br>"+
+"                        08/03/2022. De 7:30 a.m. a 12:00 m.<br>"+
+"Cantidad de personas con derecho al voto: <b>"+$P{p_totalvotantes}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="5db9c866-ace9-41df-b287-4022e8af4413" x="27" y="132" width="485" height="51"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Se requirió a las diferentes Unidades Organizativas de oficina central, remitir el nombre de un postulante conforme a los requisitos establecidos en el Reglamento de Gestión de la Prevención de Riesgos en los Lugares de Trabajo, persona que fue elegida por el personal de cada Unidad Organizativa. Así mismo se validaron las nóminas de votación que incluye únicamente a quienes laboran físicamente en oficinas centrales."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1bf4b7e7-a472-4f3f-bace-bf26fd60ccb2" x="12" y="132" width="25" height="24"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[1.]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="ade71a90-202f-4c39-bf0a-0ca08740e275" x="27" y="180" width="485" height="34"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Se creó un Sistema de Votación Digital en el cual se encriptó el nombre y fotografía de los postulantes e incorporó al personal con derecho al voto. Dándose a conocer al personal la metodología de votación, así como los pasos a seguir para ejercer el voto."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2042b17c-defb-49c3-9a57-83822d287d3c" x="12" y="180" width="15" height="24"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="96fb4d91-2e99-4d4a-9e67-24fd11086be9" x="27" y="215" width="485" height="21"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["La tabulación de los resultados generados por el Sistema de Votación Digital se detalla a continuación:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ca6e5936-af50-4c11-b84b-d18c925afdc9" x="12" y="215" width="15" height="21"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[3.]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Immediate"/>
+	</columnHeader>
+	<detail>
+		<band height="44" splitType="Stretch">
+			<componentElement>
+				<reportElement uuid="424b84a6-9e4b-4f6a-818e-76b41629de2c" key="table" style="table" x="27" y="0" width="459" height="42"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="postulantes" uuid="7a7aab11-49d1-4a84-be34-c077e773c6e0">
+						<dataSourceExpression><![CDATA[$P{p_PostulantesCollection}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="37" uuid="a03a7a2c-45ac-4dc6-a06b-bd0f5eff475c">
+						<jr:tableFooter style="table_TH" height="15" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="28" rowSpan="1">
+							<staticText>
+								<reportElement uuid="5570a234-847c-4f2b-9f25-230d3e00ee4c" x="0" y="0" width="37" height="28"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[No.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="14" rowSpan="1">
+							<textField>
+								<reportElement uuid="7d4803e3-9887-4d14-b788-abd4cc72a4fb" x="0" y="0" width="37" height="14"/>
+								<box leftPadding="3" rightPadding="3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{correlativo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="308" uuid="dc0f2f07-702a-4b1a-b1b0-d17802890d16">
+						<jr:tableFooter style="table_TH" height="15" rowSpan="1">
+							<staticText>
+								<reportElement uuid="30e8c1b4-d6aa-4e0e-a87c-485c8018602f" x="0" y="0" width="308" height="15"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[TOTAL DE VOTOS EJERCIDOS]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_CH" height="28" rowSpan="1">
+							<staticText>
+								<reportElement uuid="ed42f70e-7c83-4ad3-a653-d7393907361e" x="0" y="0" width="308" height="28"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[NOMBRE DE POSTULANTES]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="14" rowSpan="1">
+							<textField>
+								<reportElement uuid="16304a9a-a4dc-436b-96f0-1a63f3a7aed3" x="0" y="0" width="308" height="14"/>
+								<box leftPadding="3" rightPadding="3"/>
+								<textElement verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="113" uuid="d0dec2c6-873e-4518-a1ae-7e7d917d448b">
+						<jr:tableFooter style="table_TH" height="15" rowSpan="1">
+							<textField>
+								<reportElement uuid="0b776d95-17f1-4729-a28f-39ab0317ebf4" x="0" y="0" width="112" height="15"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumavotos}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_CH" height="28" rowSpan="1">
+							<staticText>
+								<reportElement uuid="7932f9fa-aff0-4bac-a3b7-73f412cc9f3e" x="0" y="0" width="112" height="28"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[CANTIDAD DE VOTOS OBTENIDOS POR POSTULANTE]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="14" rowSpan="1">
+							<textField>
+								<reportElement uuid="9ef20ac9-9c08-49a1-bc7d-cd6a9547759a" x="0" y="0" width="112" height="14"/>
+								<box leftPadding="3" rightPadding="3"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{votos}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="180" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0274a483-102c-476f-b9f2-b13b264518b8" x="0" y="1" width="512" height="50"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Se conserva en los archivos de la Dirección de Desarrollo Humano la nómina de las personas que ingresaron al Sistema para ejercer el voto\n\n"+
+"Dando fe del proceso y resultados obtenidos, firmamos, a los " + $P{p_dias} + " días del mes de " + $P{p_mes} + " del año " + $P{p_anio} + "."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="75fd70db-9cf0-4a43-9e17-382080fa7cbd" x="0" y="72" width="153" height="60"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="9"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["___________________________\n"+
+$P{p_titular} +
+"\nMinistro de Educación, Ciencia y Tecnología o su Apoderado"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="b0b353e4-7dce-4b50-aa06-869afeed86e4" x="178" y="121" width="153" height="59"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["___________________________\n"+
+$P{p_atramec} +
+"\nRepresentante del Sindicato ATRAMEC"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="6b232a6c-d54f-47a6-b65c-8531fdaf497d" x="359" y="72" width="153" height="60"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["___________________________\n"+
+$P{p_ddh}+
+"\nRepresentante de la Dirección de Desarrollo Humano"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

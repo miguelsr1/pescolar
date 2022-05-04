@@ -1,14 +1,6 @@
 package sv.gob.mined.pescolar.repository;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 
 /**
@@ -22,7 +14,7 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
         super(ResolucionesAdjudicativa.class);
     }
 
-    @Transactional
+    /*@Transactional
     public ResolucionesAdjudicativa findResolucionAdjudicativa(Long idParticipante) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ResolucionesAdjudicativa> cr = cb.createQuery(ResolucionesAdjudicativa.class);
@@ -36,5 +28,5 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
         Query query = em.createQuery(cr);
 
         return (ResolucionesAdjudicativa) query.getSingleResult();
-    }
+    }*/
 }

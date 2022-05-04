@@ -64,13 +64,20 @@ public class Participante implements Serializable {
     private BigDecimal porcentajePrecio;
 
     @OneToMany(mappedBy = "idParticipante", fetch = FetchType.LAZY)
-    @OrderBy(clause = "noItem asc")
+    @OrderBy(clause = "to_number(noItem) asc")
     private List<DetalleOferta> detalleOfertasList;
 
     @Transient
     private BigInteger cantidad = BigInteger.ZERO;
     @Transient
     private BigDecimal monto = BigDecimal.ZERO;
+
+    public Participante() {
+    }
+
+    public Participante(Long id) {
+        this.id = id;
+    }
 
     public BigDecimal getPorcentajePrecio() {
         return porcentajePrecio;
@@ -189,9 +196,9 @@ public class Participante implements Serializable {
 
     public BigInteger getCantidad() {
         cantidad = BigInteger.ZERO;
-        for (DetalleOferta detalleOfertas : detalleOfertasList) {
+        for (DetalleOferta detalleOfertas : getDetalleOfertasList()) {
             if (detalleOfertas.getEstadoEliminacion().compareTo(0l) == 0) {
-                cantidad = cantidad.add(detalleOfertas.getCantidad().toBigInteger());
+                cantidad = cantidad.add(detalleOfertas.getCantidad());
             }
         }
         return cantidad;
@@ -199,9 +206,9 @@ public class Participante implements Serializable {
 
     public BigDecimal getMonto() {
         monto = BigDecimal.ZERO;
-        for (DetalleOferta detalleOfertas : detalleOfertasList) {
+        for (DetalleOferta detalleOfertas : getDetalleOfertasList()) {
             if (detalleOfertas.getEstadoEliminacion().compareTo(0l) == 0) {
-                monto = monto.add(detalleOfertas.getPrecioUnitario().multiply(detalleOfertas.getCantidad()));
+                monto = monto.add(detalleOfertas.getPrecioUnitario().multiply(new BigDecimal(detalleOfertas.getCantidad())));
             }
         }
         return monto;

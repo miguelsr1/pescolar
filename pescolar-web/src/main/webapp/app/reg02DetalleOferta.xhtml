@@ -1,8 +1,330 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    template="/WEB-INF/template.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <script type="text/javascript">
+
+        </script>
+
+        <style type="text/css">
+            .hideElem {
+                display: none;
+            }
+            .invoice {
+                padding: 2rem;
+            }
+            .invoice-summary {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+            }
+            .invoice-details {
+                width: 40rem;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+            }
+            .invoice-details .invoice-value {
+                text-align: right;
+            }
+            .invoice-details > div {
+                width: 50%;
+                margin-bottom: 0.5rem;
+            }
+
+            body .ui-panelgrid .ui-panelgrid-cell {
+                border: 1px solid #D3D5D6;
+                background: #ffffff;
+                color: #64686A;
+                padding: 0.5rem;
+            }
+
+            .p-field.p-grid, .p-formgrid.p-grid {
+                margin-top: 22px !important;
+            }
+
+
+            .layout-wrapper .layout-main .layout-content #principal > div {
+                width: 1200px;
+                margin: 0 auto;
+            }
+
+            @media (max-width: 960px) {
+                .layout-wrapper .layout-main .layout-content #principal > div {
+                    width: 100%;
+                }
+            }
+
+            body .ui-datatable .ui-datatable-data > tr > td {
+                padding: 0.5rem 0.5rem;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                border-top-width: 1px;
+                border-right-width: 1px;
+                border-bottom-width: 1px;
+                border-left-width: 1px;
+                border-width: 0 0 1px 0;
+            }
+
+            .divSticky{
+                position: sticky !important;
+                top: 80px;
+                z-index: 250;
+            }
+
+            .principal {
+                top: 0;
+                z-index: 10;
+                width: 100%;
+                display: grid;
+                grid-template-columns: auto auto;
+            }
+            #dvDatos.divStickySombra{
+                box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.12);
+            }
+            #dvPresupuesto.divStickySombra{
+                box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.12);
+            }
+
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                overflow: scroll;
+                overflow-x: hidden;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">Detalle de contratación:</ui:define>
     <ui:define name="content">
-        
+        <h:form id="form" prependId="false">
+            <div class="p-grid dashboard">
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar>
+                        <p:menuitem value="Nuevo"  icon="pi pi-plus" action="#{ofertaBienesServiciosView.nuevo()}"/>
+                        <p:menuitem value="Buscar"  icon="pi pi-search" action="#{ofertaBienesServiciosView.buscar()}" />
+                    </p:menubar>
+                </div>
+                <div class="p-col-12 p-md-8 ">
+                    <div class="card ui-fluid overview-box blue" id="dvDatos">
+                        <h5 id="tituloDatos">
+                            <i class="pi pi-home" style="font-weight: bold;"></i>
+                            Datos Generales:
+                        </h5>
+
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Centro educativo</p:outputLabel>
+                            <div class="p-col-12 p-md-9" style="font-weight: bold;">
+                                <p:outputLabel>#{detalleOfertaView.participante.idOferta.codigoEntidad.codigoEntidad} - #{detalleOfertaView.participante.idOferta.codigoEntidad.nombre}</p:outputLabel>
+                            </div>
+                        </div>
+
+
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Rubro de adquisición</p:outputLabel>
+                            <div class="p-col-12 p-md-9" style="font-weight: bold;">
+                                <p:outputLabel>#{detalleOfertaView.participante.idOferta.idDetProcesoAdq.idRubroAdq.descripcionRubro}</p:outputLabel>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Proveedor</p:outputLabel>
+                            <div class="p-col-12 p-md-9" style="font-weight: bold;">
+                                <p:outputLabel>#{detalleOfertaView.participante.idEmpresa.razonSocial}</p:outputLabel>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel for="cboEst" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Estado reserva</p:outputLabel>
+                            <div class="p-col-12 p-md-9">
+                                <p:selectOneMenu id="cboEst" value="#{detalleOfertaView.resAdj.idEstadoReserva.id}">
+                                    <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
+                                    <f:selectItems value="#{detalleOfertaView.lstEstadoReserva}" var="est" itemLabel="#{est.descripcionReserva}" itemValue="#{est.id}"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4 " >
+                    <div class="card ui-fluid overview-box green" id="dvPresupuesto">
+                        <h5 id="tituloPresupuesto">
+                            <i class="pi pi-dollar" style="font-weight: bold;"></i>
+                            Presupuesto del C.E.:
+                        </h5>
+                        <p:panelGrid id="pnlSaldos" columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank" >
+                            <p:panelGrid styleClass="companyHeaderGrid" style="margin: 0 auto !important;">
+                                <p:row>
+                                    <p:column styleClass="numero">
+                                        <p:outputLabel value="a. Montol total asignado:  $"/>
+                                    </p:column>
+                                    <p:column style="text-align: right">
+                                        <p:outputLabel value="#{detalleOfertaView.techo.montoPresupuestado}">
+                                            <f:convertNumber pattern="#,###.00"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column />
+                                </p:row>
+                                <p:row>
+                                    <p:column styleClass="numero">
+                                        <p:outputLabel value="b. Adjudicación acumulada:  $" />
+                                    </p:column>
+                                    <p:column style="text-align: right">
+                                        <p:outputLabel value="#{detalleOfertaView.techo.montoAdjudicado}">
+                                            <f:convertNumber pattern="#,###.00"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column />
+                                </p:row>
+                                <p:row>
+                                    <p:column styleClass="numero">
+                                        <p:outputLabel value="c. Adjudicacion actual:  $" />
+                                    </p:column>
+                                    <p:column style="text-align: right">
+                                        <p:outputLabel value="#{detalleOfertaView.resAdj.idParticipante.monto}">
+                                            <f:convertNumber pattern="#,###.00"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column />
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="3">
+                                        <p:separator />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column styleClass="numero">
+                                        <p:outputLabel value="d. Saldo:  $"/>
+                                    </p:column>
+                                    <p:column style="text-align: right; font-weight: bold">
+                                        <p:outputLabel value="#{detalleOfertaView.montoSaldo}">
+                                            <f:convertNumber pattern="#,###.00"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column>
+                                        <div class="overview-box-p red" style="display: #{detalleOfertaView.positivo ? 'block':'none'}">
+                                            <i class="pi pi-thumbs-down" style="font-size: 8px !important"></i>
+                                        </div>
+                                        <div class="overview-box-p blue" style="display: #{(!detalleOfertaView.positivo)? 'block':'none'}">
+                                            <i class="pi pi-thumbs-up"></i>
+                                        </div>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid>
+                    </div>
+                </div>
+                <div class="p-col-12" style="padding-top: 0.1rem">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box orange">
+                            <h5>
+                                <i class="pi pi-list" style="font-weight: bold;"></i>
+                                Detalle de contratación:
+                            </h5>
+                            <p:commandButton id="btnAgregar" value="Agregar" icon="pi pi-plus-circle" styleClass="rounded-button p-mr-2 p-mb-2"
+                                             update="tblDetalleOferta" style="float: right; font-size: 12px; width: 100px"
+                                             action="#{detalleOfertaView.agregarDetalle()}" disabled="#{not detalleOfertaView.editable or detalleOfertaView.mostrarMsjPrecio}"/>
+                        </div>
+
+
+                        <h:panelGrid id="pngMsj" columns="1" rendered="#{participantesController.mostrarMsj}">
+                            <p:spacer height="10"/>
+                            <p:outputLabel value="" style="font-size: 16px; color: #FF0000;"/>
+                            <p:spacer height="10"/>
+                        </h:panelGrid>
+
+                        <div class="p-col-12" style="display: #{detalleOfertaView.mostrarMsjPrecio?'block':'none'}">
+                            <p:staticMessage severity="warn" summary="Alerta" detail="Al proveedor seleccionado NO se le han ingresado los precios de referencia." style="width: 100%"/>
+                        </div>
+
+
+                        <p:dataTable id="tblDetalleOferta" value="#{detalleOfertaView.participante.detalleOfertasList}" 
+                                     var="detalle" reflow="true" editable="#{detalleOfertaView.editable}" editMode="cell" rowIndexVar="rowId"
+                                     styleClass="ui-datatable-striped" widgetVar="tblDetalleOferta">
+
+                            <p:ajax id="event" event="cellEdit" listener="#{detalleOfertaView.onCellEdit}" onsuccess="updDetalleOferta();"/>
+
+                            <p:column headerText="No." width="27" id="item">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:outputLabel value="#{detalle.noItem}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="txtNoItem" value="#{detalle.noItem}" style="width:100%"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Descripción" field="consolidadoEspTec" filterable="false" sortable="false"/>
+
+                            <p:column headerText="Cant." width="60" id="cantidad" style="text-align: right;">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <p:outputLabel value="#{detalle.cantidad}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputNumber decimalPlaces="0" id="txtCantidad" value="#{detalle.cantidad}" style="width:100%;" inputStyle="text-align: right;">
+                                            <p:ajax event="keyup" update="tblDetalleOferta:#{rowId}:lblst" global="false"/>
+                                        </p:inputNumber>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Pre.Uni." width="60" style="text-align: right;">
+                                <p:outputLabel value="#{detalle.precioUnitario}">
+                                    <f:convertNumber pattern="#,###.00"/>
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Sub.Total" width="60" style="text-align: right;">
+                                <p:outputLabel id="lblst" value="#{detalle.precioUnitario*detalle.cantidad}">
+                                    <f:convertNumber pattern="#,###.00"/>
+                                </p:outputLabel>
+                            </p:column>
+
+                            <p:column exportable="false" width="20">
+                                <p:commandButton class="ui-button-warning rounded-button" update="tblDetalleOferta" icon="pi pi-trash" process="@this" 
+                                                 actionListener="#{detalleOfertaView.eliminarDetalle()}" disabled="#{not detalleOfertaView.editable}">
+                                    <f:setPropertyActionListener value="#{detalle}" target="#{detalleOfertaView.detalleSeleccionado}"/>
+                                    <f:setPropertyActionListener value="#{rowId}" target="#{detalleOfertaView.rowEdit}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <div class="invoice-summary">
+                                    <div class="invoice-notes">
+
+                                    </div>
+                                    <div>
+                                        <div class="invoice-details">
+                                            <div class="invoice-label">TOTAL</div>
+                                            <div class="invoice-value">
+                                                <p:outputLabel id="lblTotalCantidad" value="#{detalleOfertaView.cantidadContrato}">
+                                                    <f:convertNumber pattern="#,###"/>
+                                                </p:outputLabel>
+                                                <p:spacer width="120"/>
+                                                <p:outputLabel id="lblTotalMonto" value="#{detalleOfertaView.montoContrato}">
+                                                    <f:convertNumber pattern="$ #,###.00"/>
+                                                </p:outputLabel>
+                                                <p:spacer width="40"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </f:facet>
+                        </p:dataTable>
+
+                        <p:remoteCommand name="updDetalleOferta" update="tblDetalleOferta:lblTotalMonto tblDetalleOferta:lblTotalCantidad"/>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        <h:outputStylesheet name="personalizadas.css" library="css"/>
+        <h:outputScript name="default.js" library="js"/>
     </ui:define>
 </ui:composition>

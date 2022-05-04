@@ -1,16 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.pescolar.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import sv.gob.mined.pescolar.utils.Filtro;
+import sv.gob.mined.pescolar.utils.db.Filtro;
 
 /**
  *
@@ -51,22 +50,63 @@ public abstract class AbstractRepository<Entity, Primary> {
 
         return em.createQuery(cq).getResultList();
     }
-    
+
     public Entity findEntityByParam(List<Filtro> parametros) {
+        List<Predicate> lstCondiciones = new ArrayList();
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Entity> cq = cb.createQuery(entityClass);
         Root<Entity> root = cq.from(entityClass);
+
         for (Filtro parametro : parametros) {
-            switch (parametro.getTipoOperacion()) {
-                case 1://EQUALS
-                    cq.select(root).where(cb.equal(root.get(parametro.getClave()), parametro.getValor()));
-                    break;
-                case 2://LIKE
-                    cq.select(root).where(cb.like(root.get(parametro.getClave()), "%" + parametro.getValor() + "%"));
-                    break;
+            Path path = root;
+            if (parametro.getValor() != null) {
+                switch (parametro.getTipoOperacion()) {
+                    case EQUALS://EQUALS
+                        if (parametro.getClave().split("\\.").length > 1) {
+                            for (String clave : parametro.getClave().split("\\.")) {
+                                path = path.get(clave);
+                            }
+                            lstCondiciones.add(cb.equal(path, parametro.getValor()));
+                        } else {
+                            lstCondiciones.add(cb.equal(path.get(parametro.getClave()), parametro.getValor()));
+                        }
+                        break;
+                    case LIKE://LIKE
+                        if (parametro.getClave().split("\\.").length > 1) {
+                            for (String clave : parametro.getClave().split("\\.")) {
+                                path = path.get(clave);
+                            }
+                            lstCondiciones.add(cb.like(path, "%" + parametro.getValor() + "%"));
+                        } else {
+                            lstCondiciones.add(cb.like(path, "%" + parametro.getValor() + "%"));
+                        }
+                        break;
+                    case IN:
+
+                        if (parametro.getClave().split("\\.").length > 1) {
+                            for (String clave : parametro.getClave().split("\\.")) {
+                                path = path.get(clave);
+                            }
+                        }
+                        
+
+                        /*CriteriaBuilder.In<?> inClause = cb.in(path);
+
+                        for (String idNivel : parametro.getValor().toString().split("\\,")) {
+                            inClause.value(parametro.getClazz().cast(idNivel));
+                        }*/
+
+                        break;
+                }
             }
         }
+        cq.select(root).where(lstCondiciones.toArray(Predicate[]::new));
 
         return em.createQuery(cq).getResultList().isEmpty() ? null : em.createQuery(cq).getResultList().get(0);
+    }
+    
+    public void prueba(){
+        //CriteriaBuilder.In<Long> inClause = cb.in(path);
     }
 }

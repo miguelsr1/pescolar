@@ -36,7 +36,7 @@ Estilos modificados de la plantilla
     padding: 0;
     top: 0px;
     right: 0;
-    width: 500px !important;
+    /*width: 500px !important;*/
     z-index: 999;
     height: 100%;
     transform: translate3d(240px, 0px, 0px);
@@ -47,3 +47,68 @@ Estilos modificados de la plantilla
     background-color: #ffffff;
     box-shadow: 0 24px 64px -2px rgba(0, 0, 0, 0.02), 0 6px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -2px rgba(0, 0, 0, 0.08);
 }
+
+.overview-box.green > h5 > i {
+    background-color: rgba(55, 165, 51, 0.3);
+    color: #37a533;
+}
+.overview-box.blue > h5 > i {
+    background-color: rgba(57, 132, 184, 0.3);
+    color: #3984b8;
+}
+
+.overview-box.orange > h5 > i {
+    background-color: rgba(246, 172, 43, 0.3);
+    color: #f6ac2b;
+}
+
+.overview-box > h5 > i {
+    padding: 6px;
+    font-size: 16px;
+    background-color: rgba(57, 132, 184, 0.3);
+    color: #3984b8;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    height: 28px;
+    width: 28px;
+}
+
+.overview-box-p.orange > i {
+    background-color: rgba(246, 172, 43, 0.3);
+    color: #f6ac2b;
+}
+
+.overview-box-p.red > i {
+    background: #FFCDD2;
+    color: #C63737;
+}
+
+.overview-box-p >  i {
+    padding: 6px;
+    font-size: 14px;
+    background-color: rgba(57, 132, 184, 0.3);
+    color: #3984b8;
+    border-radius: 4px;
+    height: 28px;
+    width: 28px;
+}
+
+.overview-box-p {
+    height: 100%;
+}
+
+/*.yellow{
+    color: yellow;
+}
+.red {
+    color: #d0525d;
+}
+.blue {
+    color: #33afde;
+}
+.green {
+    color: #5fcf80;
+}
+.orange {
+    color: #f6ac2b;
+}*/

@@ -13,12 +13,12 @@ import org.primefaces.PrimeFaces;
 import sv.gob.mined.dhcomitesso.model.dhcsso.DetalleProceso;
 import sv.gob.mined.dhcomitesso.model.dhcsso.view.CandidatoDto;
 import sv.gob.mined.dhcomitesso.repository.CandidatoRepo;
+import sv.gob.mined.utils.jsf.JsfUtil;
 
 /**
  *
  * @author misanchez
  */
-@SuppressWarnings("serial")
 @Named
 @ViewScoped
 public class DetalleVotacionView implements Serializable {
@@ -69,9 +69,13 @@ public class DetalleVotacionView implements Serializable {
     }
 
     public void guardar() {
-        candidatoRepo.guardarVoto(1, idCandidato, psv.getEmpleado());
-        psv.setVotoRealizado(Boolean.TRUE);
+        if (idCandidato != null) {
+            candidatoRepo.guardarVoto(1, idCandidato, psv.getEmpleado());
+            psv.setVotoRealizado(Boolean.TRUE);
 
-        PrimeFaces.current().executeScript("PF('dlgVoto').show()");
+            PrimeFaces.current().executeScript("PF('dlgVoto').show()");
+        }else{
+            JsfUtil.mensajeAlerta("Debe de seleccionar un candidato.");
+        }
     }
 }

@@ -3,6 +3,7 @@ package sv.gob.mined.dhcomitesso.view;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.enterprise.context.RequestScoped;
@@ -10,19 +11,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.security.enterprise.AuthenticationStatus;
-import javax.security.enterprise.SecurityContext;
-import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
-import javax.security.enterprise.credential.UsernamePasswordCredential;
-import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
 import org.primefaces.PrimeFaces;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
+import sv.gob.mined.dhcomitesso.model.dhcsso.Users;
 import sv.gob.mined.dhcomitesso.repository.EmailRepo;
 import sv.gob.mined.dhcomitesso.repository.LoginRepo;
 import sv.gob.mined.dhcomitesso.util.RC4Crypter;
+import sv.gob.mined.dhcomitesso.util.VarSession;
 import sv.gob.mined.utils.jsf.JsfUtil;
 import sv.gob.mined.utils.mail.MailSession;
 
@@ -30,16 +25,13 @@ import sv.gob.mined.utils.mail.MailSession;
  *
  * @author misanchez
  */
-@SuppressWarnings("serial")
 @Named
 @RequestScoped
 public class LoginView implements Serializable {
 
     private static final ResourceBundle UTIL_CORREO = ResourceBundle.getBundle("Bundle");
 
-    @NotEmpty
     private String codigoEmpleado;
-    @NotEmpty
     private String claveAcceso;
 
     private String duiEmpleado;
@@ -49,9 +41,6 @@ public class LoginView implements Serializable {
     private LoginRepo loginRepo;
     @Inject
     private EmailRepo emailRepo;
-
-    @Inject
-    private SecurityContext securityContext;
 
     public String getCodigoEmpleado() {
         return codigoEmpleado;
@@ -115,42 +104,38 @@ public class LoginView implements Serializable {
         }
         PrimeFaces.current().executeScript("PF('dlgActivarCorreo').hide();");
     }
-    Map<String, String> parameters = new HashMap<>();
+
+//    @Inject
+//    private Pbkdf2PasswordHash passwordHash;
+    public String validarUsuario() {
+
+//        Map<String, String> parameters = new HashMap<>();
 //        parameters.put("Pbkdf2PasswordHash.Iterations", "3072");
 //        parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
 //        parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
 //        passwordHash.initialize(parameters);
-//
-//        System.out.println(passwordHash.generate(claveAcceso.toCharArray()));
-    @Inject
-    private Pbkdf2PasswordHash passwordHash;
 
-    public String validarUsuario() {
-//        
         
-        switch (processAuthentication()){
-            case SEND_CONTINUE:
-                //facesContext.responseComplete();
-                break;
-            case SEND_FAILURE:
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid user name and/or password.", null));
-                break;
-            case SUCCESS:
-                // It really passes here, but I'm not redirected to the start
-                // page. I keep in the login page.
-                return "/app/principal?faces-redirect=true";
-            default:
-                break;
+//        List<Users> lstUsers = loginRepo.findAllUsers();
+//        for (Users user : lstUsers) {
+//            loginRepo.guardar(user, user.getUserPassword());
+//        }
+        Users u = loginRepo.usuarioValido(codigoEmpleado, claveAcceso);
+        if (u != null) {
+            VarSession.setVariableSession("pUsuario", u);
+            return "/app/principal?faces-redirect=true";
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario o clave de acceso inválido .", null));
         }
         return null;
     }
-    
-    private AuthenticationStatus processAuthentication() {
-        return securityContext.authenticate(
-                (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
-                (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse(),
-                AuthenticationParameters.withParams().credential(
-                        new UsernamePasswordCredential(codigoEmpleado, claveAcceso))
-        );
-    }
+
+//    private AuthenticationStatus processAuthentication() {
+//        return securityContext.authenticate(
+//                (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
+//                (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse(),
+//                AuthenticationParameters.withParams().credential(
+//                        new UsernamePasswordCredential(codigoEmpleado, claveAcceso))
+//        );
+//    }
 }

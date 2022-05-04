@@ -16,6 +16,13 @@ public class EstadoReserva implements Serializable {
     @Column(name = "DESCRIPCION_RESERVA", length = 25)
     private String descripcionReserva;
 
+    public EstadoReserva(Long id) {
+        this.id = id;
+    }
+
+    public EstadoReserva() {
+    }
+
     public String getDescripcionReserva() {
         return descripcionReserva;
     }

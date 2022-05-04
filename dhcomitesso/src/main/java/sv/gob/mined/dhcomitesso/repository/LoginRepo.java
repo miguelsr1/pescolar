@@ -6,11 +6,8 @@ package sv.gob.mined.dhcomitesso.repository;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -18,9 +15,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.transaction.Transactional;
 import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
+import sv.gob.mined.dhcomitesso.model.dhcsso.Users;
+import sv.gob.mined.dhcomitesso.util.RC4Crypter;
 
 /**
  *
@@ -28,9 +26,6 @@ import sv.gob.mined.dhcomitesso.model.dhcsso.Empleado;
  */
 @ApplicationScoped
 public class LoginRepo implements Serializable {
-
-    @Inject
-    private Pbkdf2PasswordHash passwordHash;
 
     @PersistenceContext(unitName = "siecssoPU")
     private EntityManager em;
@@ -45,7 +40,7 @@ public class LoginRepo implements Serializable {
         lstCondiciones.add(cb.equal(root.get("codigo"), codigoEmpleado));
         lstCondiciones.add(cb.equal(root.get("dui"), dui));
 
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("codigo"), codigoEmpleado), cb.equal(root.get("dui"), dui));
 
         Query query = em.createQuery(cr);
         return query.getResultList().isEmpty() ? null : (Empleado) query.getResultList().get(0);
@@ -60,7 +55,7 @@ public class LoginRepo implements Serializable {
         List<Predicate> lstCondiciones = new ArrayList();
         lstCondiciones.add(cb.equal(root.get("codigo"), codigoEmpleado));
 
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("codigo"), codigoEmpleado));
 
         Query query = em.createQuery(cr);
         return query.getResultList().isEmpty() ? null : (Empleado) query.getResultList().get(0);
@@ -75,7 +70,7 @@ public class LoginRepo implements Serializable {
         lstCondiciones.add(cb.equal(root.get("codigo"), codigoEmpleado));
         lstCondiciones.add(cb.equal(root.get("id"), idEmpleado));
 
-        cr.select(root).where(lstCondiciones.toArray(Predicate[]::new));
+        cr.select(root).where(cb.equal(root.get("codigo"), codigoEmpleado), cb.equal(root.get("id"), idEmpleado));
 
         Query query = em.createQuery(cr);
         return query.getResultList().isEmpty() ? null : (Empleado) query.getResultList().get(0);
@@ -91,19 +86,28 @@ public class LoginRepo implements Serializable {
     }
 
     @Transactional
-    public void guardar(String usuario, String password) {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("Pbkdf2PasswordHash.Iterations", "3072");
-        parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
-        parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
-        passwordHash.initialize(parameters);
+    public void guardar(Users user, String pass) {
+        user.setUserPassword((new RC4Crypter()).encrypt("HA", pass));
+        em.merge(user);
+    }
 
-        Query q = em.createNativeQuery("Insert into SIECSSO.USERS (USERNAME,USER_PASSWORD) values ('"+usuario+"','" + passwordHash.generate(password.toCharArray()) + "')");
-        q.executeUpdate();
+    public List<Users> findAllUsers() {
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<Users> cr = cb.createQuery(Users.class);
+//        Root<Users> root = cr.from(Users.class);
+//
+//        cr.select(root);
 
-        q = em.createNativeQuery("Insert into SIECSSO.GRUPO (ID_GRUPO,USER_GROUP,USERNAME) values (1,'" + usuario + "','" + passwordHash.generate(password.toCharArray()) + "')");
-        q.executeUpdate();
+        Query query = em.createNativeQuery("SELECT * FROM Users where length(user_password) = 9", Users.class);
+        return query.getResultList();
+    }
 
+    public Users usuarioValido(String usuario, String pass) {
+        Query query = em.createQuery("SELECT u FROM Users u WHERE u.username=:user AND u.userPassword=:pass", Users.class);
+        query.setParameter("user", usuario);
+        query.setParameter("pass", (new RC4Crypter()).encrypt("HA", pass));
+
+        return query.getResultList().isEmpty() ? null : (Users) query.getResultList().get(0);
     }
 
 }

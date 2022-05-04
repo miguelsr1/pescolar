@@ -1,13 +1,19 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @Table(name = "PERSONA")
 @Entity
 public class Persona implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona", fetch = FetchType.LAZY)
+    private List<Empresa> empresaList;
 
     @Id
     @Column(name = "ID_PERSONA", nullable = false)
@@ -450,5 +456,13 @@ public class Persona implements Serializable {
 
     public void setUsuarioList(List<Usuario> usuarioList) {
         this.usuarioList = usuarioList;
+    }
+
+    public List<Empresa> getEmpresaList() {
+        return empresaList;
+    }
+
+    public void setEmpresaList(List<Empresa> empresaList) {
+        this.empresaList = empresaList;
     }
 }

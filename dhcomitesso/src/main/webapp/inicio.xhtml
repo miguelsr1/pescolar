@@ -57,15 +57,15 @@
                     <div class="p-col-12">
                         <p:outputLabel for="username" value="Código empleado"/>
                         <div class="input-wrapper">
-                            <p:inputText id="username" widgetVar="username" placeholder="Código empleado" value="#{loginView.codigoEmpleado}"/>
+                            <p:inputMask id="username" mask="NR*******" widgetVar="username" placeholder="Código empleado" value="#{loginView.codigoEmpleado}"/>
                             <p:graphicImage name="images/login/user.png" library="paradise-layout"
                                             styleClass="user-icon"/>
                         </div>
                     </div>
                     <div class="p-col-12">
-                        <p:outputLabel for="password" value="Contraseña"/>
+                        <p:outputLabel for="password" value="DUI (sin guion)"/>
                         <div class="input-wrapper">
-                            <p:password id="password" widgetVar="password" placeholder="Contraseña" feedback="false" value="#{loginView.claveAcceso}"/>
+                            <p:password id="password" widgetVar="password" placeholder="Contraseña" feedback="false" value="#{loginView.claveAcceso}" maxlength="9"/>
                             <p:graphicImage name="images/login/lock.png" library="paradise-layout"
                                             styleClass="lock-icon"/>
                         </div>

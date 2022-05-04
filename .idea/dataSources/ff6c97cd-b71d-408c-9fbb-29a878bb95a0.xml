@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="ProPaquete">
-  <database-model serializer="dbm" dbms="ORACLE" family-id="ORACLE" format-version="4.21">
-    <root id="1">
-      <ServerVersion>11.2.0.3.0</ServerVersion>
-    </root>
+  <database-model serializer="dbm" dbms="ORACLE" family-id="ORACLE" format-version="4.38">
+    <root id="1"/>
     <schema id="2" parent="1" name="ACREDITACION">
       <ObjectId>65</ObjectId>
     </schema>
@@ -260,8 +258,8 @@
       <ObjectId>225</ObjectId>
     </schema>
     <schema id="87" parent="1" name="PAQUETES">
-      <ObjectId>202</ObjectId>
       <Current>1</Current>
+      <ObjectId>202</ObjectId>
     </schema>
     <schema id="88" parent="1" name="PAQUETES_TEST">
       <ObjectId>240</ObjectId>
@@ -709,8 +707,8 @@
     </user>
     <user id="236" parent="1" name="PAQUETES">
       <ObjectId>202</ObjectId>
-      <DefaultTablespace>PAQUETES</DefaultTablespace>
-      <TemporaryTablespace>TMP_PAQUETE</TemporaryTablespace>
+      <DefaultTablespaceName>PAQUETES</DefaultTablespaceName>
+      <TemporaryTablespaceName>TMP_PAQUETE</TemporaryTablespaceName>
     </user>
     <user id="237" parent="1" name="PAQUETES_TEST">
       <ObjectId>240</ObjectId>

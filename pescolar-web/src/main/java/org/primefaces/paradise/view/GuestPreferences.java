@@ -20,27 +20,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import sv.gob.mined.pescolar.web.MenuView;
 
 @Named
 @SessionScoped
 public class GuestPreferences implements Serializable {
 
     private String layout = "default";
-
     private String menuMode = "layout-menu-overlay";
-
     private boolean darkMenu = false;
-
     private String theme = "blue";
-
     private String inputStyle = "outlined";
-
     private List<ComponentTheme> componentThemes;
-
     private List<FlatLayout> flatLayouts;
-
     private List<SpecialLayout> specialLayouts;
+    
+    @Inject
+    private MenuView menuView;
     
     @PostConstruct
     public void init() {
@@ -209,5 +207,10 @@ public class GuestPreferences implements Serializable {
         public String getColor2() {
             return color2;
         }
+    }
+    
+    public void ocultarMenu(){
+        this.menuMode = "layout-menu-overlay";
+        menuView.limpiarMenu();
     }
 }

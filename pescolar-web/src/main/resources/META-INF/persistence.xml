@@ -32,6 +32,8 @@
     <class>sv.gob.mined.pescolar.model.OpcionMenu</class>
     <class>sv.gob.mined.pescolar.model.Modulo</class>
     <class>sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto</class>
+    <class>sv.gob.mined.pescolar.model.EstadisticaCenso</class>
+    <class>sv.gob.mined.pescolar.model.PreciosRefRubroEmp</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
       <property name="hibernate.show_sql" value="false"/>

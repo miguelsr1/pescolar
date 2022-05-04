@@ -6,8 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Table(name = "PROCESO_ELECCION", schema = "SIECSSO")
 @Entity
@@ -18,13 +21,14 @@ public class ProcesoEleccion implements Serializable {
     private Integer id;
 
     @Column(name = "FECHA_INICIO")
-    private LocalDate fechaInicio;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaInicio;
 
     @Column(name = "HABILITAR_PROCESO")
     private Boolean habilitarProceso;
 
     @Column(name = "HORAS")
-    private Boolean horas;
+    private Integer horas;
 
     @OneToMany(mappedBy = "idProceso")
     private List<DetalleProceso> detalleProcesoList;
@@ -40,19 +44,19 @@ public class ProcesoEleccion implements Serializable {
         this.fechaInsercion = fechaInsercion;
     }
 
-    public LocalDate getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Boolean getHoras() {
+    public Integer getHoras() {
         return horas;
     }
 
-    public void setHoras(Boolean horas) {
+    public void setHoras(Integer horas) {
         this.horas = horas;
     }
 
