@@ -61,7 +61,7 @@ public class OfertaBienesServicio implements Serializable {
     private LocalDate fechaOferta;
     
     @OneToMany(mappedBy = "idOferta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @OrderBy("idParticipante ASC")
+    @OrderBy("id ASC")
     private List<Participante> participantesList;
 
     public LocalDate getFechaOferta() {

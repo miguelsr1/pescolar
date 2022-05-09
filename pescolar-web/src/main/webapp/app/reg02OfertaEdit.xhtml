@@ -22,6 +22,13 @@
                         </f:facet>
                     </p:menubar>
                 </div>
+
+                <p:panel visible="false">
+                    <p:commandButton id="btnModificarOferta" action="#{ofertaBienesServiciosView.editarOferta()}" process="@this, cboRubro, txtCodigoEntidad">
+                        <p:confirm header="Confirmación" message="Ya existe una oferta para este Centro Educativo, ¿Desea editar la oferta?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </p:panel>
+
                 <div class="p-col-12">
                     <div class="card">
                         <div class="card-header overview-box blue">
@@ -58,7 +65,7 @@
                             <div class="p-field p-grid">
                                 <p:outputLabel value="Fecha de registro:" for="cldFechaApertura" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
                                 <div class="p-col-12 p-md-10">
-                                    <p:calendar id="cldFechaApertura" pattern="dd/MM/yyyy" size="11" requiredMessage="Fecha de apertura de la oferta" />
+                                    <p:calendar id="cldFechaApertura" value="#{ofertaBienesServiciosView.oferta.fechaApertura}" pattern="dd/MM/yyyy" size="11" requiredMessage="Fecha de apertura de la oferta" />
                                 </div>
                             </div>
                         </div> 
@@ -69,17 +76,17 @@
                                 Lista de Proveedores
                                 <i class="pi pi-list"></i>
                                 <p:commandButton id="btoExportar" value=" Exportar" icon="pi pi-upload" style="float: right; font-size: 12px;"/>
-                                <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus-circle" style="float: right; font-size: 12px; margin-right: 5px;"/>
+                                <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus-circle" style="float: right; font-size: 12px; margin-right: 5px;" action="#{ofertaBienesServiciosView.agregarProveedor()}"/>
                             </h5>
                         </div>
 
                         <p:dataTable id="tblParticipantes" value="#{ofertaBienesServiciosView.oferta.participantesList}" var="participante" 
                                      emptyMessage="No se han agregado proveedores" rowIndexVar="rowId" styleClass="ui-datatable-borderless ui-datatable-reflow"
-                                     rowKey="#{participante.idParticipante}" rowStyleClass="#{participante.estadoEliminacion eq 1 ? 'filaEliminada' : null}"
+                                     rowKey="#{participante.id}" rowStyleClass="#{participante.estadoEliminacion eq 1 ? 'filaEliminada' : null}"
                                      lazy="false">
 
                             <p:column headerText="Id" width="40" styleClass="centrado">
-                                <p:outputLabel value="#{participante.idParticipante}" />
+                                <p:outputLabel value="#{participante.id}" />
                             </p:column>
 
                             <p:column headerText="NIT" width="120" rendered="#{!sessionView.isUsuarioDigitador}">
@@ -94,13 +101,13 @@
                                 <p:commandLink  process="@this" >
                                     <p:outputLabel rendered="#{!participante.eliminar}"> <i class="fa fa-trash"></i></p:outputLabel>
                                     <p:outputLabel rendered="#{participante.eliminar}"> <i class="fa fa-minus-circle"></i></p:outputLabel>
-                                    <f:viewParam name="idParticipante" value="#{participante.idParticipante}"/>
+                                    <f:viewParam name="idParticipante" value="#{participante.id}"/>
                                 </p:commandLink>
                             </p:column>
 
                             <p:column headerText="Ver Oferta" width="40" styleClass="centrado">
                                 <p:commandLink >
-                                    <f:param name="idParticipante" value="#{participante.idParticipante}"/>
+                                    <f:param name="idParticipante" value="#{participante.id}"/>
                                     <f:param name="txtCodigoEntidad" value="#{participante.idOferta.codigoEntidad.codigoEntidad}"/>
                                     <i class="fa fa-eye" style="font-size: 17px;"></i>
                                 </p:commandLink>
@@ -110,6 +117,64 @@
                     </div>
                 </div>
             </div>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="400">
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+            </p:confirmDialog>
+
+
+            <p:dialog id="dlgProveedor" widgetVar="dlgProveedor" header="Seleccione un proveedor" closable="true" style="font-size: 11px;" minWidth="1000" width="1000" height="500"
+                      modal="true" position="center center" onShow="PF('dlgProveedor').initPosition()"
+                      dynamic="true" responsive="true" resizable="false" hideEffect="fade" showEffect="fade">
+                <p:outputPanel id="pnoCantidad">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Número de alumnos: "/>
+                        <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos}" style="font-weight: bold;">
+                            <f:convertNumber pattern="#,###"/>
+                        </p:outputLabel>
+                        <p:outputLabel value="Número de piezas a contratar: "/>
+                        <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos*2}" style="font-weight: bold;" rendered="#{ofertaMB.rubro eq 4 || ofertaMB.rubro eq 5}">
+                            <f:convertNumber pattern="#,###"/>
+                        </p:outputLabel>
+
+                        <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos}" style="font-weight: bold;" rendered="#{ofertaMB.rubro eq 2 || ofertaMB.rubro eq 3}">
+                            <f:convertNumber pattern="#,###"/>
+                        </p:outputLabel>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <p:spacer width="10"/>
+                <p:tabView id="tbEmpresas" scrollable="true">
+                    <p:tab title="Municipio: #{ofertaBienesServiciosView.municipioCe}">
+                        <h:panelGrid columns="2" style="width: 100%;" rendered="#{!menuController.isUsuarioDigitador}">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText style="width: 100%;" value="#{ofertaBienesServiciosView.nombreEmp}" onkeyup="queryEmpresa(this.value);" />
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataView id="tblEmpresas" var="capaEmpresa" value="#{ofertaBienesServiciosView.lstCapaEmpresas}" 
+                                    gridIcon="fa fa-th-large" listIcon="fa fa-bars">
+                            <ui:include src="/app/ofertaListadoProveedores.xhtml"/>
+                        </p:dataView>
+                    </p:tab>
+
+                    <p:tab title="Otros Municipios">
+                        <h:panelGrid columns="2" style="width: 100%;" rendered="#{!menuController.isUsuarioDigitador}">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText style="width: 100%;" value="#{ofertaBienesServiciosView.nombreEmpOtro}" onkeyup="queryEmpresaOtros(this.value);" />
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataView id="tblEmpresasOtras" var="capaEmpresa" value="#{ofertaBienesServiciosView.lstCapaEmpresasOtros}"
+                                    gridIcon="fa fa-th-large" listIcon="fa fa-bars">
+                            <ui:include src="/app/ofertaListadoProveedores.xhtml"/>
+                        </p:dataView>
+                    </p:tab>
+                </p:tabView>
+
+                <f:facet name="footer" >
+                    <p:commandButton value="Cancelar" icon="fa fa-times-circle" onclick="PF('dlgProveedor').hide();" />
+                </f:facet>
+            </p:dialog>
+
 
             <!--p:remoteCommand name="findEntidad" update="menuBar tblParticipantes nombreCE cldFechaApertura btoAgregarProveedor" actionListener="{ofertaMB.buscarEntidadEducativa}" /-->
             <!--p:remoteCommand name="findEmpresa" update="tbEmpresas:tblEmpresas" actionListener="{ofertaMB.filterProveedores()}" />

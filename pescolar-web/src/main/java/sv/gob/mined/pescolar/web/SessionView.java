@@ -109,6 +109,10 @@ public class SessionView implements Serializable {
         }
     }
 
+    public Long getIdRubro() {
+        return idRubro;
+    }
+
     public String getAnhoProceso() {
         return anhoProceso;
     }
@@ -210,19 +214,7 @@ public class SessionView implements Serializable {
             ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
         }
     }
-    
-    public void logout() {
-        try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().getSessionMap().clear();
-            ExternalContext externalContext = context.getExternalContext();
-            externalContext.redirect(((ServletContext) externalContext.getContext()).getContextPath() + "/index.mined");
-            System.gc();
-        } catch (IOException ex) {
-            Logger.getLogger(SessionView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+
     public Boolean getIsUsuarioDigitador() {
         if (proceso.getDescripcionProcesoAdq().contains("SOBREDEMANDA")) {
             switch (usuario.getIdTipoUsuario().getIdTipoUsuario().intValue()) {
@@ -236,6 +228,18 @@ public class SessionView implements Serializable {
             }
         } else {
             return (usuario.getIdTipoUsuario().getIdTipoUsuario().intValue() != 1);
+        }
+    }
+
+    public void logout() {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getSessionMap().clear();
+            ExternalContext externalContext = context.getExternalContext();
+            externalContext.redirect(((ServletContext) externalContext.getContext()).getContextPath() + "/index.mined");
+            System.gc();
+        } catch (IOException ex) {
+            Logger.getLogger(SessionView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

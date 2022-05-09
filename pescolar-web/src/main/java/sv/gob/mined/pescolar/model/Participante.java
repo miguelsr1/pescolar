@@ -71,6 +71,8 @@ public class Participante implements Serializable {
     private BigInteger cantidad = BigInteger.ZERO;
     @Transient
     private BigDecimal monto = BigDecimal.ZERO;
+    @Transient
+    private Boolean eliminar = false;
 
     public Participante() {
     }
@@ -214,4 +216,16 @@ public class Participante implements Serializable {
         return monto;
     }
 
+    public void setEliminar(Boolean eliminar) {
+        this.eliminar = eliminar;
+        if (this.eliminar) {
+            estadoEliminacion = 1l;
+        } else {
+            estadoEliminacion = 0l;
+        }
+    }
+
+    public Boolean getEliminar() {
+        return estadoEliminacion.compareTo(1l) == 0;
+    }
 }

@@ -87,7 +87,7 @@ public class CatalogoRepo {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(arg);
         Root root = cq.from(arg);
-        cq = createCriteriaQuery(cb, cq, root, arg, parametros);
+        cq = createCriteriaQuery(cb, cq, root, parametros);
         Query query = em.createQuery(cq);
 
         return query.getResultList();
@@ -114,7 +114,7 @@ public class CatalogoRepo {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(arg);
         Root root = cq.from(arg);
-        cq = createCriteriaQuery(cb, cq, root, arg, parametros);
+        cq = createCriteriaQuery(cb, cq, root, parametros);
         Query query = em.createQuery(cq);
 
         return query.getResultList().isEmpty() ? null : (T) query.getSingleResult();
@@ -125,7 +125,7 @@ public class CatalogoRepo {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(arg);
         Root root = cq.from(arg);
-        cq = createCriteriaQuery(cb, cq, root, arg, parametros);
+        cq = createCriteriaQuery(cb, cq, root, parametros);
 
         if (orderBy != null && orderAsc != null) {
             Path path = root;
@@ -149,7 +149,7 @@ public class CatalogoRepo {
         return query.getResultList();
     }
 
-    private CriteriaQuery createCriteriaQuery(CriteriaBuilder cb, CriteriaQuery cq, Root root, Class<?> arg, List<Filtro> parametros) {
+    private CriteriaQuery createCriteriaQuery(CriteriaBuilder cb, CriteriaQuery cq, Root root, List<Filtro> parametros) {
         List<Predicate> lstCondiciones = new ArrayList();
 
         for (Filtro parametro : parametros) {
