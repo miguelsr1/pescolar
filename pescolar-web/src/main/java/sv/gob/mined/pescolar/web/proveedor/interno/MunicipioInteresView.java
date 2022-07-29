@@ -3,10 +3,8 @@ package sv.gob.mined.pescolar.web.proveedor.interno;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +27,7 @@ import org.primefaces.model.DualListModel;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
 import sv.gob.mined.pescolar.model.DisMunicipioIntere;
+import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.dto.MunicipioDto;
 import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
@@ -63,7 +62,7 @@ public class MunicipioInteresView implements Serializable {
     @EJB
     public ProveedorEJB proveedorEJB;
 
-    @ManagedProperty(value = "#{cargaGeneralView}")
+    @Inject
     private CargaGeneralView cargaGeneralView;
 
     @PostConstruct
@@ -241,11 +240,11 @@ public class MunicipioInteresView implements Serializable {
         if (event.getObject() != null) {
             if (event.getObject() instanceof Empresa) {
                 cargaGeneralView.setEmpresa((Empresa) event.getObject());
-                VarSession.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getIdEmpresa());
+                VarSession.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
                 cargaGeneralView.cargarDetalleCalificacion();
                 cargarMunInteres();
             } else {
-                Logger.getLogger(ProveedorController.class
+                Logger.getLogger(MunicipioInteresView.class
                         .getName()).log(Level.INFO, "No se pudo convertir el objeto a la clase Empresa{0}", event.getObject());
             }
         } else {
@@ -256,10 +255,10 @@ public class MunicipioInteresView implements Serializable {
     private void cargarMunInteres() {
         cargarDetalleCalificacion();
 
-        if (capacidadInst != null && capacidadInst.getIdCapInstRubro() != null) {
+        if (capacidadInst != null && capacidadInst.getId() != null) {
             if (departamentoCalif != null && departamentoCalif.getCodigoDepartamento() != null) {
-                lstMunSource = datosGeograficosEJB.getLstMunicipiosDisponiblesDeInteres(departamentoCalif.getIdCapaDistribucion(), departamentoCalif.getCodigoDepartamento().getCodigoDepartamento());
-                lstMunTarget = datosGeograficosEJB.getLstMunicipiosDeInteres(departamentoCalif.getIdCapaDistribucion());
+                lstMunSource = datosGeograficosEJB.getLstMunicipiosDisponiblesDeInteres(departamentoCalif.getId(), departamentoCalif.getCodigoDepartamento().getId());
+                lstMunTarget = datosGeograficosEJB.getLstMunicipiosDeInteres(departamentoCalif.getId());
                 lstMunicipiosInteres = new DualListModel(lstMunSource, lstMunTarget);
             }
         }
