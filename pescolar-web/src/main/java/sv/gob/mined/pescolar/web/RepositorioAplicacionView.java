@@ -1,24 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.pescolar.web;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.MunicipioAledanho;
+import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
-import sv.gob.mined.pescolar.utils.db.Filtro;
 
 /**
  *
@@ -32,6 +27,7 @@ public class RepositorioAplicacionView implements Serializable {
     private List<Departamento> lstDepartamentos;
     private List<Anho> lstAnhos;
     private List<MunicipioAledanho> lstMunicipioAledanho;
+    private List<VwCatalogoEntidadEducativa> lstEntidades;
 
     @Inject
     private CatalogoRepo catalogoRepo;
@@ -41,6 +37,8 @@ public class RepositorioAplicacionView implements Serializable {
         lstAnhos = catalogoRepo.findListByParam(Anho.class, new ArrayList(), "id", false);
         lstMunicipioAledanho = catalogoRepo.findListByParam(MunicipioAledanho.class, new ArrayList());
         lstDepartamentos = catalogoRepo.findListByParam(Departamento.class, new ArrayList(), "id", true);
+
+        lstEntidades = catalogoRepo.findAllEntidades();
     }
 
     public List<Departamento> getLstDepartamentos() {
@@ -63,5 +61,13 @@ public class RepositorioAplicacionView implements Serializable {
         } else {
             return null;
         }
+    }
+
+    public List<VwCatalogoEntidadEducativa> findAllEntidadesByCodigoEntidad(String codigoEntidad) {
+        return lstEntidades.stream().filter(entidad -> entidad.toString().startsWith(codigoEntidad)).collect(Collectors.toList());
+    }
+
+    public VwCatalogoEntidadEducativa findEntidadByCodigoEntidad(String codigoEntidad) {
+        return lstEntidades.stream().filter(entidad -> entidad.getCodigoEntidad().compareTo(codigoEntidad) == 0).findAny().get();
     }
 }

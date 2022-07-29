@@ -28,6 +28,7 @@ import sv.gob.mined.pescolar.utils.enums.TipoOperador;
  */
 @Stateless
 public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
+
     @Inject
     private CatalogoRepo catalogoRepo;
 
@@ -78,37 +79,13 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
     public List<ProveedorDisponibleDto> findLstProveedoresDisponibles(DetalleProcesoAdq detProcesoAdq,
             String codigoEntidad, String codDepartamento, String codMunicipio, String codCanton,
             Long idMunicipio, String idMunicipios, Boolean municipioIgual, Long cantidad, HashMap<String, String> mapItems) {
-        Integer idDetTemp;
-
-        if (detProcesoAdq.getIdProcesoAdq().getPadreIdProcesoAdq() != null) {
-            idDetTemp = getIdDetProcesoPadre(detProcesoAdq);
-        } else {
-            idDetTemp = detProcesoAdq.getId();
-        }
-
-        Integer idDetT1 = getIdDetProcesoPadre(detProcesoAdq);
-
-        if (idDetT1 == 41) {
-            idDetTemp = 40;
-        }
 
         Query q = em.createNativeQuery(getQueryLstIdEmpresa(codDepartamento, codMunicipio, codCanton, idMunicipio, idMunicipios, detProcesoAdq.getIdRubroAdq().getId(), detProcesoAdq,
-                idDetTemp, municipioIgual, cantidad, mapItems.get("noItemSeparados"), mapItems.get("noItems")), ProveedorDisponibleDto.class);
+                municipioIgual, cantidad, mapItems.get("noItemSeparados"), mapItems.get("noItems")), ProveedorDisponibleDto.class);
         return q.getResultList();
     }
 
-    private Integer getIdDetProcesoPadre(DetalleProcesoAdq detalleProcesoAdq) {
-        if (detalleProcesoAdq.getIdProcesoAdq().getPadreIdProcesoAdq() != null) {
-            for (DetalleProcesoAdq det : detalleProcesoAdq.getIdProcesoAdq().getPadreIdProcesoAdq().getDetalleProcesoAdqList()) {
-                if (det.getIdRubroAdq().getId().intValue() == detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
-                    return det.getId();
-                }
-            }
-        }
-        return detalleProcesoAdq.getId();
-    }
-
-    private String getQueryLstIdEmpresa(String codDep, String codMun, String codCanton, Long idMunicipio, String idMunicipios, Long idRubro, DetalleProcesoAdq idDetProcesoAdq, Integer idDetTemp,
+    private String getQueryLstIdEmpresa(String codDep, String codMun, String codCanton, Long idMunicipio, String idMunicipios, Long idRubro, DetalleProcesoAdq idDetProcesoAdq,
             Boolean municipioIgual, Long cantidad, String noItemSeparados, String noItems) {
         Long idAnho = idDetProcesoAdq.getIdProcesoAdq().getIdAnho().getId();
 
@@ -173,18 +150,19 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
                 + "    tb1.id_empresa          as idEmpresa,\n"
                 + "    razon_social            as razonSocial,\n"
                 + "    distribuidor,\n"
+                + "    capacidad_acreditada    as capacidadAcreditada,\n"
+                + "    capacidad_adjudicada    as capacidadAdjudicada,\n"
                 + "    nombre_municipio        as nombreMunicipio,\n"
                 + "    nombre_departamento     as nombreDepartamento,\n"
                 + "    precio_promedio         as puAvg,\n"
-                + "    capacidad_acreditada    as capacidadAcreditada,\n"
-                + "    capacidad_adjudicada    as capacidadAdjudicada,\n"
                 + "    porcentaje_precio       as porcentajePrecio,\n"
                 + "    porcentaje_geo          as porcentajeGeo,\n"
-                + "    porcentaje_capacidad_i  as porcentajeCapacidadItem,\n"
                 + "    porcentaje_capacidad    as porcentajeCapacidad,\n"
+                + "    porcentaje_capacidad_i  as porcentajeCapacidadItem,\n"
                 + "    porcentaje_precio+porcentaje_geo+porcentaje_capacidad_i+porcentaje_capacidad" + ((idAnho.intValue() == 10 && idRubro == 3) ? "+porcentaje_nota" : "") + " as porcentajeEvaluacion,\n"
-                + "    ((capacidad_adjudicada*100)/capacidad_acreditada) porcentajeAdjudicacion\n"
-                + ((idAnho.intValue() == 10 && idRubro == 3) ? " ,porcentaje_nota as porcentajeNota " : "")
+                + "    0                       as porcentajeCalificacion,\n"
+                + "    ((capacidad_adjudicada*100)/capacidad_acreditada) porcentajeAdjudicacion,\n"
+                + ((idAnho.intValue() == 10 && idRubro == 3) ? " porcentaje_nota as porcentajeNota\n" : " 0 as porcentajeNota\n")
                 + "from (select \n"
                 + "        emp.id_empresa,\n"
                 + "        det.id_muestra_interes,\n"
@@ -236,11 +214,11 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
 
         return sql;
     }
-    
+
     private List<PorcentajeEvaluacion> getPorcentajesEvaluacionByAnho(Long idAnho, Long idRubro) {
         List<Filtro> params = new ArrayList();
         params.add(new Filtro(TipoOperador.EQUALS, "idAnho", idAnho));
-        params.add(new Filtro(TipoOperador.EQUALS, "idRubro", idRubro));
+        params.add(new Filtro(TipoOperador.EQUALS, "idRubroInteres", idRubro));
 
         return (List<PorcentajeEvaluacion>) catalogoRepo.findListByParam(PorcentajeEvaluacion.class, params);
     }
@@ -273,7 +251,7 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
                 return " case when mun_e.codigo_departamento in (" + codigosDepartamento + ") then " + porUbicacionLocal.toString() + " else " + porUbicacionOtros.toString() + " end porcentaje_geo";
         }
     }
-    
+
     public List<PrecioReferenciaEmpresaDto> getLstPreciosByIdEmpresaAndIdProcesoAdq(Long idEmpresa, Long idAnho, String idNivelesCe) {
         Query q = em.createNativeQuery("select \n"
                 + "                rownum                  idRow,\n"

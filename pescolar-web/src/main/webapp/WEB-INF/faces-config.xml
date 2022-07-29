@@ -10,6 +10,11 @@
         <component-class>org.primefaces.paradise.component.ParadiseMenu</component-class>
     </component>
     
+    <converter>
+        <converter-for-class>sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa</converter-for-class>
+        <converter-class>sv.gob.mined.pescolar.convert.EntidadEducativaConvert</converter-class>
+    </converter>
+    
     <render-kit>
         <renderer>
             <component-family>org.primefaces.component</component-family>

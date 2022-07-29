@@ -6,77 +6,6 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <style>
-            .imgCandidato {
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-                margin: 2rem 0;
-            }
-
-            .card {
-                background: var(--surface-e);
-                padding: 0rem;
-                box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-                border-radius: 4px;
-                margin-bottom: 1.5rem;
-            }
-            .p-ai-center {
-                align-items: center;
-            }
-
-            .vertical-container {
-                margin: 0;
-                border-radius: 4px;
-            }
-
-            .imgBlackAndWhite {
-                -webkit-filter: grayscale(200%); /* Safari 6.0 - 9.0 */
-                filter: grayscale(200%);
-            }
-
-            .p-grid {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -ms-flex-wrap: wrap;
-                flex-wrap: wrap;
-                margin-right: 0rem;
-                margin-left: 0rem;
-                margin-top: 0rem;
-            }
-
-            .custom-scrolltop.ui-scrolltop {
-                width: 2rem;
-                height: 2rem;
-                border-radius: 4px;
-                outline: 0 none;
-                background-color: var(--primary-color);
-            }
-            .custom-scrolltop.ui-scrolltop:hover {
-                background-color: var(--primary-color);
-            }
-
-            .custom-scrolltop.ui-scrolltop .ui-scrolltop-icon {
-                font-size: 1rem;
-                color: var(--primary-color-text);
-            }
-
-            .modulo{
-                background-color: #f4f9fd;
-                width: 240px;
-                max-width: 100%;
-                height: 180px;
-                text-align: center;
-                display: inline-block;
-                margin-bottom: 40px;
-                padding: 15px 15px;
-            }
-            .moduloCeleste {
-                border-bottom: solid 5px #38a4de;
-            }
-        </style>
-    </ui:define>
-
     <ui:define name="title">Paquete Escolar</ui:define>
 
     <ui:define name="content">
@@ -114,7 +43,8 @@
                                     </div>
                                     <div class="p-col-12 p-md-4">
                                         <div class="overview-box" style="text-align: center !important">
-                                            <p:commandLink action="presentacionResultados?faces-redirect=true" >
+                                            <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
+                                                <f:setPropertyActionListener value="55" target="#{menuView.idOpcionMenu}" />
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
                                                     <h5>Proveedores</h5>
                                                     <br/>
@@ -196,5 +126,7 @@
                 </div>
             </div>
         </h:form>
+        
+        <h:outputStylesheet library="css" name="menu-principal.css"/>
     </ui:define>
 </ui:composition>

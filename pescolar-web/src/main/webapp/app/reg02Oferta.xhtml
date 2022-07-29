@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="head">
         <style type="text/css">
@@ -46,13 +47,12 @@
                         <p:menuitem value="Buscar"  icon="pi pi-search" action="#{ofertaBienesServiciosView.buscar()}" update="tblParticipantes"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
-                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" 
-                                    actionListener="#{guestPreferences.ocultarMenu()}"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout}"/>
                         </f:facet>
                     </p:menubar>
-                    
+
                     <p:hotkey bind="ctrl+shift+f" actionListener="#{ofertaBienesServiciosView.buscar()}"/>
                 </div>
                 <div class="p-col-12">
@@ -63,7 +63,7 @@
                                 <i class="pi pi-filter blue" ></i>
                             </h5>
                         </div>
-                        
+
                         <div class="p-field p-grid">
                             <p:outputLabel for="cboDepa" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento</p:outputLabel>
                             <div class="p-col-12 p-md-4">
@@ -96,7 +96,7 @@
                             <div class="p-col-12 p-md-4">
                                 <p:selectOneMenu id="cboRubro" value="#{ofertaBienesServiciosView.idRubro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
-                                    <f:selectItems value="#{ofertaBienesServiciosView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
+                                    <f:selectItems value="#{sessionView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                                 <i class="pi pi-list"></i>
                             </h5>
                         </div>
-                        
+
                         <p:dataTable id="tblParticipantes" value="#{ofertaBienesServiciosView.lstParticipantes}" var="participante" reflow="true"
                                      styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines products-table">
                             <p:column headerText="C.E.">
@@ -121,13 +121,16 @@
                             <p:column headerText="Proveedor">
                                 <p:outputLabel value="#{participante.idEmpresa.razonSocial}"/>
                             </p:column>
+                            <p:column headerText="¿Contrato?">
+                                <p:outputLabel value="#{participante.idEmpresa.razonSocial}"/>
+                            </p:column>
                             <p:column exportable="false" width="80">
                                 <p:commandButton icon="pi pi-pencil" action="#{ofertaBienesServiciosView.editarDetalleOferta()}"
                                                  styleClass="edit-button rounded-button ui-button-success" process="@this">
                                     <f:setPropertyActionListener value="#{participante.id}" target="#{ofertaBienesServiciosView.idParticipante}" />
                                 </p:commandButton>
                                 <p:spacer width="10"/>
-                                <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" >
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this" >
                                     <f:setPropertyActionListener value="#{product}" target="#{crudDemoView.selectedProduct}" />
                                 </p:commandButton>
                             </p:column>

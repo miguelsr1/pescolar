@@ -19,9 +19,12 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.web.MenuView;
 
 @Named
@@ -212,5 +215,11 @@ public class GuestPreferences implements Serializable {
     public void ocultarMenu(){
         this.menuMode = "layout-menu-overlay";
         menuView.limpiarMenu();
+    }
+    
+    public void ocultarMenuRedirect(){
+        this.menuMode = "layout-menu-overlay";
+        menuView.limpiarMenu();
+        JsfUtil.redireccionar("/app/principal.xhtml");
     }
 }

@@ -47,8 +47,9 @@ public abstract class AbstractRepository<Entity, Primary> {
     }
 
     public List<Entity> findAll() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Entity> cq = cb.createQuery(entityClass);
+        CriteriaQuery<Entity> cq = em.getCriteriaBuilder().createQuery(entityClass);
+        Root<Entity> root = cq.from(entityClass);
+        cq.select(root);
 
         return em.createQuery(cq).getResultList();
     }
@@ -91,13 +92,12 @@ public abstract class AbstractRepository<Entity, Primary> {
                                 path = path.get(clave);
                             }
                         }
-                       
+
                         /*CriteriaBuilder.In<?> inClause = cb.in(path);
 
                         for (String idNivel : parametro.getValor().toString().split("\\,")) {
                             inClause.value(parametro.getClazz().cast(idNivel));
                         }*/
-
                         break;
                 }
             }
@@ -106,7 +106,7 @@ public abstract class AbstractRepository<Entity, Primary> {
 
         return em.createQuery(cq).getResultList().isEmpty() ? null : em.createQuery(cq).getResultList().get(0);
     }
-    
+
     @Transactional
     public List<Entity> findListByParam(List<Filtro> parametros, String orderBy, Boolean orderAsc) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -135,7 +135,7 @@ public abstract class AbstractRepository<Entity, Primary> {
 
         return query.getResultList();
     }
-    
+
     private CriteriaQuery createCriteriaQuery(CriteriaBuilder cb, CriteriaQuery cq, Root root, List<Filtro> parametros) {
         List<Predicate> lstCondiciones = new ArrayList();
 

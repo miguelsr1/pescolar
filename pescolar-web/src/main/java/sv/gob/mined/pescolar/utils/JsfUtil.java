@@ -12,6 +12,7 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +21,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
+import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 
 public class JsfUtil {
 
@@ -91,48 +94,14 @@ public class JsfUtil {
         configurableNavigationHandler.performNavigation(url);
     }
 
-    /*public static <T extends Object> T getValuePK(Object t) {
-        T value = null;
-        Field[] fields = t.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            if (field.getAnnotation(javax.persistence.Id.class) != null) {
-                try {
-                    Class[] sinArgumentos = new Class[0];
-                    Object[] sinParametros = new Object[0];
-                    Method getter = new PropertyDescriptor(field.getName(), t.getClass()).getReadMethod();
-                    value = (T) t.getClass().getMethod(getter.getName(), sinArgumentos).invoke(t, sinParametros);
-                    break;
-                } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException ex) {
-                    Logger.getLogger(JsfUtil.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+    public static DetalleProcesoAdq findDetalleByRubroAndAnho(ProcesoAdquisicion procesoAdquisicion, Long idRubro, Long idAnho) {
+        Optional<DetalleProcesoAdq> detalle = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().
+                filter(det -> det.getIdRubroAdq().getId().compareTo(idRubro) == 0 && det.getIdProcesoAdq().getIdAnho().getId().compareTo(idAnho) == 0).findAny();
+        if (detalle.isPresent()) {
+            return detalle.get();
+        } else {
+            return null;
         }
-        return value;
-    }*/
-
-    public static Object newInstanceValuePK(Class t, Object o) {
-        Object value = null;
-        Field[] fields = t.getDeclaredFields();
-        for (Field field : fields) {
-            if (field.getAnnotation(javax.persistence.Id.class) != null) {
-                try {
-                    if (Integer.class.isAssignableFrom(field.getType())) {
-                        value = Integer.parseInt(o.toString());
-                    } else if (BigDecimal.class.isAssignableFrom(field.getType())) {
-                        value = new BigDecimal(o.toString());
-                    } else if (BigInteger.class.isAssignableFrom(field.getType())) {
-                        value = new BigInteger(o.toString());
-                    } else if (String.class.isAssignableFrom(field.getType())) {
-                        value = o.toString();
-                    }
-
-                    break;
-                } catch (NumberFormatException ex) {
-                    Logger.getLogger(JsfUtil.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return value;
     }
 
     public static String getNombreDepartamentoByCodigo(String codigo) {
@@ -187,7 +156,7 @@ public class JsfUtil {
         return nombre;
     }
 
-    public static String getNombreRubroById(BigDecimal idRubro) {
+    public static String getNombreRubroById(Long idRubro) {
         switch (idRubro.intValue()) {
             case 1:
             case 4:
@@ -272,7 +241,6 @@ public class JsfUtil {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         return params.get(nombreParamentro);
     }
-
 
     public static Object getControllerByName(String name) {
         return FacesContext.getCurrentInstance().getApplication().getELResolver().

@@ -1,0 +1,62 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <div class="card-header overview-box blue">
+        <h5>
+            <i class="pi pi-id-card-o" style="font-size: 16px;" aria-hidden="true"></i>
+            <p:spacer width="10" height="8"/>
+            Datos de #{cargaGeneralView.empresa.razonSocial}
+        </h5>
+    </div>
+    <p:accordionPanel id="pnlFoto">
+        <p:tab title="Información General">
+            <div class="p-col-12 p-md-6">
+                <div class="p-field p-grid">
+                    <p:outputLabel value="N.I.T.:" styleClass="p-col-12 p-mb-4 p-md-8 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-10">
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.numeroNit}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Municipio y Departamento:" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-8">
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.idMunicipio.nombreMunicipio} , #{cargaGeneralView.empresa.idMunicipio.codigoDepartamento.nombreDepartamento}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Domicilio: " styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-8">
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.direccionCompleta}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Teléfonos: " styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-8">
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.telefonos} , #{cargaGeneralView.empresa.numeroCelular}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Estado de registro: " styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-8">
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.idEstadoRegistro.descripcionEstado}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Rubro a participar: " styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-8">
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.nombreRubroProveedor}" />
+                    </div>
+                </div>
+
+                <p:commandLink id="foto" action="#{cargaGeneralView.dlgFotografia}" disabled="#{cargaGeneralView.capacidadInstPorRubro eq null}">
+                    <p:ajax event="dialogReturn" listener="#{datosGeneralesView.updateFrm}" update="pnlFoto"/>
+                    <p:graphicImage rendered="#{cargaGeneralView.showFoto}" value="/DynamicImageServlet?file=#{cargaGeneralView.empresa.idPersona.urlImagen}" width="120"/>
+                </p:commandLink>
+            </div>
+        </p:tab>
+    </p:accordionPanel>
+</ui:composition>
+

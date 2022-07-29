@@ -15,17 +15,21 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang.math.NumberUtils;
 import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.SelectEvent;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.DetalleOferta;
 import sv.gob.mined.pescolar.model.EstadoReserva;
 import sv.gob.mined.pescolar.model.NivelEducativo;
+import sv.gob.mined.pescolar.model.OfertaBienesServicio;
 import sv.gob.mined.pescolar.model.Participante;
 import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.TechoRubroEntEdu;
+import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.NivelEducativoRepo;
+import sv.gob.mined.pescolar.repository.OfertaRepo;
 import sv.gob.mined.pescolar.repository.PrecioRefRubroEmpRepo;
 import sv.gob.mined.pescolar.repository.ResolucionesAdjudicativasRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
@@ -44,17 +48,20 @@ public class DetalleOfertaView implements Serializable {
     private int rowEdit = 0;
     private Long tmpIdNivel = 0l;
     private Long idParticipante;
+    private Long idRubro = 0l;
+    private Long idEstadoReserva = 0l;
+    private String codigoEntidad;
     private String numItem;
     private String msjError = "";
     private Boolean positivo = false;
     private Boolean editable = true;
     private Boolean mostrarMsjPrecio = false;
+    private Boolean activarFiltro = false;
 
-    private BigDecimal montoTotal = BigDecimal.ZERO;
     private BigInteger cantidadTotal = BigInteger.ZERO;
 
+    private BigDecimal montoTotal = BigDecimal.ZERO;
     private BigDecimal saldoActual = BigDecimal.ZERO;
-    private BigDecimal idEstadoReserva = BigDecimal.ZERO;
 
     private List<Long> lstNiveles = new ArrayList();
 
@@ -67,9 +74,13 @@ public class DetalleOfertaView implements Serializable {
     private PreciosRefRubroEmp precio;
     private ResolucionesAdjudicativa resAdj;
     private TechoRubroEntEdu techo;
+    private VwCatalogoEntidadEducativa entidadEducativa;
 
     private List<PreciosRefRubroEmp> lstPreciosEmp = new ArrayList<>();
+    private List<Participante> lstParticipantes = new ArrayList<>();
 
+    @Inject
+    private OfertaRepo ofertaRepo;
     @Inject
     private ResolucionesAdjudicativasRepo resolucionRepo;
     @Inject
@@ -80,6 +91,8 @@ public class DetalleOfertaView implements Serializable {
     private SessionView sessionView;
     @Inject
     private PrecioRefRubroEmpRepo precioRefRubroEmpRepo;
+    @Inject
+    private RepositorioAplicacionView repositorioAplicacionView;
 
     public DetalleOfertaView() {
     }
@@ -89,6 +102,7 @@ public class DetalleOfertaView implements Serializable {
         Map<String, String> parametros = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (parametros.containsKey("idParticipante")) {
             //recuperación de techo presupuestario del ce
+            activarFiltro = true;
             participante = catalogoRepo.findEntityByPk(Participante.class, Long.parseLong(parametros.get("idParticipante")));
 
             params.clear();
@@ -105,6 +119,8 @@ public class DetalleOfertaView implements Serializable {
             if (resAdj == null) {
                 crearReserva();
             } else {
+                idEstadoReserva = resAdj.getIdEstadoReserva().getId();
+
                 switch (resAdj.getIdEstadoReserva().getId().intValue()) {
                     case 1:
                     case 3:
@@ -117,16 +133,21 @@ public class DetalleOfertaView implements Serializable {
             }
         }
     }
+    
+    public void editarOferta(){
+        activarFiltro = true;
+    }
 
     private void crearReserva() {
+        idEstadoReserva = 1l;
         resAdj = new ResolucionesAdjudicativa();
         resAdj.setIdParticipante(new Participante(idParticipante));
-        resAdj.setIdEstadoReserva(new EstadoReserva(1l));
+        resAdj.setIdEstadoReserva(new EstadoReserva(idEstadoReserva));
 
-        params.clear();
+        /*params.clear();
         params.add(new Filtro(TipoOperador.EQUALS, "idEmpresa.id", participante.getIdEmpresa().getId()));
         params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idRubroInteres.id", participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId()));
-        params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idAnho.id", participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId()));
+        params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idAnho.id", participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId()));*/
 
         //lstPreciosEmp = (List<PreciosRefRubroEmp>) catalogoRepo.findListByParam(PreciosRefRubroEmp.class, params);
         lstPreciosEmp = precioRefRubroEmpRepo.findPreciosByEmp(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
@@ -197,6 +218,54 @@ public class DetalleOfertaView implements Serializable {
 
     }
 
+    public String getCodigoEntidad() {
+        return codigoEntidad;
+    }
+
+    public void setCodigoEntidad(String codigoEntidad) {
+        this.codigoEntidad = codigoEntidad;
+    }
+
+    public List<Participante> getLstParticipantes() {
+        return lstParticipantes;
+    }
+
+    public void setLstParticipantes(List<Participante> lstParticipantes) {
+        this.lstParticipantes = lstParticipantes;
+    }
+
+    public Long getIdRubro() {
+        return idRubro;
+    }
+
+    public void setIdRubro(Long idRubro) {
+        this.idRubro = idRubro;
+    }
+
+    public VwCatalogoEntidadEducativa getEntidadEducativa() {
+        return entidadEducativa;
+    }
+
+    public void setEntidadEducativa(VwCatalogoEntidadEducativa entidadEducativa) {
+        this.entidadEducativa = entidadEducativa;
+    }
+
+    public Boolean getActivarFiltro() {
+        return activarFiltro;
+    }
+
+    public void setActivarFiltro(Boolean activarFiltro) {
+        this.activarFiltro = activarFiltro;
+    }
+
+    public Long getIdEstadoReserva() {
+        return idEstadoReserva;
+    }
+
+    public void setIdEstadoReserva(Long idEstadoReserva) {
+        this.idEstadoReserva = idEstadoReserva;
+    }
+
     public Boolean getPositivo() {
         return positivo;
     }
@@ -251,17 +320,21 @@ public class DetalleOfertaView implements Serializable {
 
     public BigDecimal getMontoContrato() {
         montoTotal = BigDecimal.ZERO;
-        for (DetalleOferta detalleOferta : resAdj.getIdParticipante().getDetalleOfertasList()) {
-            montoTotal = montoTotal.add(detalleOferta.getPrecioUnitario().multiply(new BigDecimal(detalleOferta.getCantidad())));
+        if (resAdj != null && resAdj.getIdParticipante() != null) {
+            for (DetalleOferta detalleOferta : resAdj.getIdParticipante().getDetalleOfertasList()) {
+                montoTotal = montoTotal.add(detalleOferta.getPrecioUnitario().multiply(new BigDecimal(detalleOferta.getCantidad())));
+            }
         }
 
         return montoTotal;
     }
 
-    public BigInteger getCantidadContrato                                                                                   () {
+    public BigInteger getCantidadContrato() {
         cantidadTotal = BigInteger.ZERO;
-        for (DetalleOferta detalleOferta : resAdj.getIdParticipante().getDetalleOfertasList()) {
-            cantidadTotal = cantidadTotal.add(detalleOferta.getCantidad());
+        if (resAdj != null && resAdj.getIdParticipante() != null) {
+            for (DetalleOferta detalleOferta : resAdj.getIdParticipante().getDetalleOfertasList()) {
+                cantidadTotal = cantidadTotal.add(detalleOferta.getCantidad());
+            }
         }
 
         return cantidadTotal;
@@ -295,6 +368,14 @@ public class DetalleOfertaView implements Serializable {
 
     public String getMontoPresupuestado() {
         return "0.00";
+    }
+
+    public void onItemSelect(SelectEvent event) {
+
+    }
+    
+    public List<VwCatalogoEntidadEducativa> completeCe(String query) {
+        return repositorioAplicacionView.findAllEntidadesByCodigoEntidad(query);
     }
 
     public void agregarDetalle() {
@@ -477,5 +558,14 @@ public class DetalleOfertaView implements Serializable {
         } else {
             JsfUtil.mensajeAlerta("Debe seleccionar un detalle para poder eliminarlo.");
         }
+    }
+
+    public void cargarParticipantes() {
+        params.clear();
+        params.add(new Filtro(TipoOperador.EQUALS, "codigoEntidad.codigoEntidad", entidadEducativa.getCodigoEntidad()));
+        params.add(new Filtro(TipoOperador.EQUALS, "idDetProcesoAdq.idProcesoAdq.id", sessionView.getIdProcesoAdq()));
+        params.add(new Filtro(TipoOperador.EQUALS, "idDetProcesoAdq.idRubroAdq.id", idRubro));
+
+        lstParticipantes = catalogoRepo.findByParam(OfertaBienesServicio.class, params).getParticipantesList();
     }
 }

@@ -26,6 +26,10 @@ public class Municipio implements Serializable {
     @Column(name = "CODIGO_MUNICIPIO", length = 2)
     private String codigoMunicipio;
 
+    public Municipio(Long id) {
+        this.id = id;
+    }
+
     public String getCodigoMunicipio() {
         return codigoMunicipio;
     }

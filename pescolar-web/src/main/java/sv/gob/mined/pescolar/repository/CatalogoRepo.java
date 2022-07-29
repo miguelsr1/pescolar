@@ -14,10 +14,16 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.transaction.Transactional;
+import sv.gob.mined.pescolar.model.Canton;
+import sv.gob.mined.pescolar.model.CapaInstPorRubro;
+import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
+import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.EstadisticaCenso;
 import sv.gob.mined.pescolar.model.EstadoReserva;
+import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto;
+import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 
 /**
@@ -103,7 +109,7 @@ public class CatalogoRepo {
             lst.add(root.get(varIn));
         }
         cq.multiselect(lst);
-        
+
         Query query = em.createQuery(cq);
 
         return query.getResultList();
@@ -200,5 +206,78 @@ public class CatalogoRepo {
         cq.where(lstCondiciones.toArray(Predicate[]::new));
 
         return em.createQuery(cq).getResultList();
+    }
+
+    public List<VwCatalogoEntidadEducativa> findAllEntidades() {
+        CriteriaQuery<VwCatalogoEntidadEducativa> cq = em.getCriteriaBuilder().createQuery(VwCatalogoEntidadEducativa.class);
+        Root<VwCatalogoEntidadEducativa> root = cq.from(VwCatalogoEntidadEducativa.class);
+        cq.select(root);
+        return em.createQuery(cq).getResultList();
+    }
+
+    public <T extends Object> T findDetProveedor(DetRubroMuestraIntere detRubro, Long idPro, Class clase) {
+        Query q = em.createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.idRubroInteres=:pIdRubro and d.idMuestraInteres.idAnho.idAnho=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.idProcesoAdq=:pIdPro " : "") + " ORDER BY d.idMuestraInteres", clase);
+        q.setParameter("pIdRubro", detRubro.getIdRubroInteres().getId());
+        q.setParameter("pIdAnho", detRubro.getIdAnho().getId());
+        q.setParameter("idEmpresa", detRubro.getIdEmpresa());
+        if (clase.equals(CapaInstPorRubro.class)) {
+            q.setParameter("pIdPro", idPro);
+        }
+
+        if (q.getResultList().isEmpty()) {
+            return null;
+        } else {
+            return (T) q.getResultList().get(0);
+        }
+    }
+
+    public List<Municipio> getLstMunicipiosByDepartamento(String codigoDepartamento) {
+        Query query;
+        if (null == codigoDepartamento) {
+            query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.codigoDepartamento=:departamento", Municipio.class);
+            query.setParameter("departamento", codigoDepartamento);
+        } else {
+            switch (codigoDepartamento) {
+                case "00":
+                    query = em.createQuery("SELECT m FROM Municipio m ORDER BY FUNC('TO_NUMBER',m.codigoDepartamento.codigoDepartamento),  FUNC('TO_NUMBER',m.codigoMunicipio)", Municipio.class);
+                    break;
+                default:
+                    query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.codigoDepartamento=:departamento ORDER BY FUNC('TO_NUMBER',m.codigoDepartamento.codigoDepartamento),  FUNC('TO_NUMBER',m.codigoMunicipio)", Municipio.class);
+                    query.setParameter("departamento", codigoDepartamento);
+                    break;
+            }
+        }
+        return query.getResultList();
+    }
+
+    public List<Canton> getLstCantonByMunicipio(Long idMunicipio) {
+        Query q = em.createQuery("SELECT c FROM Canton c WHERE c.idMunicipio=:id ORDER BY c.codigoCanton", Canton.class);
+        q.setParameter("id", idMunicipio);
+        return q.getResultList();
+    }
+
+    /**
+     * Devuelve un listado de entidades financieras (BANCOS o CAJAS DE CREDITO O
+     * PRESTAMO) dependiendo del parametro que reciba 0 - Modulo de créditos 1 -
+     * Bancos asociados a cuentas de los proveedores 2 - Las 2 anteriores
+     *
+     * @param tipoEntidad
+     * @return
+     */
+    public List<EntidadFinanciera> findEntidadFinancieraEntities(Short tipoEntidad) {
+        Query q = em.createQuery("SELECT e FROM EntidadFinanciera e WHERE e.estadoEliminacion=0 AND e.bandera=:tipoEntidad ORDER BY e.nombreEntFinan", EntidadFinanciera.class);
+        q.setParameter("tipoEntidad", tipoEntidad);
+        return q.getResultList();
+    }
+
+    public DetRubroMuestraIntere findDetRubroByAnhoAndRubro(Long idAnho, Long idEmpresa) {
+        Query q = em.createQuery("SELECT d FROM DetRubroMuestraInteres d WHERE d.idEmpresa.idEmpresa=:idEmpresa and d.idAnho.idAnho=:pIdAnho and d.estadoEliminacion=0 ORDER BY d.idMuestraInteres", DetRubroMuestraIntere.class);
+        q.setParameter("idEmpresa", idEmpresa);
+        q.setParameter("pIdAnho", idAnho);
+        if (q.getResultList().isEmpty()) {
+            return null;
+        } else {
+            return (DetRubroMuestraIntere) q.getResultList().get(0);
+        }
     }
 }

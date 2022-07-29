@@ -142,4 +142,9 @@ public class VwCatalogoEntidadEducativa implements Serializable {
     public void setIdMunicipio(Municipio idMunicipio) {
         this.idMunicipio = idMunicipio;
     }
+
+    @Override
+    public String toString() {
+        return codigoEntidad + " - " + nombre;
+    }
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.pescolar.web;
 
 import java.io.Serializable;
@@ -74,43 +70,47 @@ public class MenuView implements Serializable {
             params.add(new Filtro(TipoOperador.EQUALS, "idUsuario", usuario.getIdUsuario()));
 
             lstOpcionMenu = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), idOpcionMenu);
-            
+
             crearArbolMenu();
         }
     }
-    
-    public void limpiarMenu(){
+
+    public void limpiarMenu() {
         model.getElements().clear();
-    }    
+    }
 
     private void crearArbolMenu() {
         DefaultMenuModel menu = new DefaultMenuModel();
 
         try {
-            DefaultMenuItem itemMenu = new DefaultMenuItem();
-            itemMenu.setValue(" Slim Menu");
-            itemMenu.setIcon("fa fa-thumb-tack");
-            itemMenu.setCommand("#{guestPreferences.setSlimMenu(true)}");
-            itemMenu.setAjax(false);
+            //<p:menuitem id="om_dashboard" value="Home" icon="pi pi-home" action="/app/principal" />
+
+            DefaultMenuItem itemMenu = DefaultMenuItem.builder()
+                    .value(" Principal")
+                    .icon("pi pi-home")
+                    .command("#{guestPreferences.ocultarMenuRedirect}")
+                    .ajax(false)
+                    .build();
 
             menu.getElements().add(itemMenu);
 
             for (OpcionMenuUsuarioDto opc : lstOpcionMenu) {
                 if (opc.getOpcIdOpcMenu() != null) {
-                    itemMenu = new DefaultMenuItem();
-
-                    itemMenu.setValue(" " + opc.getNombreOpcion());
-                    itemMenu.setOutcome(opc.getNombrePanel());
-                    itemMenu.setIcon(opc.getIcono());
-                    itemMenu.setAjax(false);
-                    itemMenu.setId("item" + opc.getIdOpcMenu().toString());
+                    itemMenu = DefaultMenuItem.builder()
+                            .value(" " + opc.getNombreOpcion())
+                            .outcome(opc.getNombrePanel())
+                            .icon(opc.getIcono())
+                            .ajax(false)
+                            .id("item" + opc.getIdOpcMenu().toString())
+                            .build();
 
                     menu.getElements().add(itemMenu);
                 } else {
-                    DefaultSubMenu subMenu = new DefaultSubMenu();
-                    subMenu.setIcon(opc.getIcono());
-                    subMenu.setLabel(opc.getNombreOpcion());
-                    subMenu.setId("sub" + opc.getIdOpcMenu().toString());
+                    DefaultSubMenu subMenu = DefaultSubMenu.builder()
+                            .icon(opc.getIcono())
+                            .label(opc.getNombreOpcion())
+                            .id("sub" + opc.getIdOpcMenu().toString())
+                            .build();
                     getHijo(subMenu, opc.getIdOpcMenu());
 
                     menu.getElements().add(subMenu);
@@ -139,19 +139,21 @@ public class MenuView implements Serializable {
             List lstTemp = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), object.getIdOpcMenu());
 
             if (lstTemp.isEmpty()) {
-                DefaultMenuItem itemMenu = new DefaultMenuItem();
-
-                itemMenu.setValue(" " + object.getNombreOpcion());
-                itemMenu.setOutcome(object.getNombrePanel());
-                itemMenu.setIcon(object.getIcono());
-                itemMenu.setAjax(false);
-                itemMenu.setId("item" + object.getIdOpcMenu());
+                DefaultMenuItem itemMenu = DefaultMenuItem.builder()
+                        .value(" " + object.getNombreOpcion())
+                        .outcome(object.getNombrePanel())
+                        .icon(object.getIcono())
+                        .ajax(false)
+                        .id("item" + object.getIdOpcMenu())
+                        .build();
                 opPadre.getElements().add(itemMenu);
             } else {
-                DefaultSubMenu subMenu = new DefaultSubMenu();
-                subMenu.setIcon(object.getIcono());
-                subMenu.setLabel(object.getNombrePanel());
-                subMenu.setId("sub" + object.getIdOpcMenu());
+                DefaultSubMenu subMenu = DefaultSubMenu.builder()
+                        .icon(object.getIcono())
+                        .label(object.getNombrePanel())
+                        .id("sub" + object.getIdOpcMenu())
+                        .build();
+
                 getHijo(subMenu, object.getIdOpcMenu());
                 opPadre.getElements().add(subMenu);
             }

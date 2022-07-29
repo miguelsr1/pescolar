@@ -21,6 +21,7 @@ import org.primefaces.PrimeFaces;
 import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
+import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.Usuario;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.utils.db.Filtro;
@@ -161,6 +162,14 @@ public class SessionView implements Serializable {
         this.idMunicipio = idMunicipio;
     }
 
+    public ProcesoAdquisicion getProceso() {
+        return proceso;
+    }
+
+    public void setProceso(ProcesoAdquisicion proceso) {
+        this.proceso = proceso;
+    }
+
     public List<ProcesoAdquisicion> getLstProcesoAdquisicion() {
         params.clear();
         params.add(new Filtro(TipoOperador.EQUALS, "idAnho.id", idAnho));
@@ -177,6 +186,10 @@ public class SessionView implements Serializable {
         }
 
         return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", true);
+    }
+
+    public List<RubrosAmostrarInteres> getLstRubros() {
+        return catalogoRepo.findAllRubrosByIdProceso(getIdProcesoAdq());
     }
 
     public void guardarParametros() throws IOException {

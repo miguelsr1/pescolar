@@ -76,7 +76,7 @@
                                 Lista de Proveedores
                                 <i class="pi pi-list"></i>
                                 <p:commandButton id="btoExportar" value=" Exportar" icon="pi pi-upload" style="float: right; font-size: 12px;"/>
-                                <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus-circle" style="float: right; font-size: 12px; margin-right: 5px;" action="#{ofertaBienesServiciosView.agregarProveedor()}"/>
+                                <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus" style="float: right; font-size: 12px; margin-right: 5px;" action="#{ofertaBienesServiciosView.agregarProveedor()}" update="pnoCantidad"/>
                             </h5>
                         </div>
 
@@ -128,51 +128,115 @@
                       modal="true" position="center center" onShow="PF('dlgProveedor').initPosition()"
                       dynamic="true" responsive="true" resizable="false" hideEffect="fade" showEffect="fade">
                 <p:outputPanel id="pnoCantidad">
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="Número de alumnos: "/>
-                        <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos}" style="font-weight: bold;">
-                            <f:convertNumber pattern="#,###"/>
-                        </p:outputLabel>
-                        <p:outputLabel value="Número de piezas a contratar: "/>
-                        <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos*2}" style="font-weight: bold;" rendered="#{ofertaMB.rubro eq 4 || ofertaMB.rubro eq 5}">
-                            <f:convertNumber pattern="#,###"/>
-                        </p:outputLabel>
+                    <div class="p-col-12">
+                        <div class="ui-fluid">
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Número de alumnos: " styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-8">
+                                    <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos}" style="font-weight: bold;">
+                                        <f:convertNumber pattern="#,###"/>
+                                    </p:outputLabel>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Número de piezas a contratar: " styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-8">
+                                    <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos*2}" style="font-weight: bold;" rendered="#{ofertaBienesServiciosView.idRubro eq 4 || ofertaBienesServiciosView.idRubro eq 5}">
+                                        <f:convertNumber pattern="#,###"/>
+                                    </p:outputLabel>
+                                    <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos}" style="font-weight: bold;" rendered="#{ofertaBienesServiciosView.idRubro eq 2 || ofertaBienesServiciosView.idRubro eq 3}">
+                                        <f:convertNumber pattern="#,###"/>
+                                    </p:outputLabel>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p:spacer width="10"/>
+                    <p:tabView id="tbEmpresas" prependId="false">
+                        <p:tab title="Municipio: #{ofertaBienesServiciosView.municipioCe}">
+                            <h:panelGrid columns="2" style="width: 100%;" rendered="#{!sessionView.isUsuarioDigitador}">
+                                <h:outputText value="Nombre:"/>
+                                <p:inputText style="width: 100%;" value="#{ofertaBienesServiciosView.nombreEmp}" onkeyup="queryEmpresa(this.value);" />
+                            </h:panelGrid>
+                            <br/>
+                            <p:dataView id="tblEmpresas" var="capaEmpresa" value="#{ofertaBienesServiciosView.lstCapaEmpresas}" 
+                                        gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                                <ui:include src="/app/ofertaListadoProveedores.xhtml"/>
+                            </p:dataView>
+                        </p:tab>
 
-                        <p:outputLabel value="#{ofertaBienesServiciosView.cantidadAlumnos}" style="font-weight: bold;" rendered="#{ofertaMB.rubro eq 2 || ofertaMB.rubro eq 3}">
-                            <f:convertNumber pattern="#,###"/>
-                        </p:outputLabel>
-                    </h:panelGrid>
+                        <p:tab title="Otros Municipios">
+                            <h:panelGrid columns="2" style="width: 100%;" rendered="#{!sessionView.isUsuarioDigitador}">
+                                <h:outputText value="Nombre:"/>
+                                <p:inputText style="width: 100%;" value="#{ofertaBienesServiciosView.nombreEmpOtro}" onkeyup="queryEmpresaOtros(this.value);" />
+                            </h:panelGrid>
+                            <br/>
+                            <p:dataView id="tblEmpresasOtras" var="capaEmpresa" value="#{ofertaBienesServiciosView.lstCapaEmpresasOtros}"
+                                        gridIcon="pi pi-th-large" listIcon="fa fa-bars">
+                                <ui:include src="/app/ofertaListadoProveedores.xhtml"/>
+                            </p:dataView>
+                        </p:tab>
+                    </p:tabView>
                 </p:outputPanel>
-                <p:spacer width="10"/>
-                <p:tabView id="tbEmpresas" scrollable="true">
-                    <p:tab title="Municipio: #{ofertaBienesServiciosView.municipioCe}">
-                        <h:panelGrid columns="2" style="width: 100%;" rendered="#{!menuController.isUsuarioDigitador}">
-                            <h:outputText value="Nombre:"/>
-                            <p:inputText style="width: 100%;" value="#{ofertaBienesServiciosView.nombreEmp}" onkeyup="queryEmpresa(this.value);" />
-                        </h:panelGrid>
-                        <br/>
-                        <p:dataView id="tblEmpresas" var="capaEmpresa" value="#{ofertaBienesServiciosView.lstCapaEmpresas}" 
-                                    gridIcon="fa fa-th-large" listIcon="fa fa-bars">
-                            <ui:include src="/app/ofertaListadoProveedores.xhtml"/>
-                        </p:dataView>
-                    </p:tab>
-
-                    <p:tab title="Otros Municipios">
-                        <h:panelGrid columns="2" style="width: 100%;" rendered="#{!menuController.isUsuarioDigitador}">
-                            <h:outputText value="Nombre:"/>
-                            <p:inputText style="width: 100%;" value="#{ofertaBienesServiciosView.nombreEmpOtro}" onkeyup="queryEmpresaOtros(this.value);" />
-                        </h:panelGrid>
-                        <br/>
-                        <p:dataView id="tblEmpresasOtras" var="capaEmpresa" value="#{ofertaBienesServiciosView.lstCapaEmpresasOtros}"
-                                    gridIcon="fa fa-th-large" listIcon="fa fa-bars">
-                            <ui:include src="/app/ofertaListadoProveedores.xhtml"/>
-                        </p:dataView>
-                    </p:tab>
-                </p:tabView>
 
                 <f:facet name="footer" >
-                    <p:commandButton value="Cancelar" icon="fa fa-times-circle" onclick="PF('dlgProveedor').hide();" />
+                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dlgProveedor').hide();" />
                 </f:facet>
+            </p:dialog>
+
+            <p:dialog id="dlgDetalleProveedor" header="#{sessionView.isUsuarioDigitador?('PROVE-'+concat(ofertaBienesServiciosView.empresaSeleccionada.id)):ofertaBienesServiciosView.empresaSeleccionada.razonSocial}"
+                      widgetVar="dlgDetalleProveedor" width="670" height="550"  
+                      modal="true" position="center center" onShow="PF('dlgDetalleProveedor').initPosition()"
+                      dynamic="true" responsive="true" resizable="false" hideEffect="fade" showEffect="fade">
+                <h:panelGrid columns="1" >
+                    <p:tabView>
+                        <p:tab title="Fotos productos"  rendered="#{ofertaMB.rubro eq 3}">
+                            <p:outputPanel id="pnlProductos">
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Seleccione el estilo:"/> 
+                                    <p:selectOneMenu value="#{ofertaMB.estiloSeleccionado}">
+                                        <f:selectItems value="#{ofertaMB.lstEstilos}"/>
+                                        <p:ajax update="pnlProductos" listener="#{ofertaMB.cargarFotosPorEstilo}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGroup>
+                                    <p:galleria value="#{ofertaMB.images}" var="image" style="width: auto;" autoPlay="false">
+                                        <p:graphicImage value="/DynamicImageServlet?file=#{image}" />
+                                    </p:galleria>
+                                </h:panelGroup>
+                            </p:outputPanel>
+                        </p:tab>
+
+                        <p:tab title="Precios de Referencia">
+                            <p:dataTable id="tblDetallePrecio" widgetVar="tblDetallePrecio" value="#{ofertaMB.lstPrecios}" var="precio" 
+                                         emptyMessage="No se han registrado precios a este proveedor" styleClass="ui-datatable-borderless ui-datatable-reflow">
+                                <p:column headerText="Item" width="15" id="item" styleClass="centrado">
+                                    <p:outputLabel value="#{precio.noItem}" />
+                                </p:column>
+                                <p:column headerText="Descripción Item" width="100">
+                                    <p:outputLabel value="#{precio.nombreProducto}" id="descripcionItem" />
+                                </p:column>
+                                <p:column headerText="Nivel Educativo" width="80">
+                                    <p:outputLabel value="#{precio.descripcionNivel}" id="nivelEducativo"/>
+                                </p:column>
+                                <p:column headerText="Precio Máximo" width="50" styleClass="numero" id="precioMax">
+                                    <h:outputText value="#{precio.precioMaximo}">
+                                        <f:convertNumber pattern="###0.00"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Precio U." width="50" styleClass="numero" id="precio">
+                                    <p:outputLabel rendered="#{precio.precioReferencia lt precio.precioMaximo}">
+                                        <i class="fa fa-arrow-down" aria-hidden="true" style="color: #007ad9"></i>
+                                    </p:outputLabel>
+                                    <p:spacer width="10"/>
+                                    <h:outputText value="#{precio.precioReferencia}">
+                                        <f:convertNumber pattern="###0.00"/>
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+                </h:panelGrid>
             </p:dialog>
 
 

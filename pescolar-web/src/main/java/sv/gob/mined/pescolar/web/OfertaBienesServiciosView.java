@@ -1,5 +1,6 @@
 package sv.gob.mined.pescolar.web;
 
+import java.io.File;
 import sv.gob.mined.pescolar.model.OfertaBienesServicio;
 import sv.gob.mined.pescolar.model.Participante;
 
@@ -19,13 +20,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.primefaces.PrimeFaces;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Municipio;
-import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
@@ -33,6 +34,7 @@ import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.NivelEducativoRepo;
 import sv.gob.mined.pescolar.repository.OfertaRepo;
 import sv.gob.mined.pescolar.repository.ParticipanteRepo;
+import sv.gob.mined.pescolar.repository.PrecioRefRubroEmpRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.enums.TipoOperacion;
@@ -67,9 +69,10 @@ public class OfertaBienesServiciosView implements Serializable {
     private ProveedorDisponibleDto proveedorSeleccionado = new ProveedorDisponibleDto();
 
     private HashMap<String, String> mapItems;
+    private SelectItem[] lstEstilos = new SelectItem[0];
 
     private List<Participante> lstParticipantes = new ArrayList();
-    private List<RubrosAmostrarInteres> lstRubros = new ArrayList();
+    //private List<RubrosAmostrarInteres> lstRubros = new ArrayList();
     private List<Filtro> params = new ArrayList();
 
     private List<ProveedorDisponibleDto> lstCapaEmpresas = new ArrayList();
@@ -84,7 +87,8 @@ public class OfertaBienesServiciosView implements Serializable {
     private ParticipanteRepo participanteRepo;
     @Inject
     private RepositorioAplicacionView repoView;
-
+    @Inject
+    private PrecioRefRubroEmpRepo preciosRepo;
     @Inject
     private CatalogoRepo catalogoRepo;
     @Inject
@@ -114,6 +118,10 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getter-setter">
+    public Empresa getEmpresaSeleccionada() {
+        return empresaSeleccionada;
+    }
+
     public ProveedorDisponibleDto getProveedorSeleccionado() {
         return proveedorSeleccionado;
     }
@@ -161,7 +169,7 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     private void inicializarVariables() {
-        lstRubros = catalogoRepo.findAllRubrosByIdProceso(sessionView.getIdProcesoAdq());
+        //lstRubros = catalogoRepo.findAllRubrosByIdProceso(sessionView.getIdProcesoAdq());
         entidadEducativa = new VwCatalogoEntidadEducativa();
     }
 
@@ -187,9 +195,9 @@ public class OfertaBienesServiciosView implements Serializable {
         return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", false);
     }
 
-    public List<RubrosAmostrarInteres> getLstRubros() {
-        return lstRubros;
-    }
+//    public List<RubrosAmostrarInteres> getLstRubros() {
+//        return lstRubros;
+//    }
 
     public String getCodigoDepartamento() {
         return codigoDepartamento;
@@ -376,9 +384,9 @@ public class OfertaBienesServiciosView implements Serializable {
 
         //calcular el menor precio de ambos listados
         lstEmpresas = participanteRepo.findLstProveedoresDisponibles(detalleProceso, codigoEntidad, entidadEducativa.getCodigoDepartamento().getId(), entidadEducativa.getCodigoMunicipio(), entidadEducativa.getCodigoCanton(),
-                idMunicipio, idMunicipios, Boolean.TRUE, cantidad, mapItems);
+                entidadEducativa.getIdMunicipio().getId(), idMunicipios, Boolean.TRUE, cantidad, mapItems);
         lstEmpresasOtros = participanteRepo.findLstProveedoresDisponibles(detalleProceso, codigoEntidad, entidadEducativa.getCodigoDepartamento().getId(), entidadEducativa.getCodigoMunicipio(), entidadEducativa.getCodigoCanton(),
-                idMunicipio, idMunicipios, Boolean.FALSE, cantidad, mapItems);
+                entidadEducativa.getIdMunicipio().getId(), idMunicipios, Boolean.FALSE, cantidad, mapItems);
 
         lstCapaEmpresas.clear();
         lstCapaEmpresas.addAll(lstEmpresas);
@@ -386,7 +394,9 @@ public class OfertaBienesServiciosView implements Serializable {
         lstCapaEmpresasOtros.addAll(lstEmpresasOtros);
 
         if (lstEmpresas.isEmpty()) {
-            JsfUtil.mensajeInformacion("No se encontró ninguna coincidencia con el valor: <strong>" + valorDeBusqueda + "</strong>");
+            JsfUtil.mensajeInformacion("No se encontrarón proveedores para este centro escolar.");
+        } else {
+            PrimeFaces.current().executeScript("PF('dlgProveedor').show();");
         }
     }
 
@@ -463,5 +473,22 @@ public class OfertaBienesServiciosView implements Serializable {
             }
         }
         return false;
+    }
+
+    public void cargarDetalleProveedor(BigDecimal idEmpresa) {
+        empresaSeleccionada = catalogoRepo.findEntityByPk(Empresa.class, idEmpresa);
+        File carpetaNfs = new File("/imagenes/PaqueteEscolar/Fotos_Zapatos/" + empresaSeleccionada.getNumeroNit() + "/");
+        lstPrecios = preciosRepo.getLstPreciosByIdEmpresaAndIdProcesoAdq(empresaSeleccionada.getId(), detalleProceso.getIdProcesoAdq().getIdAnho().getId(), mapItems.get("idNivelesCe"));
+
+        if (carpetaNfs.list() != null) {
+            lstEstilos = new SelectItem[carpetaNfs.list().length + 1];
+            int i = 0;
+            lstEstilos[i] = new SelectItem("-", "Seleccione");
+            i++;
+            for (String string : carpetaNfs.list()) {
+                lstEstilos[i] = new SelectItem(string, string);
+                i++;
+            }
+        }
     }
 }

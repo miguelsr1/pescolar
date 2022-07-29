@@ -67,12 +67,17 @@ public class Participante implements Serializable {
     @OrderBy(clause = "to_number(noItem) asc")
     private List<DetalleOferta> detalleOfertasList;
 
+    @OneToMany(mappedBy = "idParticipante", fetch = FetchType.LAZY)
+    private List<ResolucionesAdjudicativa> resolucionesAdjudicativaList;
+
     @Transient
     private BigInteger cantidad = BigInteger.ZERO;
     @Transient
     private BigDecimal monto = BigDecimal.ZERO;
     @Transient
     private Boolean eliminar = false;
+    @Transient
+    private Boolean tieneReserva = false;
 
     public Participante() {
     }
@@ -227,5 +232,22 @@ public class Participante implements Serializable {
 
     public Boolean getEliminar() {
         return estadoEliminacion.compareTo(1l) == 0;
+    }
+
+    public Boolean getTieneReserva() {
+        tieneReserva = getResolucionesAdjudicativaList() == null;
+        return tieneReserva;
+    }
+
+    public void setTieneReserva(Boolean tieneReserva) {
+        this.tieneReserva = tieneReserva;
+    }
+
+    public List<ResolucionesAdjudicativa> getResolucionesAdjudicativaList() {
+        return resolucionesAdjudicativaList;
+    }
+
+    public void setResolucionesAdjudicativaList(List<ResolucionesAdjudicativa> resolucionesAdjudicativaList) {
+        this.resolucionesAdjudicativaList = resolucionesAdjudicativaList;
     }
 }

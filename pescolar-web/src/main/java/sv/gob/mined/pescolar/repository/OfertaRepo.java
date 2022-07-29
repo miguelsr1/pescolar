@@ -245,5 +245,10 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
         return mapItems;
     }
 
-    
+    /*public OfertaBienesServicio findOfertaByCodEntAndRubro(String codigoEntidad, Long idRubro){
+        CriteriaQuery<OfertaBienesServicio> cq = em.getCriteriaBuilder().createQuery(OfertaBienesServicio.class);
+        Root<OfertaBienesServicio> root = cq.from(OfertaBienesServicio.class);
+        
+        
+    }*/
 }

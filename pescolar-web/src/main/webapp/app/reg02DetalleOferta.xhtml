@@ -3,7 +3,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/template.xhtml">
+                template="/WEB-INF/template.xhtml"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
     <ui:define name="head">
         <script type="text/javascript">
 
@@ -112,20 +113,29 @@
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar>
                         <p:menuitem value="Nuevo"  icon="pi pi-plus" action="#{ofertaBienesServiciosView.nuevo()}"/>
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" action="#{detalleOfertaView.editarOferta()}" update="dvDatos"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" action="#{ofertaBienesServiciosView.buscar()}" />
                     </p:menubar>
                 </div>
                 <div class="p-col-12 p-md-8 ">
-                    <div class="card ui-fluid overview-box blue" id="dvDatos">
+                    <div class="card ui-fluid overview-box blue" jsf:id="dvDatos">
                         <h5 id="tituloDatos">
                             <i class="pi pi-home" style="font-weight: bold;"></i>
                             Datos Generales:
                         </h5>
 
                         <div class="p-field p-grid">
-                            <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Centro educativo</p:outputLabel>
+                            <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0" for="@next">Centro educativo</p:outputLabel>
                             <div class="p-col-12 p-md-9" style="font-weight: bold;">
-                                <p:outputLabel>#{detalleOfertaView.participante.idOferta.codigoEntidad.codigoEntidad} - #{detalleOfertaView.participante.idOferta.codigoEntidad.nombre}</p:outputLabel>
+                                <p:outputLabel rendered="#{detalleOfertaView.activarFiltro}">#{detalleOfertaView.participante.idOferta.codigoEntidad.codigoEntidad} - #{detalleOfertaView.participante.idOferta.codigoEntidad.nombre}</p:outputLabel>
+                                
+                                <p:autoComplete id="acMinLength" minQueryLength="4" value="#{detalleOfertaView.entidadEducativa}"
+                                                completeMethod="#{detalleOfertaView.completeCe}" 
+                                                var="entidad" itemLabel="#{entidad}" itemValue="#{entidad}"
+                                                converter="#{entidadEducativaConvert}" effect="fade" scrollHeight="250"
+                                                rendered="#{not detalleOfertaView.activarFiltro}" forceSelection="true">
+                                    <p:ajax event="itemSelect" listener="#{detalleOfertaView.onItemSelect}"/>
+                                </p:autoComplete>
                             </div>
                         </div>
 
@@ -133,19 +143,29 @@
                         <div class="p-field p-grid">
                             <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Rubro de adquisición</p:outputLabel>
                             <div class="p-col-12 p-md-9" style="font-weight: bold;">
-                                <p:outputLabel>#{detalleOfertaView.participante.idOferta.idDetProcesoAdq.idRubroAdq.descripcionRubro}</p:outputLabel>
+                                <p:outputLabel rendered="#{detalleOfertaView.activarFiltro}">#{detalleOfertaView.participante.idOferta.idDetProcesoAdq.idRubroAdq.descripcionRubro}</p:outputLabel>
+                                <p:selectOneMenu id="cboRubro" value="#{detalleOfertaView.idRubro}" rendered="#{not detalleOfertaView.activarFiltro}">
+                                    <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
+                                    <f:selectItems value="#{sessionView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
+                                    <p:ajax listener="#{detalleOfertaView.cargarParticipantes}" update="cboProveedor"/>
+                                </p:selectOneMenu>
                             </div>
                         </div>
                         <div class="p-field p-grid">
                             <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Proveedor</p:outputLabel>
                             <div class="p-col-12 p-md-9" style="font-weight: bold;">
-                                <p:outputLabel>#{detalleOfertaView.participante.idEmpresa.razonSocial}</p:outputLabel>
+                                <p:outputLabel rendered="#{detalleOfertaView.activarFiltro}">#{detalleOfertaView.participante.idEmpresa.razonSocial}</p:outputLabel>
+                                
+                                <p:selectOneMenu id="cboProveedor" value="#{detalleOfertaView.participante}" rendered="#{not detalleOfertaView.activarFiltro}">
+                                    <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
+                                    <f:selectItems value="#{detalleOfertaView.lstParticipantes}" var="par" itemValue="#{par}" itemLabel="#{par.idEmpresa.razonSocial}"/>
+                                </p:selectOneMenu>
                             </div>
                         </div>
                         <div class="p-field p-grid">
                             <p:outputLabel for="cboEst" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Estado reserva</p:outputLabel>
                             <div class="p-col-12 p-md-9">
-                                <p:selectOneMenu id="cboEst" value="#{detalleOfertaView.resAdj.idEstadoReserva.id}">
+                                <p:selectOneMenu id="cboEst" value="#{detalleOfertaView.idEstadoReserva}" disabled="#{detalleOfertaView.idEstadoReserva eq 5}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
                                     <f:selectItems value="#{detalleOfertaView.lstEstadoReserva}" var="est" itemLabel="#{est.descripcionReserva}" itemValue="#{est.id}"/>
                                 </p:selectOneMenu>
@@ -245,7 +265,7 @@
                         </div>
 
 
-                        <p:dataTable id="tblDetalleOferta" value="#{detalleOfertaView.participante.detalleOfertasList}" 
+                        <p:dataTable id="tblDetalleOferta" value="#{detalleOfertaView.participante.detalleOfertasList}" lazy="true"
                                      var="detalle" reflow="true" editable="#{detalleOfertaView.editable}" editMode="cell" rowIndexVar="rowId"
                                      styleClass="ui-datatable-striped" widgetVar="tblDetalleOferta">
 

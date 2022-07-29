@@ -1,8 +1,254 @@
 <ui:composition 
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
     template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-        
+        <h:form id="form" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar" styleClass="divSticky"> 
+                        <p:menuitem value="Nuevo" icon="fa fa-file-o" ajax="true" process="@this" disabled="true"/>
+                        <p:menuitem value="Modificar" update="frmPrincipal" process="@this" icon="fa fa-edit" onclick="onClick('btnModificar');" />
+                        <p:menuitem value="Guardar" icon="fa fa-save" disabled="#{menuController.usuarioSoloLectura || datosGeneralesView.deshabiliar}" action="#{datosGeneralesView.guardarDatosGenerales}" />
+                        <p:menuitem value="Imprimir" icon="fa fa-print" disabled="true" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
+                        <p:menuitem value="Notificar" icon="fa fa-envelope" disabled="true"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="fa fa-sign-out" value="Salir" />
+                        </f:facet>
+                    </p:menubar>
+                </div>
+                <p:panel visible="false">
+                    <p:commandButton id="btnModificar" value="ok" actionListener="#{datosGeneralesView.filtroProveedores}" process="@this">
+                        <p:ajax event="dialogReturn" listener="#{datosGeneralesView.empresaSeleccionada}"  update="frmPrincipal pnlFoto pnlModif dvDatosGenerales" />
+                    </p:commandButton>
+                </p:panel>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <ui:include src="/app/proveedor/interno/datosGenProveedor.xhtml"/>
+                    </div>
+                </div>
+
+                <div class="p-col-12">
+                    <div class="card">
+                        <div class="card-header overview-box blue">
+                            <h5>
+                                <i class="pi pi-pencil-square-o verde" style="font-size: 16px;"></i>
+                                <p:spacer width="8"/>
+                                Campos editables
+                            </h5>
+                        </div>
+
+                        <p:outputPanel id="pnlModif">
+                            <p:tabView prependId="false">
+                                <p:tab title="#{datosGeneralesView.tapEmpresa}" rendered="#{datosGeneralesView.tapEmpresa ne ''}">
+                                    <p:panelGrid columns="2" columnClasses="col2_label,col10" styleClass="ui-panelgrid-blank form-group form-elements" >
+                                        <p:outputLabel value="Razon Social:"/>
+                                        <p:inputText value="#{cargaGeneralView.empresa.razonSocial}" size="85"/>
+                                        <p:outputLabel value="Departamento: "/>
+                                        <h:panelGroup>
+                                            <h:panelGrid columns="4">
+                                                <p:selectOneMenu id="cboDepaEmp" value="#{datosGeneralesView.codigoDepartamentoLocal}" disabled="#{parametrosMB.usuarioDepartamental}">
+                                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccione un departamento" />
+                                                    <f:selectItems value="#{catalogosGeneralesController.lstDepartamentos}" var="depa" itemValue="#{depa.codigoDepartamento}" itemLabel="#{depa.codigoDepartamento} - #{depa.nombreDepartamento}" />
+                                                    <p:ajax update="cboMuniEmp"/>
+                                                </p:selectOneMenu>
+                                                <p:spacer width="10"/>
+                                                <p:outputLabel value="Municipio:" />
+                                                <p:selectOneMenu id="cboMuniEmp" value="#{datosGeneralesView.idMunicipioLocal}" >
+                                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccione un municipio" />
+                                                    <f:selectItems value="#{datosGeneralesView.lstMunicipiosLocal}" var="mun" itemValue="#{mun.idMunicipio}" itemLabel="#{mun.codigoMunicipio} - #{mun.nombreMunicipio}" />
+                                                </p:selectOneMenu>
+                                            </h:panelGrid>
+                                        </h:panelGroup>
+                                        <p:outputLabel value="Cantón:" rendered="#{datosGeneralesView.rubroUniforme}"/>
+                                        <p:selectOneMenu id="cboCantonEmp" value="#{datosGeneralesView.idCantonLocal}" rendered="#{datosGeneralesView.rubroUniforme}">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Seleccione un cantón" />
+                                            <f:selectItems value="#{datosGeneralesView.lstCantonesLocal}" var="can" itemValue="#{can.codigoCanton}" itemLabel="#{can.codigoCanton} - #{can.nombreCanton}" />
+                                            <p:ajax update="cboCantonEmp"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Dirección:" />
+                                        <p:inputTextarea value="#{cargaGeneralView.empresa.direccionCompleta}" cols="40"/>
+                                        <p:outputLabel value="Teléfono:"/>
+                                        <h:panelGroup>
+                                            <h:panelGrid columns="4">
+                                                <p:inputText value="#{cargaGeneralView.empresa.telefonos}"/>
+                                                <p:spacer width="10"/>
+                                                <p:outputLabel value="Celular:"/>
+                                                <p:inputText value="#{cargaGeneralView.empresa.numeroCelular}"/>
+                                            </h:panelGrid>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="#{datosGeneralesView.tapPersona}" rendered="#{datosGeneralesView.tapPersona ne ''}">
+                                    <p:panelGrid columns="4" columnClasses="col2_label,col3,col2_label,col5" 
+                                                 styleClass="ui-panelgrid-blank form-group form-elements" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="Primer Nombre:"/>
+                                        <p:inputText value="#{cargaGeneralView.empresa.idPersona.primerNombre}" placeholder="1er Nombre"/>
+                                        <p:outputLabel value="Segundo Nombre:"/>
+                                        <p:inputText value="#{cargaGeneralView.empresa.idPersona.segundoNombre}" placeholder="2do Nombre"/>
+                                        <p:outputLabel value="Primer Apellido:"/>
+                                        <p:inputText value="#{cargaGeneralView.empresa.idPersona.primerApellido}" placeholder="1er Apellido"/>
+                                        <p:outputLabel value="Segundo Apellido:"/>
+                                        <h:panelGroup>
+                                            <h:panelGrid columns="2">
+                                                <p:inputText value="#{cargaGeneralView.empresa.idPersona.segundoApellido}" placeholder="2do Apellido"/>
+                                                <p:inputText value="#{cargaGeneralView.empresa.idPersona.acasada}" placeholder="Apellido casada/vda"/>
+                                            </h:panelGrid>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel value="Teléfono:"/>
+                                        <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numeroTelefono}" mask="9999-9999"/>
+                                        <p:outputLabel value="Celular:"/>
+                                        <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numeroCelular}" mask="9999-9999"/>
+
+                                        <p:outputLabel value="Teléfono 2:"/>
+                                        <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numTelefono2}" mask="9999-9999"/>
+                                        <p:outputLabel value="Teléfono 3:"/>
+                                        <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numTelefono3}" mask="9999-9999"/>
+
+                                        <p:outputLabel value="DUI:"/>
+                                        <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numeroDui}" mask="99999999-9"/>
+                                        <p:spacer/>
+                                        <p:spacer/>
+
+                                        <p:outputLabel value="Departamento: "/>
+                                        <p:selectOneMenu id="cboDepartamento" value="#{datosGeneralesView.codigoDepartamento}">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Seleccione un departamento" />
+                                            <f:selectItems value="#{catalogosGeneralesController.lstDepartamentos}" var="depaP" itemValue="#{depaP.codigoDepartamento}" itemLabel="#{depaP.codigoDepartamento} - #{depaP.nombreDepartamento}" />
+                                            <p:ajax update="cboMunicipio"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Municipio:" />
+                                        <p:selectOneMenu id="cboMunicipio" value="#{datosGeneralesView.idMunicipio}">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Seleccione un municipio" />
+                                            <f:selectItems value="#{datosGeneralesView.lstMunicipios}" var="munP" itemValue="#{munP.idMunicipio}" itemLabel="#{munP.codigoMunicipio} - #{munP.nombreMunicipio}"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Cantón:" rendered="#{datosGeneralesView.rubroUniforme}"/>
+                                        <p:selectOneMenu id="cboCanton" value="#{datosGeneralesView.idCanton}" rendered="#{proveedorController.rubroUniforme}">
+                                            <f:selectItem noSelectionOption="true" itemLabel="Seleccione un cantón" />
+                                            <f:selectItems value="#{datosGeneralesView.lstCantones}" var="canP" itemValue="#{canP.codigoCanton}" itemLabel="#{canP.codigoCanton} - #{canP.nombreCanton}"/>
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" columnClasses="col2_label,col10"
+                                                 styleClass="ui-panelgrid-blank form-group form-elements" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="eMail:"/>
+                                        <p:inputText value="#{cargaGeneralView.empresa.idPersona.email}" style="width: 200px;"/>
+                                        <p:outputLabel value="Dirección:" />
+                                        <p:inputTextarea value="#{cargaGeneralView.empresa.idPersona.domicilio}" cols="100"/>
+                                        <p:spacer />
+                                        <p:outputPanel rendered="#{datosGeneralesView.personaNatural}">
+                                            <p:selectBooleanCheckbox value="#{datosGeneralesView.mismaDireccion}" itemLabel="¿Su local tiene la misma dirección de su domicilio?"
+                                                                     rendered="#{datosGeneralesView.personaNatural}" style="width: 100%;">
+                                                <p:ajax update="pnlDireccionLocal" />
+                                            </p:selectBooleanCheckbox>
+                                        </p:outputPanel>
+                                    </p:panelGrid>
+
+                                    <p:panel id="pnlDireccionLocal" header="Ubicación del Local" visible="#{datosGeneralesView.personaNatural}">
+                                        <p:panelGrid columns="4" columnClasses="col2_label,col3,col2_label,col5" 
+                                                     styleClass="ui-panelgrid-blank form-group form-elements" style="border:0px none; background-color:transparent;width: 100%;">
+                                            <p:outputLabel value="Departamento: "/>
+                                            <p:selectOneMenu id="cboDepartamentoLocal" value="#{datosGeneralesView.codigoDepartamentoLocal}" disabled="true">
+                                                <f:selectItem noSelectionOption="true" itemLabel="Seleccione un departamento" />
+                                                <f:selectItems value="#{catalogosGeneralesController.lstDepartamentos}" var="depaP" itemValue="#{depaP.codigoDepartamento}" itemLabel="#{depaP.codigoDepartamento} - #{depaP.nombreDepartamento}" />
+                                                <p:ajax update="cboMunicipio"/>
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="Municipio:" />
+                                            <p:selectOneMenu id="cboMunicipioLocal" value="#{datosGeneralesView.idMunicipioLocal}">
+                                                <f:selectItem noSelectionOption="true" itemLabel="Seleccione un municipio" />
+                                                <f:selectItems value="#{datosGeneralesView.lstMunicipiosLocal}" var="munP" itemValue="#{munP.idMunicipio}" itemLabel="#{munP.codigoMunicipio} - #{munP.nombreMunicipio}"/>
+                                                <p:ajax update="cboCantonLocal"/>
+                                            </p:selectOneMenu>
+
+                                            <p:outputLabel value="Cantón:" rendered="#{datosGeneralesView.rubroUniforme}"/>
+                                            <p:selectOneMenu id="cboCantonLocal" value="#{datosGeneralesView.idCantonLocal}" rendered="#{datosGeneralesView.rubroUniforme}">
+                                                <f:selectItem noSelectionOption="true" itemLabel="Seleccione un cantón" />
+                                                <f:selectItems value="#{datosGeneralesMB.lstCantonLocal}" var="canton" itemValue="#{canton.codigoCanton}" itemLabel="#{canton.codigoCanton} - #{canton.nombreCanton}"/>
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:panelGrid columns="2" columnClasses="col2_label,col10" rendered="#{datosGeneralesView.personaNatural}"
+                                                     styleClass="ui-panelgrid-blank form-group form-elements" style="border:0px none; background-color:transparent;width: 100%;">
+                                            <p:outputLabel value="Dirección:" />
+                                            <p:inputTextarea value="#{cargaGeneralView.empresa.direccionCompleta}" cols="100"/>
+                                        </p:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+                                <p:tab title="Datos de Calificación">
+                                    <p:panelGrid columns="2" columnClasses="col3_label,col9" 
+                                                 styleClass="ui-panelgrid-blank form-group form-elements" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="Departamento Calificado: "/>
+                                        <p:selectOneMenu id="cbDepartamento" value="#{datosGeneralesView.codigoDepartamentoCalificado}" >
+                                            <f:selectItem itemLabel="Seleccione un departamento"/>
+                                            <f:selectItems value="#{catalogosGeneralesController.lstDepartamentos}" var="depa" itemValue="#{depa.codigoDepartamento}" itemLabel="#{depa.codigoDepartamento} - #{depa.nombreDepartamento}"/>
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                                 style="border:0px none; background-color:transparent;">
+                                        <h:outputText value="A continuación, responda ¿Cuál considera que es su capacidad de producción real? Tomando en consideración los siguientes factores:"/>
+                                    </p:panelGrid>
+                                    <div class="ui-message ui-staticmessage ui-message-info ui-widget ui-corner-all" style="font-size: 14px !important;">
+                                        <ul>
+                                            <li><p:outputLabel value="Su maquinaria disponible para producción (no cuentan maquinas en des uso);"/><br/></li>
+                                            <li><p:outputLabel value="Personal a contratar para la producción;"/><br/></li>
+                                            <li><p:outputLabel value="Durante los primeros días de ejecución debe coordinarse y realizarse la toma de tallas a los estudiantes;"/><br/></li>
+                                            <li><p:outputLabel value="El período de ejecución de los contratos es de 40 días hábiles y deben cubrirse, sin falta, en ese período (incluye la coordinación de entrega y posibles arreglos a los bienes)."/><br/></li>
+                                            <li><p:outputLabel value="Considere también que puede resultar adjudicado por varios centros educativos, lo que supone que deberá coordinar y hacer la toma de tallas con cada uno sin que eso signifique una justificación a incumplir con lo considerado en el literal anterior."/><br/></li>
+                                        </ul>
+
+                                        <p:outputLabel value="Habiendo leído y tomado en cuenta los literales que anteceden considero que mi Capacidad de Producción es:"/>
+                                        <p:spacer width="10"/>
+                                        <p:inputNumber id="txtCapacidadPro" value="#{datosGeneralesView.capacidadInst.capacidadPropuesta}" decimalPlaces="0" size="10"
+                                                       inputStyle="text-align: right;" minValue="0"/>
+                                        <p:spacer width="5"/>
+                                        <p:outputLabel value="piezas"/>
+                                    </div>
+                                    <p:panelGrid columns="2" columnClasses="col3,col9" 
+                                                 styleClass="ui-panelgrid-blank form-group form-elements" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="Capacidad Adjudicada: " />
+                                        <p:inputNumber id="txtCapacidadAdj" value="#{datosGeneralesView.capacidadInst.capacidadAdjudicada}" decimalPlaces="0" size="10" readonly="true" inputStyle="text-align: right"/>
+                                        <p:outputLabel value="Capacidad Calificada: " />
+                                        <p:inputNumber id="txtCapacidad" value="#{datosGeneralesView.capacidadInst.capacidadAcreditada}" decimalPlaces="0" size="10" readonly="true" inputStyle="text-align: right"/>
+                                    </p:panelGrid>
+                                    <br/>
+                                    <p:panelGrid columns="2" columnClasses="col3_label,col9"  styleClass="ui-panelgrid-blank form-group form-elements" 
+                                                 style="border:0px none; background-color:transparent;" rendered="#{datosGeneralesView.rubroUniforme}">
+                                        <h:outputText value="¿Esta inscrito al IVA si sus ventas han sido superiores a $ 5,714.29?"/>
+                                        <p:selectBooleanCheckbox value="#{datosGeneralesView.inscritoIva}">
+                                            <p:ajax update="chDesea" />
+                                        </p:selectBooleanCheckbox>
+                                    </p:panelGrid>
+                                    <br/>
+                                    <p:panelGrid columns="2" columnClasses="col3_label,col9"  styleClass="ui-panelgrid-blank form-group form-elements" 
+                                                 style="border:0px none; background-color:transparent;" rendered="#{datosGeneralesView.rubroUniforme}">
+                                        <h:outputText value="¿Desea inscribirse al IVA?"/>
+                                        <p:selectBooleanCheckbox id="chDesea" value="#{datosGeneralesView.deseaInscribirseIva}" disabled="#{datosGeneralesView.inscritoIva}"/>
+                                    </p:panelGrid>
+
+                                </p:tab>
+                                <p:tab title="Cuenta Bancaria">
+                                    <p:panelGrid columns="2" columnClasses="col3_label,col9" 
+                                                 styleClass="ui-panelgrid-blank form-group form-elements" style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel value="Banco:"/>
+                                        <p:selectOneMenu id="idEntFinan" value="#{datosGeneralesView.codEntFinanciera}" disabled="#{datosGeneralesView.deshabiliar}" >
+                                            <f:selectItems value="#{datosGeneralesView.lstEntidades}" var="ent" itemValue="#{ent.codEntFinanciera}" itemLabel="#{ent.nombreEntFinan}" />
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="Número de Cuenta:"/>
+                                        <p:inputText value="#{cargaGeneralView.empresa.numeroCuenta}" disabled="#{datosGeneralesView.deshabiliar}"/>
+                                    </p:panelGrid>
+                                </p:tab>
+                            </p:tabView>
+                        </p:outputPanel>
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
     </ui:define>
 </ui:composition>
