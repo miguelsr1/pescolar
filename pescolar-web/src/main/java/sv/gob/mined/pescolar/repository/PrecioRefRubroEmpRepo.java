@@ -1,15 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.pescolar.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
+import sv.gob.mined.pescolar.model.NivelEducativo;
+import sv.gob.mined.pescolar.model.PreciosRefRubro;
 import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 
@@ -60,6 +60,43 @@ public class PrecioRefRubroEmpRepo extends AbstractRepository<PreciosRefRubroEmp
                 + "                pemp.estado_eliminacion = 0 and\n"
                 + (idAnho.intValue() > 8 ? " pemp.id_nivel_educativo in (" + (idNivelesCe.replace("1", "22").replace("5", "5,23").replace("6", "6,24")) + ")\n" : "                pemp.id_nivel_educativo in (" + (idNivelesCe) + ")\n")
                 + "            order by to_number(pemp.no_item)", PrecioReferenciaEmpresaDto.class);
+        return q.getResultList();
+    }
+
+    public PreciosRefRubro findPreciosRefRubroByNivelEduAndRubro(BigDecimal nivelEdu, DetalleProcesoAdq rubro) {
+        PreciosRefRubro pr = new PreciosRefRubro();
+        NivelEducativo n = em.find(NivelEducativo.class, nivelEdu);
+        pr.setIdNivelEducativo(n);
+        pr.setPrecioMaxFem(BigDecimal.ZERO);
+        pr.setPrecioMaxMas(BigDecimal.ZERO);
+
+        if (rubro == null || nivelEdu == null) {
+            return pr;
+        }
+        Query q = em.createQuery("SELECT p FROM PreciosRefRubro p WHERE p.idNivelEducativo.id=:nivelEdu and p.idRubroInteres.id=:pIdRubro and p.idAnho.id=:pIdAnho", PreciosRefRubro.class);
+        q.setParameter("nivelEdu", nivelEdu);
+        q.setParameter("pIdRubro", rubro.getIdRubroAdq().getId());
+        q.setParameter("pIdAnho", rubro.getIdProcesoAdq().getIdAnho().getId());
+
+        if (q.getResultList().isEmpty()) {
+            return pr;
+        } else {
+            return (PreciosRefRubro) q.getSingleResult();
+        }
+    }
+
+    public List<PreciosRefRubro> getLstPreciosRefRubroByRubro(DetalleProcesoAdq rubro) {
+        Query q = em.createNativeQuery("select prr.* \n"
+                + "from PRECIOS_REF_RUBRO prr \n"
+                + "    inner join NIVEL_EDUCATIVO niv on niv.ID_NIVEL_EDUCATIVO = prr.ID_NIVEL_EDUCATIVO \n"
+                + "    inner join detalle_proceso_adq dpa on dpa.id_det_proceso_adq = prr.id_det_proceso_adq\n"
+                + "    inner join proceso_adquisicion pa on dpa.id_proceso_adq = pa.id_proceso_adq\n"
+                + "    inner join anho on pa.id_anho = anho.id_anho\n"
+                + "where anho.id_anho = ?1 and dpa.id_rubro_adq = ?2\n"
+                + "order by niv.ORDEN2", PreciosRefRubro.class);
+        q.setParameter(1, rubro.getIdProcesoAdq().getIdAnho().getId());
+        q.setParameter(2, rubro.getIdRubroAdq().getId());
+
         return q.getResultList();
     }
 }

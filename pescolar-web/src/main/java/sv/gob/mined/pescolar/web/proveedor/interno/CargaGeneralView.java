@@ -19,7 +19,7 @@ import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.RecuperarProcesoUtil;
-import sv.gob.mined.pescolar.utils.VarSession;
+import sv.gob.mined.pescolar.web.SessionView;
 
 /**
  *
@@ -32,9 +32,9 @@ public class CargaGeneralView extends RecuperarProcesoUtil implements Serializab
     private Boolean deshabiliar = false;
     private Boolean showFoto;
 
-    public String url;
-    public String fileName;
-    public String rubroProveedor = "";
+    private String urlStr;
+    private String fileName;
+    private String rubroProveedor;
 
     private Long idAnho;
 
@@ -43,20 +43,22 @@ public class CargaGeneralView extends RecuperarProcesoUtil implements Serializab
     private DetRubroMuestraIntere detRubroMuestraInteres;
 
     @Inject
-    public CatalogoRepo proveedorEJB;
+    private CatalogoRepo proveedorEJB;
+    @Inject
+    private SessionView sessionView;
 
     @PostConstruct
     public void ini() {
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        url = req.getRequestURL().toString();
+        urlStr = req.getRequestURL().toString();
     }
 
-    public String getUrl() {
-        return url;
+    public String getUrlStr() {
+        return urlStr;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrlStr(String url) {
+        this.urlStr = url;
     }
 
     public String getFileName() {
@@ -130,7 +132,7 @@ public class CargaGeneralView extends RecuperarProcesoUtil implements Serializab
             options.put("resizable", false);
             options.put("contentHeight", 400);
             options.put("contentWidth", 554);
-            VarSession.setVariableSession("nitEmpresa", getEmpresa().getNumeroNit());
+            sessionView.setVariableSession("nitEmpresa", getEmpresa().getNumeroNit());
             PrimeFaces.current().dialog().openDynamic("/app/comunes/filtroFotoProveedor", options, null);
         }
     }

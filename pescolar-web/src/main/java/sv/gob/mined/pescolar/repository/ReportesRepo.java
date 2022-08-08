@@ -38,10 +38,9 @@ import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
  * @author misanchez
  */
 @Stateless
-@LocalBean
-public class ReportesFacade {
+public class ReportesRepo {
 
-    @PersistenceContext(unitName = "paquescolarUP")
+    @PersistenceContext(unitName = "paquetePU")
     private EntityManager em;
 
     /**
@@ -53,14 +52,12 @@ public class ReportesFacade {
      */
     public JasperPrint getRpt(HashMap map, InputStream input) {
         try {
-            JasperPrint jp;
-            Connection conn = em.unwrap(java.sql.Connection.class);
-            jp = JasperFillManager.fillReport(input, map, conn);
-
-            input.close();
-            return jp;
+            try (input) {
+                Connection conn = em.unwrap(java.sql.Connection.class);
+                return JasperFillManager.fillReport(input, map, conn);
+            }
         } catch (JRException | IOException ex) {
-            Logger.getLogger(ReportesFacade.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReportesRepo.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
@@ -75,20 +72,18 @@ public class ReportesFacade {
      */
     public JasperPrint getRpt(HashMap map, InputStream input, List lst) {
         try {
-            JasperPrint jp;
+            try (input) {
+                JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(lst);
 
-            JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(lst);
-
-            jp = JasperFillManager.fillReport(input, map, ds);
-            input.close();
-            return jp;
+                return JasperFillManager.fillReport(input, map, ds);
+            }
         } catch (JRException | IOException ex) {
-            Logger.getLogger(ReportesFacade.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReportesRepo.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
 
-    public List<OfertaGlobal> getLstOfertaGlobal(String nit, BigDecimal idRubro, BigDecimal idAnho) {
+    public List<OfertaGlobal> getLstOfertaGlobal(String nit, Long idRubro, Long idAnho) {
 
         List<OfertaGlobal> lstRpt;
         Anho anho = em.find(Anho.class, idAnho);
@@ -106,10 +101,10 @@ public class ReportesFacade {
         return lstRpt;
     }
 
-    public List<DetItemOfertaGlobal> getLstItemOfertaGlobal(String nit, BigDecimal idRubro, BigDecimal idAnho) {
+    public List<DetItemOfertaGlobal> getLstItemOfertaGlobal(String nit, Long idRubro, Long idAnho) {
         PreciosRefRubroEmp preTem;
         List<DetItemOfertaGlobal> lst = new ArrayList();
-        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.estadoEliminacion=0 and p.idMuestraInteres.idEmpresa.numeroNit=:nit and p.idMuestraInteres.idRubroInteres.idRubroInteres=:pIdRubro AND p.idMuestraInteres.idAnho.idAnho=:pIdAnho and p.idProducto.idProducto not in (1) ORDER BY  FUNC('TO_NUMBER', p.noItem)", PreciosRefRubroEmp.class);
+        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.numeroNit=:nit and p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho and p.idProducto.id not in (1) ORDER BY  FUNC('TO_NUMBER', p.noItem)", PreciosRefRubroEmp.class);
         q.setParameter("nit", nit);
         q.setParameter("pIdRubro", idRubro);
         q.setParameter("pIdAnho", idAnho);
@@ -292,9 +287,9 @@ public class ReportesFacade {
         return lst;
     }
 
-    public List<DetMunIntOfertaGlobal> getLstMunIntOfertaGlobal(String nit, BigDecimal idRubro, BigDecimal idAnho) {
+    public List<DetMunIntOfertaGlobal> getLstMunIntOfertaGlobal(String nit, Long idRubro, Long idAnho) {
         List<DetMunIntOfertaGlobal> lst = new ArrayList();
-        Query q = em.createQuery("SELECT d FROM DisMunicipioInteres d WHERE d.estadoEliminacion=0 and d.idCapaDistribucion.idMuestraInteres.idEmpresa.numeroNit=:nit and d.idCapaDistribucion.idMuestraInteres.idRubroInteres.idRubroInteres=:pIdRubro and d.idCapaDistribucion.idMuestraInteres.idAnho.idAnho=:pIdAnho ORDER BY d.idMunicipio.codigoDepartamento.codigoDepartamento, d.idMunicipio.codigoMunicipio ASC", DisMunicipioIntere.class);
+        Query q = em.createQuery("SELECT d FROM DisMunicipioIntere d WHERE d.idCapaDistribucion.idMuestraInteres.idEmpresa.numeroNit=:nit and d.idCapaDistribucion.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idCapaDistribucion.idMuestraInteres.idAnho.id=:pIdAnho ORDER BY d.idMunicipio.codigoDepartamento.id, d.idMunicipio.codigoMunicipio ASC", DisMunicipioIntere.class);
         q.setParameter("nit", nit);
         q.setParameter("pIdRubro", idRubro);
         q.setParameter("pIdAnho", idAnho);
@@ -313,8 +308,8 @@ public class ReportesFacade {
     }
 
     public PreciosRefRubroEmp getPrecioMax(List<PreciosRefRubroEmp> lstPrecioMax, final String noItem) {
-        return lstPrecioMax.stream().parallel().filter(precio ->  precio.getNoItem().equals(noItem)).findAny().orElse(new PreciosRefRubroEmp());
-        
+        return lstPrecioMax.stream().parallel().filter(precio -> precio.getNoItem().equals(noItem)).findAny().orElse(new PreciosRefRubroEmp());
+
         /*return ((PreciosRefRubroEmp) CollectionUtils.find(lstPrecioMax, new Predicate() {
             @Override
             public boolean evaluate(Object o) {
@@ -323,7 +318,7 @@ public class ReportesFacade {
         }));*/
     }
 
-    public List<DeclaracionJurada> getDeclaracionJurada(Empresa empresa, BigDecimal idRubro, BigDecimal idAnho, String ciudad) {
+    public List<DeclaracionJurada> getDeclaracionJurada(Empresa empresa, Long idRubro, Long idAnho, String ciudad) {
         Query q = em.createNamedQuery("Proveedor.DeclaracionJurada", DeclaracionJurada.class);
         q.setParameter(1, empresa.getNumeroNit());
         q.setParameter(2, idRubro);
@@ -336,4 +331,5 @@ public class ReportesFacade {
         }
         return lstDeclaracion.isEmpty() ? new ArrayList() : lstDeclaracion;
     }
+
 }

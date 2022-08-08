@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -31,9 +30,11 @@ import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.dto.MunicipioDto;
 import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
+import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.repository.DisMunicipioInteresRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.Reportes;
-import sv.gob.mined.pescolar.utils.VarSession;
+import sv.gob.mined.pescolar.web.SessionView;
 
 /**
  *
@@ -54,25 +55,25 @@ public class MunicipioInteresView implements Serializable {
     
     @Inject
     private Reportes reportes;
-
-    @EJB
-    private ReportesEJB reportesEJB;
-    @EJB
-    private DatosGeograficosEJB datosGeograficosEJB;
-    @EJB
-    public ProveedorEJB proveedorEJB;
-
+    @Inject
+    private SessionView sessionView;
+    
+    
+    @Inject
+    private CatalogoRepo datosGeograficosEJB;
+    @Inject
+    private DisMunicipioInteresRepo disMuniRepo;
     @Inject
     private CargaGeneralView cargaGeneralView;
 
     @PostConstruct
     public void init() {
         if (cargaGeneralView.getEmpresa().getId() != null) {
-            if (cargaGeneralView.getUrl().contains("DatosGenerales")) {
+            if (cargaGeneralView.getUrlStr().contains("DatosGenerales")) {
 
-            } else if (cargaGeneralView.getUrl().contains("MunicipioInteres")) {
+            } else if (cargaGeneralView.getUrlStr().contains("MunicipioInteres")) {
                 cargarMunInteres();
-            } else if (cargaGeneralView.getUrl().contains("PreciosReferencia")) {
+            } else if (cargaGeneralView.getUrlStr().contains("PreciosReferencia")) {
 
             }
         }
@@ -123,7 +124,7 @@ public class MunicipioInteresView implements Serializable {
     }
 
     public void guardarMunicipioInteres() {
-        List<DisMunicipioIntere> lstMunicipioIntereses = proveedorEJB.findMunicipiosInteres(departamentoCalif);
+        List<DisMunicipioIntere> lstMunicipioIntereses = disMuniRepo.findMunicipiosInteres(departamentoCalif);
 
         lstMunicipioIntereses.forEach((disMunicipioInteres) -> {
             disMunicipioInteres.setEstadoEliminacion(1l);
@@ -146,17 +147,14 @@ public class MunicipioInteresView implements Serializable {
                     disMunicipio.setFechaInsercion(LocalDate.now());
                     disMunicipio.setIdCapaDistribucion(departamentoCalif);
                     disMunicipio.setIdMunicipio(new Municipio(mun.getIdMunicipio()));
-                    disMunicipio.setUsuarioInsercion(VarSession.getVariableSessionUsuario());
+                    disMunicipio.setUsuarioInsercion(sessionView.getVariableSessionUsuario());
                     lstMunicipioIntereses.add(disMunicipio);
                 }
             }
 
             Boolean val = false;
             for (DisMunicipioIntere disMunicipioInteres : lstMunicipioIntereses) {
-                val = proveedorEJB.guardar(disMunicipioInteres);
-                if (val == false) {
-                    break;
-                }
+                disMuniRepo.save(disMunicipioInteres);
             }
 
             if (val) {
@@ -176,15 +174,15 @@ public class MunicipioInteresView implements Serializable {
             HashMap param = new HashMap();
             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
             param.put("pEscudo", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
-            param.put("usuarioInsercion", VarSession.getVariableSessionUsuario());
+            param.put("usuarioInsercion", sessionView.getVariableSessionUsuario());
             param.put("pLugar", lugar);
             param.put("pRubro", JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             param.put("pIdRubro", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId().intValue());
             param.put("pCorreoPersona", capacidadInst.getIdMuestraInteres().getIdEmpresa().getIdPersona().getEmail());
             param.put("pIdGestion", idGestion);
 
-            List<OfertaGlobal> lstDatos = reportesEJB.getLstOfertaGlobal(cargaGeneralView.getEmpresa().getNumeroNit(), 
-                    cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getIdAnho());
+            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(cargaGeneralView.getEmpresa().getNumeroNit(), 
+                    cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getId());
             lstDatos.get(0).setRubro(JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             if (lstDatos.get(0).getDepartamento().contains("TODO EL PAIS")) {
                 param.put("productor", Boolean.TRUE);
@@ -198,15 +196,15 @@ public class MunicipioInteresView implements Serializable {
                     reportes.getPathReporte("sv/gob/mined/apps/reportes/oferta" + File.separator + "rptOfertaGlobalProv" + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho() + ".jasper"),
                     param, new JRBeanCollectionDataSource(lstDatos)));
 
-            String muni = VarSession.getNombreMunicipioSession();
+            String muni = sessionView.getNombreMunicipio();
 
             param.put("pLugar", cargaGeneralView.getEmpresa().getIdMunicipio().getCodigoDepartamento().getNombreDepartamento());
 
             if (cargaGeneralView.getEmpresa().getIdPersoneria().getId().intValue() == 1) {
-                jasperPrintList.add(reportes.getReporteAImprimir("sv/gob/mined/apps/reportes/declaracion" + File.separator + "rptDeclaracionJurAceptacionPerProvNat" + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho(), param, new JRBeanCollectionDataSource(reportesEJB.getDeclaracionJurada(cargaGeneralView.getEmpresa(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getId(), muni))));
+                jasperPrintList.add(reportes.getReporteAImprimir("sv/gob/mined/apps/reportes/declaracion" + File.separator + "rptDeclaracionJurAceptacionPerProvNat" + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho(), param, new JRBeanCollectionDataSource(reportes.getDeclaracionJurada(cargaGeneralView.getEmpresa(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getId(), muni))));
 
             } else {
-                jasperPrintList.add(reportes.getReporteAImprimir("sv/gob/mined/apps/reportes/declaracion" + File.separator + "rptDeclaracionJurAceptacionPerProvJur" + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho(), param, new JRBeanCollectionDataSource(reportesEJB.getDeclaracionJurada(cargaGeneralView.getEmpresa(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getId(), muni))));
+                jasperPrintList.add(reportes.getReporteAImprimir("sv/gob/mined/apps/reportes/declaracion" + File.separator + "rptDeclaracionJurAceptacionPerProvJur" + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho(), param, new JRBeanCollectionDataSource(reportes.getDeclaracionJurada(cargaGeneralView.getEmpresa(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getId(), muni))));
 
             }
 
@@ -240,7 +238,7 @@ public class MunicipioInteresView implements Serializable {
         if (event.getObject() != null) {
             if (event.getObject() instanceof Empresa) {
                 cargaGeneralView.setEmpresa((Empresa) event.getObject());
-                VarSession.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
+                sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
                 cargaGeneralView.cargarDetalleCalificacion();
                 cargarMunInteres();
             } else {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.gob.mined.pescolar.web.proveedor.interno;
 
 import java.io.IOException;
@@ -18,7 +13,7 @@ import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.repository.AnhoRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
-import sv.gob.mined.pescolar.utils.VarSession;
+import sv.gob.mined.pescolar.web.SessionView;
 
 /**
  *
@@ -36,18 +31,20 @@ public class ProveedorView implements Serializable {
     private AnhoRepo anhoRepo;
     @Inject
     private EmpresaRepo empresaRepo;
+    @Inject
+    private SessionView sessionView;
 
     @PostConstruct
     public void ini() {
-        if (VarSession.isVariableSession("idEmpresa")) {
+        if (sessionView.isVariableSession("idEmpresa")) {
             anho = (Anho) anhoRepo.findListByParam(new ArrayList(), "id", Boolean.FALSE).get(0);
             idAnho = anho.getId();
         }
     }
 
     public Empresa getEmpresa() {
-        if (VarSession.isVariableSession("idEmpresa")) {
-            empresa = empresaRepo.findByPk((Long) VarSession.getVariableSession("idEmpresa"));
+        if (sessionView.isVariableSession("idEmpresa")) {
+            empresa = empresaRepo.findByPk((Long) sessionView.getVariableSession("idEmpresa"));
         }
         return empresa;
     }

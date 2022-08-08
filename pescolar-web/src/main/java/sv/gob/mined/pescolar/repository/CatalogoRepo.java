@@ -2,6 +2,7 @@ package sv.gob.mined.pescolar.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
@@ -22,15 +23,17 @@ import sv.gob.mined.pescolar.model.EstadisticaCenso;
 import sv.gob.mined.pescolar.model.EstadoReserva;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
+import sv.gob.mined.pescolar.model.dto.MunicipioDto;
 import sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
+import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 
 /**
  *
  * @author misanchez
  */
-@ApplicationScoped
+@Stateless
 public class CatalogoRepo {
 
     @PersistenceContext(unitName = "paquetePU")
@@ -216,7 +219,7 @@ public class CatalogoRepo {
     }
 
     public <T extends Object> T findDetProveedor(DetRubroMuestraIntere detRubro, Long idPro, Class clase) {
-        Query q = em.createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.idRubroInteres=:pIdRubro and d.idMuestraInteres.idAnho.idAnho=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.idProcesoAdq=:pIdPro " : "") + " ORDER BY d.idMuestraInteres", clase);
+        Query q = em.createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idMuestraInteres.idAnho.id=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.idProcesoAdq=:pIdPro " : "") + " ORDER BY d.idMuestraInteres", clase);
         q.setParameter("pIdRubro", detRubro.getIdRubroInteres().getId());
         q.setParameter("pIdAnho", detRubro.getIdAnho().getId());
         q.setParameter("idEmpresa", detRubro.getIdEmpresa());
@@ -234,7 +237,7 @@ public class CatalogoRepo {
     public List<Municipio> getLstMunicipiosByDepartamento(String codigoDepartamento) {
         Query query;
         if (null == codigoDepartamento) {
-            query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.codigoDepartamento=:departamento", Municipio.class);
+            query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento", Municipio.class);
             query.setParameter("departamento", codigoDepartamento);
         } else {
             switch (codigoDepartamento) {
@@ -242,7 +245,7 @@ public class CatalogoRepo {
                     query = em.createQuery("SELECT m FROM Municipio m ORDER BY FUNC('TO_NUMBER',m.codigoDepartamento.codigoDepartamento),  FUNC('TO_NUMBER',m.codigoMunicipio)", Municipio.class);
                     break;
                 default:
-                    query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.codigoDepartamento=:departamento ORDER BY FUNC('TO_NUMBER',m.codigoDepartamento.codigoDepartamento),  FUNC('TO_NUMBER',m.codigoMunicipio)", Municipio.class);
+                    query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento ORDER BY FUNC('TO_NUMBER',m.codigoDepartamento.id),  FUNC('TO_NUMBER',m.codigoMunicipio)", Municipio.class);
                     query.setParameter("departamento", codigoDepartamento);
                     break;
             }
@@ -258,20 +261,20 @@ public class CatalogoRepo {
 
     /**
      * Devuelve un listado de entidades financieras (BANCOS o CAJAS DE CREDITO O
-     * PRESTAMO) dependiendo del parametro que reciba 0 - Modulo de créditos 1 -
-     * Bancos asociados a cuentas de los proveedores 2 - Las 2 anteriores
+     * PRESTAMO) dependiendo del parametro que reciba 0 - Modulo de créditos 1
+     * - Bancos asociados a cuentas de los proveedores 2 - Las 2 anteriores
      *
      * @param tipoEntidad
      * @return
      */
     public List<EntidadFinanciera> findEntidadFinancieraEntities(Short tipoEntidad) {
-        Query q = em.createQuery("SELECT e FROM EntidadFinanciera e WHERE e.estadoEliminacion=0 AND e.bandera=:tipoEntidad ORDER BY e.nombreEntFinan", EntidadFinanciera.class);
+        Query q = em.createQuery("SELECT e FROM EntidadFinanciera e WHERE e.bandera=:tipoEntidad ORDER BY e.nombreEntFinan", EntidadFinanciera.class);
         q.setParameter("tipoEntidad", tipoEntidad);
         return q.getResultList();
     }
 
     public DetRubroMuestraIntere findDetRubroByAnhoAndRubro(Long idAnho, Long idEmpresa) {
-        Query q = em.createQuery("SELECT d FROM DetRubroMuestraInteres d WHERE d.idEmpresa.idEmpresa=:idEmpresa and d.idAnho.idAnho=:pIdAnho and d.estadoEliminacion=0 ORDER BY d.idMuestraInteres", DetRubroMuestraIntere.class);
+        Query q = em.createQuery("SELECT d FROM DetRubroMuestraIntere d WHERE d.idEmpresa.id=:idEmpresa and d.idAnho.id=:pIdAnho ORDER BY d.id", DetRubroMuestraIntere.class);
         q.setParameter("idEmpresa", idEmpresa);
         q.setParameter("pIdAnho", idAnho);
         if (q.getResultList().isEmpty()) {
@@ -279,5 +282,20 @@ public class CatalogoRepo {
         } else {
             return (DetRubroMuestraIntere) q.getResultList().get(0);
         }
+    }
+
+    public List<MunicipioDto> getLstMunicipiosDisponiblesDeInteres(Long idCapaDistribucion, String codigoDepartamento) {
+        String sql = Constantes.QUERY_PROVEEDOR_MUNICIPIOS_DISPONIBLES_DE_INTERES;
+        sql = codigoDepartamento.equals("00") ? sql.replace("COMODIN_DEPARTAMENTO", "")
+                : sql.replace("COMODIN_DEPARTAMENTO", "and depa.codigo_departamento = '" + codigoDepartamento + "'");
+        Query q = em.createNativeQuery(sql, MunicipioDto.class);
+        q.setParameter(1, idCapaDistribucion);
+        return q.getResultList();
+    }
+
+    public List<MunicipioDto> getLstMunicipiosDeInteres(Long idCapaDistribucion) {
+        Query q = em.createNamedQuery("Proveedor.MunicipiosDeIntegeres", MunicipioDto.class);
+        q.setParameter(1, idCapaDistribucion);
+        return q.getResultList();
     }
 }

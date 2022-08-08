@@ -6,9 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import org.hibernate.annotations.Filter;
 
 @Table(name = "CATALOGO_PRODUCTO")
 @Entity
+@Filter(name = "eliminado", condition = "estadoEliminacion=0") 
 public class CatalogoProducto implements Serializable {
     @Id
     @Column(name = "ID_PRODUCTO", nullable = false)

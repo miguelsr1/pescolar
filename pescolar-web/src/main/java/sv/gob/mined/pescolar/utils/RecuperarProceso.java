@@ -35,7 +35,7 @@ public class RecuperarProceso implements Serializable {
     }
 
     public void recuperarProcesoAdq() {
-        if (VarSession.isVariableSession("idEmpresa")) {
+        if (sessionView.isVariableSession("idEmpresa")) {
 
             procesoAdquisicion = proveedorView.getAnho().getProcesoAdquisicionList().get(0);
             sessionView.setProceso(procesoAdquisicion);

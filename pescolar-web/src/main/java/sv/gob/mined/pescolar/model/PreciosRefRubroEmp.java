@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
@@ -20,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.Filter;
 
 /**
  *
@@ -29,6 +26,7 @@ import javax.validation.constraints.Size;
 @Table(name = "PRECIOS_REF_RUBRO_EMP")
 @NamedQueries({
     @NamedQuery(name = "PreciosRefRubroEmp.findAll", query = "SELECT p FROM PreciosRefRubroEmp p")})
+@Filter(name = "eliminado", condition = "estadoEliminacion=0") 
 public class PreciosRefRubroEmp implements Serializable {
 
     private static final long serialVersionUID = 1L;

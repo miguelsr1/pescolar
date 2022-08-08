@@ -35,7 +35,7 @@ import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.dto.DeclaracionJurada;
 import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
-import sv.gob.mined.pescolar.repository.ReportesFacade;
+import sv.gob.mined.pescolar.repository.ReportesRepo;
 import sv.gob.mined.pescolar.web.SessionView;
 
 /**
@@ -46,8 +46,8 @@ import sv.gob.mined.pescolar.web.SessionView;
 public class Reportes {
 
     @Inject
-    private ReportesFacade reportesFacade;
-    @Inject 
+    private ReportesRepo reportesFacade;
+    @Inject
     private SessionView sessionView;
 
     public static final String PATH_REPORTES = File.separator + "sv" + File.separator + "gob" + File.separator + "mined" + File.separator + "apps" + File.separator + "reportes" + File.separator;
@@ -83,7 +83,7 @@ public class Reportes {
      * @param param
      * @param paqueteRpt
      * @param nombreRpt
-     * @return 
+     * @return
      */
     public JasperPrint generarRptBeanConnection(List lst, HashMap param, String paqueteRpt, String nombreRpt) {
         try {
@@ -244,7 +244,7 @@ public class Reportes {
             HashMap param = new HashMap();
             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
             param.put("pEscudo", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
-            param.put("usuarioInsercion", VarSession.getVariableSessionUsuario());
+            param.put("usuarioInsercion", sessionView.getVariableSessionUsuario());
             param.put("pLugar", lugar + ", " + sdf.format(new Date()));
             param.put("pRubro", JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             param.put("pIdRubro", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId().intValue());
@@ -312,4 +312,13 @@ public class Reportes {
             return new ArrayList();
         }
     }
+
+    public List<OfertaGlobal> getLstOfertaGlobal(String nit, Long idRubro, Long idAnho) {
+        return reportesFacade.getLstOfertaGlobal(nit, idRubro, idAnho);
+    }
+    
+    public List<DeclaracionJurada> getDeclaracionJurada(Empresa empresa, Long idRubro, Long idAnho, String ciudad) {
+        return reportesFacade.getDeclaracionJurada(empresa, idRubro, idAnho, ciudad);
+    }
+
 }

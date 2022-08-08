@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings 
+    xmlns="http://java.sun.com/xml/ns/persistence/orm" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm  http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+    version="2.0">
+    <description>Native queries para Paquete Escolar</description>
+    
+    <named-native-query name="DatosProveDto.ofertaGlobal" 
+                        result-class="sv.gob.mined.pescolar.model.dto.OfertaGlobal">
+        <query>
+            <![CDATA[
+            SELECT 
+                ROWNUM                  as idRow, 
+                NOMBRE_DEPARTAMENTO     as departamento,
+                RAZON_SOCIAL            as razonSocial,
+                DESCRIPCION_RUBRO       as descripcionRubro,
+                NOMBRE_PRESENTANTE      as nombreRepresentante,
+                NUMERO_NIT              as nitRepresentante,
+                CAPACIDAD_ACREDITADA    as capacidadCalificada,
+                NUMERO_DUI              as duiRepresentante,
+                NIT_EMPRESA             as nitSociedad,
+                fecha_modificacion      as fechaModificacion,
+                id_rubro_interes        as idRubroInteres,
+                id_anho                 as idAnho
+            FROM 
+                VW_RPT_CABECERA_OFERTA_GLOBAL 
+            WHERE 
+                nit_empresa=?1 and 
+                id_rubro_interes=?2 and
+                id_anho=?3
+            ]]>
+        </query>
+    </named-native-query>
+   
+    <named-native-query name="Proveedor.MunicipiosDeIntegeres" 
+                        result-class="sv.gob.mined.pescolar.model.dto.MunicipioDto">
+        <query>
+            <![CDATA[
+            select 
+                rownum                  as idRow,
+                mun.id_municipio        as idMunicipio,
+                mun.codigo_departamento as codigoDepartamento,
+                depa.nombre_departamento || ' : ' ||mun.codigo_municipio|| ' - ' || mun.nombre_municipio    as nombreMunicipio,
+                mun.codigo_municipio    as codigoMunicipio
+            from 
+                municipio mun
+                inner join departamento depa              on depa.codigo_departamento = mun.codigo_departamento
+                inner join DIS_MUNICIPIO_INTERES dis on mun.id_municipio = dis.id_municipio 
+            where 
+                mun.id_municipio is not null and dis.ID_CAPA_DISTRIBUCION = ?1
+                 and dis.estado_eliminacion = 0
+            order by
+                mun.id_municipio
+            ]]>
+        </query>
+    </named-native-query>
+    
+    <named-native-query name="Proveedor.DeclaracionJurada" 
+                        result-class="sv.gob.mined.pescolar.model.dto.DeclaracionJurada">
+        <query>
+            <![CDATA[
+            select 
+                rownum              as idRow,
+                descripcion_rubro   as rubro,
+                anho                as anho,
+                razon_social        as razonSocial,
+                nombre_presentante  as representanteLegal,
+                nit_empresa         as nitEmpresa,
+                direccion_completa  as direccionEmpresa,
+                numero_nit          as nitRepre,
+                numero_dui          as duiRepre,
+                domicilio           as direccionRepre,
+                fecha_modificacion  as fechaModificacion
+            from VW_RPT_DECLARACION_JURADA2 
+            where 
+                nit_empresa=?1 and 
+                id_rubro_interes=?2 and
+                id_anho=?3
+            ]]>
+        </query>
+    </named-native-query>
+</entity-mappings>

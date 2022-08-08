@@ -21,7 +21,7 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
 
     public Boolean guardarCapaInst(CapaDistribucionAcre capaDistribucionAcre, CapaInstPorRubro capaInstPorRubro) {
         try {
-            Query query = em.createQuery("UPDATE CapaInstPorRubro c SET c.capacidadAcreditada = :capaCalificada, c.capacidadPropuesta=:capaPropuesta WHERE c.idMuestraInteres.idEmpresa.idEmpresa = :idEmpresa and c.idMuestraInteres.idAnho.idAnho = :pIdAnho and c.idMuestraInteres.idRubroInteres.idRubroInteres = :pIdRubro");
+            Query query = em.createQuery("UPDATE CapaInstPorRubro c SET c.capacidadAcreditada = :capaCalificada, c.capacidadPropuesta=:capaPropuesta WHERE c.idMuestraInteres.idEmpresa.id = :idEmpresa and c.idMuestraInteres.idAnho.id = :pIdAnho and c.idMuestraInteres.idRubroInteres.id = :pIdRubro");
             query.setParameter("capaCalificada", capaInstPorRubro.getCapacidadAcreditada());
             query.setParameter("capaPropuesta", capaInstPorRubro.getCapacidadPropuesta());
             query.setParameter("idEmpresa", capaInstPorRubro.getIdMuestraInteres().getIdEmpresa().getId());
@@ -30,7 +30,7 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
 
             query.executeUpdate();
 
-            query = em.createQuery("UPDATE CapaDistribucionAcre c SET c.codigoDepartamento = :codigoDepartamento WHERE c.idMuestraInteres.idEmpresa.idEmpresa = :idEmpresa and c.idMuestraInteres.idAnho.idAnho=:pIdAnho and c.idMuestraInteres.idRubroInteres.idRubroInteres=:pIdRubro");
+            query = em.createQuery("UPDATE CapaDistribucionAcre c SET c.codigoDepartamento = :codigoDepartamento WHERE c.idMuestraInteres.idEmpresa.id = :idEmpresa and c.idMuestraInteres.idAnho.id =:pIdAnho and c.idMuestraInteres.idRubroInteres.id =:pIdRubro");
             query.setParameter("codigoDepartamento", capaDistribucionAcre.getCodigoDepartamento());
             query.setParameter("idEmpresa", capaInstPorRubro.getIdMuestraInteres().getIdEmpresa().getId());
             query.setParameter("pIdAnho", capaInstPorRubro.getIdMuestraInteres().getIdAnho().getId());

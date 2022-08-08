@@ -12,11 +12,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Participante;
 import sv.gob.mined.pescolar.model.PorcentajeEvaluacion;
+import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
 import sv.gob.mined.pescolar.utils.db.Filtro;
@@ -280,7 +282,7 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
     public Boolean isDepaCalificado(Empresa empresa, String codigoDepartamento, DetalleProcesoAdq detalleProceso) {
         Boolean valor = false;
         Query q;
-        q = em.createQuery("SELECT c.codigoDepartamento FROM CapaDistribucionAcre c WHERE c.idMuestraInteres.idEmpresa=:idEmpresa and (c.idMuestraInteres.idRubroInteres.idRubroInteres=:pIdRubro and c.idMuestraInteres.idAnho.idAnho=:pIdAnho) and c.estadoEliminacion=0");
+        q = em.createQuery("SELECT c.codigoDepartamento FROM CapaDistribucionAcre c WHERE c.idMuestraInteres.idEmpresa=:idEmpresa and (c.idMuestraInteres.idRubroInteres.id=:pIdRubro and c.idMuestraInteres.idAnho.id=:pIdAnho)");
         q.setParameter("idEmpresa", empresa);
         q.setParameter("pIdRubro", detalleProceso.getIdRubroAdq().getId());
         q.setParameter("pIdAnho", detalleProceso.getIdProcesoAdq().getIdAnho().getId());
@@ -300,5 +302,22 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
             }
         }
         return valor;
+    }
+
+    public List<CatalogoProducto> findItemProveedor(Empresa empresa, DetalleProcesoAdq detProcesoAdq) {
+        Query q = em.createQuery("SELECT distinct d.idProducto FROM DetCapaSegunRubro d WHERE d.idMuestraInteres.idEmpresa=:empresa and d.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idMuestraInteres.idAnho.id=:pIdAnho", CatalogoProducto.class);
+        q.setParameter("empresa", empresa);
+        q.setParameter("pIdRubro", detProcesoAdq.getIdRubroAdq().getId());
+        q.setParameter("pIdAnho", detProcesoAdq.getIdProcesoAdq().getIdAnho().getId());
+
+        return q.getResultList();
+    }
+    
+    public List<PreciosRefRubroEmp> findPreciosRefRubroEmpRubro(Empresa idEmpresa, Long idRubro, Long idAnho) {
+        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.id =:pIdEmpresa and (p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho) ORDER BY FUNC('TO_NUMBER', p.noItem)", PreciosRefRubroEmp.class);
+        q.setParameter("pIdEmpresa", idEmpresa.getId());
+        q.setParameter("pIdRubro", idRubro);
+        q.setParameter("pIdAnho", idAnho);
+        return q.getResultList();
     }
 }

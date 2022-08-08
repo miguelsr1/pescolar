@@ -22,6 +22,7 @@ import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Filter;
 
 /**
  *
@@ -33,6 +34,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "EntidadFinanciera.findAll", query = "SELECT e FROM EntidadFinanciera e")})
 @SqlResultSetMapping(name = "defaultEntidadCreditoHabilitado",
         entities = @EntityResult(entityClass = EntidadFinanciera.class))
+@Filter(name = "eliminado", condition = "estadoEliminacion=0") 
 public class EntidadFinanciera implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codEntFinanciera", fetch = FetchType.LAZY)

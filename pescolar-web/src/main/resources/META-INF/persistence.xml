@@ -2,6 +2,7 @@
 <persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
   <persistence-unit name="paquetePU" transaction-type="JTA">
     <jta-data-source>java:/PaqueteDS</jta-data-source>
+    <mapping-file>META-INF/nativeQueries.xml</mapping-file>
     <class>sv.gob.mined.pescolar.model.Anho</class>
     <class>sv.gob.mined.pescolar.model.CatalogoProducto</class>
     <class>sv.gob.mined.pescolar.model.ContratosOrdenesCompra</class>
@@ -34,6 +35,26 @@
     <class>sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto</class>
     <class>sv.gob.mined.pescolar.model.EstadisticaCenso</class>
     <class>sv.gob.mined.pescolar.model.PreciosRefRubroEmp</class>
+    <class>sv.gob.mined.pescolar.model.Canton</class>
+    <class>sv.gob.mined.pescolar.model.CapaDistribucionAcre</class>
+    <class>sv.gob.mined.pescolar.model.CreditoBancario</class>
+    <class>sv.gob.mined.pescolar.model.DetRubroMuestraIntere</class>
+    <class>sv.gob.mined.pescolar.model.DetalleCredito</class>
+    <class>sv.gob.mined.pescolar.model.EntFinanDetProAdq</class>
+    <class>sv.gob.mined.pescolar.model.EntidadFinanciera</class>
+    <class>sv.gob.mined.pescolar.model.MunicipioAledanho</class>
+    <class>sv.gob.mined.pescolar.model.PorcentajeEvaluacion</class>
+    <class>sv.gob.mined.pescolar.model.PreciosRefRubro</class>
+    <class>sv.gob.mined.pescolar.model.TipoUsuario</class>
+    <class>sv.gob.mined.pescolar.model.Usuario</class>
+    <class>sv.gob.mined.pescolar.model.UsuarioEntidadFinanciera</class>
+    <class>sv.gob.mined.pescolar.model.dto.DeclaracionJurada</class>
+    <class>sv.gob.mined.pescolar.model.dto.DetalleItemDto</class>
+    <class>sv.gob.mined.pescolar.model.dto.MunicipioDto</class>
+    <class>sv.gob.mined.pescolar.model.dto.OfertaGlobal</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
       <property name="hibernate.show_sql" value="false"/>

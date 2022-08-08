@@ -3,9 +3,11 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.time.LocalDate;
+import org.hibernate.annotations.Filter;
 
 @Table(name = "CAPA_DISTRIBUCION_ACRE")
 @Entity
+@Filter(name = "eliminado", condition = "estadoEliminacion=0") 
 public class CapaDistribucionAcre implements Serializable {
     @Id
     @Column(name = "ID_CAPA_DISTRIBUCION", nullable = false)

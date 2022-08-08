@@ -23,7 +23,7 @@ import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
-import sv.gob.mined.pescolar.utils.VarSession;
+import sv.gob.mined.pescolar.web.SessionView;
 
 /**
  *
@@ -64,6 +64,8 @@ public class DatosGeneralesView implements Serializable {
     private CatalogoRepo catalogoRepo;
     @Inject
     private EmpresaRepo empresaRepo;
+    @Inject
+    private SessionView sessionView;
 
     @ManagedProperty(value = "#{cargaGeneralView}")
     private CargaGeneralView cargaGeneralView;
@@ -261,7 +263,7 @@ public class DatosGeneralesView implements Serializable {
             if (event.getObject() instanceof Empresa) {
                 cargaGeneralView.setEmpresa((Empresa) event.getObject());
 
-                if (cargaGeneralView.getUrl().contains("DatosGenerales")) {
+                if (cargaGeneralView.getUrlStr().contains("DatosGenerales")) {
                     idMunicipio = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getId();
                     codigoDepartamento = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getCodigoDepartamento().getId();
                 }
@@ -273,10 +275,10 @@ public class DatosGeneralesView implements Serializable {
                         cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, BigDecimal.ONE));
                     }
                 }
-                VarSession.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
+                sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
                 cargaGeneralView.cargarDetalleCalificacion();
                 cargarDetalleCalificacion();
-                showUpdateEmpresa = ((Integer) VarSession.getVariableSession("idTipoUsuario") == 1);
+                showUpdateEmpresa = ((Integer) sessionView.getVariableSession("idTipoUsuario") == 1);
             }
         } else {
             deshabiliar = false;
@@ -435,7 +437,7 @@ public class DatosGeneralesView implements Serializable {
             options.put("resizable", false);
             options.put("contentHeight", 400);
             options.put("contentWidth", 554);
-            VarSession.setVariableSession("nitEmpresa", cargaGeneralView.getEmpresa().getNumeroNit());
+            sessionView.setVariableSession("nitEmpresa", cargaGeneralView.getEmpresa().getNumeroNit());
             PrimeFaces.current().dialog().openDynamic("/app/comunes/filtroFotoProveedor", options, null);
         }
     }

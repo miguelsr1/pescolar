@@ -17,6 +17,7 @@ import javax.security.enterprise.SecurityContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.primefaces.PrimeFaces;
 import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Municipio;
@@ -26,7 +27,6 @@ import sv.gob.mined.pescolar.model.Usuario;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.JsfUtil;
-import sv.gob.mined.pescolar.utils.VarSession;
 import sv.gob.mined.pescolar.utils.enums.TipoOperador;
 
 /**
@@ -57,6 +57,7 @@ public class SessionView implements Serializable {
 
     @Inject
     private SecurityContext securityContext;
+    
     @Inject
     private CatalogoRepo catalogoRepo;
 
@@ -93,18 +94,18 @@ public class SessionView implements Serializable {
         codigoDepartamento = usuario.getCodigoDepartamento().getId();
 
         if (codigoDepartamento != null) {
-            if (VarSession.isCookie("municipio")) {
-                idMunicipio = Long.parseLong(VarSession.getCookieValue("municipio"));
+            if (isCookie("municipio")) {
+                idMunicipio = Long.parseLong(getCookieValue("municipio"));
                 municipio = catalogoRepo.findEntityByPk(Municipio.class, idMunicipio);
                 ubicacion = JsfUtil.getNombreDepartamentoByCodigo(codigoDepartamento) + ", " + municipio.getNombreMunicipio();
             }
             usuarioDepartamental = !codigoDepartamento.equals("00");
 
-        } else if (VarSession.isCookie("departamento")) {
-            codigoDepartamento = VarSession.getCookieValue("departamento");
+        } else if (isCookie("departamento")) {
+            codigoDepartamento = getCookieValue("departamento");
         }
-        if (VarSession.isCookie("municipio") && idMunicipio == null) {
-            idMunicipio = Long.parseLong(VarSession.getCookieValue("municipio"));
+        if (isCookie("municipio") && idMunicipio == null) {
+            idMunicipio = Long.parseLong(getCookieValue("municipio"));
             municipio = catalogoRepo.findEntityByPk(Municipio.class, idMunicipio);
             ubicacion = JsfUtil.getNombreDepartamentoByCodigo(codigoDepartamento) + ", " + municipio.getNombreMunicipio();
         }
@@ -216,10 +217,10 @@ public class SessionView implements Serializable {
             proceso = ((ProcesoAdquisicion) catalogoRepo.findEntityByPk(ProcesoAdquisicion.class, idProcesoAdq));
             anhoProceso = anho.getAnho() + " :: " + proceso.getDescripcionProcesoAdq();
 
-            VarSession.crearCookie("departamento", codigoDepartamento);
-            VarSession.crearCookie("municipio", idMunicipio.toString());
-            VarSession.crearCookie("anho", anho.getId().toString());
-            VarSession.crearCookie("proceso", proceso.getId().toString());
+            crearCookie("departamento", codigoDepartamento);
+            crearCookie("municipio", idMunicipio.toString());
+            crearCookie("anho", anho.getId().toString());
+            crearCookie("proceso", proceso.getId().toString());
 
             PrimeFaces.current().executeScript("buttonConfig()");
 
@@ -254,5 +255,69 @@ public class SessionView implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(SessionView.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public String getNombreMunicipio() {
+        return municipio.getNombreMunicipio();
+    }
+
+    public Boolean isCookie(String name) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getExternalContext().getRequestCookieMap().containsKey(name);
+    }
+
+    public String getCookieValue(String name) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return ((Cookie) context.getExternalContext().getRequestCookieMap().get(name)).getValue();
+    }
+    
+    public void crearCookie(String nombre, String valor) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+        Cookie cookie = new Cookie(nombre, valor);
+        cookie.setMaxAge(1 * 365 * 24 * 60 * 60);
+        cookie.setPath(request.getContextPath());
+
+        ((HttpServletResponse) context.getExternalContext().getResponse()).addCookie(cookie);
+    }
+
+    public Object getVariableSession(String key) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getExternalContext().getSessionMap().get(key);
+    }
+
+    public String getVariableSessionUsuario() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getExternalContext().getSessionMap().get("Usuario").toString();
+    }
+
+    public int getVariableSessionED() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context.getExternalContext().getSessionMap().containsKey("estadoEdicion")) {
+            return Integer.parseInt(context.getExternalContext().getSessionMap().get("estadoEdicion").toString());
+        } else {
+            return 0;
+        }
+    }
+
+    public void setVariableSessionED(String valor) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put("estadoEdicion", valor);
+    }
+
+    public void setVariableSession(String key, Object value) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put(key, value);
+    }
+
+    public Boolean isVariableSession(String key) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getExternalContext().getSessionMap().containsKey(key);
+    }
+
+    public void removeVariableSession(String key) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().remove(key);
     }
 }
