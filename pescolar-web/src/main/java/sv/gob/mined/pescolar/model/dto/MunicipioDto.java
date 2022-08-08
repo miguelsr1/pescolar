@@ -47,6 +47,14 @@ public class MunicipioDto implements Serializable {
         this.idMunicipio = idMunicipio;
     }
 
+    public Long getId() {
+        return idMunicipio;
+    }
+
+    public void setId(Long idMunicipio) {
+        this.idMunicipio = idMunicipio;
+    }
+
     public String getNombreMunicipio() {
         return nombreMunicipio;
     }

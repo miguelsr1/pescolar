@@ -55,7 +55,7 @@
                                 <div class="p-field">
                                     <p:outputLabel value="Departamento:" />
                                     <br/>
-                                    <h:selectOneMenu id="cboDepartamento" value="#{sessionView.codigoDepartamento}" disabled="#{sessionView.usuarioDepartamental}" styleClass="ui-inputfield ui-corner-all" style="width: 100%;">
+                                    <h:selectOneMenu id="cboDepartamentoGlobal" value="#{sessionView.codigoDepartamento}" disabled="#{sessionView.usuarioDepartamental}" styleClass="ui-inputfield ui-corner-all" style="width: 100%;">
                                         <f:selectItem noSelectionOption="true" itemLabel="Seleccione un departamento" />
                                         <f:selectItems value="#{repositorioAplicacionView.lstDepartamentos}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.id} - #{depa.nombreDepartamento}"/>
                                         <p:ajax update="lightdark-panel"/>
@@ -64,7 +64,7 @@
                                 <div class="p-field">
                                     <p:outputLabel value="Municipio:" />
                                     <br/>
-                                    <h:selectOneMenu id="cboMunicipio" value="#{sessionView.idMunicipio}" styleClass="ui-inputfield ui-corner-all"  style="width: 100%;">
+                                    <h:selectOneMenu id="cboMunicipioGlobal" value="#{sessionView.idMunicipio}" styleClass="ui-inputfield ui-corner-all"  style="width: 100%;">
                                         <f:selectItem noSelectionOption="true" itemLabel="Seleccione un municipio" />
                                         <f:selectItems value="#{sessionView.lstMunicipios}" var="muni" itemValue="#{muni.id}" itemLabel="#{muni.id} - #{muni.nombreMunicipio}"/>
                                     </h:selectOneMenu>

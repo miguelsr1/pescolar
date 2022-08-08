@@ -15,6 +15,7 @@
  */
 package org.primefaces.paradise.view;
 
+import java.io.IOException;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,8 +23,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.ServletContext;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.web.MenuView;
 
@@ -39,10 +43,10 @@ public class GuestPreferences implements Serializable {
     private List<ComponentTheme> componentThemes;
     private List<FlatLayout> flatLayouts;
     private List<SpecialLayout> specialLayouts;
-    
+
     @Inject
     private MenuView menuView;
-    
+
     @PostConstruct
     public void init() {
         componentThemes = new ArrayList<>();
@@ -97,7 +101,7 @@ public class GuestPreferences implements Serializable {
     public String getMenuMode() {
         return this.menuMode;
     }
-    
+
     public void setMenuMode(String menuMode) {
         this.menuMode = menuMode;
     }
@@ -135,6 +139,7 @@ public class GuestPreferences implements Serializable {
     }
 
     public class ComponentTheme {
+
         String name;
         String file;
         String color;
@@ -159,6 +164,7 @@ public class GuestPreferences implements Serializable {
     }
 
     public class FlatLayout {
+
         String name;
         String file;
         String color;
@@ -183,6 +189,7 @@ public class GuestPreferences implements Serializable {
     }
 
     public class SpecialLayout {
+
         String name;
         String file;
         String color1;
@@ -211,15 +218,27 @@ public class GuestPreferences implements Serializable {
             return color2;
         }
     }
-    
-    public void ocultarMenu(){
+
+    public void ocultarMenu() {
         this.menuMode = "layout-menu-overlay";
         menuView.limpiarMenu();
     }
-    
-    public void ocultarMenuRedirect(){
+
+    public void ocultarMenuRedirect() {
         this.menuMode = "layout-menu-overlay";
         menuView.limpiarMenu();
         JsfUtil.redireccionar("/app/principal.xhtml");
+    }
+
+    public void logout() {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getSessionMap().clear();
+            ExternalContext externalContext = context.getExternalContext();
+            externalContext.redirect(((ServletContext) externalContext.getContext()).getContextPath() + "/inicio.mined");
+            System.gc();
+        } catch (IOException ex) {
+            Logger.getLogger(GuestPreferences.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

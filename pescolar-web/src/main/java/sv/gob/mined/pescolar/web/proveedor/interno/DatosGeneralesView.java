@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.annotation.ManagedProperty;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,6 +21,7 @@ import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
+import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.web.SessionView;
 
@@ -67,7 +67,7 @@ public class DatosGeneralesView implements Serializable {
     @Inject
     private SessionView sessionView;
 
-    @ManagedProperty(value = "#{cargaGeneralView}")
+    @Inject
     private CargaGeneralView cargaGeneralView;
 
     @PostConstruct
@@ -278,7 +278,7 @@ public class DatosGeneralesView implements Serializable {
                 sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
                 cargaGeneralView.cargarDetalleCalificacion();
                 cargarDetalleCalificacion();
-                showUpdateEmpresa = ((Integer) sessionView.getVariableSession("idTipoUsuario") == 1);
+                showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l);
             }
         } else {
             deshabiliar = false;
@@ -303,6 +303,8 @@ public class DatosGeneralesView implements Serializable {
             if (departamentoCalif == null || departamentoCalif.getCodigoDepartamento() == null) {
                 JsfUtil.mensajeAlerta("Este proveedor no posee departamento de calificación " + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho());
             } else {
+                codigoDepartamento = cargaGeneralView.getEmpresa().getIdMunicipio().getCodigoDepartamento().getId();
+                idMunicipio = cargaGeneralView.getEmpresa().getIdMunicipio().getId();
                 codigoDepartamentoCalificado = departamentoCalif.getCodigoDepartamento().getId();
 
                 idMunicipioLocal = cargaGeneralView.getEmpresa().getIdMunicipio().getId();
@@ -326,7 +328,7 @@ public class DatosGeneralesView implements Serializable {
         /*}
         }*/
 
-        if (cargaGeneralView.getEmpresa() == null) {
+        if (cargaGeneralView.getEmpresa() == null || cargaGeneralView.getEmpresa().getId() == null) {
             tapEmpresa = "";
             tapPersona = "";
         } else if (cargaGeneralView.getEmpresa().getIdPersoneria().getId() == null) {
@@ -411,11 +413,11 @@ public class DatosGeneralesView implements Serializable {
         options.put("draggable", true);
         options.put("resizable", false);
         options.put("contentHeight", 500);
-        options.put("contentWidth", 750);
+        options.put("contentWidth", 800);
         options.put("hideEffect", "fade");
         options.put("showEffect", "fade");
 
-        PrimeFaces.current().dialog().openDynamic("/app/comunes/dialogos/proveedor/filtroProveedor", options, null);
+        PrimeFaces.current().dialog().openDynamic(Constantes.DLG_BUSCAR_PROVEEDOR, options, null);
     }
 
     public String getNombreRubroProveedor() {

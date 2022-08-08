@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Table(name = "CAPA_INST_POR_RUBRO")
 @Entity
 public class CapaInstPorRubro implements Serializable {
+
     @Id
     @Column(name = "ID_CAP_INST_RUBRO", nullable = false)
     private Long id;
@@ -41,6 +42,10 @@ public class CapaInstPorRubro implements Serializable {
 
     @Column(name = "CAPACIDAD_PROPUESTA")
     private Integer capacidadPropuesta;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_PROCESO_ADQ", referencedColumnName = "ID_PROCESO_ADQ")
+    private ProcesoAdquisicion idProcesoAdq;
 
     public Integer getCapacidadPropuesta() {
         return capacidadPropuesta;
@@ -128,5 +133,13 @@ public class CapaInstPorRubro implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public ProcesoAdquisicion getIdProcesoAdq() {
+        return idProcesoAdq;
+    }
+
+    public void setIdProcesoAdq(ProcesoAdquisicion idProcesoAdq) {
+        this.idProcesoAdq = idProcesoAdq;
     }
 }

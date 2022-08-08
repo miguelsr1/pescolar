@@ -39,6 +39,7 @@ import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.ParticipanteRepo;
 import sv.gob.mined.pescolar.repository.PrecioRefRubroEmpRepo;
+import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.Reportes;
 import sv.gob.mined.pescolar.utils.db.Filtro;
@@ -235,7 +236,7 @@ public class PreciosReferenciaView implements Serializable {
         options.put("contentHeight", 500);
         options.put("contentWidth", 750);
 
-        PrimeFaces.current().dialog().openDynamic("/app/comunes/dialogos/proveedor/filtroProveedor", options, null);
+        PrimeFaces.current().dialog().openDynamic(Constantes.DLG_BUSCAR_PROVEEDOR, options, null);
     }
 
     private void cargaInicialDeDatos() {

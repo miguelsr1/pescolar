@@ -1,5 +1,6 @@
 package sv.gob.mined.pescolar.repository;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -43,5 +44,13 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
             Logger.getLogger(EmpresaRepo.class.getName()).log(Level.SEVERE, null, e);
             return false;
         }
+    }
+    
+     public List<Empresa> findEmpresaByValorBusqueda(String valor) {
+        //Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.numeroNit like :nit OR FUNC('REGEXP_REPLACE', e.razonSocial,' ','') like :razonSocial", Empresa.class);
+        Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.numeroNit like :nit OR e.razonSocial like :razonSocial", Empresa.class);
+        q.setParameter("nit", "%" + valor + "%");
+        q.setParameter("razonSocial", "%" + valor.replace(" ", "") + "%");
+        return q.getResultList();
     }
 }

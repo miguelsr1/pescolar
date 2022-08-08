@@ -314,10 +314,11 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
     }
     
     public List<PreciosRefRubroEmp> findPreciosRefRubroEmpRubro(Empresa idEmpresa, Long idRubro, Long idAnho) {
-        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.id =:pIdEmpresa and (p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho) ORDER BY FUNC('TO_NUMBER', p.noItem)", PreciosRefRubroEmp.class);
+        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.id =:pIdEmpresa and (p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho) ORDER BY cast(p.noItem as integer)", PreciosRefRubroEmp.class);
         q.setParameter("pIdEmpresa", idEmpresa.getId());
         q.setParameter("pIdRubro", idRubro);
         q.setParameter("pIdAnho", idAnho);
         return q.getResultList();
     }
+    
 }

@@ -4,47 +4,70 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://java.sun.com/jsf/core"
-    template="#{pageContext.servletContext.contextPath}/resources/template/template.xhtml">
-    <ui:define name="content">
-        <p:menubar id="menuBar" styleClass="divSticky"> 
-            <p:menuitem value="Nuevo" icon="fa fa-file-o" ajax="true" process="@this" disabled="true"/>
-            <p:menuitem value="Modificar" update="frmPrincipal" icon="fa fa-edit" ajax="true"  onclick="onClick('btnModificar');"/>
-            <p:menuitem value="Guardar" icon="fa fa-save"  disabled="#{menuController.usuarioSoloLectura || municipioInteresView.deshabiliar}" action="#{municipioInteresView.guardarMunicipioInteres}"/>
-            <p:menuitem value="Imprimir" ajax="false" icon="fa fa-print" action="#{municipioInteresView.impOfertaGlobal}" />
-            <p:menuitem value="Principal" icon="fa fa-home" action="#{parametrosMB.limpiarVariables}" url="#{request.contextPath}/app/inicial.mined"/>
+    template="/WEB-INF/template.xhtml"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-            <f:facet  name="options">  
-                <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}"/>
-            </f:facet>  
-        </p:menubar>
-        <p:panel visible="false">
-            <p:commandButton id="btnModificar" value="ok" actionListener="#{municipioInteresView.filtroProveedores}">
-                <p:ajax event="dialogReturn" listener="#{municipioInteresView.empSelecMuniInteres}" update="frmPrincipal pnlFoto" />
-            </p:commandButton>
-        </p:panel>
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">
-                    <ui:include src="/app/comunes/datosGenProveedor.xhtml"/>
+    <ui:define name="head">
+        <style>
+            .ui-picklist .ui-picklist-list {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: auto;
+                height: 200px;
+                width: 350px;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="frmPrincipal" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar" styleClass="divSticky"> 
+                        <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
+                        <p:menuitem value="Modificar" update="frmPrincipal" icon="pi pi-pencil" ajax="true"  onclick="onClick('btnModificar');"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save"  disabled="#{menuController.usuarioSoloLectura || municipioInteresView.deshabiliar}" action="#{municipioInteresView.guardarMunicipioInteres}"/>
+                        <p:menuitem value="Imprimir" ajax="false" icon="pi pi-print" action="#{municipioInteresView.impOfertaGlobal}" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{guestPreferences.logout}"/>
+                        </f:facet>  
+                    </p:menubar>
+                </div>
+                <p:panel visible="false">
+                    <p:commandButton id="btnModificar" value="ok" actionListener="#{municipioInteresView.filtroProveedores}">
+                        <p:ajax event="dialogReturn" listener="#{municipioInteresView.empSelecMuniInteres}" update="frmPrincipal pnlFoto" />
+                    </p:commandButton>
+                </p:panel>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid" jsf:id="dvDatosGenerales">
+                        <ui:include src="/app/proveedor/interno/datosGenProveedor.xhtml"/>
+                    </div>
                 </div>
 
-                <div class="card clearfix">
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h5>
+                                <i class="pi pi-list verde" style="font-size: 16px;"></i>
+                                <p:spacer width="10"/>
+                                Municipios de Interes :: Departamento: #{municipioInteresView.departamentoCalif.codigoDepartamento.nombreDepartamento}
+                            </h5>
+                        </div>
 
-                    <p:outputPanel>
-                        <h1>
-                            <i class="fa fa-list-ol verde" style="font-size: 16px;"></i>
-                            <p:spacer width="10"/>
-                            <h:outputText value="Municipios de Interes :: Departamento: #{municipioInteresView.departamentoCalif.codigoDepartamento.nombreDepartamento}"/>
-                        </h1>
-                        <p:outputLabel value="Seleccione los municipios en los que tiene interes de participar"/><br/>
-                        <h:panelGrid columns="2">
-                            <p:pickList id="pickList" value="#{municipioInteresView.lstMunicipiosInteres}" converter="muniConverter" var="municipio" 
-                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-                                        itemLabel=" #{municipio.nombreMunicipio}" itemValue="#{municipio}"/>
-                        </h:panelGrid>
-                    </p:outputPanel>
+                        <div class="ui-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12">
+                                <p:outputLabel for="pickList" value="Seleccione los municipios en los que tiene interes de participar" />
+                                <p:pickList id="pickList" value="#{municipioInteresView.lstMunicipiosInteres}" converter="muniConverter" var="municipio" 
+                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                                            itemLabel=" #{municipio.nombreMunicipio}" itemValue="#{municipio}"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </h:form>
     </ui:define>
 </ui:composition>

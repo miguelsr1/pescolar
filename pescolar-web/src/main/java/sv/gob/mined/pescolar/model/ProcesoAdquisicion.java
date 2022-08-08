@@ -14,6 +14,8 @@ public class ProcesoAdquisicion implements Serializable {
 
     @OneToMany(mappedBy = "idProcesoAdq", fetch = FetchType.LAZY)
     private List<EstadisticaCenso> estadisticaCensoList;
+    @OneToMany(mappedBy = "idProcesoAdq", fetch = FetchType.LAZY)
+    private List<CapaInstPorRubro> capaInstPorRurboCensoList;
     @OneToMany(mappedBy = "padreIdProcesoAdq", fetch = FetchType.LAZY)
     private List<ProcesoAdquisicion> procesoAdquisicionList;
     @Id
@@ -87,5 +89,13 @@ public class ProcesoAdquisicion implements Serializable {
 
     public void setDetalleProcesoAdqList(List<DetalleProcesoAdq> detalleProcesoAdqList) {
         this.detalleProcesoAdqList = detalleProcesoAdqList;
+    }
+
+    public List<CapaInstPorRubro> getCapaInstPorRurboCensoList() {
+        return capaInstPorRurboCensoList;
+    }
+
+    public void setCapaInstPorRurboCensoList(List<CapaInstPorRubro> capaInstPorRurboCensoList) {
+        this.capaInstPorRurboCensoList = capaInstPorRurboCensoList;
     }
 }

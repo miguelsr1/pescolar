@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.web.proveedor.interno;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +12,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +24,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DualListModel;
@@ -32,6 +37,7 @@ import sv.gob.mined.pescolar.model.dto.MunicipioDto;
 import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.DisMunicipioInteresRepo;
+import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.Reportes;
 import sv.gob.mined.pescolar.web.SessionView;
@@ -43,7 +49,7 @@ import sv.gob.mined.pescolar.web.SessionView;
 @Named
 @ViewScoped
 public class MunicipioInteresView implements Serializable {
-    
+
     private Boolean deshabiliar = false;
 
     private CapaInstPorRubro capacidadInst = new CapaInstPorRubro();
@@ -52,15 +58,13 @@ public class MunicipioInteresView implements Serializable {
     private List<MunicipioDto> lstMunSource = new ArrayList();
     private List<MunicipioDto> lstMunTarget = new ArrayList();
     private DualListModel<MunicipioDto> lstMunicipiosInteres = new DualListModel();
-    
+
     @Inject
     private Reportes reportes;
     @Inject
     private SessionView sessionView;
-    
-    
     @Inject
-    private CatalogoRepo datosGeograficosEJB;
+    private CatalogoRepo catalogoRepo;
     @Inject
     private DisMunicipioInteresRepo disMuniRepo;
     @Inject
@@ -71,7 +75,8 @@ public class MunicipioInteresView implements Serializable {
         if (cargaGeneralView.getEmpresa().getId() != null) {
             if (cargaGeneralView.getUrlStr().contains("DatosGenerales")) {
 
-            } else if (cargaGeneralView.getUrlStr().contains("MunicipioInteres")) {
+            } else if (cargaGeneralView.getUrlStr().contains("MunicipiosInteres")) {
+                //cargaGeneralView.cargarDetalleCalificacion();
                 cargarMunInteres();
             } else if (cargaGeneralView.getUrlStr().contains("PreciosReferencia")) {
 
@@ -121,6 +126,10 @@ public class MunicipioInteresView implements Serializable {
 
     public CapaDistribucionAcre getDepartamentoCalif() {
         return departamentoCalif;
+    }
+
+    public Municipio getMunicipioByConverter(Long id) {
+        return catalogoRepo.findEntityByPk(Municipio.class, id);
     }
 
     public void guardarMunicipioInteres() {
@@ -181,7 +190,7 @@ public class MunicipioInteresView implements Serializable {
             param.put("pCorreoPersona", capacidadInst.getIdMuestraInteres().getIdEmpresa().getIdPersona().getEmail());
             param.put("pIdGestion", idGestion);
 
-            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(cargaGeneralView.getEmpresa().getNumeroNit(), 
+            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(cargaGeneralView.getEmpresa().getNumeroNit(),
                     cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getId());
             lstDatos.get(0).setRubro(JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             if (lstDatos.get(0).getDepartamento().contains("TODO EL PAIS")) {
@@ -231,7 +240,7 @@ public class MunicipioInteresView implements Serializable {
         options.put("contentHeight", 500);
         options.put("contentWidth", 750);
 
-        PrimeFaces.current().dialog().openDynamic("/app/comunes/dialogos/proveedor/filtroProveedor", options, null);
+        PrimeFaces.current().dialog().openDynamic(Constantes.DLG_BUSCAR_PROVEEDOR, options, null);
     }
 
     public void empSelecMuniInteres(SelectEvent event) {
@@ -255,8 +264,8 @@ public class MunicipioInteresView implements Serializable {
 
         if (capacidadInst != null && capacidadInst.getId() != null) {
             if (departamentoCalif != null && departamentoCalif.getCodigoDepartamento() != null) {
-                lstMunSource = datosGeograficosEJB.getLstMunicipiosDisponiblesDeInteres(departamentoCalif.getId(), departamentoCalif.getCodigoDepartamento().getId());
-                lstMunTarget = datosGeograficosEJB.getLstMunicipiosDeInteres(departamentoCalif.getId());
+                lstMunSource = catalogoRepo.getLstMunicipiosDisponiblesDeInteres(departamentoCalif.getId(), departamentoCalif.getCodigoDepartamento().getId());
+                lstMunTarget = catalogoRepo.getLstMunicipiosDeInteres(departamentoCalif.getId());
                 lstMunicipiosInteres = new DualListModel(lstMunSource, lstMunTarget);
             }
         }
@@ -273,6 +282,47 @@ public class MunicipioInteresView implements Serializable {
                 cargaGeneralView.setFileName("fotoProveedores/profile.png");
             } else {
                 cargaGeneralView.setFileName("fotoProveedores/" + cargaGeneralView.getEmpresa().getIdPersona().getUrlImagen());
+            }
+        }
+    }
+
+    @FacesConverter(forClass = MunicipioDto.class, value = "muniConverter")
+    public static class MunicipioControllerConverter implements Converter {
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            MunicipioInteresView controller = (MunicipioInteresView) facesContext.getApplication().getELResolver().getValue(facesContext.getELContext(), null, "proveedorController");
+            MunicipioDto mun = new MunicipioDto();
+            try {
+                BeanUtils.copyProperties(mun, controller.getMunicipioByConverter(getKey(value)));
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(MunicipioInteresView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            return mun;
+        }
+
+        Long getKey(String value) {
+            return Long.parseLong(value);
+        }
+
+        String getStringKey(Long value) {
+            return value.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof MunicipioDto) {
+                MunicipioDto o = (MunicipioDto) object;
+                return getStringKey(o.getId());
+            } else {
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Municipio.class.getName());
             }
         }
     }

@@ -104,7 +104,7 @@ public class ReportesRepo {
     public List<DetItemOfertaGlobal> getLstItemOfertaGlobal(String nit, Long idRubro, Long idAnho) {
         PreciosRefRubroEmp preTem;
         List<DetItemOfertaGlobal> lst = new ArrayList();
-        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.numeroNit=:nit and p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho and p.idProducto.id not in (1) ORDER BY  FUNC('TO_NUMBER', p.noItem)", PreciosRefRubroEmp.class);
+        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.numeroNit=:nit and p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho and p.idProducto.id not in (1) ORDER BY cast(p.noItem as integer)", PreciosRefRubroEmp.class);
         q.setParameter("nit", nit);
         q.setParameter("pIdRubro", idRubro);
         q.setParameter("pIdAnho", idAnho);

@@ -1,4 +1,4 @@
-body .ui-datatable.ui-datatable-striped .ui-datatable-data > tr.ui-datatable-odd {
+/*body .ui-datatable.ui-datatable-striped .ui-datatable-data > tr.ui-datatable-odd {
     background: #f8f9fa;
 }
 
@@ -27,16 +27,16 @@ body .ui-datatable.ui-datatable-striped .ui-datatable-data > tr.ui-datatable-odd
     }
 }
 
-/**
+*
 Estilos modificados de la plantilla
-*/
+
 
 .layout-config {
     position: fixed;
     padding: 0;
     top: 0px;
     right: 0;
-    /*width: 500px !important;*/
+    width: 500px !important;
     z-index: 999;
     height: 100%;
     transform: translate3d(240px, 0px, 0px);
@@ -95,20 +95,30 @@ Estilos modificados de la plantilla
 
 .overview-box-p {
     height: 100%;
-}
-
-/*.yellow{
-    color: yellow;
-}
-.red {
-    color: #d0525d;
-}
-.blue {
-    color: #33afde;
-}
-.green {
-    color: #5fcf80;
-}
-.orange {
-    color: #f6ac2b;
 }*/
+
+/*COLORES*/
+.linkDialog{
+    color: #3984b8; 
+}
+.blue{
+    color: #33afde; 
+}
+.lila{
+    color: #7e8dcd; 
+}
+.verde{
+    color: #1d9d74;
+}
+.naranja{
+    color: #f6ac2b;
+}
+.acua{
+    color: #39b8b6;
+}
+.rosa{
+    color: #e175a0;
+}
+.rojo{
+    color: #e17576;
+}

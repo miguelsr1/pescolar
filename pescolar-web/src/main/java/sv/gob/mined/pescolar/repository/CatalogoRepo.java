@@ -219,7 +219,7 @@ public class CatalogoRepo {
     }
 
     public <T extends Object> T findDetProveedor(DetRubroMuestraIntere detRubro, Long idPro, Class clase) {
-        Query q = em.createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idMuestraInteres.idAnho.id=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.idProcesoAdq=:pIdPro " : "") + " ORDER BY d.idMuestraInteres", clase);
+        Query q = em.createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idMuestraInteres.idAnho.id=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.id=:pIdPro " : "") + " ORDER BY d.idMuestraInteres", clase);
         q.setParameter("pIdRubro", detRubro.getIdRubroInteres().getId());
         q.setParameter("pIdAnho", detRubro.getIdAnho().getId());
         q.setParameter("idEmpresa", detRubro.getIdEmpresa());
@@ -242,10 +242,11 @@ public class CatalogoRepo {
         } else {
             switch (codigoDepartamento) {
                 case "00":
-                    query = em.createQuery("SELECT m FROM Municipio m ORDER BY FUNC('TO_NUMBER',m.codigoDepartamento.codigoDepartamento),  FUNC('TO_NUMBER',m.codigoMunicipio)", Municipio.class);
+                    query = em.createQuery("SELECT m FROM Municipio m ORDER BY cast(m.codigoDepartamento.codigoDepartamento as integer"
+                            + " ),  cast(m.codigoMunicipio as integer)", Municipio.class);
                     break;
                 default:
-                    query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento ORDER BY FUNC('TO_NUMBER',m.codigoDepartamento.id),  FUNC('TO_NUMBER',m.codigoMunicipio)", Municipio.class);
+                    query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento ORDER BY cast(m.codigoDepartamento.id as integer),  cast(m.codigoMunicipio as integer)", Municipio.class);
                     query.setParameter("departamento", codigoDepartamento);
                     break;
             }

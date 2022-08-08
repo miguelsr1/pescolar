@@ -21,7 +21,7 @@ import sv.gob.mined.pescolar.web.proveedor.interno.ProveedorView;
 @SessionScoped
 public class RecuperarProceso implements Serializable {
 
-    private ProcesoAdquisicion procesoAdquisicion = new ProcesoAdquisicion();
+    //private ProcesoAdquisicion procesoAdquisicion = new ProcesoAdquisicion();
     private String departamento;
 
     @Inject
@@ -35,7 +35,7 @@ public class RecuperarProceso implements Serializable {
     }
 
     public void recuperarProcesoAdq() {
-        if (sessionView.isVariableSession("idEmpresa")) {
+        /*if (sessionView.isVariableSession("idEmpresa")) {
 
             procesoAdquisicion = proveedorView.getAnho().getProcesoAdquisicionList().get(0);
             sessionView.setProceso(procesoAdquisicion);
@@ -46,14 +46,14 @@ public class RecuperarProceso implements Serializable {
 
         if (procesoAdquisicion == null || procesoAdquisicion.getId() == null) {
             JsfUtil.mensajeAlerta("Debe de seleccionar un proceso de adquisición.");
-        }
+        }*/
 
         departamento = sessionView.getCodigoDepartamento();
     }
 
     public ProcesoAdquisicion getProcesoAdquisicion() {
-        procesoAdquisicion = sessionView.getProceso();
-        return procesoAdquisicion;
+        return sessionView.getProceso();
+         
     }
 
     public String getDepartamento() {
