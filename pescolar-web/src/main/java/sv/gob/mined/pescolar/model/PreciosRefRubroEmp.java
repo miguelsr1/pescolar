@@ -2,7 +2,6 @@ package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -51,12 +50,12 @@ public class PreciosRefRubroEmp implements Serializable {
     @Column(name = "FECHA_ELIMINACION")
     private LocalDate fechaEliminacion;
     @Column(name = "ESTADO_ELIMINACION")
-    private BigInteger estadoEliminacion;
+    private Long estadoEliminacion;
     @Size(max = 3)
     @Column(name = "NO_ITEM")
     private String noItem;
     @Column(name = "ID_PROCESO_ADQ")
-    private Integer idProcesoAdq;
+    private Long idProcesoAdq;
     @JoinColumn(name = "ID_PRODUCTO", referencedColumnName = "ID_PRODUCTO")
     @ManyToOne(fetch = FetchType.LAZY)
     private CatalogoProducto idProducto;
@@ -108,11 +107,11 @@ public class PreciosRefRubroEmp implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public BigInteger getEstadoEliminacion() {
+    public Long getEstadoEliminacion() {
         return estadoEliminacion;
     }
 
-    public void setEstadoEliminacion(BigInteger estadoEliminacion) {
+    public void setEstadoEliminacion(Long estadoEliminacion) {
         this.estadoEliminacion = estadoEliminacion;
     }
 
@@ -124,11 +123,11 @@ public class PreciosRefRubroEmp implements Serializable {
         this.noItem = noItem;
     }
 
-    public Integer getIdProcesoAdq() {
+    public Long getIdProcesoAdq() {
         return idProcesoAdq;
     }
 
-    public void setIdProcesoAdq(Integer idProcesoAdq) {
+    public void setIdProcesoAdq(Long idProcesoAdq) {
         this.idProcesoAdq = idProcesoAdq;
     }
 

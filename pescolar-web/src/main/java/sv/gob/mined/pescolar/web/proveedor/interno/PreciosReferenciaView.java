@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -241,7 +240,7 @@ public class PreciosReferenciaView implements Serializable {
 
     private void cargaInicialDeDatos() {
         params.clear();
-        params.add(new Filtro(TipoOperador.EQUALS, "idProcesoAdq.id", cargaGeneralView.getProcesoAdquisicion()));
+        params.add(new Filtro(TipoOperador.EQUALS, "idProcesoAdq.id", cargaGeneralView.getProcesoAdquisicion().getId()));
         params.add(new Filtro(TipoOperador.EQUALS, "idRubroAdq.id", cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId()));
 
         detalleProcesoAdq = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
@@ -287,11 +286,11 @@ public class PreciosReferenciaView implements Serializable {
             case 6:
             case 7:
             case 8:
-                preMaxRefPar = precioRepo.findPreciosRefRubroByNivelEduAndRubro(BigDecimal.ONE, detalleProcesoAdq);
-                preMaxRefCi = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(3), detalleProcesoAdq);
-                preMaxRefCii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(4), detalleProcesoAdq);
-                preMaxRefCiii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(5), detalleProcesoAdq);
-                preMaxRefBac = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(6), detalleProcesoAdq);
+                preMaxRefPar = precioRepo.findPreciosRefRubroByNivelEduAndRubro(1l, detalleProcesoAdq);
+                preMaxRefCi = precioRepo.findPreciosRefRubroByNivelEduAndRubro(3l, detalleProcesoAdq);
+                preMaxRefCii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(4l, detalleProcesoAdq);
+                preMaxRefCiii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(5l, detalleProcesoAdq);
+                preMaxRefBac = precioRepo.findPreciosRefRubroByNivelEduAndRubro(6l, detalleProcesoAdq);
                 if (detalleProcesoAdq.getIdProcesoAdq().getIdAnho().getId().intValue() > 6
                         && detalleProcesoAdq.getIdRubroAdq().getId().intValue() == 2) {
                     //procesos de contratación mayores a 2018 y rubro de utiles
@@ -310,16 +309,16 @@ public class PreciosReferenciaView implements Serializable {
                 break;
             default: //año 2021 año 2022
                 if (detalleProcesoAdq.getIdRubroAdq().getId().intValue() != 1) { //utiles y zapatos
-                    preMaxRefPar = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(22), detalleProcesoAdq);
+                    preMaxRefPar = precioRepo.findPreciosRefRubroByNivelEduAndRubro(22l, detalleProcesoAdq);
                 }
-                preMaxRefCi = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(3), detalleProcesoAdq);
-                preMaxRefCii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(4), detalleProcesoAdq);
-                preMaxRefCiii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(5), detalleProcesoAdq);
-                preMaxRefBac = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(6), detalleProcesoAdq);
+                preMaxRefCi = precioRepo.findPreciosRefRubroByNivelEduAndRubro(3l, detalleProcesoAdq);
+                preMaxRefCii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(4l, detalleProcesoAdq);
+                preMaxRefCiii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(5l, detalleProcesoAdq);
+                preMaxRefBac = precioRepo.findPreciosRefRubroByNivelEduAndRubro(6l, detalleProcesoAdq);
 
                 if (detalleProcesoAdq.getIdRubroAdq().getId().intValue() == 2) { //utiles
-                    preMaxRefCiiiMf = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(23), detalleProcesoAdq);
-                    preMaxRefBacMf = precioRepo.findPreciosRefRubroByNivelEduAndRubro(new BigDecimal(24), detalleProcesoAdq);
+                    preMaxRefCiiiMf = precioRepo.findPreciosRefRubroByNivelEduAndRubro(23l, detalleProcesoAdq);
+                    preMaxRefBacMf = precioRepo.findPreciosRefRubroByNivelEduAndRubro(24l, detalleProcesoAdq);
                 }
                 break;
         }
@@ -332,8 +331,8 @@ public class PreciosReferenciaView implements Serializable {
         } else {
             if (detalleProcesoAdq.getId() != null) {
                 PreciosRefRubroEmp current = new PreciosRefRubroEmp();
-                current.setEstadoEliminacion(BigInteger.ZERO);
-                current.setUsuarioInsercion(sessionView.getVariableSessionUsuario());
+                current.setEstadoEliminacion(0l);
+                current.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
                 current.setFechaInsercion(LocalDate.now());
                 current.setIdEmpresa(cargaGeneralView.getEmpresa());
                 current.setIdMuestraInteres(cargaGeneralView.getDetRubroMuestraInteres());
@@ -913,14 +912,14 @@ public class PreciosReferenciaView implements Serializable {
 
     public void eliminarDetalle() {
         if (precioRef != null) {
-            if (precioRef.getEstadoEliminacion().compareTo(BigInteger.ZERO) == 0) {
+            if (precioRef.getEstadoEliminacion().compareTo(0l) == 0) {
                 if (precioRef.getIdPrecioRefEmp() != null) {
-                    precioRef.setEstadoEliminacion(BigInteger.ONE);
+                    precioRef.setEstadoEliminacion(1l);
                 } else {
                     lstPreciosReferencia.remove(idRow);
                 }
             } else {
-                precioRef.setEstadoEliminacion(BigInteger.ZERO);
+                precioRef.setEstadoEliminacion(0l);
             }
 
             precioRef = null;

@@ -63,7 +63,7 @@ public class PrecioRefRubroEmpRepo extends AbstractRepository<PreciosRefRubroEmp
         return q.getResultList();
     }
 
-    public PreciosRefRubro findPreciosRefRubroByNivelEduAndRubro(BigDecimal nivelEdu, DetalleProcesoAdq rubro) {
+    public PreciosRefRubro findPreciosRefRubroByNivelEduAndRubro(Long nivelEdu, DetalleProcesoAdq rubro) {
         PreciosRefRubro pr = new PreciosRefRubro();
         NivelEducativo n = em.find(NivelEducativo.class, nivelEdu);
         pr.setIdNivelEducativo(n);
