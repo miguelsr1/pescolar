@@ -1220,7 +1220,7 @@ p:last-child {
     background-size: cover;
     height: auto;
     min-height: 100vh;
-    padding-top: 125px;
+    padding-top: 5vh;
 }
 .login-body .login-panel {
     width: 600px;
@@ -1233,7 +1233,7 @@ p:last-child {
 .login-body .login-panel .p-col-12.logo-container {
     padding: 50px 50px 25px 50px;
     border-bottom: 8px solid #dee4e9;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 .login-body .login-panel .p-col-12.logo-container .logo {
     height: 50px;

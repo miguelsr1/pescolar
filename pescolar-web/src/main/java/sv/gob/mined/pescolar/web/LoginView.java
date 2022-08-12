@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sv.gob.mined.pescolar.web;
 
 import java.io.Serializable;
@@ -34,14 +30,34 @@ public class LoginView implements Serializable {
     private String usuario;
     @NotEmpty
     private String claveAcceso;
-    
+    @NotEmpty
+    private String duiPro;
+    @NotEmpty
+    private String claveAccesoPro;
+
     private static final ResourceBundle UTIL_CORREO = ResourceBundle.getBundle("Bundle");
 
     @Inject
     private Pbkdf2PasswordHash passwordHash;
-    
+
     @Inject
     private SecurityContext securityContext;
+
+    public String getDuiPro() {
+        return duiPro;
+    }
+
+    public void setDuiPro(String duiPro) {
+        this.duiPro = duiPro;
+    }
+
+    public String getClaveAccesoPro() {
+        return claveAccesoPro;
+    }
+
+    public void setClaveAccesoPro(String claveAccesoPro) {
+        this.claveAccesoPro = claveAccesoPro;
+    }
 
     public String getUsuario() {
         return usuario;
@@ -70,8 +86,8 @@ public class LoginView implements Serializable {
     }
 
     public String validarUsuario() {
-       // updateClave();
-        switch (processAuthentication()){
+        // updateClave();
+        switch (processAuthentication(usuario, claveAcceso)) {
             case SEND_CONTINUE:
                 //facesContext.responseComplete();
                 break;
@@ -88,12 +104,31 @@ public class LoginView implements Serializable {
         return null;
     }
     
-    private AuthenticationStatus processAuthentication() {
+    public String validarProveedor() {
+        // updateClave();
+        switch (processAuthentication(duiPro, claveAccesoPro)) {
+            case SEND_CONTINUE:
+                //facesContext.responseComplete();
+                break;
+            case SEND_FAILURE:
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid user name and/or password.", null));
+                break;
+            case SUCCESS:
+                // It really passes here, but I'm not redirected to the start
+                // page. I keep in the login page.
+                return "/pro/principal?faces-redirect=true";
+            default:
+                break;
+        }
+        return null;
+    }
+
+    private AuthenticationStatus processAuthentication(String user, String pass) {
         return securityContext.authenticate(
                 (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
                 (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse(),
                 AuthenticationParameters.withParams().credential(
-                        new UsernamePasswordCredential(usuario, claveAcceso))
+                        new UsernamePasswordCredential(user, pass))
         );
     }
 }

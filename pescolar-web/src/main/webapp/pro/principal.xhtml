@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Paquete Escolar</ui:define>
+
+    <ui:define name="content">
+        <p:scrollTop id="clientId" style="margin-right: 170px; margin-bottom: 25px;" />
+
+        <h:form prependId="false">
+            <div class="card">
+                <div class="content-section implementation">
+                    <div class="p-grid p-jc-center">
+                        <div class="p-col-12">
+                            <div class="ui-fluid">
+                                <div class="p-grid dashboard" style="max-width: 900px; margin: 0 auto;">
+                                    <div class="p-col-12 p-md-4">
+                                        <div class="overview-box" style="text-align: center !important">
+                                            <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
+                                                <f:setPropertyActionListener value="31" target="#{menuView.idOpcionMenu}" />
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Contrataciones</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="contract.svg" library="images"  width="80"/>
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4">
+                                        <div class="overview-box"  style="text-align: center !important;" >
+                                            <p:commandLink action="detalleVotacion?faces-redirect=true" >
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Consultas</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="report.svg" library="images" width="80" />
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4">
+                                        <div class="overview-box" style="text-align: center !important">
+                                            <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
+                                                <f:setPropertyActionListener value="55" target="#{menuView.idOpcionMenu}" />
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Proveedores</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="shop.svg" library="images" width="80" />
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4" >
+                                        <div class="overview-box" style="text-align: center !important">
+                                            <p:commandLink action="registroCandidato?faces-redirect=true" >
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Modificativas</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="modificativa.svg" library="images"  width="80"/>
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4">
+                                        <div class="overview-box"  style="text-align: center !important;" >
+                                            <p:commandLink action="detalleVotacion?faces-redirect=true" >
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Créditos</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="bank.svg" library="images" width="80" />
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4">
+                                        <div class="overview-box" style="text-align: center !important">
+                                            <p:commandLink action="presentacionResultados?faces-redirect=true" >
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Recepción</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="delivery.svg" library="images" width="80" />
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4" >
+                                        <div class="overview-box" style="text-align: center !important">
+                                            <p:commandLink action="registroCandidato?faces-redirect=true" >
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Pagos</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="pay.svg" library="images"  width="80"/>
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4">
+                                        <div class="overview-box"  style="text-align: center !important;" >
+                                            <p:commandLink action="detalleVotacion?faces-redirect=true" >
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Liquidación</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="stamp.svg" library="images" width="80" />
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-4">
+                                        <div class="overview-box" style="text-align: center !important">
+                                            <p:commandLink action="presentacionResultados?faces-redirect=true" >
+                                                <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
+                                                    <h5>Mantenimiento</h5>
+                                                    <br/>
+                                                    <p:graphicImage name="config.svg" library="images" width="80" />
+                                                </div>
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        
+        <h:outputStylesheet library="css" name="menu-principal.css"/>
+    </ui:define>
+</ui:composition>

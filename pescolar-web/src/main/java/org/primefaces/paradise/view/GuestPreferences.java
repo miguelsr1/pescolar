@@ -229,16 +229,4 @@ public class GuestPreferences implements Serializable {
         menuView.limpiarMenu();
         JsfUtil.redireccionar("/app/principal.xhtml");
     }
-
-    public void logout() {
-        try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().getSessionMap().clear();
-            ExternalContext externalContext = context.getExternalContext();
-            externalContext.redirect(((ServletContext) externalContext.getContext()).getContextPath() + "/inicio.mined");
-            System.gc();
-        } catch (IOException ex) {
-            Logger.getLogger(GuestPreferences.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

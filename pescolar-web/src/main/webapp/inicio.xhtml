@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
     <h:head>
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -11,85 +11,75 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes"/>
         </f:facet>
-        <title>Paquete Escolar</title>
-
-        <script type="text/javascript">
-            //<![CDATA[
-            /**
-             * Faces Validator
-             */
-            /*PrimeFaces.validator['custom.emailValidator'] = {
-             
-             pattern: /\S+@\S+/,
-             
-             validate: function (element, value) {
-             //use element.data() to access validation metadata, in this case there is none.
-             if (!this.pattern.test(value)) {
-             throw {
-             summary: 'Error de validación',
-             detail: value + ' no es un correo valido.',
-             severity: 'error'
-             }
-             }
-             }
-             };*/
-
-
-            //]]>
-        </script>
+        <title>Paquete Escolar</title>        
+        <h:outputScript name="login.js" library="js"/>
+        <h:outputScript name="js/layout.js" library="paradise-layout"/>
+        <h:outputScript name="js/prism.js" library="paradise-layout"/>
+        <h:outputScript name="funciones.js" library="js"/>
     </h:head>
+    <h:body  styleClass="login-body">
+        <div class="login-panel ui-fluid fadeIn container">
+            <div class="p-grid p-nogutter">
+                <div class="p-col-12 logo-container">
+                    <h:panelGrid columns="2" width="100%">
+                        <p:graphicImage name="logo_mined.png" library="images" width="200"/>
+                        <p:outputLabel style="font-size: 2rem;">Paquete Escolar</p:outputLabel>
+                    </h:panelGrid>
+                </div>
+                <div class="p-col-12" style="padding: 0 0 !important">
+                    <div class="container" id="container">
+                        <div class="form-container sign-up-container">
+                            <h:form>
+                                <h2 style="margin-bottom: 1rem;">
+                                    <i class="pi pi-id-card" style="font-size: 1.5rem;"></i>
+                                    Proveedor
+                                </h2>
 
-    <h:body styleClass="login-body">
-        <h:form id="login" prependId="false">
-            <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
-                <p:autoUpdate />
-            </p:growl>
-
-            <div class="login-panel ui-fluid">
-                <div class="p-grid p-nogutter">
-                    <div class="p-col-12 logo-container">
-                        <h:panelGrid columns="2" width="100%">
-                            <p:graphicImage name="logo_mined.png" library="images" width="200"/>
-
-                            <p:outputLabel style="font-size: 18px;">Paquete Escolar</p:outputLabel>
-                        </h:panelGrid>
-                    </div>
-                    <div class="p-col-12">
-                        <p:outputLabel for="username" value="Usuario:"/>
-                        <div class="input-wrapper">
-                            <p:inputText id="username" widgetVar="username" placeholder="Código empleado" value="#{loginView.usuario}"/>
-                            <p:graphicImage name="images/login/user.png" library="paradise-layout" styleClass="user-icon"/>
+                                <p:inputMask id="txtDui" value="#{loginView.duiPro}" mask="99999999-9" validateMask="true" placeholder="DUI" style="margin-bottom: 1rem"/>
+                                <p:password id="txtPassPro" value="#{loginView.claveAccesoPro}" placeholder="Clave de acceso" />
+                                <a href="#">¿Olvidó su clave de acceso?</a>
+                                <p:commandButton id="btnIngresarEmp" process="@this,txtDui,txtPassPro" value="Ingresar" styleClass="blue-btn raised-btn" 
+                                                 action="#{loginView.validarProveedor()}" style="margin-top: 1.5rem;" update="@form" ajax="false"/>
+                                <p:blockUI block="btnIngresarEmp" trigger="btnIngresarEmp"  />
+                            </h:form>
                         </div>
-                    </div>
-                    <div class="p-col-12">
-                        <p:outputLabel for="password" value="Clave de acceso:"/>
-                        <div class="input-wrapper">
-                            <p:password id="password" widgetVar="password" placeholder="Contraseña" feedback="false" value="#{loginView.claveAcceso}" />
-                            <p:graphicImage name="images/login/lock.png" library="paradise-layout" styleClass="lock-icon"/>
+                        <div class="form-container sign-in-container">
+                            <h:form>
+                                <h2 style="margin-bottom: 1rem;">
+                                    <i class="pi pi-user" style="font-size: 1.5rem;"></i>
+                                    Usuario
+                                </h2>
+
+                                <p:inputText id="txtUser" value="#{loginView.usuario}" placeholder="Usuario" style="margin-bottom: 1rem;"/>
+                                <p:password id="txtPass" value="#{loginView.claveAcceso}" placeholder="Clave de acceso" />
+
+                                <a href="#">¿Olvidó su clave de acceso?</a>
+                                <p:commandButton id="submit" value="Ingresar" styleClass="ui-button-info ui-button-raised" 
+                                                 action="#{loginView.validarUsuario()}" update="@form" ajax="false" style="margin-top: 1.5rem;"/>
+                                <p:blockUI block="submit" trigger="submit" />
+                            </h:form>
                         </div>
-                    </div>
-                    <div class="p-col-12 chkbox-container">
-                        <!--a href="">¿Olvidó su contraseña?</a>
-                        <p:commandLink value="Activar correo" onclick="PF('dlgActivarCorreo').show();" style="float: right; margin-right:" / -->
-                    </div>
-                    <div class="p-col-12 button-container">
-
-
-                        <p:commandButton id="submit" value="Ingresar" styleClass="ui-button-info ui-button-raised"
-                                         action="#{loginView.validarUsuario()}" update="@form" ajax="false" />
-                        <p:blockUI block="submit" trigger="submit" />
-                        <h:outputText value="."/>
+                        <div class="overlay-container">
+                            <div class="overlay">
+                                <div class="overlay-panel overlay-left">
+                                    <h2>¿No es Proveedor?</h2>
+                                    <p>Para personal administrativo MINED Central, Departamental y para usuarios de Entidades Financieras</p>
+                                    <button class="ghost" id="signIn">Ingresa aca</button>
+                                </div>
+                                <div class="overlay-panel overlay-right">
+                                    <h2>¿Es proveedor?</h2>
+                                    <p>Para proveedores con Personería Jurídica o Natural</p>
+                                    <button class="ghost" id="signUp" >Ingresa aca</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-
-        </h:form>
+        </div>
     </h:body>
+    <h:outputStylesheet name="login.css" library="css"/>
     <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
-
-
 </html>

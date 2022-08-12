@@ -250,7 +250,7 @@ public class SessionView implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getSessionMap().clear();
             ExternalContext externalContext = context.getExternalContext();
-            externalContext.redirect(((ServletContext) externalContext.getContext()).getContextPath() + "/index.mined");
+            externalContext.redirect(((ServletContext) externalContext.getContext()).getContextPath() + "/inicio.xhtml");
             System.gc();
         } catch (IOException ex) {
             Logger.getLogger(SessionView.class.getName()).log(Level.SEVERE, null, ex);
