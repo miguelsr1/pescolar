@@ -1,12 +1,9 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 
 @Table(name = "PERSONA")
 @Entity

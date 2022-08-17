@@ -33,9 +33,8 @@ import sv.gob.mined.pescolar.utils.enums.TipoOperador;
  *
  * @author misanchez
  */
-@SuppressWarnings("serial")
-@SessionScoped
 @Named
+@SessionScoped
 public class SessionView implements Serializable {
 
     private Boolean usuarioDepartamental = false;
@@ -57,14 +56,14 @@ public class SessionView implements Serializable {
 
     @Inject
     private SecurityContext securityContext;
-    
+
     @Inject
     private CatalogoRepo catalogoRepo;
 
     @PostConstruct
     public void init() {
         params = new ArrayList();
-        params.add(new Filtro(TipoOperador.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()));
+        params.add(Filtro.builder().tipoOperador(TipoOperador.EQUALS).clave("idPersona.usuario").valor(securityContext.getCallerPrincipal().getName()).build());
         usuario = ((Usuario) catalogoRepo.findListByParam(Usuario.class, params).get(0));
 
         //Recuperarción de variables almacenadas como COOKIES
@@ -173,7 +172,7 @@ public class SessionView implements Serializable {
 
     public List<ProcesoAdquisicion> getLstProcesoAdquisicion() {
         params.clear();
-        params.add(new Filtro(TipoOperador.EQUALS, "idAnho.id", idAnho));
+        params.add(Filtro.builder().tipoOperador(TipoOperador.EQUALS).clave("idAnho.id").valor(idAnho).build());
         return (List<ProcesoAdquisicion>) catalogoRepo.findListByParam(ProcesoAdquisicion.class, params, "id", true);
     }
 
@@ -181,9 +180,9 @@ public class SessionView implements Serializable {
         params.clear();
 
         if (codigoDepartamento == null) {
-            params.add(new Filtro(TipoOperador.EQUALS, "codigoDepartamento.id", "00"));
+            params.add(Filtro.builder().tipoOperador(TipoOperador.EQUALS).clave("codigoDepartamento.id").valor("00").build());
         } else {
-            params.add(new Filtro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento));
+            params.add(Filtro.builder().tipoOperador(TipoOperador.EQUALS).clave("codigoDepartamento.id").valor(codigoDepartamento).build());
         }
 
         return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", true);
@@ -270,7 +269,7 @@ public class SessionView implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         return ((Cookie) context.getExternalContext().getRequestCookieMap().get(name)).getValue();
     }
-    
+
     public void crearCookie(String nombre, String valor) {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();

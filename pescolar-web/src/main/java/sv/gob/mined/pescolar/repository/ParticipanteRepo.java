@@ -219,8 +219,8 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
 
     private List<PorcentajeEvaluacion> getPorcentajesEvaluacionByAnho(Long idAnho, Long idRubro) {
         List<Filtro> params = new ArrayList();
-        params.add(new Filtro(TipoOperador.EQUALS, "idAnho", idAnho));
-        params.add(new Filtro(TipoOperador.EQUALS, "idRubroInteres", idRubro));
+        params.add(Filtro.builder().tipoOperador(TipoOperador.EQUALS).clave("idAnho").valor(idAnho).build());
+        params.add(Filtro.builder().tipoOperador(TipoOperador.EQUALS).clave("idRubroInteres").valor(idRubro).build());
 
         return (List<PorcentajeEvaluacion>) catalogoRepo.findListByParam(PorcentajeEvaluacion.class, params);
     }

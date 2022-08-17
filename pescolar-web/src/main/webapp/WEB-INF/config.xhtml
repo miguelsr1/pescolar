@@ -4,7 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <div id="layout-config" class="layout-config">
+    <div id="layout-config" class="layout-config" style="display: #{(sessionView.usuario.idTipoUsuario.idTipoUsuario ne 9)?'block':'none'}">
         <div class="layout-config-content">
             <a href="#" id="layout-config-button" class="layout-config-button" onclick="buttonConfig();">
                 <i class="pi pi-cog"></i>

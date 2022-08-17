@@ -15,19 +15,13 @@
  */
 package org.primefaces.paradise.view;
 
-import java.io.IOException;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.web.MenuView;
 
@@ -35,9 +29,10 @@ import sv.gob.mined.pescolar.web.MenuView;
 @SessionScoped
 public class GuestPreferences implements Serializable {
 
+    private boolean darkMenu = false;
+    
     private String layout = "default";
     private String menuMode = "layout-menu-overlay";
-    private boolean darkMenu = false;
     private String theme = "blue";
     private String inputStyle = "outlined";
     private List<ComponentTheme> componentThemes;

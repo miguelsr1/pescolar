@@ -54,7 +54,6 @@ public class OfertaBienesServiciosView implements Serializable {
     private String municipioCe;
     private String nivelesEducativos;
     private String nombre;
-    private String valorDeBusqueda;
 
     private Long idParticipante;
     private Long idRubro;
@@ -191,14 +190,13 @@ public class OfertaBienesServiciosView implements Serializable {
 
     public List<Municipio> getLstMunicipio() {
         params.clear();
-        params.add(new Filtro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento));
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento).build());
         return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", false);
     }
 
 //    public List<RubrosAmostrarInteres> getLstRubros() {
 //        return lstRubros;
 //    }
-
     public String getCodigoDepartamento() {
         return codigoDepartamento;
     }
@@ -274,12 +272,13 @@ public class OfertaBienesServiciosView implements Serializable {
 
     public void buscar() {
         params.clear();
-        params.add(new Filtro(TipoOperador.EQUALS, "idOferta.codigoEntidad.codigoDepartamento.id", codigoDepartamento));
-        params.add(new Filtro(TipoOperador.EQUALS, "idOferta.codigoEntidad.idMunicipio.id", idMunicipio));
-        params.add(new Filtro(TipoOperador.EQUALS, "idOferta.codigoEntidad.codigoEntidad", codigoEntidad));
-        params.add(new Filtro(TipoOperador.LIKE, "idOferta.codigoEntidad.nombre", nombre.isEmpty() ? null : nombre));
-        params.add(new Filtro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idProcesoAdq.id", sessionView.getIdProcesoAdq()));
-        params.add(new Filtro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idRubroAdq.id", idRubro));
+
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.codigoEntidad.codigoDepartamento.id", codigoDepartamento).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.codigoEntidad.idMunicipio.id", idMunicipio).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.codigoEntidad.codigoEntidad", codigoEntidad).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.codigoEntidad.nombre", nombre.isEmpty() ? null : nombre).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idRubroAdq.id", idRubro).build());
         lstParticipantes = (List<Participante>) catalogoRepo.findListByParam(Participante.class, params, "idOferta.id", Boolean.TRUE);
     }
 
@@ -290,8 +289,8 @@ public class OfertaBienesServiciosView implements Serializable {
             JsfUtil.mensajeAlerta("No se ha encontrado el centro escolar con código: " + codigoEntidad);
         } else {
             params.clear();
-            params.add(new Filtro(TipoOperador.EQUALS, "idProcesoAdq.id", sessionView.getIdProcesoAdq()));
-            params.add(new Filtro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro));
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro).build());
 
             detalleProceso = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
 
@@ -307,9 +306,9 @@ public class OfertaBienesServiciosView implements Serializable {
                     if (entidadEducativa.getCodigoDepartamento().getId().equals(dep) || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario().compareTo(1l) == 0) {
                         params.clear();
 
-                        params.add(new Filtro(TipoOperador.EQUALS, "codigoEntidad.codigoEntidad", codigoEntidad));
-                        params.add(new Filtro(TipoOperador.EQUALS, "idDetProcesoAdq.id", detalleProceso.getId()));
-                        params.add(new Filtro(TipoOperador.EQUALS, "estadoEliminacion", 0l));
+                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad.codigoEntidad", codigoEntidad).build());
+                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq.id", detalleProceso.getId()).build());
+                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "estadoEliminacion", 0l).build());
 
                         ofertaBienesServicio = ofertaRepo.findEntityByParam(params);
 
@@ -413,9 +412,9 @@ public class OfertaBienesServiciosView implements Serializable {
                 } else {
                     if (sessionView.getCodigoDepartamento() != null) {
                         params.clear();
-                        params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idEmpresa", empresaSeleccionada));
-                        params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idRubroInteres.id", idRubro));
-                        params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idAnho.id", sessionView.getIdAnho()));
+                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idMuestraInteres.idEmpresa", empresaSeleccionada).build());
+                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idMuestraInteres.idRubroInteres.id", idRubro).build());
+                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idMuestraInteres.idAnho.id", sessionView.getIdAnho()).build());
 
                         List<CapaDistribucionAcre> lstCapa = (List<CapaDistribucionAcre>) catalogoRepo.findListByParam(CapaDistribucionAcre.class, params);
                         CapaDistribucionAcre capa = lstCapa.get(0);

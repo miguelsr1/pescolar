@@ -240,8 +240,8 @@ public class PreciosReferenciaView implements Serializable {
 
     private void cargaInicialDeDatos() {
         params.clear();
-        params.add(new Filtro(TipoOperador.EQUALS, "idProcesoAdq.id", cargaGeneralView.getProcesoAdquisicion().getId()));
-        params.add(new Filtro(TipoOperador.EQUALS, "idRubroAdq.id", cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId()));
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idProcesoAdq.id", cargaGeneralView.getProcesoAdquisicion().getId()).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId()).build());
 
         detalleProcesoAdq = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
 

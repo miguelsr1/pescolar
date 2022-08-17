@@ -10,52 +10,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e942a60-5b5e-4829-9e95-c90c2ca304d0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ff6c97cd-b71d-408c-9fbb-29a878bb95a0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ff6c97cd-b71d-408c-9fbb-29a878bb95a0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/dhcomitesso.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/nb-configuration.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/nb-configuration.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/view/GuestPreferences.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/org/primefaces/paradise/view/GuestPreferences.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/JAXRSConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/ProcesoEleccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/ProcesoEleccion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/view/ResultadosDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/model/dhcsso/view/ResultadosDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/CandidatoRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/CandidatoRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/EstructuraOrganizativaRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/EstructuraOrganizativaRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/LoginRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/repository/LoginRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/resources/JavaEE8Resource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/AdminServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ApplicationConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ConfigurationBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/ConfigurationBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/security/UserServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/CandidatoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/CandidatoView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/DetalleVotacionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/DetalleVotacionView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/LoginView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ParametrosSesionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ParametrosSesionView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ResultadosView.java" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ResultadosView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/java/sv/gob/mined/dhcomitesso/view/ValidarProveedorMB.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/jboss-web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/jboss-web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/topbar.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/topbar.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/detalleVotacion.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/detalleVotacion.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/presentacionResultados.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/presentacionResultados.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/principal.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/app/principal.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/inicio.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/dhcomitesso/src/main/webapp/inicio.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/model/Participante.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/model/Participante.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/model/view/VwCatalogoEntidadEducativa.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/model/view/VwCatalogoEntidadEducativa.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/AbstractRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/AbstractRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/CatalogoRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/CatalogoRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/Filtro.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/db/Filtro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/VarSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/utils/VarSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/OfertaRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/OfertaRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/ParticipanteRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/ParticipanteRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/PrecioRefRubroEmpRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/repository/PrecioRefRubroEmpRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/DetalleOfertaView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/DetalleOfertaView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/MenuView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/MenuView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/OfertaBienesServiciosView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/OfertaBienesServiciosView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/RepositorioAplicacionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/RepositorioAplicacionView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/SessionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/java/sv/gob/mined/pescolar/web/SessionView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/resources/Bundle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/resources/Bundle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/WEB-INF/faces-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/WEB-INF/faces-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/ofertaListadoProveedores.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/ofertaListadoProveedores.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02DetalleOferta.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02DetalleOferta.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02Oferta.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02Oferta.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02OfertaEdit.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg02OfertaEdit.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pescolar-web/src/main/webapp/app/reg03DatosGenerales.xhtml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,6 +254,7 @@
       <workItem from="1651157409414" duration="140000" />
       <workItem from="1651157556029" duration="29000" />
       <workItem from="1651157587908" duration="40000" />
+      <workItem from="1656089069740" duration="9000" />
     </task>
     <servers />
   </component>

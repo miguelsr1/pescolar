@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -17,6 +18,7 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
+import sv.gob.mined.pescolar.utils.JsfUtil;
 
 /**
  *
@@ -26,6 +28,8 @@ import javax.validation.constraints.NotEmpty;
 @RequestScoped
 public class LoginView implements Serializable {
 
+    private final String UR_WELCOME_PROVE = "/pro/reg03DatosGenerales";
+    private final String UR_WELCOME_USU = "/app/principal";
     @NotEmpty
     private String usuario;
     @NotEmpty
@@ -82,41 +86,27 @@ public class LoginView implements Serializable {
         parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
         passwordHash.initialize(parameters);
 
-        System.out.println(passwordHash.generate("mined2013.".toCharArray()));
+        System.out.println(passwordHash.generate(claveAccesoPro.toCharArray()));
     }
 
     public String validarUsuario() {
-        // updateClave();
-        switch (processAuthentication(usuario, claveAcceso)) {
-            case SEND_CONTINUE:
-                //facesContext.responseComplete();
-                break;
-            case SEND_FAILURE:
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid user name and/or password.", null));
-                break;
-            case SUCCESS:
-                // It really passes here, but I'm not redirected to the start
-                // page. I keep in the login page.
-                return "/app/principal?faces-redirect=true";
-            default:
-                break;
-        }
-        return null;
+        return validarLogin(usuario, claveAcceso, UR_WELCOME_USU);
     }
-    
+
     public String validarProveedor() {
-        // updateClave();
-        switch (processAuthentication(duiPro, claveAccesoPro)) {
+        updateClave();
+        return validarLogin(duiPro, claveAccesoPro, UR_WELCOME_PROVE);
+    }
+
+    private String validarLogin(String usuario, String clave, String urlWelcome) {
+        switch (processAuthentication(usuario, clave)) {
             case SEND_CONTINUE:
-                //facesContext.responseComplete();
                 break;
             case SEND_FAILURE:
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid user name and/or password.", null));
+                JsfUtil.mensajeError("Usuario/Clave de acceso incorrectos!");
                 break;
             case SUCCESS:
-                // It really passes here, but I'm not redirected to the start
-                // page. I keep in the login page.
-                return "/pro/principal?faces-redirect=true";
+                return urlWelcome + "?faces-redirect=true";
             default:
                 break;
         }

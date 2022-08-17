@@ -46,7 +46,7 @@ public class MenuView implements Serializable {
     @PostConstruct
     public void init() {
         params = new ArrayList();
-        params.add(new Filtro(TipoOperador.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()));
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()).build());
         usuario = ((Usuario) catalogoRepo.findListByParam(Usuario.class, params).get(0));
     }
 
@@ -66,8 +66,8 @@ public class MenuView implements Serializable {
         model = new DefaultMenuModel();
         if (idOpcionMenu != null) {
             params.clear();
-            params.add(new Filtro(TipoOperador.EQUALS, "idOpcMenu", idOpcionMenu));
-            params.add(new Filtro(TipoOperador.EQUALS, "idUsuario", usuario.getIdUsuario()));
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOpcMenu", idOpcionMenu).build());
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idUsuario", usuario.getIdUsuario()).build());
 
             lstOpcionMenu = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), idOpcionMenu);
 
@@ -134,7 +134,7 @@ public class MenuView implements Serializable {
         for (OpcionMenuUsuarioDto object : lst) {
 
             params.clear();
-            params.add(new Filtro(TipoOperador.EQUALS, "opcIdOpcMenu.idOpcMenu", object.getIdOpcMenu()));
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "opcIdOpcMenu.idOpcMenu", object.getIdOpcMenu()).build());
 
             List lstTemp = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), object.getIdOpcMenu());
 

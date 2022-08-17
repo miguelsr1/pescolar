@@ -2,15 +2,21 @@ package sv.gob.mined.pescolar.web.proveedor.interno;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.Session;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.paradise.view.GuestPreferences;
 import sv.gob.mined.pescolar.model.Canton;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
@@ -21,8 +27,11 @@ import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
+import sv.gob.mined.pescolar.repository.MailRepo;
 import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.JsfUtil;
+import sv.gob.mined.pescolar.utils.db.Filtro;
+import sv.gob.mined.pescolar.utils.enums.TipoOperador;
 import sv.gob.mined.pescolar.web.SessionView;
 
 /**
@@ -32,6 +41,8 @@ import sv.gob.mined.pescolar.web.SessionView;
 @Named
 @ViewScoped
 public class DatosGeneralesView implements Serializable {
+
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("Bundle");
 
     private Boolean deshabiliar = false;
     private Boolean showUpdateEmpresa;
@@ -56,6 +67,8 @@ public class DatosGeneralesView implements Serializable {
     private Long idMunicipio;
     private Long idMunicipioLocal;
 
+    private List<Filtro> params = new ArrayList();
+
     private DetalleProcesoAdq detalleProcesoAdq;
     private CapaDistribucionAcre departamentoCalif;
     private CapaInstPorRubro capacidadInst = new CapaInstPorRubro();
@@ -65,14 +78,30 @@ public class DatosGeneralesView implements Serializable {
     @Inject
     private EmpresaRepo empresaRepo;
     @Inject
-    private SessionView sessionView;
+    private MailRepo mailRepo;
 
     @Inject
+    private SessionView sessionView;
+    @Inject
     private CargaGeneralView cargaGeneralView;
+    @Inject
+    private GuestPreferences guestPreferencesView;
+
+    @Resource(mappedName = "java:/PaqueteEscolar")
+    private Session mailSession;
 
     @PostConstruct
     public void init() {
-        cargarDetalleCalificacion();
+        if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
+            //El usuario logeado es un proveedor
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona", sessionView.getUsuario().getIdPersona()).build());
+            cargaGeneralView.setEmpresa(empresaRepo.findEntityByParam(params));
+            cargarDatosEmpresa(cargaGeneralView.getEmpresa());
+            showUpdateEmpresa = true;
+        } else {
+            //El usuario logeado es un usuario MINED
+            cargarDetalleCalificacion();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="getter-setter">
@@ -261,29 +290,33 @@ public class DatosGeneralesView implements Serializable {
     public void empresaSeleccionada(SelectEvent event) {
         if (event.getObject() != null) {
             if (event.getObject() instanceof Empresa) {
-                cargaGeneralView.setEmpresa((Empresa) event.getObject());
-
-                if (cargaGeneralView.getUrlStr().contains("DatosGenerales")) {
-                    idMunicipio = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getId();
-                    codigoDepartamento = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getCodigoDepartamento().getId();
-                }
-
-                if (cargaGeneralView.getEmpresa().getIdMunicipio() == null) {
-                    cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, 1l));
-
-                    if (cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio() == null) {
-                        cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, BigDecimal.ONE));
-                    }
-                }
-                sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
-                cargaGeneralView.cargarDetalleCalificacion();
-                cargarDetalleCalificacion();
-                showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l);
+                cargarDatosEmpresa((Empresa) event.getObject());
             }
         } else {
             deshabiliar = false;
             JsfUtil.mensajeAlerta("Debe de seleccionar una empresa");
         }
+    }
+
+    private void cargarDatosEmpresa(Empresa emp) {
+        cargaGeneralView.setEmpresa(emp);
+
+        if (cargaGeneralView.getUrlStr().contains("DatosGenerales")) {
+            idMunicipio = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getId();
+            codigoDepartamento = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getCodigoDepartamento().getId();
+        }
+
+        if (cargaGeneralView.getEmpresa().getIdMunicipio() == null) {
+            cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, 1l));
+
+            if (cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio() == null) {
+                cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, BigDecimal.ONE));
+            }
+        }
+        sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
+        cargaGeneralView.cargarDetalleCalificacion();
+        cargarDetalleCalificacion();
+        showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l);
     }
 
     private void cargarDetalleCalificacion() {
@@ -382,7 +415,7 @@ public class DatosGeneralesView implements Serializable {
                 cargaGeneralView.getEmpresa().setDeseaInscribirse(deseaInscribirseIva);
             }
 
-            empresaRepo.save(cargaGeneralView.getEmpresa());
+            empresaRepo.update(cargaGeneralView.getEmpresa());
 
             departamentoCalif.setCodigoDepartamento(catalogoRepo.findEntityByPk(Departamento.class, codigoDepartamentoCalificado));
 
@@ -398,6 +431,27 @@ public class DatosGeneralesView implements Serializable {
         if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
             JsfUtil.mensajeUpdate();
         }
+
+        //Si el usuario es proveedor, enviar notificación a cuenta de técnico de paquete escolar
+        if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
+            notificarTecnicoPaquete();
+        }
+    }
+
+    /**
+     * Luego de que el proveedor actualice los datos generales, se envia un
+     * correo a un tecnico MINED para darle seguimiento al registro de la oferta
+     */
+    private void notificarTecnicoPaquete() {
+        StringBuilder sb = new StringBuilder("");
+
+        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.header"), cargaGeneralView.getEmpresa().getRazonSocial()));
+        sb = sb.append("<br/>").append("<br/>");
+        sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"));
+        sb = sb.append("<br/>").append("<br/>");
+        sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.update.footer"));
+
+        mailRepo.enviarMail("miguelsr1@gmail.com", "rafael.arias@mined.gob.sv",RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sb.toString(), mailSession);
     }
 
     public void filtroProveedores() {
@@ -451,5 +505,9 @@ public class DatosGeneralesView implements Serializable {
         } else {
             cargaGeneralView.getEmpresa().getIdPersona().setUrlImagen(fotoProveedor);
         }
+    }
+
+    public void usuarioProveedor() {
+        guestPreferencesView.setMenuMode("layout-menu-overlay");
     }
 }
