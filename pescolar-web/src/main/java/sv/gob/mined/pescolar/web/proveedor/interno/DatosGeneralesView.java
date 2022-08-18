@@ -87,7 +87,7 @@ public class DatosGeneralesView implements Serializable {
     @Inject
     private GuestPreferences guestPreferencesView;
 
-    @Resource(mappedName = "java:/PaqueteEscolar")
+    @Resource(mappedName = "java:/MailBoleta01")
     private Session mailSession;
 
     @PostConstruct
@@ -447,11 +447,15 @@ public class DatosGeneralesView implements Serializable {
 
         sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.header"), cargaGeneralView.getEmpresa().getRazonSocial()));
         sb = sb.append("<br/>").append("<br/>");
-        sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"));
+        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"),JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()),sessionView.getAnhoProceso(),RESOURCE_BUNDLE.getString("url")));
         sb = sb.append("<br/>").append("<br/>");
         sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.update.footer"));
 
-        mailRepo.enviarMail("miguelsr1@gmail.com", "rafael.arias@mined.gob.sv",RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sb.toString(), mailSession);
+        mailRepo.enviarMail("miguelsr1@gmail.com", 
+                "boleta01@mined.gob.sv",
+                MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()), 
+                sb.toString(), 
+                mailSession);
     }
 
     public void filtroProveedores() {

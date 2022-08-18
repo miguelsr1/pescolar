@@ -6,6 +6,7 @@ package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -60,16 +61,13 @@ public class EntidadFinanciera implements Serializable {
     private String usuarioInsercion;
     @Basic(optional = false)
     @Column(name = "FECHA_INSERCION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaInsercion;
+    private LocalDate fechaInsercion;
     @Column(name = "USUARIO_MODIFICACION")
     private String usuarioModificacion;
     @Column(name = "FECHA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaModificacion;
+    private LocalDate fechaModificacion;
     @Column(name = "FECHA_ELIMINACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaEliminacion;
+    private LocalDate fechaEliminacion;
     @Basic(optional = false)
     @Column(name = "ESTADO_ELIMINACION")
     private BigInteger estadoEliminacion;
@@ -89,7 +87,7 @@ public class EntidadFinanciera implements Serializable {
         this.codEntFinanciera = codEntFinanciera;
     }
 
-    public EntidadFinanciera(String codEntFinanciera, String nombreEntFinan, String eMail, String telefonoEnt, String usuarioInsercion, Date fechaInsercion, BigInteger estadoEliminacion) {
+    public EntidadFinanciera(String codEntFinanciera, String nombreEntFinan, String eMail, String telefonoEnt, String usuarioInsercion, LocalDate fechaInsercion, BigInteger estadoEliminacion) {
         this.codEntFinanciera = codEntFinanciera;
         this.nombreEntFinan = nombreEntFinan;
         this.eMail = eMail;
@@ -139,11 +137,11 @@ public class EntidadFinanciera implements Serializable {
         this.usuarioInsercion = usuarioInsercion;
     }
 
-    public Date getFechaInsercion() {
+    public LocalDate getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(Date fechaInsercion) {
+    public void setFechaInsercion(LocalDate fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 
@@ -155,19 +153,19 @@ public class EntidadFinanciera implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public Date getFechaModificacion() {
+    public LocalDate getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
+    public void setFechaModificacion(LocalDate fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
-    public Date getFechaEliminacion() {
+    public LocalDate getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(Date fechaEliminacion) {
+    public void setFechaEliminacion(LocalDate fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 

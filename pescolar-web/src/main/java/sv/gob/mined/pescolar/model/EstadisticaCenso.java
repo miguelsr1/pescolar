@@ -1,7 +1,7 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Formula;
@@ -41,22 +39,19 @@ public class EstadisticaCenso implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "FECHA_INSERCION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaInsercion;
+    private LocalDate fechaInsercion;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
     @Column(name = "USUARIO_INSERCION")
     private String usuarioInsercion;
     @Column(name = "FECHA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaModificacion;
+    private LocalDate fechaModificacion;
     @Size(max = 25)
     @Column(name = "USUARIO_MODIFICACION")
     private String usuarioModificacion;
     @Column(name = "FECHA_ELIMINACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaEliminacion;
+    private LocalDate fechaEliminacion;
     @Column(name = "ESTADO_ELIMINACION")
     private Short estadoEliminacion;
     @JoinColumn(name = "ID_NIVEL_EDUCATIVO", referencedColumnName = "ID_NIVEL_EDUCATIVO")
@@ -76,7 +71,7 @@ public class EstadisticaCenso implements Serializable {
         this.id = idEstadistica;
     }
 
-    public EstadisticaCenso(Long idEstadistica, Date fechaInsercion, String usuarioInsercion) {
+    public EstadisticaCenso(Long idEstadistica, LocalDate fechaInsercion, String usuarioInsercion) {
         this.id = idEstadistica;
         this.fechaInsercion = fechaInsercion;
         this.usuarioInsercion = usuarioInsercion;
@@ -114,11 +109,11 @@ public class EstadisticaCenso implements Serializable {
         this.femenimo = femenimo;
     }
 
-    public Date getFechaInsercion() {
+    public LocalDate getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(Date fechaInsercion) {
+    public void setFechaInsercion(LocalDate fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 
@@ -130,11 +125,11 @@ public class EstadisticaCenso implements Serializable {
         this.usuarioInsercion = usuarioInsercion;
     }
 
-    public Date getFechaModificacion() {
+    public LocalDate getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
+    public void setFechaModificacion(LocalDate fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
@@ -146,11 +141,11 @@ public class EstadisticaCenso implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public Date getFechaEliminacion() {
+    public LocalDate getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(Date fechaEliminacion) {
+    public void setFechaEliminacion(LocalDate fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 
@@ -200,10 +195,7 @@ public class EstadisticaCenso implements Serializable {
             return false;
         }
         EstadisticaCenso other = (EstadisticaCenso) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

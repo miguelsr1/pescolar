@@ -1,7 +1,7 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -34,31 +32,25 @@ public class Usuario implements Serializable {
     @Column(name = "USUARIO_INSERCION")
     private String usuarioInsercion;
     @Column(name = "FECHA_INSERCION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaInsercion;
+    private LocalDate fechaInsercion;
     @Size(max = 25)
     @Column(name = "USUARIO_MODIFICACION")
     private String usuarioModificacion;
     @Column(name = "FECHA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaModificacion;
+    private LocalDate fechaModificacion;
     @Column(name = "FECHA_ELIMINACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaEliminacion;
+    private LocalDate fechaEliminacion;
     @Column(name = "ESTADO_ELIMINACION")
     private Long estadoEliminacion;
     @JoinColumn(name = "CODIGO_DEPARTAMENTO", referencedColumnName = "CODIGO_DEPARTAMENTO")
     @ManyToOne(fetch = FetchType.EAGER)
     private Departamento codigoDepartamento;
     @Column(name = "FECHA_VENCIMIENTO_CLAVE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaVencimientoClave;
+    private LocalDate fechaVencimientoClave;
     @Column(name = "FECHA_INICIO_LOGIN")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaInicioLogin;
+    private LocalDate fechaInicioLogin;
     @Column(name = "FECHA_FIN_LOGIN")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaFinLogin;
+    private LocalDate fechaFinLogin;
     @Column(name = "RANGO_FECHA_LOGIN")
     private Short rangoFechaLogin;
     @Column(name = "ACTIVO")
@@ -96,11 +88,11 @@ public class Usuario implements Serializable {
         this.usuarioInsercion = usuarioInsercion;
     }
 
-    public Date getFechaInsercion() {
+    public LocalDate getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(Date fechaInsercion) {
+    public void setFechaInsercion(LocalDate fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 
@@ -112,19 +104,19 @@ public class Usuario implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public Date getFechaModificacion() {
+    public LocalDate getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
+    public void setFechaModificacion(LocalDate fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
-    public Date getFechaEliminacion() {
+    public LocalDate getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(Date fechaEliminacion) {
+    public void setFechaEliminacion(LocalDate fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 
@@ -144,27 +136,27 @@ public class Usuario implements Serializable {
         this.codigoDepartamento = codigoDepartamento;
     }
 
-    public Date getFechaVencimientoClave() {
+    public LocalDate getFechaVencimientoClave() {
         return fechaVencimientoClave;
     }
 
-    public void setFechaVencimientoClave(Date fechaVencimientoClave) {
+    public void setFechaVencimientoClave(LocalDate fechaVencimientoClave) {
         this.fechaVencimientoClave = fechaVencimientoClave;
     }
 
-    public Date getFechaInicioLogin() {
+    public LocalDate getFechaInicioLogin() {
         return fechaInicioLogin;
     }
 
-    public void setFechaInicioLogin(Date fechaInicioLogin) {
+    public void setFechaInicioLogin(LocalDate fechaInicioLogin) {
         this.fechaInicioLogin = fechaInicioLogin;
     }
 
-    public Date getFechaFinLogin() {
+    public LocalDate getFechaFinLogin() {
         return fechaFinLogin;
     }
 
-    public void setFechaFinLogin(Date fechaFinLogin) {
+    public void setFechaFinLogin(LocalDate fechaFinLogin) {
         this.fechaFinLogin = fechaFinLogin;
     }
 

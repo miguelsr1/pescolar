@@ -6,8 +6,7 @@ package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -49,16 +46,13 @@ public class PreciosRefRubro implements Serializable {
     @Column(name = "USUARIO_INSERCION")
     private String usuarioInsercion;
     @Column(name = "FECHA_INSERCION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaInsercion;
+    private LocalDate fechaInsercion;
     @Column(name = "USUARIO_MODIFICACION")
     private String usuarioModificacion;
     @Column(name = "FECHA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaModificacion;
+    private LocalDate fechaModificacion;
     @Column(name = "FECHA_ELIMINACION")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaEliminacion;
+    private LocalDate fechaEliminacion;
     @Column(name = "ESTADO_ELIMINACION")
     private Long estadoEliminacion;
     @Column(name = "PRECIO_MAX_FEM")
@@ -101,11 +95,11 @@ public class PreciosRefRubro implements Serializable {
         this.usuarioInsercion = usuarioInsercion;
     }
 
-    public Date getFechaInsercion() {
+    public LocalDate getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(Date fechaInsercion) {
+    public void setFechaInsercion(LocalDate fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 
@@ -117,19 +111,19 @@ public class PreciosRefRubro implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public Date getFechaModificacion() {
+    public LocalDate getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
+    public void setFechaModificacion(LocalDate fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
-    public Date getFechaEliminacion() {
+    public LocalDate getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(Date fechaEliminacion) {
+    public void setFechaEliminacion(LocalDate fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 
