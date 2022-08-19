@@ -319,4 +319,11 @@ public class SessionView implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getSessionMap().remove(key);
     }
+    
+    public void setAnhoProvedor(Long idAnho){
+        this.idAnho = idAnho;
+        anho = catalogoRepo.findEntityByPk(Anho.class, idAnho);
+        proceso = anho.getProcesoAdquisicionList().stream().filter(pro -> pro.getPadreIdProcesoAdq() == null).findFirst().get();
+        anhoProceso = anho.getAnho() + " :: " + proceso.getDescripcionProcesoAdq();
+    }
 }

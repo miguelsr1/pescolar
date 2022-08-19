@@ -1,0 +1,89 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <ui:define name="content">
+        <h:form id="frmPrincipal" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar" styleClass="divSticky"> 
+                        <p:menuitem value="Nuevo" disabled="true"/>
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
+                        <p:menuitem value="Imprimir" disabled="true" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{parametrosMB.limpiarVariables}" url="#{request.contextPath}/app/inicial.mined"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout}"/>
+                        </f:facet>  
+                    </p:menubar>
+                </div>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid" jsf:id="dvDatosGenerales">
+                        <div class="p-col-12 p-md-8">
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Técnico:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu value="#{tecnicoProveedorView.selectTecnico}">
+                                        <f:selectItem itemLabel="Seleccione un técnico"/>
+                                        <f:selectItems value="#{tecnicoProveedorView.lstTecnicos}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="DUI o Nombre.:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:autoComplete id="pojo" value="#{tecnicoProveedorView.empresa}"
+                                                    completeMethod="#{tecnicoProveedorView.completeEmpresa}"
+                                                    var="emp" itemLabel="#{emp.razonSocial}" itemValue="#{emp}"
+                                                    converter="#{empresaConverter}" forceSelection="true" scrollHeight="250"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:commandButton value="Agregar" action="#{tecnicoProveedorView.guardar()}" icon="pi pi-plus" style="width: 100px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h5>
+                                <i class="pi pi-list verde" style="font-size: 16px;"></i>
+                                <p:spacer width="10"/>
+                                Listo de Proveedor a atender
+                            </h5>
+                        </div>
+
+                        <div class="p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <p:dataTable value="#{tecnicoProveedorView.lstTecnicoProveedor}" var="tec" rowIndexVar="rowId" rowKey="#{tec.idTecnico}">
+                                    <p:column headerText="#">
+                                        <p:outputLabel value="#{rowId + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="DUI">
+                                        <p:outputLabel value="#{tec.idEmpresa.idPersona.numeroDui}" />
+                                    </p:column>
+                                    <p:column headerText="Proveedor">
+                                        <p:outputLabel value="#{tec.idEmpresa.razonSocial}" />
+                                    </p:column>
+                                    <p:column headerText="Operaciones">
+                                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" oncomplete="PF('delPersonaDlg').show()" >
+                                            <f:setPropertyActionListener value="#{tec}" target="#{tecnicoProveedorView.tecnicoProveedor}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

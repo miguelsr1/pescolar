@@ -3,7 +3,6 @@ package sv.gob.mined.pescolar.repository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +26,7 @@ import sv.gob.mined.pescolar.model.dto.MunicipioDto;
 import sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.utils.Constantes;
+import sv.gob.mined.pescolar.utils.DescriptorDto;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 
 /**
@@ -262,8 +262,8 @@ public class CatalogoRepo {
 
     /**
      * Devuelve un listado de entidades financieras (BANCOS o CAJAS DE CREDITO O
-     * PRESTAMO) dependiendo del parametro que reciba 0 - Modulo de créditos 1
-     * - Bancos asociados a cuentas de los proveedores 2 - Las 2 anteriores
+     * PRESTAMO) dependiendo del parametro que reciba 0 - Modulo de créditos 1 -
+     * Bancos asociados a cuentas de los proveedores 2 - Las 2 anteriores
      *
      * @param tipoEntidad
      * @return
@@ -298,5 +298,24 @@ public class CatalogoRepo {
         Query q = em.createNamedQuery("Proveedor.MunicipiosDeIntegeres", MunicipioDto.class);
         q.setParameter(1, idCapaDistribucion);
         return q.getResultList();
+    }
+
+    public List<DescriptorDto> getLstTecnicosPaquete() {
+        List<DescriptorDto> lst = new ArrayList();
+
+        lst.add(new DescriptorDto("Carlos Enrique Villegas", "carlos.enrique.villegas@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Yasmin Floricelda Pineda", "yasmin.floricelda.pineda@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Misael Humberto Escobar", "misael.humberto.chavez@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Evelyn Lissette Zetino", "evelin.lissette.zetino@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Rudy Josue Acevedo", "rudy.josue.acevedo@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Angela Margarita Rosales", "angela.margarita.rosales@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Jorge Adalberto Henriquez Acosta", "jorge.adalberto.henriquez@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Jaime Roberto Gomez", "jaime.roberto.gomez@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Rene Oswaldo Hernandez Brizuela", "rene.oswaldo.hernandez@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Jose Ruben Renderos Giron", "jose.ruben.renderos@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Juan Alberto Rivera", "juan.alberto.rivera@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("Ester Elizabeth Ayala", "ester.elizabeth.ayala@admin.mined.edu.sv"));
+
+        return lst;
     }
 }

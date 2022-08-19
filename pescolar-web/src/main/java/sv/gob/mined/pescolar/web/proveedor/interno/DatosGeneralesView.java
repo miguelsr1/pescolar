@@ -87,7 +87,7 @@ public class DatosGeneralesView implements Serializable {
     @Inject
     private GuestPreferences guestPreferencesView;
 
-    @Resource(mappedName = "java:/MailBoleta01")
+    @Resource(mappedName = "java:/PaqueteEscolar")
     private Session mailSession;
 
     @PostConstruct
@@ -447,14 +447,14 @@ public class DatosGeneralesView implements Serializable {
 
         sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.header"), cargaGeneralView.getEmpresa().getRazonSocial()));
         sb = sb.append("<br/>").append("<br/>");
-        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"),JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()),sessionView.getAnhoProceso(),RESOURCE_BUNDLE.getString("url")));
+        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"), JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()), sessionView.getProceso().getIdAnho().getAnho(), RESOURCE_BUNDLE.getString("url")));
         sb = sb.append("<br/>").append("<br/>");
         sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.update.footer"));
 
-        mailRepo.enviarMail("miguelsr1@gmail.com", 
-                "boleta01@mined.gob.sv",
-                MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()), 
-                sb.toString(), 
+        mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
+                "rafael.arias@mined.gob.sv",
+                MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
+                sb.toString(),
                 mailSession);
     }
 
@@ -512,6 +512,7 @@ public class DatosGeneralesView implements Serializable {
     }
 
     public void usuarioProveedor() {
+        sessionView.setIdAnho(11l);
         guestPreferencesView.setMenuMode("layout-menu-overlay");
     }
 }
