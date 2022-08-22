@@ -7,7 +7,6 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,9 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Where;
 
 /**
  *
@@ -35,7 +32,7 @@ import org.hibernate.annotations.Filter;
     @NamedQuery(name = "EntidadFinanciera.findAll", query = "SELECT e FROM EntidadFinanciera e")})
 @SqlResultSetMapping(name = "defaultEntidadCreditoHabilitado",
         entities = @EntityResult(entityClass = EntidadFinanciera.class))
-@Filter(name = "eliminado", condition = "estadoEliminacion=0") 
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class EntidadFinanciera implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codEntFinanciera", fetch = FetchType.LAZY)

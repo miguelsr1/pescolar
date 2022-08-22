@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.web.SessionView;
-import sv.gob.mined.pescolar.web.proveedor.interno.ProveedorView;
 
 /**
  *
@@ -24,8 +23,6 @@ public class RecuperarProceso implements Serializable {
     //private ProcesoAdquisicion procesoAdquisicion = new ProcesoAdquisicion();
     private String departamento;
 
-    @Inject
-    private ProveedorView proveedorView;
     @Inject
     private SessionView sessionView;
 

@@ -4,11 +4,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Where;
 
 @Table(name = "EMPRESA")
 @Entity
-@Filter(name = "eliminado", condition = "estadoEliminacion=0") 
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class Empresa implements Serializable {
 
     @OneToMany(mappedBy = "idEmpresa", fetch = FetchType.LAZY)

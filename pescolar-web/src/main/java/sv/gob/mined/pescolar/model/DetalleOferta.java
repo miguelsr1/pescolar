@@ -5,11 +5,11 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Where;
 
 @Table(name = "DETALLE_OFERTAS")
 @Entity
-@Filter(name = "deleteDetalleOferta", condition = ":estadoEliminacion = 0")
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class DetalleOferta implements Serializable {
     @Id
     @Column(name = "ID_DETALLE_OFE", nullable = false)

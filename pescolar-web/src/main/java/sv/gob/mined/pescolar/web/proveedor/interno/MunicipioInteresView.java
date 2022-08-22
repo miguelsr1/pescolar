@@ -155,7 +155,7 @@ public class MunicipioInteresView implements Serializable {
                     disMunicipio.setFechaInsercion(LocalDate.now());
                     disMunicipio.setIdCapaDistribucion(departamentoCalif);
                     disMunicipio.setIdMunicipio(new Municipio(mun.getIdMunicipio()));
-                    disMunicipio.setUsuarioInsercion(sessionView.getVariableSessionUsuario());
+                    disMunicipio.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
                     lstMunicipioIntereses.add(disMunicipio);
                 }
             }
@@ -182,7 +182,7 @@ public class MunicipioInteresView implements Serializable {
             HashMap param = new HashMap();
             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
             param.put("pEscudo", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
-            param.put("usuarioInsercion", sessionView.getVariableSessionUsuario());
+            param.put("usuarioInsercion", sessionView.getUsuario().getIdPersona().getUsuario());
             param.put("pLugar", lugar);
             param.put("pRubro", JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             param.put("pIdRubro", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId().intValue());

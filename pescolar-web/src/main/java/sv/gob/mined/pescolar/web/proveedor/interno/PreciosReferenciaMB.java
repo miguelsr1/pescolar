@@ -146,7 +146,7 @@ public class PreciosReferenciaMB implements Serializable {
             if (preciosValidos) {
                 lstPreciosReferencia.forEach((precio) -> {
                     precio.setFechaModificacion(LocalDate.now());
-                    precio.setUsuarioModificacion(sessionView.getVariableSessionUsuario());
+                    precio.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
                     preciosRepo.save(precio);
                 });
                 lstPreciosReferencia = participanteRepo.findPreciosRefRubroEmpRubro(getEmpresa(), 

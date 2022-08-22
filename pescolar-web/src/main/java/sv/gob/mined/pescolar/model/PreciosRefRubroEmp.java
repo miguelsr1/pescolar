@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Where;
 
 /**
  *
@@ -25,7 +25,7 @@ import org.hibernate.annotations.Filter;
 @Table(name = "PRECIOS_REF_RUBRO_EMP")
 @NamedQueries({
     @NamedQuery(name = "PreciosRefRubroEmp.findAll", query = "SELECT p FROM PreciosRefRubroEmp p")})
-@Filter(name = "eliminado", condition = "estadoEliminacion=0") 
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class PreciosRefRubroEmp implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -182,7 +182,7 @@ public class PreciosReferenciaView implements Serializable {
             HashMap param = new HashMap();
             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
             param.put("pEscudo", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
-            param.put("usuarioInsercion", sessionView.getVariableSessionUsuario());
+            param.put("usuarioInsercion", sessionView.getUsuario().getIdPersona().getUsuario());
             param.put("pLugar", lugar);
             param.put("pRubro", JsfUtil.getNombreRubroById(cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId()));
             param.put("pIdRubro", cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId().intValue());

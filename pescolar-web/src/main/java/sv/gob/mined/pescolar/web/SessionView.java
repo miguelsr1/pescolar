@@ -286,11 +286,6 @@ public class SessionView implements Serializable {
         return context.getExternalContext().getSessionMap().get(key);
     }
 
-    public String getVariableSessionUsuario() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        return context.getExternalContext().getSessionMap().get("Usuario").toString();
-    }
-
     public int getVariableSessionED() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (context.getExternalContext().getSessionMap().containsKey("estadoEdicion")) {

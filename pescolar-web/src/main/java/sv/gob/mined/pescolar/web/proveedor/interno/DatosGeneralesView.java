@@ -417,25 +417,24 @@ public class DatosGeneralesView implements Serializable {
 
             empresaRepo.update(cargaGeneralView.getEmpresa());
 
+            //Si el usuario es proveedor, enviar notificación a cuenta de técnico de paquete escolar
+            if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
+                notificarTecnicoPaquete();
+            }
+        } else {
             departamentoCalif.setCodigoDepartamento(catalogoRepo.findEntityByPk(Departamento.class, codigoDepartamentoCalificado));
 
             if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
                 JsfUtil.mensajeUpdate();
             }
-
         }
         //revisar este funcionamiento
 
-        departamentoCalif.setCodigoDepartamento(catalogoRepo.findEntityByPk(Departamento.class, codigoDepartamentoCalificado));
+        /*departamentoCalif.setCodigoDepartamento(catalogoRepo.findEntityByPk(Departamento.class, codigoDepartamentoCalificado));
 
         if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
             JsfUtil.mensajeUpdate();
-        }
-
-        //Si el usuario es proveedor, enviar notificación a cuenta de técnico de paquete escolar
-        if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
-            notificarTecnicoPaquete();
-        }
+        }*/
     }
 
     /**
@@ -445,14 +444,30 @@ public class DatosGeneralesView implements Serializable {
     private void notificarTecnicoPaquete() {
         StringBuilder sb = new StringBuilder("");
 
+        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.nofitecnico.message"), cargaGeneralView.getEmpresa().getRazonSocial()));
+        sb = sb.append("<br/>").append("<br/>");
+        sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.footer"));
+
+        mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
+                "infopaquetes@mined.gob.sv",
+                empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId()).getMailTecnico(),
+                MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.nofitecnico.titulo"), sessionView.getAnhoProceso()),
+                sb.toString(),
+                mailSession);
+    }
+
+    private void invitacionProveedorPaquete() {
+        StringBuilder sb = new StringBuilder("");
+
         sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.header"), cargaGeneralView.getEmpresa().getRazonSocial()));
         sb = sb.append("<br/>").append("<br/>");
         sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"), JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()), sessionView.getProceso().getIdAnho().getAnho(), RESOURCE_BUNDLE.getString("url")));
         sb = sb.append("<br/>").append("<br/>");
-        sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.update.footer"));
+        sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.footer"));
 
         mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
                 "rafael.arias@mined.gob.sv",
+                "",
                 MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
                 sb.toString(),
                 mailSession);

@@ -14,6 +14,7 @@ import java.math.BigDecimal;
  */
 public class Constantes {
 
+    public static final String GO_TO_PRINCIPAL_PAGE = "/app/principal?faces-redirect=true";
     public static final String DLG_BUSCAR_PROVEEDOR = "/app/proveedor/interno/filtroProveedor";
     public static final String MSJ_ERROR = "msjError";
     public static final String MSJ_WARNING = "msjAlerta";

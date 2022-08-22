@@ -40,6 +40,6 @@ public class DescriptorDto {
 
     @Override
     public String toString() {
-        return "Descriptor{" + "atributo=" + atributo + ", valor=" + valor + '}';
+        return atributo;
     }
 }

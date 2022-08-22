@@ -18,10 +18,11 @@ import lombok.Setter;
 @Entity
 @NamedNativeQuery(
         name = "opcionMenuUsuarioDto",
-        query = "select opc.id_opc_menu idOpcMenu, opc.nombre_opcion nombreOpcion, opc.nombre_panel nombrePanel, opc.icono, opc.orden, uom.id_usuario idUsuario, opc.opc_id_opc_menu opcIdOpcMenu, opc.app idModulo \n"
-        + "from opcion_menu opc\n"
-        + "    inner join usuario_opc_menu uom on uom.id_opc_menu = opc.id_opc_menu\n"
-        + "where uom.id_usuario = ?1 and\n"
+        query = "select opc.id_opc_menu idOpcMenu, opc.nombre_opcion nombreOpcion, opc.nombre_panel nombrePanel, opc.icono, opc.orden, usu.id_usuario idUsuario, opc.opc_id_opc_menu opcIdOpcMenu, opc.app idModulo \n"
+        + "from usuario usu\n"
+        + "    inner join tipo_usu_opc_menu tuom on usu.id_tipo_usuario = tuom.id_tipo_usuario\n"
+        + "    inner join opcion_menu opc on tuom.id_opc_menu = opc.id_opc_menu\n"
+        + "where usu.id_usuario = ?1 and\n"
         + "    opc.opc_id_opc_menu = ?2\n"
         + "order by opc.orden",
         resultClass = OpcionMenuUsuarioDto.class)

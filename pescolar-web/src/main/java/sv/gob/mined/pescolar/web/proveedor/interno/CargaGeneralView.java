@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.spi.AlterableContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,6 +20,7 @@ import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.RecuperarProcesoUtil;
 import sv.gob.mined.pescolar.web.SessionView;
@@ -46,6 +50,8 @@ public class CargaGeneralView extends RecuperarProcesoUtil implements Serializab
     private CatalogoRepo proveedorEJB;
     @Inject
     private SessionView sessionView;
+    @Inject
+    private BeanManager beanManager;
 
     @PostConstruct
     public void ini() {
@@ -150,5 +156,21 @@ public class CargaGeneralView extends RecuperarProcesoUtil implements Serializab
                 rubroProveedor = JsfUtil.getNombreRubroById(detRubroMuestraInteres.getIdRubroInteres().getId());
             }
         }
+    }
+
+    /**
+     * Destruye el bean en sesión y redirecciona a la página de inicio
+     * @return 
+     */
+    public String gotoPrincipalPage() {
+        AlterableContext ctxSession = (AlterableContext) beanManager.getContext(SessionScoped.class);
+        for (Bean<?> bean : beanManager.getBeans(CargaGeneralView.class)) {
+            Object instance = ctxSession.get(bean);
+            if (instance != null) {
+                ctxSession.destroy(bean);
+            }
+        }
+
+        return Constantes.GO_TO_PRINCIPAL_PAGE;
     }
 }

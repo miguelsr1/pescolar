@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,10 +25,10 @@ import sv.gob.mined.pescolar.utils.JsfUtil;
 @ViewScoped
 public class TecnicoProveedorView implements Serializable {
 
+    private String selectTecnico;
     private Empresa empresa;
-    private TecnicoProveedor tecnicoProveedor;
-    private SelectItem selectTecnico;
-    private List<SelectItem> lstTecnicos = new ArrayList();
+    private TecnicoProveedor tecnicoProveedor = new TecnicoProveedor();
+    private List<DescriptorDto> lstTecnicos = new ArrayList();
     private List<TecnicoProveedor> lstTecnicoProveedor = new ArrayList();
 
     @Inject
@@ -43,18 +42,15 @@ public class TecnicoProveedorView implements Serializable {
 
     @PostConstruct
     public void init() {
-        catalogoRepo.getLstTecnicosPaquete().stream().forEach(tec -> {
-            lstTecnicos.add(new SelectItem(tec, tec.getAtributo()));
-        });
-
+        lstTecnicos = catalogoRepo.getLstTecnicosPaquete();
         lstTecnicoProveedor = tpRepo.findAll();
     }
 
-    public SelectItem getSelectTecnico() {
+    public String getSelectTecnico() {
         return selectTecnico;
     }
 
-    public void setSelectTecnico(SelectItem selectTecnico) {
+    public void setSelectTecnico(String selectTecnico) {
         this.selectTecnico = selectTecnico;
     }
 
@@ -74,7 +70,7 @@ public class TecnicoProveedorView implements Serializable {
         this.tecnicoProveedor = tecnicoProveedor;
     }
 
-    public List<SelectItem> getLstTecnicos() {
+    public List<DescriptorDto> getLstTecnicos() {
         return lstTecnicos;
     }
 
@@ -88,15 +84,20 @@ public class TecnicoProveedorView implements Serializable {
             tecnicoProveedor.setFechaInsercion(LocalDate.now());
             tecnicoProveedor.setIdAnho(sessionView.getProceso().getIdAnho());
             tecnicoProveedor.setIdEmpresa(empresa);
-            tecnicoProveedor.setMailTecnico(((DescriptorDto) selectTecnico.getValue()).getValor());
-            tecnicoProveedor.setUsuarioInsercion(sessionView.getVariableSessionUsuario());
+            tecnicoProveedor.setMailTecnico(selectTecnico);
+            tecnicoProveedor.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
             tpRepo.save(tecnicoProveedor);
+            lstTecnicoProveedor.add(tecnicoProveedor);
+            tecnicoProveedor = new TecnicoProveedor();
             JsfUtil.mensajeInsert();
         }
     }
 
     public void eliminar() {
+        tecnicoProveedor.setEstadoEliminacion(Boolean.TRUE);
+        tecnicoProveedor.setFechaEliminacion(LocalDate.now());
         tpRepo.update(tecnicoProveedor);
+        lstTecnicoProveedor = tpRepo.findAll();
         JsfUtil.mensajeInformacion("El registro ha sido eliminado");
     }
 

@@ -1,6 +1,7 @@
 package sv.gob.mined.pescolar.web;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,9 +31,19 @@ import sv.gob.mined.pescolar.utils.enums.TipoOperador;
 @SessionScoped
 public class MenuView implements Serializable {
 
+    private Boolean showModuloContrataciones = false;
+    private Boolean showModuloProveedores = false;
+    private Boolean showModuloConsultas = false;
+    private Boolean showModuloModificativas = false;
+    private Boolean showModuloCreditos = false;
+    private Boolean showModuloRecepcion = false;
+    private Boolean showModuloPagos = false;
+    private Boolean showModuloLiquidacion = false;
+    private Boolean showModuloMantenimiento = false;
+
     private Long idOpcionMenu;
     private Usuario usuario;
-
+    private List<BigDecimal> lstModulos = new ArrayList();
     private MenuModel model;
     private List<OpcionMenuUsuarioDto> lstOpcionMenu = new ArrayList();
     private List<Filtro> params = new ArrayList();
@@ -45,9 +56,43 @@ public class MenuView implements Serializable {
 
     @PostConstruct
     public void init() {
-        params = new ArrayList();
-        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()).build());
-        usuario = ((Usuario) catalogoRepo.findListByParam(Usuario.class, params).get(0));
+        loadingUsuarioAndModulos();
+    }
+
+    public Boolean getShowModuloContrataciones() {
+        return showModuloContrataciones;
+    }
+
+    public Boolean getShowModuloProveedores() {
+        return showModuloProveedores;
+    }
+
+    public Boolean getShowModuloConsultas() {
+        return showModuloConsultas;
+    }
+
+    public Boolean getShowModuloModificativas() {
+        return showModuloModificativas;
+    }
+
+    public Boolean getShowModuloCreditos() {
+        return showModuloCreditos;
+    }
+
+    public Boolean getShowModuloRecepcion() {
+        return showModuloRecepcion;
+    }
+
+    public Boolean getShowModuloPagos() {
+        return showModuloPagos;
+    }
+
+    public Boolean getShowModuloLiquidacion() {
+        return showModuloLiquidacion;
+    }
+
+    public Boolean getShowModuloMantenimiento() {
+        return showModuloMantenimiento;
     }
 
     public MenuModel getModel() {
@@ -156,6 +201,46 @@ public class MenuView implements Serializable {
 
                 getHijo(subMenu, object.getIdOpcMenu());
                 opPadre.getElements().add(subMenu);
+            }
+        }
+    }
+
+    private void loadingUsuarioAndModulos() {
+        params = new ArrayList();
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()).build());
+        usuario = ((Usuario) catalogoRepo.findListByParam(Usuario.class, params).get(0));
+
+        lstModulos = catalogoRepo.findAllModuloByUsuario(usuario.getIdUsuario());
+
+        for (BigDecimal idModulo : lstModulos) {
+            switch (idModulo.intValue()) {
+                case 1:
+                    showModuloContrataciones = true;
+                    break;
+                case 2:
+                    showModuloConsultas = true;
+                    break;
+                case 3:
+                    showModuloProveedores = true;
+                    break;
+                case 4:
+                    showModuloModificativas = true;
+                    break;
+                case 5:
+                    showModuloCreditos = true;
+                    break;
+                case 6:
+                    showModuloRecepcion = true;
+                    break;
+                case 7:
+                    showModuloPagos = true;
+                    break;
+                case 8:
+                    showModuloMantenimiento = true;
+                    break;
+                case 10:
+                    showModuloLiquidacion = true;
+                    break;
             }
         }
     }

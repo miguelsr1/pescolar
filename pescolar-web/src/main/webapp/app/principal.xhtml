@@ -18,7 +18,7 @@
                         <div class="p-col-12">
                             <div class="ui-fluid">
                                 <div class="p-grid dashboard" style="max-width: 900px; margin: 0 auto;">
-                                    <div class="p-col-12 p-md-4">
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloContrataciones ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
                                             <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
                                                 <f:setPropertyActionListener value="31" target="#{menuView.idOpcionMenu}" />
@@ -30,7 +30,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4">
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloConsultas ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box"  style="text-align: center !important;" >
                                             <p:commandLink action="detalleVotacion?faces-redirect=true" >
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
@@ -41,7 +41,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4">
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloProveedores ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
                                             <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
                                                 <f:setPropertyActionListener value="55" target="#{menuView.idOpcionMenu}" />
@@ -53,7 +53,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4" >
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloModificativas ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
                                             <p:commandLink action="registroCandidato?faces-redirect=true" >
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
@@ -64,7 +64,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4">
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloCreditos ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box"  style="text-align: center !important;" >
                                             <p:commandLink action="detalleVotacion?faces-redirect=true" >
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
@@ -75,7 +75,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4">
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloRecepcion ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
                                             <p:commandLink action="presentacionResultados?faces-redirect=true" >
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
@@ -86,7 +86,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4" >
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloPagos ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
                                             <p:commandLink action="registroCandidato?faces-redirect=true" >
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
@@ -97,7 +97,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4">
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloLiquidacion ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box"  style="text-align: center !important;" >
                                             <p:commandLink action="detalleVotacion?faces-redirect=true" >
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
@@ -108,7 +108,7 @@
                                             </p:commandLink>
                                         </div>
                                     </div>
-                                    <div class="p-col-12 p-md-4">
+                                    <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloMantenimiento ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
                                             <p:commandLink action="presentacionResultados?faces-redirect=true" >
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
@@ -126,7 +126,7 @@
                 </div>
             </div>
         </h:form>
-        
+
         <h:outputStylesheet library="css" name="menu-principal.css"/>
     </ui:define>
 </ui:composition>

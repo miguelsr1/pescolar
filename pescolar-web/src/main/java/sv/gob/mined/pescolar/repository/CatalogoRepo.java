@@ -1,5 +1,6 @@
 package sv.gob.mined.pescolar.repository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -48,6 +49,15 @@ public class CatalogoRepo {
         q.setParameter(1, idUsuario);
         q.setParameter(2, idOpcMenu);
 
+        return q.getResultList();
+    }
+
+    public List<BigDecimal> findAllModuloByUsuario(Long idUsuario) {
+        Query q = em.createNativeQuery("select distinct opc.app idModulo \n"
+                + "from usuario usu inner join tipo_usu_opc_menu tuom on usu.id_tipo_usuario = tuom.id_tipo_usuario inner join opcion_menu opc on tuom.id_opc_menu = opc.id_opc_menu\n"
+                + "where usu.id_usuario = ?1\n"
+                + "order by opc.app");
+        q.setParameter(1, idUsuario);
         return q.getResultList();
     }
 
@@ -315,6 +325,7 @@ public class CatalogoRepo {
         lst.add(new DescriptorDto("Jose Ruben Renderos Giron", "jose.ruben.renderos@admin.mined.edu.sv"));
         lst.add(new DescriptorDto("Juan Alberto Rivera", "juan.alberto.rivera@admin.mined.edu.sv"));
         lst.add(new DescriptorDto("Ester Elizabeth Ayala", "ester.elizabeth.ayala@admin.mined.edu.sv"));
+        lst.add(new DescriptorDto("MIGUEL ", "miguel.sanchez@mined.gob.sv"));
 
         return lst;
     }

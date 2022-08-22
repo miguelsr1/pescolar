@@ -244,7 +244,7 @@ public class Reportes {
             HashMap param = new HashMap();
             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
             param.put("pEscudo", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
-            param.put("usuarioInsercion", sessionView.getVariableSessionUsuario());
+            param.put("usuarioInsercion", sessionView.getUsuario().getIdPersona().getUsuario());
             param.put("pLugar", lugar + ", " + sdf.format(new Date()));
             param.put("pRubro", JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             param.put("pIdRubro", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId().intValue());

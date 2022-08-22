@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
 import sv.gob.mined.pescolar.model.Empresa;
+import sv.gob.mined.pescolar.model.TecnicoProveedor;
 
 /**
  *
@@ -45,12 +46,19 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
             return false;
         }
     }
-    
-     public List<Empresa> findEmpresaByValorBusqueda(String valor) {
+
+    public List<Empresa> findEmpresaByValorBusqueda(String valor) {
         //Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.numeroNit like :nit OR FUNC('REGEXP_REPLACE', e.razonSocial,' ','') like :razonSocial", Empresa.class);
         Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.numeroNit like :nit OR e.razonSocial like :razonSocial", Empresa.class);
         q.setParameter("nit", "%" + valor + "%");
         q.setParameter("razonSocial", "%" + valor.replace(" ", "") + "%");
         return q.getResultList();
+    }
+
+    public TecnicoProveedor getTecnicoProveedor(Long idEmpresa) {
+        Query q = em.createQuery("SELECT t FROM TecnicoProveedor t WHERE t.idEmpresa.id = :pIdEmpresa", TecnicoProveedor.class);
+        q.setParameter("pIdEmpresa", idEmpresa);
+
+        return (TecnicoProveedor) q.getResultList().get(0);
     }
 }

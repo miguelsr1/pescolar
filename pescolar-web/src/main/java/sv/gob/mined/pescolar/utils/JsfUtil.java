@@ -257,4 +257,9 @@ public class JsfUtil {
         }
     }
 
+    public static void removeVariableSession(String key) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().remove(key);
+    }
+
 }

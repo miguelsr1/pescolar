@@ -23,7 +23,7 @@ import javax.mail.internet.MimeMessage;
 public class MailRepo {
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Boolean enviarMail(String destinatario, String remitente, String titulo, String mensaje, Session mailSession) {
+    public Boolean enviarMail(String destinatario, String remitente, String cc, String titulo, String mensaje, Session mailSession) {
         try {
 
             MimeMessage menssage = new MimeMessage(mailSession);
@@ -31,7 +31,8 @@ public class MailRepo {
 
             menssage.setFrom(from);
             menssage.setRecipients(Message.RecipientType.TO, destinatario);
-            menssage.setRecipients(Message.RecipientType.BCC, "miguel.sanchez@admin.mined.edu.sv");
+            menssage.setRecipients(Message.RecipientType.CC, cc);
+            menssage.setRecipients(Message.RecipientType.BCC, "miguel.sanchez@mined.gob.sv");
 
             menssage.setSubject(titulo, "UTF-8");
             menssage.setText(mensaje, "UTF-8", "html");

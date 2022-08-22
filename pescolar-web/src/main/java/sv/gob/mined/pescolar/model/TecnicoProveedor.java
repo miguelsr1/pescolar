@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.Where;
 
 /**
  *
@@ -19,6 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TECNICO_PROVEEDOR")
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class TecnicoProveedor implements Serializable {
 
     @Id

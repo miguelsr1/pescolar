@@ -14,7 +14,6 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
-import sv.gob.mined.pescolar.repository.ParticipanteRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
 /**
