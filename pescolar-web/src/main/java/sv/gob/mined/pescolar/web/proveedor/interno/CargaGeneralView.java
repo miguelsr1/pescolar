@@ -22,7 +22,6 @@ import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.JsfUtil;
-import sv.gob.mined.pescolar.utils.RecuperarProcesoUtil;
 import sv.gob.mined.pescolar.web.SessionView;
 
 /**
@@ -31,7 +30,7 @@ import sv.gob.mined.pescolar.web.SessionView;
  */
 @Named
 @SessionScoped
-public class CargaGeneralView extends RecuperarProcesoUtil implements Serializable {
+public class CargaGeneralView /*extends RecuperarProcesoUtil*/ implements Serializable {
 
     private Boolean deshabiliar = false;
     private Boolean showFoto;
@@ -124,7 +123,7 @@ public class CargaGeneralView extends RecuperarProcesoUtil implements Serializab
     }
 
     public ProcesoAdquisicion getProcesoAdquisicion() {
-        return super.getRecuperarProceso().getProcesoAdquisicion();
+        return sessionView.getProceso();
     }
 
     public void dlgFotografia() {
@@ -144,7 +143,7 @@ public class CargaGeneralView extends RecuperarProcesoUtil implements Serializab
     }
 
     public void cargarDetalleCalificacion() {
-        this.proceso = super.getRecuperarProceso().getProcesoAdquisicion();
+        this.proceso = sessionView.getProceso();
         idAnho = proceso.getIdAnho().getId();
         if (proceso.getId() == null) {
             JsfUtil.mensajeAlerta("Debe seleccionar un proceso de contratación");

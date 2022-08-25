@@ -167,7 +167,7 @@ public class SessionView implements Serializable {
     }
 
     public void setProceso(ProcesoAdquisicion proceso) {
-        this.proceso = proceso;
+        this.idProcesoAdq = proceso.getId();
     }
 
     public List<ProcesoAdquisicion> getLstProcesoAdquisicion() {
@@ -189,7 +189,7 @@ public class SessionView implements Serializable {
     }
 
     public List<RubrosAmostrarInteres> getLstRubros() {
-        return catalogoRepo.findAllRubrosByIdProceso(getIdProcesoAdq());
+        return catalogoRepo.findAllRubrosByIdProceso(getProceso().getId());
     }
 
     public void guardarParametros() throws IOException {
@@ -314,8 +314,8 @@ public class SessionView implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getSessionMap().remove(key);
     }
-    
-    public void setAnhoProvedor(Long idAnho){
+
+    public void setAnhoProvedor(Long idAnho) {
         this.idAnho = idAnho;
         anho = catalogoRepo.findEntityByPk(Anho.class, idAnho);
         proceso = anho.getProcesoAdquisicionList().stream().filter(pro -> pro.getPadreIdProcesoAdq() == null).findFirst().get();

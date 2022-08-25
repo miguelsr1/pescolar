@@ -17,6 +17,7 @@ import javax.mail.Session;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.paradise.view.GuestPreferences;
+import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Canton;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
@@ -94,6 +95,7 @@ public class DatosGeneralesView implements Serializable {
     public void init() {
         if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
             //El usuario logeado es un proveedor
+            sessionView.setAnhoProvedor(11l);
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona", sessionView.getUsuario().getIdPersona()).build());
             cargaGeneralView.setEmpresa(empresaRepo.findEntityByParam(params));
             cargarDatosEmpresa(cargaGeneralView.getEmpresa());
@@ -322,7 +324,7 @@ public class DatosGeneralesView implements Serializable {
     private void cargarDetalleCalificacion() {
         capacidadInst = cargaGeneralView.getCapacidadInstPorRubro();
         if (capacidadInst == null) {
-            JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + cargaGeneralView.getProcesoAdquisicion().getIdAnho());
+            //JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + cargaGeneralView.getProcesoAdquisicion().getIdAnho());
         } else {
             detalleProcesoAdq = JsfUtil.findDetalleByRubroAndAnho(cargaGeneralView.getProcesoAdquisicion(),
                     capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId(),
@@ -527,7 +529,10 @@ public class DatosGeneralesView implements Serializable {
     }
 
     public void usuarioProveedor() {
-        sessionView.setIdAnho(11l);
+        //año 2023
+        Anho anho = catalogoRepo.findEntityByPk(Anho.class, 11l);
+        sessionView.setIdAnho(anho.getId());
+        sessionView.setProceso(anho.getProcesoAdquisicionList().get(0));
         guestPreferencesView.setMenuMode("layout-menu-overlay");
     }
 }

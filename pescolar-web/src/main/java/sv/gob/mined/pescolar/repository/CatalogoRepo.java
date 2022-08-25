@@ -325,7 +325,7 @@ public class CatalogoRepo {
         lst.add(new DescriptorDto("Jose Ruben Renderos Giron", "jose.ruben.renderos@admin.mined.edu.sv"));
         lst.add(new DescriptorDto("Juan Alberto Rivera", "juan.alberto.rivera@admin.mined.edu.sv"));
         lst.add(new DescriptorDto("Ester Elizabeth Ayala", "ester.elizabeth.ayala@admin.mined.edu.sv"));
-        lst.add(new DescriptorDto("MIGUEL ", "miguel.sanchez@mined.gob.sv"));
+        lst.add(new DescriptorDto("RAFA ", "rafael.arias@mined.gob.sv"));
 
         return lst;
     }
