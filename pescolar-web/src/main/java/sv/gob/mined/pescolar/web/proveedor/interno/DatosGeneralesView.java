@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -303,11 +306,6 @@ public class DatosGeneralesView implements Serializable {
     private void cargarDatosEmpresa(Empresa emp) {
         cargaGeneralView.setEmpresa(emp);
 
-        if (cargaGeneralView.getUrlStr().contains("DatosGenerales")) {
-            idMunicipio = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getId();
-            codigoDepartamento = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getCodigoDepartamento().getId();
-        }
-
         if (cargaGeneralView.getEmpresa().getIdMunicipio() == null) {
             cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, 1l));
 
@@ -338,8 +336,9 @@ public class DatosGeneralesView implements Serializable {
             if (departamentoCalif == null || departamentoCalif.getCodigoDepartamento() == null) {
                 JsfUtil.mensajeAlerta("Este proveedor no posee departamento de calificación " + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho());
             } else {
-                codigoDepartamento = cargaGeneralView.getEmpresa().getIdMunicipio().getCodigoDepartamento().getId();
-                idMunicipio = cargaGeneralView.getEmpresa().getIdMunicipio().getId();
+                
+                codigoDepartamento = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getCodigoDepartamento().getId();
+                idMunicipio = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getId();
                 codigoDepartamentoCalificado = departamentoCalif.getCodigoDepartamento().getId();
 
                 idMunicipioLocal = cargaGeneralView.getEmpresa().getIdMunicipio().getId();
@@ -391,8 +390,8 @@ public class DatosGeneralesView implements Serializable {
                     idCantonLocal = idCanton;
                     cargaGeneralView.getEmpresa().setDireccionCompleta(cargaGeneralView.getEmpresa().getIdPersona().getDomicilio());
 
-                    cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(new Municipio(idMunicipio));
-                    cargaGeneralView.getEmpresa().setIdMunicipio(new Municipio(idMunicipioLocal));
+                    cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
+                    cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipioLocal));
                     if (rubroUniforme) {
                         cargaGeneralView.getEmpresa().setCodigoCanton(idCantonLocal);
                         cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
@@ -401,7 +400,8 @@ public class DatosGeneralesView implements Serializable {
                         cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(null);
                     }
                 } else {
-                    cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(new Municipio(idMunicipio));
+                    cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
+                    cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
                     cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
                 }
 
@@ -418,25 +418,34 @@ public class DatosGeneralesView implements Serializable {
             }
 
             empresaRepo.update(cargaGeneralView.getEmpresa());
+            empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst);
 
             //Si el usuario es proveedor, enviar notificación a cuenta de técnico de paquete escolar
             if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
                 notificarTecnicoPaquete();
             }
+            JsfUtil.mensajeUpdate();
+            forceRefreshPage();
         } else {
             departamentoCalif.setCodigoDepartamento(catalogoRepo.findEntityByPk(Departamento.class, codigoDepartamentoCalificado));
 
             if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
-                JsfUtil.mensajeUpdate();
             }
-        }
-        //revisar este funcionamiento
 
-        /*departamentoCalif.setCodigoDepartamento(catalogoRepo.findEntityByPk(Departamento.class, codigoDepartamentoCalificado));
+            if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
+            }
 
-        if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
             JsfUtil.mensajeUpdate();
-        }*/
+        }
+    }
+    
+    public void forceRefreshPage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String refreshpage = context.getViewRoot().getViewId();
+        ViewHandler handler = context.getApplication().getViewHandler();
+        UIViewRoot root = handler.createView(context, refreshpage);
+        root.setViewId(refreshpage);
+        context.setViewRoot(root);
     }
 
     /**

@@ -14,6 +14,8 @@ import java.math.BigDecimal;
  */
 public class Constantes {
 
+    public static final Long PERSONA_NATURAL = 1l;
+    public static final Long PERSONA_JURIDICA = 2l;
     public static final String GO_TO_PRINCIPAL_PAGE = "/app/principal?faces-redirect=true";
     public static final String DLG_BUSCAR_PROVEEDOR = "/app/proveedor/interno/filtroProveedor";
     public static final String MSJ_ERROR = "msjError";

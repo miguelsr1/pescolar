@@ -15,21 +15,21 @@
         <p:tab title="Información General">
             <div class="p-col-12 p-md-8">
                 <div class="p-field p-grid">
-                    <p:outputLabel value="N.I.T.:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <p:outputLabel value="D.U.I./N.I.T.:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
                     <div class="p-col-12 p-md-9">
-                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.numeroNit}" />
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.numeroNit}" />
                     </div>
                 </div>
                 <div class="p-field p-grid">
                     <p:outputLabel value="Municipio y Departamento:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
                     <div class="p-col-12 p-md-9">
-                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.idMunicipio.nombreMunicipio} , #{cargaGeneralView.empresa.idMunicipio.codigoDepartamento.nombreDepartamento}" />
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.municipioDepartamento}" />
                     </div>
                 </div>
                 <div class="p-field p-grid">
                     <p:outputLabel value="Domicilio: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
                     <div class="p-col-12 p-md-9">
-                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.direccionCompleta}" />
+                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.domicilio}" />
                     </div>
                 </div>
                 <div class="p-field p-grid">

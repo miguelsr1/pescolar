@@ -13,7 +13,8 @@
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar id="menuBar" styleClass="divSticky"> 
                         <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{menuController.usuarioSoloLectura || datosGeneralesView.deshabiliar}" action="#{datosGeneralesView.guardarDatosGenerales}" />
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{menuController.usuarioSoloLectura || datosGeneralesView.deshabiliar}" 
+                                    action="#{datosGeneralesView.guardarDatosGenerales}" update="dvDatosGenerales pnlModif" ajax="false"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
 
                         <f:facet  name="options">  
@@ -190,7 +191,7 @@
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Municipio:" />
-                                                <p:selectOneMenu id="cboMunicipioLocal" value="#{datosGeneralesView.idMunicipioLocal}">
+                                                <p:selectOneMenu id="cboMunicipioLocal" value="#{datosGeneralesView.idMunicipioLocal}" disabled="#{datosGeneralesView.mismaDireccion}">
                                                     <f:selectItem noSelectionOption="true" itemLabel="Seleccione un municipio" />
                                                     <f:selectItems value="#{datosGeneralesView.lstMunicipiosLocal}" var="munP" itemValue="#{munP.id}" itemLabel="#{munP.codigoMunicipio} - #{munP.nombreMunicipio}"/>
                                                     <p:ajax update="cboCantonLocal"/>
@@ -205,7 +206,7 @@
                                             </div>
                                             <div class="p-field p-col-12 p-md-12">
                                                 <p:outputLabel value="Dirección:" />
-                                                <p:inputTextarea value="#{cargaGeneralView.empresa.direccionCompleta}" cols="100"/>
+                                                <p:inputTextarea value="#{cargaGeneralView.empresa.direccionCompleta}" cols="100" disabled="#{datosGeneralesView.mismaDireccion}"/>
                                             </div>
                                         </div>
                                     </p:panel>

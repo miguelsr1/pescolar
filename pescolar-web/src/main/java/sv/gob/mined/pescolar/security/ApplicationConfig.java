@@ -12,7 +12,6 @@ import javax.security.enterprise.authentication.mechanism.http.LoginToContinue;
 import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
-
 /**
  *
  * @author hantsy
@@ -31,7 +30,8 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 @CustomFormAuthenticationMechanismDefinition(
         loginToContinue = @LoginToContinue(
                 loginPage = "/inicio.xhtml",
-                errorPage = "/access.xhtml" // DRAFT API - must be set to empty for now
+                errorPage = "/access.xhtml", // DRAFT API - must be set to empty for now
+                useForwardToLogin = true
         )
 )
 @ApplicationScoped

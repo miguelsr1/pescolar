@@ -19,7 +19,7 @@ public class Empresa implements Serializable {
     @Column(name = "ID_EMPRESA", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "ID_PERSONA", nullable = false)
     private Persona idPersona;
 
@@ -35,7 +35,7 @@ public class Empresa implements Serializable {
     @JoinColumn(name = "ID_ESTADO_REGISTRO")
     private EstadoRegistro idEstadoRegistro;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ID_MUNICIPIO")
     private Municipio idMunicipio;
 
@@ -343,6 +343,11 @@ public class Empresa implements Serializable {
 
     public void setDetRubroMuestraIntereList(List<DetRubroMuestraIntere> detRubroMuestraIntereList) {
         this.detRubroMuestraIntereList = detRubroMuestraIntereList;
+    }
+
+    @Override
+    public String toString() {
+        return "Empresa{" + "id=" + id + '}';
     }
 
 }

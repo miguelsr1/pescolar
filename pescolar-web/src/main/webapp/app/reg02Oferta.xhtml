@@ -49,7 +49,7 @@
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
                         <f:facet  name="options">  
-                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout}"/>
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="/logoutServlet/logout"/>
                         </f:facet>
                     </p:menubar>
 

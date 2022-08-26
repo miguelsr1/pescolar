@@ -38,6 +38,9 @@ public class CargaGeneralView /*extends RecuperarProcesoUtil*/ implements Serial
     private String urlStr;
     private String fileName;
     private String rubroProveedor;
+    private String numeroNit;
+    private String municipioDepartamento;
+    private String domicilio;
 
     private Long idAnho;
 
@@ -126,6 +129,18 @@ public class CargaGeneralView /*extends RecuperarProcesoUtil*/ implements Serial
         return sessionView.getProceso();
     }
 
+    public String getNumeroNit() {
+        return numeroNit;
+    }
+
+    public String getMunicipioDepartamento() {
+        return municipioDepartamento;
+    }
+
+    public String getDomicilio() {
+        return domicilio;
+    }
+
     public void dlgFotografia() {
         if (getEmpresa() == null || getEmpresa().getId() == null) {
             JsfUtil.mensajeAlerta("Debe de seleccionar un empresa");
@@ -148,6 +163,15 @@ public class CargaGeneralView /*extends RecuperarProcesoUtil*/ implements Serial
         if (proceso.getId() == null) {
             JsfUtil.mensajeAlerta("Debe seleccionar un proceso de contratación");
         } else {
+            if (getEmpresa().getIdPersoneria().getId().compareTo(Constantes.PERSONA_NATURAL) == 0) {
+                numeroNit = getEmpresa().getIdPersona().getNumeroDui();
+                municipioDepartamento = getEmpresa().getIdPersona().getIdMunicipio().getNombreMunicipio() + ", " + getEmpresa().getIdPersona().getIdMunicipio().getCodigoDepartamento().getNombreDepartamento();
+                domicilio = getEmpresa().getIdPersona().getDomicilio();
+            } else {
+                numeroNit = getEmpresa().getNumeroNit();
+                municipioDepartamento = getEmpresa().getIdMunicipio().getNombreMunicipio() + ", " + getEmpresa().getIdMunicipio().getCodigoDepartamento().getNombreDepartamento();
+                domicilio = getEmpresa().getDireccionCompleta();
+            }
             detRubroMuestraInteres = proveedorEJB.findDetRubroByAnhoAndRubro(idAnho, getEmpresa().getId());
             if (detRubroMuestraInteres == null) {
                 JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + proceso.getIdAnho().getAnho());
@@ -159,7 +183,8 @@ public class CargaGeneralView /*extends RecuperarProcesoUtil*/ implements Serial
 
     /**
      * Destruye el bean en sesión y redirecciona a la página de inicio
-     * @return 
+     *
+     * @return
      */
     public String gotoPrincipalPage() {
         AlterableContext ctxSession = (AlterableContext) beanManager.getContext(SessionScoped.class);

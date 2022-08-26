@@ -244,16 +244,11 @@ public class SessionView implements Serializable {
         }
     }
 
-    public void logout() {
-        try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().getSessionMap().clear();
-            ExternalContext externalContext = context.getExternalContext();
-            externalContext.redirect(((ServletContext) externalContext.getContext()).getContextPath() + "/inicio.xhtml");
-            System.gc();
-        } catch (IOException ex) {
-            Logger.getLogger(SessionView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public String logout() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().clear();
+        context.getExternalContext().invalidateSession();
+        return "/inicio.xhtml?faces-redirect=true";
     }
 
     public String getNombreMunicipio() {

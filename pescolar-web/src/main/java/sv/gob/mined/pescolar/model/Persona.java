@@ -408,9 +408,9 @@ public class Persona implements Serializable {
     }
 
     private String getApellidos() {
-        if (acasada == null) {
-            if (segundoApellido == null) {
-                if (primerApellido == null) {
+        if (acasada == null || acasada.isEmpty()) {
+            if (segundoApellido == null || segundoApellido.isEmpty()) {
+                if (primerApellido == null || primerApellido.isEmpty()) {
                     return "";
                 } else {
                     return primerApellido;
@@ -461,5 +461,10 @@ public class Persona implements Serializable {
 
     public void setEmpresaList(List<Empresa> empresaList) {
         this.empresaList = empresaList;
+    }
+
+    @Override
+    public String toString() {
+        return "Persona{" + "id=" + id + '}';
     }
 }
