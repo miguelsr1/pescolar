@@ -11,6 +11,8 @@ import org.hibernate.annotations.Where;
 public class DisMunicipioIntere implements Serializable {
     @Id
     @Column(name = "ID_MUNICIPIO_INTERES", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DIS_MUNICIPIO" )
+    @SequenceGenerator(name = "SEQ_DIS_MUNICIPIO", sequenceName = "SEQ_DIS_MUNICIPIO", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)

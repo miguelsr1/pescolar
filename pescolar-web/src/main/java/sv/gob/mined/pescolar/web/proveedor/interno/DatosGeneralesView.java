@@ -336,7 +336,7 @@ public class DatosGeneralesView implements Serializable {
             if (departamentoCalif == null || departamentoCalif.getCodigoDepartamento() == null) {
                 JsfUtil.mensajeAlerta("Este proveedor no posee departamento de calificación " + cargaGeneralView.getProcesoAdquisicion().getIdAnho().getAnho());
             } else {
-                
+
                 codigoDepartamento = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getCodigoDepartamento().getId();
                 idMunicipio = cargaGeneralView.getEmpresa().getIdPersona().getIdMunicipio().getId();
                 codigoDepartamentoCalificado = departamentoCalif.getCodigoDepartamento().getId();
@@ -438,7 +438,7 @@ public class DatosGeneralesView implements Serializable {
             JsfUtil.mensajeUpdate();
         }
     }
-    
+
     public void forceRefreshPage() {
         FacesContext context = FacesContext.getCurrentInstance();
         String refreshpage = context.getViewRoot().getViewId();
@@ -459,11 +459,10 @@ public class DatosGeneralesView implements Serializable {
         sb = sb.append("<br/>").append("<br/>");
         sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.footer"));
 
-        mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
-                "infopaquetes@mined.gob.sv",
-                empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId()).getMailTecnico(),
-                MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.nofitecnico.titulo"), sessionView.getAnhoProceso()),
+        mailRepo.enviarMail(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.nofitecnico.titulo"), sessionView.getAnhoProceso()),
                 sb.toString(),
+                cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
+                empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId()).getMailTecnico(),
                 mailSession);
     }
 
@@ -478,7 +477,6 @@ public class DatosGeneralesView implements Serializable {
 
         mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
                 "rafael.arias@mined.gob.sv",
-                "",
                 MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
                 sb.toString(),
                 mailSession);

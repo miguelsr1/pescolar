@@ -34,6 +34,7 @@ import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.NivelEducativo;
 import sv.gob.mined.pescolar.model.PreciosRefRubro;
 import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
+import sv.gob.mined.pescolar.model.dto.DetalleItemDto;
 import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.ParticipanteRepo;
@@ -70,6 +71,7 @@ public class PreciosReferenciaView implements Serializable {
 
     private List<CatalogoProducto> lstItem = new ArrayList();
     private List<PreciosRefRubroEmp> lstPreciosReferencia = new ArrayList();
+    private List<DetalleItemDto> lstPreciosMaximos = new ArrayList();
 
     @Inject
     private SessionView sessionView;
@@ -93,6 +95,10 @@ public class PreciosReferenciaView implements Serializable {
         if (cargaGeneralView.getEmpresa() != null && cargaGeneralView.getEmpresa().getId() != null) {
             cargaInicialDeDatos();
         }
+    }
+
+    public List<DetalleItemDto> getLstPreciosMaximos() {
+        return lstPreciosMaximos;
     }
 
     public CargaGeneralView getCargaGeneralView() {
@@ -147,8 +153,12 @@ public class PreciosReferenciaView implements Serializable {
         }
 
         if (preciosValidos) {
-            lstPreciosReferencia.forEach((precio) -> {
-                precioRepo.save(precio);
+            lstPreciosReferencia.forEach((PreciosRefRubroEmp precio) -> {
+                if (precio.getIdPrecioRefEmp() == null) {
+                    precioRepo.save(precio);
+                } else {
+                    precioRepo.update(precio);
+                }
             });
             lstPreciosReferencia = participanteRepo.findPreciosRefRubroEmpRubro(cargaGeneralView.getEmpresa(),
                     cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(),
@@ -166,7 +176,6 @@ public class PreciosReferenciaView implements Serializable {
             }
 
             JsfUtil.mensajeInformacion(msj);
-
         } else {
             JsfUtil.mensajeInformacion("Los precios de referencia no han sido guardados debido a que existen datos incompletos o erroneos.");
         }
@@ -252,6 +261,7 @@ public class PreciosReferenciaView implements Serializable {
         preciosReferenciaMB.cargarDetalleCalificacion();
 
         cargarPrecioRef();
+        cargarPreciosMaximos();
     }
 
     public void empSelecPrecioRef(SelectEvent event) {
@@ -358,7 +368,11 @@ public class PreciosReferenciaView implements Serializable {
                 String numItem = event.getNewValue().toString();
                 editarNumeroDeItem(event.getRowIndex(), numItem);
             } else if (event.getColumn().getColumnKey().contains("precio")) {
-                agregarPrecio();
+                if (precioRef.getNoItem() != null && !precioRef.getNoItem().isEmpty()) {
+                    agregarPrecio(precioRef.getNoItem());
+                } else {
+                    JsfUtil.mensajeAlerta("Primero debe de ingresar el número de Item");
+                }
             }
         }
     }
@@ -746,7 +760,7 @@ public class PreciosReferenciaView implements Serializable {
         }
     }
 
-    public void agregarPrecio() {
+    public void agregarPrecio(String noItem) {
         if (precioRef != null) {
             BigDecimal preRef = BigDecimal.ZERO;
 
@@ -761,11 +775,13 @@ public class PreciosReferenciaView implements Serializable {
                         preRef = getPrecioRefUtiles();
                         break;
                     case 3:
-                        if (precioRef.getIdNivelEducativo().getId().compareTo(6l) == 0) {
-                            preRef = new BigDecimal("16.00");
+                        DetalleItemDto preTemp = lstPreciosMaximos.stream().parallel().filter(pre -> pre.getNoItem().equals(noItem)).findAny().orElse(new DetalleItemDto());
+                        preRef = preTemp.getPrecioUnitario();
+                        /*if (precioRef.getIdNivelEducativo().getId().compareTo(6l) == 0) {
+                            preRef = new BigDecimal("15.76");
                         } else {
-                            preRef = new BigDecimal("14.60");
-                        }
+                            preRef = new BigDecimal("17.27");
+                        }*/
                         break;
                 }
             }
@@ -938,6 +954,211 @@ public class PreciosReferenciaView implements Serializable {
         }
         if (!msjError.isEmpty()) {
             JsfUtil.mensajeAlerta(msjError);
+        }
+    }
+
+    public void cargarPreciosMaximos() {
+        List<PreciosRefRubro> lstPrecios = precioRepo.getLstPreciosRefRubroByRubro(detalleProcesoAdq);
+        DetalleItemDto det = new DetalleItemDto();
+
+        if (detalleProcesoAdq.getIdRubroAdq().getIdRubroUniforme().intValue() == 1) {
+
+            det.setNoItem("1");
+            det.setConsolidadoEspTec("Blusas, PARVULARIA");
+            det.setPrecioUnitario(new BigDecimal("4.25"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("2");
+            det.setConsolidadoEspTec("Falda, PARVULARIA");
+            det.setPrecioUnitario(new BigDecimal("4.25"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("3");
+            det.setConsolidadoEspTec("Camisas, PARVULARIA");
+            det.setPrecioUnitario(new BigDecimal("4.25"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("4");
+            det.setConsolidadoEspTec("Pantalon Corto, PARVULARIA");
+            det.setPrecioUnitario(new BigDecimal("4.00"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("5");
+            det.setConsolidadoEspTec("Pantalon, PARVULARIA");
+            det.setPrecioUnitario(new BigDecimal("6.00"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("6");
+            det.setConsolidadoEspTec("Blusas, BASICA(I, II Y III)");
+            det.setPrecioUnitario(new BigDecimal("4.50"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("7");
+            det.setConsolidadoEspTec("Falda, BASICA(I, II Y III)");
+            det.setPrecioUnitario(new BigDecimal("4.50"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("8");
+            det.setConsolidadoEspTec("Camisas, BASICA(I, II Y III)");
+            det.setPrecioUnitario(new BigDecimal("4.50"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("9");
+            det.setConsolidadoEspTec("Pantalon, BASICA(I, II Y III)");
+            det.setPrecioUnitario(new BigDecimal("6.00"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("10");
+            det.setConsolidadoEspTec("Blusas, BACHILLERATO");
+            det.setPrecioUnitario(new BigDecimal("4.50"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("11");
+            det.setConsolidadoEspTec("Falda, BACHILLERATO");
+            det.setPrecioUnitario(new BigDecimal("4.50"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("12");
+            det.setConsolidadoEspTec("Camisas, BACHILLERATO");
+            det.setPrecioUnitario(new BigDecimal("4.50"));
+            lstPreciosMaximos.add(det);
+
+            det = new DetalleItemDto();
+            det.setNoItem("13");
+            det.setConsolidadoEspTec("Pantalon, BACHILLERATO");
+            det.setPrecioUnitario(new BigDecimal("6.00"));
+            lstPreciosMaximos.add(det);
+        }
+
+        for (PreciosRefRubro precio : lstPrecios) {
+            det = new DetalleItemDto();
+            switch (detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
+                case 2:
+                    switch (precio.getIdNivelEducativo().getId().intValue()) {
+                        case 1:
+                            det.setNoItem("1");
+                            det.setConsolidadoEspTec("Utiles Escolares, PARVULARIA");
+                            break;
+                        case 22:
+                            det.setNoItem("1");
+                            det.setConsolidadoEspTec("Utiles Escolares, INICIAL Y PARVULARIA");
+                            break;
+                        case 3:
+                            det.setNoItem("2");
+                            det.setConsolidadoEspTec("Utiles Escolares, PRIMER CICLO");
+                            break;
+                        case 4:
+                            det.setNoItem("3");
+                            det.setConsolidadoEspTec("Utiles Escolares, SEGUNDO CICLO");
+                            break;
+                        case 5:
+                            det.setNoItem("4");
+                            det.setConsolidadoEspTec("Utiles Escolares, TERCER CICLO");
+                            break;
+                        case 23:
+                            det.setNoItem("4.4");
+                            det.setConsolidadoEspTec("Utiles Escolares, MOD.FLEXIBLE - III CICLO");
+                            break;
+                        case 6:
+                            det.setNoItem("5");
+                            det.setConsolidadoEspTec("Utiles Escolares, BACHILLERATO");
+                            break;
+                        case 24:
+                            det.setNoItem("5.1");
+                            det.setConsolidadoEspTec("Utiles Escolares, MOD.FLEXIBLE - BACHILLERATO");
+                            break;
+                    }
+                    det.setPrecioUnitario(precio.getPrecioMaxFem());
+                    lstPreciosMaximos.add(det);
+                    break;
+                case 3:
+                    switch (precio.getIdNivelEducativo().getId().intValue()) {
+                        case 1:
+                            det.setNoItem("1");
+                            det.setConsolidadoEspTec("Zapato de niña, PARVULARIA");
+                            det.setPrecioUnitario(precio.getPrecioMaxFem());
+                            lstPreciosMaximos.add(det);
+
+                            det = new DetalleItemDto();
+                            det.setNoItem("2");
+                            det.setConsolidadoEspTec("Zapato de niño, PARVULARIA");
+                            det.setPrecioUnitario(precio.getPrecioMaxMas());
+                            lstPreciosMaximos.add(det);
+                            break;
+                        case 22:
+                            det.setNoItem("1");
+                            det.setConsolidadoEspTec("Zapato de niña, INICIAL y PARVULARIA");
+                            det.setPrecioUnitario(precio.getPrecioMaxFem());
+                            lstPreciosMaximos.add(det);
+
+                            det = new DetalleItemDto();
+                            det.setNoItem("2");
+                            det.setConsolidadoEspTec("Zapato de niño, INICIAL y PARVULARIA");
+                            det.setPrecioUnitario(precio.getPrecioMaxMas());
+                            lstPreciosMaximos.add(det);
+                            break;
+                        case 3:
+                            det.setNoItem("3");
+                            det.setConsolidadoEspTec("Zapato de niña, PRIMER CICLO");
+                            det.setPrecioUnitario(precio.getPrecioMaxFem());
+                            lstPreciosMaximos.add(det);
+
+                            det = new DetalleItemDto();
+                            det.setNoItem("4");
+                            det.setConsolidadoEspTec("Zapato de niño, PRIMER CICLO");
+                            det.setPrecioUnitario(precio.getPrecioMaxMas());
+                            lstPreciosMaximos.add(det);
+                            break;
+                        case 4:
+                            det.setNoItem("5");
+                            det.setConsolidadoEspTec("Zapato de niña, SEGUNDO CICLO");
+                            det.setPrecioUnitario(precio.getPrecioMaxFem());
+                            lstPreciosMaximos.add(det);
+
+                            det = new DetalleItemDto();
+                            det.setNoItem("6");
+                            det.setConsolidadoEspTec("Zapato de niño, SEGUNDO CICLO");
+                            det.setPrecioUnitario(precio.getPrecioMaxMas());
+                            lstPreciosMaximos.add(det);
+                            break;
+                        case 5:
+                            det.setNoItem("7");
+                            det.setConsolidadoEspTec("Zapato de niña, TERCER CICLO");
+                            det.setPrecioUnitario(precio.getPrecioMaxFem());
+                            lstPreciosMaximos.add(det);
+
+                            det = new DetalleItemDto();
+                            det.setNoItem("8");
+                            det.setConsolidadoEspTec("Zapato de niño, TERCER CICLO");
+                            det.setPrecioUnitario(precio.getPrecioMaxMas());
+                            lstPreciosMaximos.add(det);
+                            break;
+                        case 6:
+                            det.setNoItem("9");
+                            det.setConsolidadoEspTec("Zapato de niña, BACHILLERATO");
+                            det.setPrecioUnitario(precio.getPrecioMaxFem());
+                            lstPreciosMaximos.add(det);
+
+                            det = new DetalleItemDto();
+                            det.setNoItem("10");
+                            det.setConsolidadoEspTec("Zapato de niño, BACHILLERATO");
+                            det.setPrecioUnitario(precio.getPrecioMaxMas());
+                            lstPreciosMaximos.add(det);
+                            break;
+                    }
+                    break;
+            }
         }
     }
 }

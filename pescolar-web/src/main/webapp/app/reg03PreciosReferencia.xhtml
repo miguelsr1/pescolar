@@ -13,7 +13,7 @@
                     <p:menubar id="menuBar" styleClass="divSticky"> 
                         <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
                         <p:menuitem value="Modificar" update="frmPrincipal" icon="pi pi-pencil" ajax="true"  onclick="onClick('btnModificar');"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{menuController.usuarioSoloLectura || preciosReferenciaView.deshabiliar}" action="#{preciosReferenciaView.guardarPreciosRef}" update="tblDetallePrecio"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{preciosReferenciaView.guardarPreciosRef}" update="tblDetallePrecio"/>
                         <p:menuitem value="Imprimir" ajax="false" icon="pi pi-print" action="#{preciosReferenciaView.impOfertaGlobal}" />
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true"/>
 
@@ -112,7 +112,7 @@
                                 <p:outputLabel value="Precios Máximos" style="font-size: 1.5em;"/>
                                 <p:dataTable id="tblDetallePrecioMax" widgetVar="tblDetallePrecioMax" value="#{preciosReferenciaMB.lstPreciosMaximos}" var="precioMax" 
                                              rowIndexVar="idRow" emptyMessage="No hay registros">
-                                    <p:column headerText="Item" width="30" style="text-align: center;" rendered="false">
+                                    <p:column headerText="Item" width="30" style="text-align: center;">
                                         <p:outputLabel value="#{precioMax.noItem}"/>
                                     </p:column>
 

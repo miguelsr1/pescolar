@@ -48,10 +48,10 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
     }
 
     public List<Empresa> findEmpresaByValorBusqueda(String valor) {
-        //Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.numeroNit like :nit OR FUNC('REGEXP_REPLACE', e.razonSocial,' ','') like :razonSocial", Empresa.class);
-        Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.numeroNit like :nit OR e.razonSocial like :razonSocial", Empresa.class);
-        q.setParameter("nit", "%" + valor + "%");
-        q.setParameter("razonSocial", "%" + valor.replace(" ", "") + "%");
+        Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.idPersona.numeroDui = :pNumeroDui OR  e.numeroNit like :pNumeroNit OR e.razonSocial like :pRazonSocial", Empresa.class);
+        q.setParameter("pNumeroDui", valor.toUpperCase());
+        q.setParameter("pNumeroNit", "%" + valor.toUpperCase() + "%");
+        q.setParameter("pRazonSocial", "%" + valor.toUpperCase().replace(" ", "") + "%");
         return q.getResultList();
     }
 
@@ -60,5 +60,16 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
         q.setParameter("pIdEmpresa", idEmpresa);
 
         return (TecnicoProveedor) q.getResultList().get(0);
+    }
+    
+    public Empresa findEmpresaByNit(String nit, Boolean empresa) {
+        Query q = em.createQuery("SELECT e FROM Empresa e WHERE e" + (empresa ? "" : ".id") + ".numeroNit=:nit and e.estadoEliminacion=0", Empresa.class);
+        q.setParameter("nit", nit);
+
+        if (q.getResultList().isEmpty()) {
+            return null;
+        } else {
+            return (Empresa) q.getSingleResult();
+        }
     }
 }

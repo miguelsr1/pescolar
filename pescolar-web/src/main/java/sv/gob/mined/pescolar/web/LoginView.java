@@ -1,13 +1,18 @@
 package sv.gob.mined.pescolar.web;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.Session;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
@@ -16,6 +21,8 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
+import sv.gob.mined.pescolar.repository.MailRepo;
+import sv.gob.mined.pescolar.repository.UsuarioRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
 /**
@@ -44,6 +51,14 @@ public class LoginView implements Serializable {
 
     @Inject
     private SecurityContext securityContext;
+
+    @Inject
+    private UsuarioRepo usuarioRepo;
+    @Inject
+    private MailRepo mailRepo;
+
+    @Resource(mappedName = "java:/PaqueteEscolar")
+    private Session mailSession;
 
     public String getDuiPro() {
         return duiPro;
@@ -77,7 +92,7 @@ public class LoginView implements Serializable {
         this.claveAcceso = claveAcceso;
     }
 
-    public void updateClave() {
+    /*public void updateClave() {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("Pbkdf2PasswordHash.Iterations", "3072");
         parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
@@ -85,7 +100,7 @@ public class LoginView implements Serializable {
         passwordHash.initialize(parameters);
 
         System.out.println(passwordHash.generate(claveAccesoPro.toCharArray()));
-    }
+    }*/
 
     public String validarUsuario() {
         return validarLogin(usuario, claveAcceso, UR_WELCOME_USU);
@@ -118,5 +133,33 @@ public class LoginView implements Serializable {
                 AuthenticationParameters.withParams().credential(
                         new UsernamePasswordCredential(user, pass))
         );
+    }
+
+    public void asignarNuevaClave() {
+        HashMap<String, String> valor = usuarioRepo.solicitarEnlaceNuevaClave(usuario);
+
+        if (valor.isEmpty()) {
+            JsfUtil.mensajeAlerta("Este DUI/NIT no existe en la base.");
+        } else {
+            String titulo = UTIL_CORREO.getString("prov.email.solicitudcambiocontrasenha.titulo");
+            String mensaje = UTIL_CORREO.getString("prov.email.solicitudcambiocontrasenha.mensaje");
+
+            mensaje = MessageFormat.format(mensaje, valor.get("nombreCompleto"), valor.get("token"));
+
+            List<String> to = new ArrayList();
+            List<String> cc = new ArrayList();
+
+            to.add(valor.get("correo"));
+
+            if (mailRepo.enviarMail(titulo,
+                    mensaje,
+                    to,
+                    cc,
+                    new ArrayList(),
+                    mailSession)) {
+                JsfUtil.mensajeInformacion("Por favor revisar su correo para poder cambiar la clave de acceso");
+            }
+
+        }
     }
 }

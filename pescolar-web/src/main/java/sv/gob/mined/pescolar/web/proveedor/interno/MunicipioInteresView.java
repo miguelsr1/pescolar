@@ -160,14 +160,15 @@ public class MunicipioInteresView implements Serializable {
                 }
             }
 
-            Boolean val = false;
-            for (DisMunicipioIntere disMunicipioInteres : lstMunicipioIntereses) {
-                disMuniRepo.save(disMunicipioInteres);
-            }
-
-            if (val) {
+            try {
+                for (DisMunicipioIntere disMunicipioInteres : lstMunicipioIntereses) {
+                    if (disMunicipioInteres.getId() == null) {
+                        disMuniRepo.save(disMunicipioInteres);
+                    }
+                }
                 JsfUtil.mensajeUpdate();
-            } else {
+            } catch (Exception e) {
+                Logger.getLogger(MunicipioInteresView.class.getName()).log(Level.SEVERE, "Error registrando municipios de interes", e);
                 JsfUtil.mensajeError("Ha ocurrido un error en el registro de los datos.<br/>Reportar por favor al adminsitrador del sistema");
             }
         }
@@ -293,7 +294,7 @@ public class MunicipioInteresView implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            MunicipioInteresView controller = (MunicipioInteresView) facesContext.getApplication().getELResolver().getValue(facesContext.getELContext(), null, "proveedorController");
+            MunicipioInteresView controller = (MunicipioInteresView) facesContext.getApplication().getELResolver().getValue(facesContext.getELContext(), null, "municipioInteresView");
             MunicipioDto mun = new MunicipioDto();
             try {
                 BeanUtils.copyProperties(mun, controller.getMunicipioByConverter(getKey(value)));
