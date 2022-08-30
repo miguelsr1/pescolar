@@ -1,7 +1,6 @@
 package sv.gob.mined.pescolar.repository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.mail.Session;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Empresa;
@@ -124,7 +122,7 @@ public class UsuarioRepo extends AbstractRepository<Usuario, Long> {
         q.executeUpdate();
     }
 
-    public int validarCodigoSegEmpresa(String codigoSeg, String nit, String dui, String tituloEmail, String cuerpoEmail, Session sesionMail) {
+    public int validarCodigoSegEmpresa(String codigoSeg, String nit, String dui, String tituloEmail, String cuerpoEmail) {
         int codigoOperacion = 1;
         Empresa emp = findEmpresaByCodSeg(codigoSeg);
 
@@ -142,7 +140,7 @@ public class UsuarioRepo extends AbstractRepository<Usuario, Long> {
 
             String cuerpo = MessageFormat.format(cuerpoEmail, codigoGenerado);
 
-            if (mailRepo.enviarMail(tituloEmail, cuerpo, emp.getIdPersona().getEmail(), "", sesionMail)) {
+            if (mailRepo.enviarMail(tituloEmail, cuerpo, emp.getIdPersona().getEmail(), "")) {
                 updateCodigoValidacionProveedor(emp.getId(), codigoGenerado, false);
             } else {
                 codigoOperacion = 3;

@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mail.Session;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.RC4Crypter;
@@ -37,9 +35,6 @@ public class ValidarProveedorView implements Serializable {
     private UsuarioRepo usuarioRepo;
     @Inject
     private CatalogoGlobal catalogoGlobal;
-
-    @Resource(mappedName = "java:/PaqueteEscolar")
-    private Session mailSession;
 
     @PostConstruct
     public void init() {
@@ -116,7 +111,7 @@ public class ValidarProveedorView implements Serializable {
         String tituloEmail = UTIL_CORREO.getString("prov.email.titulo");
         String cuerpoEmail = UTIL_CORREO.getString("prov.email.mensaje");
 
-        int validar = usuarioRepo.validarCodigoSegEmpresa(codigo, nit, dui, tituloEmail, cuerpoEmail, mailSession);
+        int validar = usuarioRepo.validarCodigoSegEmpresa(codigo, nit, dui, tituloEmail, cuerpoEmail);
         Empresa emp;
         switch (validar) {
             case 1:

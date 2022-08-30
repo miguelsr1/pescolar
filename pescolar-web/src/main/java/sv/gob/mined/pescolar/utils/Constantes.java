@@ -25,7 +25,7 @@ public class Constantes {
     public static final String ERROR = "error";
     public static final String WARNING = "alerta";
     public static final String PATH_REPORTES = File.separator + "resources" + File.separator + "reportes" + File.separator;
-    public static final String PATH_IMAGENES = File.separator + "resources" + File.separator + "imagenes" + File.separator;
+    public static final String PATH_IMAGENES = File.separator + "resources" + File.separator + "images" + File.separator;
 
     public static final String QUERY_CONTRATACION_ESTADO_RESERVA = "select res.id_estado_reserva \n"
             + "                from \n"

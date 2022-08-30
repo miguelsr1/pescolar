@@ -6,6 +6,7 @@ package sv.gob.mined.pescolar.model.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,14 +17,12 @@ import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author misanchez
  */
 @Entity
-@XmlRootElement
 @SqlResultSetMapping(name = "defaultOfertaGlobal",
         entities = @EntityResult(entityClass = OfertaGlobal.class))
 public class OfertaGlobal implements Serializable {
@@ -34,26 +33,29 @@ public class OfertaGlobal implements Serializable {
     private BigDecimal idRow;
     private String departamento;
     private String razonSocial;
+    private String nombreRepresentante;
+    private String nitRepresentante;
+    private BigDecimal capacidadCalificada;
+    private String duiRepresentante;
+    private String nitSociedad;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModificacion;
+    private BigDecimal idRubroInteres;
+    private BigDecimal idAnho;
+
     @Transient
     private String anho;
     @Transient
     private String rubro;
+    @Transient
     private String lugarFecha;
-    private String nombreRepresentante;
-    private String duiRepresentante;
-    private String nitRepresentante;
-    private String nitSociedad;
-    private BigDecimal capacidadCalificada;
+
     @Transient
     private List<DetItemOfertaGlobal> lstDetItemOfertaGlobal = new ArrayList();
     @Transient
     private List<DetItemOfertaGlobal> lstDetItemOfertaGlobalLibros = new ArrayList();
     @Transient
     private List<DetMunIntOfertaGlobal> lstMunIntOfertaGlobal = new ArrayList();
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaModificacion;
-    private BigDecimal idRubroIntres;
-    private BigDecimal idAnho;
 
     public OfertaGlobal() {
     }
@@ -178,12 +180,12 @@ public class OfertaGlobal implements Serializable {
         this.fechaModificacion = fechaModificacion;
     }
 
-    public BigDecimal getIdRubroIntres() {
-        return idRubroIntres;
+    public BigDecimal getIdRubroInteres() {
+        return idRubroInteres;
     }
 
-    public void setIdRubroIntres(BigDecimal idRubroIntres) {
-        this.idRubroIntres = idRubroIntres;
+    public void setIdRubroInteres(BigDecimal idRubroInteres) {
+        this.idRubroInteres = idRubroInteres;
     }
 
     public BigDecimal getIdAnho() {

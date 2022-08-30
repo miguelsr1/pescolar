@@ -55,6 +55,9 @@
     <class>sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto</class>
     <class>sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto</class>
     <class>sv.gob.mined.pescolar.model.TecnicoProveedor</class>
+    <class>sv.gob.mined.pescolar.model.EmpresaNoItem</class>
+    <class>sv.gob.mined.pescolar.model.EmpresaPreciosRef</class>
+    <class>sv.gob.mined.pescolar.model.dto.NotificacionOfertaProvDto</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>

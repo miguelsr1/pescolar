@@ -30,7 +30,7 @@ import sv.gob.mined.pescolar.web.SessionView;
  */
 @Named
 @SessionScoped
-public class CargaGeneralView /*extends RecuperarProcesoUtil*/ implements Serializable {
+public class CargaGeneralView implements Serializable {
 
     private Boolean deshabiliar = false;
     private Boolean showFoto;

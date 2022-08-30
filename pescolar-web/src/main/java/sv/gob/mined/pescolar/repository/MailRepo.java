@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.repository;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -22,9 +23,12 @@ import javax.mail.internet.MimeMessage;
 @Stateless
 @LocalBean
 public class MailRepo {
+    
+    @Resource(mappedName = "java:/PaqueteEscolar")
+    private Session mailSession;
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Boolean enviarMail(String titulo, String mensaje, String destinatario, String cc, Session mailSession) {
+    public Boolean enviarMail(String titulo, String mensaje, String destinatario, String cc) {
         try {
 
             MimeMessage menssage = new MimeMessage(mailSession);
@@ -33,7 +37,6 @@ public class MailRepo {
             menssage.setFrom(from);
             menssage.setRecipients(Message.RecipientType.TO, destinatario);
             menssage.setRecipients(Message.RecipientType.CC, cc);
-            //menssage.setRecipients(Message.RecipientType.BCC, "miguel.sanchez@mined.gob.sv");
 
             menssage.setSubject(titulo, "UTF-8");
             menssage.setText(mensaje, "UTF-8", "html");
@@ -50,7 +53,7 @@ public class MailRepo {
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Boolean enviarMail(String titulo, String mensaje, List<String> to, List<String> cc, List<String> bcc, Session mailSession) {
+    public Boolean enviarMail(String titulo, String mensaje, List<String> to, List<String> cc, List<String> bcc) {
         try {
             MimeMessage menssage = new MimeMessage(mailSession);
             Address from = new InternetAddress(mailSession.getProperty("mail.from"));

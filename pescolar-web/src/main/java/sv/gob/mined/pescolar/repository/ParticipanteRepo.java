@@ -19,6 +19,7 @@ import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Participante;
 import sv.gob.mined.pescolar.model.PorcentajeEvaluacion;
 import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
+import sv.gob.mined.pescolar.model.dto.NotificacionOfertaProvDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
 import sv.gob.mined.pescolar.utils.db.Filtro;
@@ -34,6 +35,9 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
     @Inject
     private CatalogoRepo catalogoRepo;
 
+    @Inject 
+    private ReportesRepo reporteRepo;
+    
     public ParticipanteRepo() {
         super(Participante.class);
     }
@@ -312,7 +316,7 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
 
         return q.getResultList();
     }
-    
+
     public List<PreciosRefRubroEmp> findPreciosRefRubroEmpRubro(Empresa idEmpresa, Long idRubro, Long idAnho) {
         Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.id =:pIdEmpresa and (p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho) ORDER BY cast(p.noItem as integer)", PreciosRefRubroEmp.class);
         q.setParameter("pIdEmpresa", idEmpresa.getId());
@@ -320,5 +324,22 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
         q.setParameter("pIdAnho", idAnho);
         return q.getResultList();
     }
-    
+
+    public NotificacionOfertaProvDto getNotificacionOfertaProv(Long idEmpresa, Long idAnho, Long idRubroInteres) {
+        NotificacionOfertaProvDto notificacionOfertaProvDto;
+
+        Query q = em.createNamedQuery("Proveedor.NotificacionOfertaProv", NotificacionOfertaProvDto.class);
+        q.setParameter(1, idEmpresa);
+        q.setParameter(2, idAnho);
+        q.setParameter(3, idRubroInteres);
+
+        notificacionOfertaProvDto = q.getResultList().isEmpty() ? null : (NotificacionOfertaProvDto) q.getResultList().get(0);
+
+        if (notificacionOfertaProvDto != null) {
+            notificacionOfertaProvDto.setLstDetItemOfertaGlobal(reporteRepo.getLstItemOfertaGlobal(notificacionOfertaProvDto.getNumeroNit(), idRubroInteres, idAnho));
+            notificacionOfertaProvDto.setLstMunIntOfertaGlobal(reporteRepo.getLstMunIntOfertaGlobal(notificacionOfertaProvDto.getNumeroNit(), idRubroInteres, idAnho));
+        }
+        return notificacionOfertaProvDto;
+    }
+
 }

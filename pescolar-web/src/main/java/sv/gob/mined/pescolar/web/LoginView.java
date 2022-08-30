@@ -5,14 +5,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mail.Session;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
@@ -57,9 +54,6 @@ public class LoginView implements Serializable {
     @Inject
     private MailRepo mailRepo;
 
-    @Resource(mappedName = "java:/PaqueteEscolar")
-    private Session mailSession;
-
     public String getDuiPro() {
         return duiPro;
     }
@@ -101,7 +95,6 @@ public class LoginView implements Serializable {
 
         System.out.println(passwordHash.generate(claveAccesoPro.toCharArray()));
     }*/
-
     public String validarUsuario() {
         return validarLogin(usuario, claveAcceso, UR_WELCOME_USU);
     }
@@ -155,11 +148,9 @@ public class LoginView implements Serializable {
                     mensaje,
                     to,
                     cc,
-                    new ArrayList(),
-                    mailSession)) {
+                    new ArrayList())) {
                 JsfUtil.mensajeInformacion("Por favor revisar su correo para poder cambiar la clave de acceso");
             }
-
         }
     }
 }

@@ -9,6 +9,15 @@ import org.hibernate.annotations.Where;
 @Table(name = "DET_RUBRO_MUESTRA_INTERES")
 @Entity
 @Where(clause = "ESTADO_ELIMINACION = 0")
+/*@NamedStoredProcedureQuery(
+        name = "SP_GET_ID_GESTION",
+        procedureName = "SP_GET_ID_GESTION",
+        parameters = {
+            @StoredProcedureParameter(mode =  ParameterMode.IN, type = Long.class, name = "P_ID_EMPRESA"),
+            @StoredProcedureParameter(mode =  ParameterMode.IN, type = Integer.class, name = "P_ID_MUESTRA_INTERES"),
+            @StoredProcedureParameter(mode =  ParameterMode.OUT, type = String.class, name = "P_ID_GESTION")
+        }
+)*/
 public class DetRubroMuestraIntere implements Serializable {
 
     @OneToMany(mappedBy = "idMuestraInteres", fetch = FetchType.LAZY)

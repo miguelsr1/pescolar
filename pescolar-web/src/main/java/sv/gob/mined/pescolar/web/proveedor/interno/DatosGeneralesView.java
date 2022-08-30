@@ -9,14 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mail.Session;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.paradise.view.GuestPreferences;
@@ -90,9 +88,6 @@ public class DatosGeneralesView implements Serializable {
     private CargaGeneralView cargaGeneralView;
     @Inject
     private GuestPreferences guestPreferencesView;
-
-    @Resource(mappedName = "java:/PaqueteEscolar")
-    private Session mailSession;
 
     @PostConstruct
     public void init() {
@@ -462,8 +457,7 @@ public class DatosGeneralesView implements Serializable {
         mailRepo.enviarMail(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.nofitecnico.titulo"), sessionView.getAnhoProceso()),
                 sb.toString(),
                 cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
-                empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId()).getMailTecnico(),
-                mailSession);
+                empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId()).getMailTecnico());
     }
 
     private void invitacionProveedorPaquete() {
@@ -478,8 +472,7 @@ public class DatosGeneralesView implements Serializable {
         mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
                 "rafael.arias@mined.gob.sv",
                 MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
-                sb.toString(),
-                mailSession);
+                sb.toString());
     }
 
     public void filtroProveedores() {

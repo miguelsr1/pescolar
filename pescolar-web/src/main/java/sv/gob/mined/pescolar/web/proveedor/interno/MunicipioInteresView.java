@@ -73,13 +73,7 @@ public class MunicipioInteresView implements Serializable {
     @PostConstruct
     public void init() {
         if (cargaGeneralView.getEmpresa().getId() != null) {
-            if (cargaGeneralView.getUrlStr().contains("DatosGenerales")) {
-
-            } else if (cargaGeneralView.getUrlStr().contains("MunicipiosInteres")) {
-                cargarMunInteres();
-            } else if (cargaGeneralView.getUrlStr().contains("PreciosReferencia")) {
-
-            }
+            cargarMunInteres();
         }
     }
 

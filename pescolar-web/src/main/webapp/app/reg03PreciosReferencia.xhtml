@@ -6,6 +6,7 @@
     xmlns:f="http://java.sun.com/jsf/core"
     template="/WEB-INF/template.xhtml"
     xmlns:jsf="http://xmlns.jcp.org/jsf">
+    
     <ui:define name="content">
         <h:form id="frmPrincipal" prependId="false">
             <div class="p-grid dashboard"> 
@@ -49,7 +50,7 @@
                             <div class="p-field p-col">
                                 <p:outputLabel value="Precios de Referencia" style="font-size: 1.5em;"/>
                                 <p:dataTable id="tblDetallePrecio" widgetVar="tblDetallePrecio" value="#{preciosReferenciaView.lstPreciosReferencia}" var="precio" 
-                                             editMode="cell" rowIndexVar="idRow" rowKey="#{precio.idPrecioRefEmp}"
+                                             editMode="cell" rowIndexVar="idRow" rowKey="#{precio.idPrecioRefEmp}" lazy="false"
                                              editable="true" rowStyleClass="#{precio.estadoEliminacion eq 1 ? 'filaEliminada' : null}" style="width: 570px !important"
                                              selection="#{preciosReferenciaView.precioRef}" emptyMessage="No se han registrado precios a este proveedor">
 
@@ -110,8 +111,8 @@
                             </div>
                             <div class="p-field p-col">
                                 <p:outputLabel value="Precios Máximos" style="font-size: 1.5em;"/>
-                                <p:dataTable id="tblDetallePrecioMax" widgetVar="tblDetallePrecioMax" value="#{preciosReferenciaMB.lstPreciosMaximos}" var="precioMax" 
-                                             rowIndexVar="idRow" emptyMessage="No hay registros">
+                                <p:dataTable id="tblDetallePrecioMax" widgetVar="tblDetallePrecioMax" value="#{preciosReferenciaView.lstPreciosMaximos}" var="precioMax" 
+                                             rowIndexVar="idRow" emptyMessage="No hay registros" lazy="false">
                                     <p:column headerText="Item" width="30" style="text-align: center;">
                                         <p:outputLabel value="#{precioMax.noItem}"/>
                                     </p:column>
