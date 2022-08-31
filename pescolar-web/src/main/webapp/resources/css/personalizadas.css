@@ -122,3 +122,6 @@ Estilos modificados de la plantilla
 .rojo{
     color: #e17576;
 }
+.numero{
+    text-align: right;    
+}
