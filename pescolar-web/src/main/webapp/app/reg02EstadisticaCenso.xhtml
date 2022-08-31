@@ -1,8 +1,235 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    template="/WEB-INF/template.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <script type="text/javascript">
+            function calcularSubTotalMatriculaNivelEdu(val1, val2, val3, lblVal, lblNivel) {
+                var val1M = $("#" + val1 + "_input").val();
+                var val2M = $("#" + val2 + "_input").val();
+                var val3M = $("#" + val3 + "_input").val();
+                //lblUni, lblUti, lblZap
+                $("#" + lblVal).val(Number(val1M) + Number(val2M) + Number(val3M));
+
+                var matFem = $("#txt" + lblNivel + "Fem").val();
+                var matMas = $("#txt" + lblNivel + "Mas").val();
+                $("#lblMat" + lblNivel).text(Number(matFem) + Number(matMas));
+
+                var preUniF = $("#txt" + lblNivel + "PreUniFem").val();
+                var preUniM = $("#txt" + lblNivel + "PreUniMas").val();
+                var preUtiF = $("#txt" + lblNivel + "PreUtiFem").val();
+                var preUtiM = $("#txt" + lblNivel + "PreUtiMas").val();
+                var preZapF = $("#txt" + lblNivel + "PreZapFem").val();
+                var preZapM = $("#txt" + lblNivel + "PreZapMas").val();
+
+                $("#lbl" + lblNivel + "Uni").val(intlRound((matFem * preUniF) + (matMas * preUniM)));
+                $("#lbl" + lblNivel + "Uti").val(intlRound((matFem * preUtiF) + (matMas * preUtiM)));
+                $("#lbl" + lblNivel + "Zap").val(intlRound((matFem * preZapF) + (matMas * preZapM)));
+
+                calcularTotales();
+            }
+            function calcularSubTotalMatricula(fem, mas, lbl) {
+                var femM = $("#" + fem + "_input").val();
+                var masM = $("#" + mas + "_input").val();
+                $("#" + lbl).text(Number(femM) + Number(masM));
+            }
+            /**
+             * Este método calcula el monto presupuestado para un nivel educativo especifico
+             * @param {type} fem cantidad de alumnas
+             * @param {type} mas cantidad de alumnos
+             * @param {type} lblNivel Nivel educativo 
+             * @returns {undefined}
+             */
+            function calcularMontoPorNivel(fem, mas, lblNivel) {
+                var femM = $("#" + fem + "_input").val();
+                var masM = $("#" + mas + "_input").val();
+                console.log($("#" + fem + "_input").val());
+
+                $("#lblMat" + lblNivel).text(Number(femM) + Number(masM));
+
+                var preUniF = $("#txt" + lblNivel + "PreUniFem").val();
+                var preUniM = $("#txt" + lblNivel + "PreUniMas").val();
+                var preUtiF = $("#txt" + lblNivel + "PreUtiFem").val();
+                var preUtiM = $("#txt" + lblNivel + "PreUtiMas").val();
+                var preZapF = $("#txt" + lblNivel + "PreZapFem").val();
+                var preZapM = $("#txt" + lblNivel + "PreZapMas").val();//lblG1Uti txtGIPreUtiFem
+
+                $("#lbl" + lblNivel + "Uni").val(intlRound((femM * preUniF) + (masM * preUniM)));
+                $("#lbl" + lblNivel + "Uti").val(intlRound((femM * preUtiF) + (masM * preUtiM)));
+                $("#lbl" + lblNivel + "Zap").val(intlRound((femM * preZapF) + (masM * preZapM)));
+            }
+
+            function intlRound(numero) {
+                var decimales = 2;
+                var usarComa = false;
+                var opciones = {
+                    maximumFractionDigits: decimales,
+                    useGrouping: false
+                };
+                usarComa = usarComa ? "es" : "en";
+                return new Intl.NumberFormat(usarComa, opciones).format(numero);
+            }
+
+            function actualizarDatos() {
+                calcularMontoPorNivel('txtIni2F', 'txtIni2M', 'Ini2');
+                calcularMontoPorNivel('txtIni3F', 'txtIni3M', 'Ini3');
+                calcularMontoPorNivel('txtParF', 'txtParM', 'lblMatPar');
+                calcularSubTotalMatriculaNivelEdu('txtIni2F', 'txtIni3F', 'txtParF', 'txtIPFem', 'IP');
+                calcularSubTotalMatriculaNivelEdu('txtIni2M', 'txtIni3M', 'txtParM', 'txtIPMas', 'IP');
+
+                calcularMontoPorNivel('txtParF', 'txtParM', 'Par');
+                calcularMontoPorNivel('txt1gfem', 'txt1gmas', 'G1');
+                calcularMontoPorNivel('txt2gfem', 'txt2gmas', 'G2');
+                calcularMontoPorNivel('txt3gfem', 'txt3gmas', 'G3');
+                calcularSubTotalMatriculaNivelEdu('txt1gfem', 'txt2gfem', 'txt3gfem', 'txtCIFem', 'CI');
+                calcularSubTotalMatriculaNivelEdu('txt1gmas', 'txt2gmas', 'txt3gmas', 'txtCIMas', 'CI');
+                calcularMontoPorNivel('txt4gfem', 'txt4gmas', 'G4');
+                calcularMontoPorNivel('txt5gfem', 'txt5gmas', 'G5');
+                calcularMontoPorNivel('txt6gfem', 'txt6gmas', 'G6');
+                calcularSubTotalMatriculaNivelEdu('txt4gfem', 'txt5gfem', 'txt6gfem', 'txtCIIFem', 'CII');
+                calcularSubTotalMatriculaNivelEdu('txt4gmas', 'txt5gmas', 'txt6gmas', 'txtCIIMas', 'CII');
+                calcularMontoPorNivel('txt7gfem', 'txt7gmas', 'G7');
+                calcularMontoPorNivel('txt8gfem', 'txt8gmas', 'G8');
+                calcularMontoPorNivel('txt9gfem', 'txt9gmas', 'G9');
+                calcularSubTotalMatriculaNivelEdu('txt7gfem', 'txt8gfem', 'txt9gfem', 'txtCIIIFem', 'CIII');
+                calcularSubTotalMatriculaNivelEdu('txt7gmas', 'txt8gmas', 'txt9gmas', 'txtCIIIMas', 'CIII');
+                calcularMontoPorNivel('txtCIIIMFFem', 'txtCIIIMFMas', 'CIIIMF');
+
+                calcularMontoPorNivel('txt1bfem', 'txt1bmas', 'B1');
+                calcularMontoPorNivel('txt2bfem', 'txt2bmas', 'B2');
+                calcularMontoPorNivel('txt3bfem', 'txt3bmas', 'B3');
+                calcularSubTotalMatriculaNivelEdu('txt1bfem', 'txt2bfem', 'txt3bfem', 'txtBacFem', 'Bac');
+                calcularSubTotalMatriculaNivelEdu('txt1bmas', 'txt2bmas', 'txt3bmas', 'txtBacMas', 'Bac');
+                calcularMontoPorNivel('txtBacMFFem', 'txtBacMFMas', 'BacMF');
+
+                calcularTotales();
+            }
+
+            function calcularTotales() {
+                var matIni2 = $("#lblMatIni2").text();
+                var matIni3 = $("#lblMatIni3").text();
+                var matPar = $("#lblMatPar").text();
+                var matCI = $("#lblMatCI").text();
+                var matCII = $("#lblMatCII").text();
+                var matCIII = $("#lblMatCIII").text();
+                var matCIIIMF = $("#lblMatCIIIMF").text();
+                var matBac = $("#lblMatBac").text();
+                var matBacMF = $("#lblMatBacMF").text();
+                var ini = 0;
+                var mf = 0;
+
+                if (isNaN(Number($("#lblIni2Uti").val()) + Number($("#lblIni3Uti").val()))) {
+                    ini = 0;
+                    mf = 0;
+                } else {
+                    ini = Number($("#lblIni2Uti").val()) + Number($("#lblIni3Uti").val());
+                    mf = Number($("#lblCIIIMFUti").val()) + Number($("#lblBacMFUti").val());
+                }
+
+
+                $("#lblTotalMatricula").text(Number(matIni2) + Number(matIni3) + Number(matPar) + Number(matCI) + Number(matCII) + Number(matCIII) + Number(matCIIIMF) + Number(matBac) + Number(matBacMF));
+
+                var montoTotalUni = Number($("#lblParUni").val()) + Number($("#lblCIUni").val()) + Number($("#lblCIIUni").val()) + Number($("#lblCIIIUni").val()) + Number($("#lblBacUni").val());
+                var montoTotalUti = ini + Number($("#lblParUti").val()) + Number($("#lblCIUti").val()) + Number($("#lblCIIUti").val()) + Number($("#lblCIIIUti").val()) + Number($("#lblBacUti").val()) + mf + Number($("#lblG1Uti").val()) + Number($("#lblG2Uti").val()) + Number($("#lblG3Uti").val()) + Number($("#lblG4Uti").val()) + Number($("#lblG5Uti").val()) + Number($("#lblG6Uti").val()) + Number($("#lblG7Uti").val()) + Number($("#lblG8Uti").val()) + Number($("#lblG9Uti").val()) + Number($("#lblB1Uti").val()) + Number($("#lblB2Uti").val());
+                var montoTotalZap = Number($("#lblParZap").val()) + Number($("#lblCIZap").val()) + Number($("#lblCIIZap").val()) + Number($("#lblCIIIZap").val()) + Number($("#lblBacZap").val());
+
+                $("#lblTotalUni").text(intlRound(montoTotalUni));
+                $("#lblTotalUti").text(intlRound(montoTotalUti));
+                $("#lblTotalZap").text(intlRound(montoTotalZap));
+            }
+        </script>
+
+        <style type="text/css">
+            .invoice {
+                padding: 2rem;
+            }
+            .invoice-summary {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+            }
+            .invoice-details {
+                width: 15rem;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+            }
+            .invoice-details .invoice-value {
+                text-align: right;
+            }
+            .invoice-details > div {
+                width: 50%;
+                margin-bottom: 0.5rem;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">Listado de ofertas registradas</ui:define>
     <ui:define name="content">
-        
+        <h:form id="form" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar>
+                        <p:menuitem value="Nuevo"  icon="pi pi-file" />
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
+                        <p:menuitem value="Buscar"  icon="pi pi-search" />
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
+                        <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
+                        </f:facet>
+                    </p:menubar>
+
+                    <p:hotkey bind="ctrl+shift+f" actionListener="#{ofertaBienesServiciosView.buscar()}"/>
+                </div>
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box blue">
+                            <h5>
+                                Filtro de busqueda
+                                <i class="pi pi-filter blue" ></i>
+                            </h5>
+                        </div>
+
+                        <div class="p-col-12">
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Código Infraestructura:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:inputText style="width: 70px; margin-right: 10px;" id="txtCodigoEntidad" maxlength="5" 
+                                                 value="#{estadisticasCensoView.codigoEntidad}" size="5" 
+                                                 autocomplete="false" disabled="#{estadisticasCensoView.deshabilitado}" onkeyup="return this.value.length >= 5">
+                                        <p:ajax event="keyup" listener="#{estadisticasCensoView.buscarEntidadEducativa}" update="nombreCE tabDatos"/>
+                                    </p:inputText>
+                                    <p:outputLabel value="añsd ifhañsdfj hañsdfkj añsdfkja sñdfjk hsdlfkja sdlakjs flaksjd"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box blue" style="display: block;" >
+                            <h5>
+                                Lista de Ofertas
+                                <i class="pi pi-list"></i>
+                            </h5>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+        <h:outputStylesheet name="personalizadas.css" library="css"/>
     </ui:define>
 </ui:composition>

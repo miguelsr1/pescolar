@@ -19,7 +19,7 @@
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true"/>
 
                         <f:facet  name="options">  
-                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout}"/>
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
                         </f:facet>  
                     </p:menubar>
                 </div>
@@ -87,7 +87,7 @@
                                                 </h:outputText>
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:inputNumber minValue="0" maxValue="16.00" decimalPlaces="2" value="#{precio.precioReferencia}" size="5" disabled="#{precio.estadoEliminacion eq 1}" onkeypress="soloNumeros(event);"/>
+                                                <p:inputNumber minValue="0" maxValue="18" decimalPlaces="2" value="#{precio.precioReferencia}" size="5" disabled="#{precio.estadoEliminacion eq 1}" onkeypress="soloNumeros(event);"/>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>

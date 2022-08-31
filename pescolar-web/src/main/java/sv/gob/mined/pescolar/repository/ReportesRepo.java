@@ -4,6 +4,7 @@
  */
 package sv.gob.mined.pescolar.repository;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -15,9 +16,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.ServletContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;

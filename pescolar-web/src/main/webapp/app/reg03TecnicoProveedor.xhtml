@@ -18,7 +18,7 @@
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true"/>
 
                         <f:facet  name="options">  
-                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout}"/>
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
                         </f:facet>  
                     </p:menubar>
                 </div>

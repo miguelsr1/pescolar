@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -14,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.enterprise.SecurityContext;
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +35,7 @@ import sv.gob.mined.pescolar.utils.enums.TipoOperador;
 public class SessionView implements Serializable {
 
     private Boolean usuarioDepartamental = false;
+    private Boolean usuarioSoloLectura = false;
 
     private String anhoProceso = "";
     private String codigoDepartamento;
@@ -66,8 +64,13 @@ public class SessionView implements Serializable {
         params.add(Filtro.builder().tipoOperador(TipoOperador.EQUALS).clave("idPersona.usuario").valor(securityContext.getCallerPrincipal().getName()).build());
         usuario = ((Usuario) catalogoRepo.findListByParam(Usuario.class, params).get(0));
 
+        usuarioSoloLectura = (usuario.getIdTipoUsuario().getIdTipoUsuario().intValue() == 8);
         //Recuperarción de variables almacenadas como COOKIES
         recuperarValoresCookies();
+    }
+
+    public Boolean getUsuarioSoloLectura() {
+        return usuarioSoloLectura;
     }
 
     private void recuperarValoresCookies() {

@@ -1,6 +1,7 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -33,9 +34,9 @@ public class EstadisticaCenso implements Serializable {
     @Column(name = "CODIGO_ENTIDAD")
     private String codigoEntidad;
     @Column(name = "MASCULINO")
-    private Long masculino;
+    private BigInteger masculino;
     @Column(name = "FEMENIMO")
-    private Long femenimo;
+    private BigInteger femenimo;
     @Basic(optional = false)
     @NotNull
     @Column(name = "FECHA_INSERCION")
@@ -65,6 +66,8 @@ public class EstadisticaCenso implements Serializable {
     private Long totalMatricula;
 
     public EstadisticaCenso() {
+        estadoEliminacion = 0;
+        fechaInsercion = LocalDate.now();
     }
 
     public EstadisticaCenso(Long idEstadistica) {
@@ -93,19 +96,19 @@ public class EstadisticaCenso implements Serializable {
         this.codigoEntidad = codigoEntidad;
     }
 
-    public Long getMasculino() {
+    public BigInteger getMasculino() {
         return masculino;
     }
 
-    public void setMasculino(Long masculino) {
+    public void setMasculino(BigInteger masculino) {
         this.masculino = masculino;
     }
 
-    public Long getFemenimo() {
+    public BigInteger getFemenimo() {
         return femenimo;
     }
 
-    public void setFemenimo(Long femenimo) {
+    public void setFemenimo(BigInteger femenimo) {
         this.femenimo = femenimo;
     }
 

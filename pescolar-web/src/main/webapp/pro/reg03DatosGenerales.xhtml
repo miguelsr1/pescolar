@@ -13,7 +13,7 @@
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar id="menuBar" styleClass="divSticky"> 
                         <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{menuController.usuarioSoloLectura || datosGeneralesView.deshabiliar}" 
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{sessionView.usuarioSoloLectura || datosGeneralesView.deshabiliar}" 
                                     action="#{datosGeneralesView.guardarDatosGenerales}" update="dvDatosGenerales pnlModif" ajax="false"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
 

@@ -4,9 +4,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import org.hibernate.annotations.Where;
 
 @Table(name = "TECHO_RUBRO_ENT_EDU")
 @Entity
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class TechoRubroEntEdu implements Serializable {
 
     @Id
@@ -46,6 +48,11 @@ public class TechoRubroEntEdu implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_DET_PROCESO_ADQ")
     private DetalleProcesoAdq idDetProcesoAdq;
+
+    public TechoRubroEntEdu() {
+        estadoEliminacion = 0l;
+        fechaInsercion = LocalDate.now();
+    }
 
     public DetalleProcesoAdq getIdDetProcesoAdq() {
         return idDetProcesoAdq;

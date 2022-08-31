@@ -13,13 +13,13 @@
                     <p:menubar id="menuBar" styleClass="divSticky"> 
                         <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
                         <p:menuitem value="Modificar" update="frmPrincipal" process="@this" icon="pi pi-pencil" onclick="onClick('btnModificar');" />
-                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{menuController.usuarioSoloLectura || datosGeneralesView.deshabiliar}" action="#{datosGeneralesView.guardarDatosGenerales}" />
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{sessionView.usuarioSoloLectura || datosGeneralesView.deshabiliar}" action="#{datosGeneralesView.guardarDatosGenerales}" />
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{cargaGeneralView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
                         <p:menuitem value="Notificar" icon="pi pi-envelope" disabled="true"/>
 
                         <f:facet  name="options">  
-                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}"/>
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
                         </f:facet>
                     </p:menubar>
                 </div>

@@ -3,7 +3,9 @@ package sv.gob.mined.pescolar.repository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,18 +36,24 @@ import sv.gob.mined.pescolar.utils.db.Filtro;
  *
  * @author misanchez
  */
-@Stateless
+@ApplicationScoped
 public class CatalogoRepo {
 
-    @PersistenceContext(unitName = "paquetePU")
+    @PersistenceContext
     private EntityManager em;
 
+    @Produces
+    @RequestScoped
+    public EntityManager entityManager() {
+        return em;
+    }
+
     public <T extends Object> T findEntityByPk(Class<T> clazz, Object pk) {
-        return em.find(clazz, pk);
+        return entityManager().find(clazz, pk);
     }
 
     public List<OpcionMenuUsuarioDto> findAllOpcionMenuByUsuarioAndApp(Long idUsuario, Long idOpcMenu) {
-        Query q = em.createNamedQuery("opcionMenuUsuarioDto", OpcionMenuUsuarioDto.class);
+        Query q = entityManager().createNamedQuery("opcionMenuUsuarioDto", OpcionMenuUsuarioDto.class);
         q.setParameter(1, idUsuario);
         q.setParameter(2, idOpcMenu);
 
@@ -53,7 +61,7 @@ public class CatalogoRepo {
     }
 
     public List<BigDecimal> findAllModuloByUsuario(Long idUsuario) {
-        Query q = em.createNativeQuery("select distinct opc.app idModulo \n"
+        Query q = entityManager().createNativeQuery("select distinct opc.app idModulo \n"
                 + "from usuario usu inner join tipo_usu_opc_menu tuom on usu.id_tipo_usuario = tuom.id_tipo_usuario inner join opcion_menu opc on tuom.id_opc_menu = opc.id_opc_menu\n"
                 + "where usu.id_usuario = ?1\n"
                 + "order by opc.app");
@@ -62,13 +70,13 @@ public class CatalogoRepo {
     }
 
     public List<RubrosAmostrarInteres> findAllRubrosByIdProceso(Long id) {
-        Query q = em.createQuery("SELECT d.idRubroAdq FROM DetalleProcesoAdq d WHERE d.idProcesoAdq.id=:id ORDER BY d.idRubroAdq.id", RubrosAmostrarInteres.class);
+        Query q = entityManager().createQuery("SELECT d.idRubroAdq FROM DetalleProcesoAdq d WHERE d.idProcesoAdq.id=:id ORDER BY d.idRubroAdq.id", RubrosAmostrarInteres.class);
         q.setParameter("id", id);
         return q.getResultList();
     }
 
     public List<EstadoReserva> findAllEstadoReserva() {
-        Query q = em.createQuery("SELECT e FROM EstadoReserva e ORDER BY e.id", EstadoReserva.class);
+        Query q = entityManager().createQuery("SELECT e FROM EstadoReserva e ORDER BY e.id", EstadoReserva.class);
         return q.getResultList();
     }
 
@@ -103,18 +111,18 @@ public class CatalogoRepo {
 
     @Transactional
     public List<?> findListByParam(Class<?> arg, List<Filtro> parametros) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(arg);
         Root root = cq.from(arg);
         cq = createCriteriaQuery(cb, cq, root, parametros);
-        Query query = em.createQuery(cq);
+        Query query = entityManager().createQuery(cq);
 
         return query.getResultList();
     }
 
     @Transactional
     public List<?> findListByParam(Class<?> arg, List<Filtro> parametros, String... varIns) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
         CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
         Root root = cq.from(arg);
         List<Selection<?>> lst = new ArrayList<>();
@@ -123,25 +131,25 @@ public class CatalogoRepo {
         }
         cq.multiselect(lst);
 
-        Query query = em.createQuery(cq);
+        Query query = entityManager().createQuery(cq);
 
         return query.getResultList();
     }
 
     @Transactional
     public <T extends Object> T findByParam(Class<T> arg, List<Filtro> parametros) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(arg);
         Root root = cq.from(arg);
         cq = createCriteriaQuery(cb, cq, root, parametros);
-        Query query = em.createQuery(cq);
+        Query query = entityManager().createQuery(cq);
 
         return query.getResultList().isEmpty() ? null : (T) query.getSingleResult();
     }
 
     @Transactional
     public List<?> findListByParam(Class<?> arg, List<Filtro> parametros, String orderBy, Boolean orderAsc) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(arg);
         Root root = cq.from(arg);
         cq = createCriteriaQuery(cb, cq, root, parametros);
@@ -163,7 +171,7 @@ public class CatalogoRepo {
             }
         }
 
-        Query query = em.createQuery(cq);
+        Query query = entityManager().createQuery(cq);
 
         return query.getResultList();
     }
@@ -208,7 +216,7 @@ public class CatalogoRepo {
     public List<Long> getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(Long idProcesoAdq, String codigoEntidad) {
         List<Predicate> lstCondiciones = new ArrayList();
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<EstadisticaCenso> root = cq.from(EstadisticaCenso.class);
         cq.select(root.get("idNivelEducativo").get("id"));
@@ -218,18 +226,18 @@ public class CatalogoRepo {
 
         cq.where(lstCondiciones.toArray(Predicate[]::new));
 
-        return em.createQuery(cq).getResultList();
+        return entityManager().createQuery(cq).getResultList();
     }
 
     public List<VwCatalogoEntidadEducativa> findAllEntidades() {
-        CriteriaQuery<VwCatalogoEntidadEducativa> cq = em.getCriteriaBuilder().createQuery(VwCatalogoEntidadEducativa.class);
+        CriteriaQuery<VwCatalogoEntidadEducativa> cq = entityManager().getCriteriaBuilder().createQuery(VwCatalogoEntidadEducativa.class);
         Root<VwCatalogoEntidadEducativa> root = cq.from(VwCatalogoEntidadEducativa.class);
         cq.select(root);
-        return em.createQuery(cq).getResultList();
+        return entityManager().createQuery(cq).getResultList();
     }
 
     public <T extends Object> T findDetProveedor(DetRubroMuestraIntere detRubro, Long idPro, Class clase) {
-        Query q = em.createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idMuestraInteres.idAnho.id=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.id=:pIdPro " : "") + " ORDER BY d.idMuestraInteres", clase);
+        Query q = entityManager().createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idMuestraInteres.idAnho.id=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.id=:pIdPro " : "") + " ORDER BY d.idMuestraInteres", clase);
         q.setParameter("pIdRubro", detRubro.getIdRubroInteres().getId());
         q.setParameter("pIdAnho", detRubro.getIdAnho().getId());
         q.setParameter("idEmpresa", detRubro.getIdEmpresa());
@@ -247,16 +255,16 @@ public class CatalogoRepo {
     public List<Municipio> getLstMunicipiosByDepartamento(String codigoDepartamento) {
         Query query;
         if (null == codigoDepartamento) {
-            query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento", Municipio.class);
+            query = entityManager().createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento", Municipio.class);
             query.setParameter("departamento", codigoDepartamento);
         } else {
             switch (codigoDepartamento) {
                 case "00":
-                    query = em.createQuery("SELECT m FROM Municipio m ORDER BY cast(m.codigoDepartamento.codigoDepartamento as integer"
+                    query = entityManager().createQuery("SELECT m FROM Municipio m ORDER BY cast(m.codigoDepartamento.codigoDepartamento as integer"
                             + " ),  cast(m.codigoMunicipio as integer)", Municipio.class);
                     break;
                 default:
-                    query = em.createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento ORDER BY cast(m.codigoDepartamento.id as integer),  cast(m.codigoMunicipio as integer)", Municipio.class);
+                    query = entityManager().createQuery("SELECT m FROM Municipio m WHERE m.codigoDepartamento.id=:departamento ORDER BY cast(m.codigoDepartamento.id as integer),  cast(m.codigoMunicipio as integer)", Municipio.class);
                     query.setParameter("departamento", codigoDepartamento);
                     break;
             }
@@ -265,7 +273,7 @@ public class CatalogoRepo {
     }
 
     public List<Canton> getLstCantonByMunicipio(Long idMunicipio) {
-        Query q = em.createQuery("SELECT c FROM Canton c WHERE c.idMunicipio=:id ORDER BY c.codigoCanton", Canton.class);
+        Query q = entityManager().createQuery("SELECT c FROM Canton c WHERE c.idMunicipio=:id ORDER BY c.codigoCanton", Canton.class);
         q.setParameter("id", idMunicipio);
         return q.getResultList();
     }
@@ -279,13 +287,13 @@ public class CatalogoRepo {
      * @return
      */
     public List<EntidadFinanciera> findEntidadFinancieraEntities(Short tipoEntidad) {
-        Query q = em.createQuery("SELECT e FROM EntidadFinanciera e WHERE e.bandera=:tipoEntidad ORDER BY e.nombreEntFinan", EntidadFinanciera.class);
+        Query q = entityManager().createQuery("SELECT e FROM EntidadFinanciera e WHERE e.bandera=:tipoEntidad ORDER BY e.nombreEntFinan", EntidadFinanciera.class);
         q.setParameter("tipoEntidad", tipoEntidad);
         return q.getResultList();
     }
 
     public DetRubroMuestraIntere findDetRubroByAnhoAndRubro(Long idAnho, Long idEmpresa) {
-        Query q = em.createQuery("SELECT d FROM DetRubroMuestraIntere d WHERE d.idEmpresa.id=:idEmpresa and d.idAnho.id=:pIdAnho ORDER BY d.id", DetRubroMuestraIntere.class);
+        Query q = entityManager().createQuery("SELECT d FROM DetRubroMuestraIntere d WHERE d.idEmpresa.id=:idEmpresa and d.idAnho.id=:pIdAnho ORDER BY d.id", DetRubroMuestraIntere.class);
         q.setParameter("idEmpresa", idEmpresa);
         q.setParameter("pIdAnho", idAnho);
         if (q.getResultList().isEmpty()) {
@@ -299,13 +307,13 @@ public class CatalogoRepo {
         String sql = Constantes.QUERY_PROVEEDOR_MUNICIPIOS_DISPONIBLES_DE_INTERES;
         sql = codigoDepartamento.equals("00") ? sql.replace("COMODIN_DEPARTAMENTO", "")
                 : sql.replace("COMODIN_DEPARTAMENTO", "and depa.codigo_departamento = '" + codigoDepartamento + "'");
-        Query q = em.createNativeQuery(sql, MunicipioDto.class);
+        Query q = entityManager().createNativeQuery(sql, MunicipioDto.class);
         q.setParameter(1, idCapaDistribucion);
         return q.getResultList();
     }
 
     public List<MunicipioDto> getLstMunicipiosDeInteres(Long idCapaDistribucion) {
-        Query q = em.createNamedQuery("Proveedor.MunicipiosDeIntegeres", MunicipioDto.class);
+        Query q = entityManager().createNamedQuery("Proveedor.MunicipiosDeIntegeres", MunicipioDto.class);
         q.setParameter(1, idCapaDistribucion);
         return q.getResultList();
     }

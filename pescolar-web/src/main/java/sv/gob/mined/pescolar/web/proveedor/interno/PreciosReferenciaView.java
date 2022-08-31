@@ -349,7 +349,6 @@ public class PreciosReferenciaView implements Serializable {
 
     public void onCellEdit(CellEditEvent event) {
         msjError = "";
-        //DataTable tbl = (DataTable) event.getSource();
         FacesContext context = FacesContext.getCurrentInstance();
         precioRef = context.getApplication().evaluateExpressionGet(context, "#{precio}", PreciosRefRubroEmp.class);
         boolean valido = true;
@@ -373,7 +372,7 @@ public class PreciosReferenciaView implements Serializable {
 
     private void editarNumeroDeItem(int rowEdit, String numItem) {
         Boolean itemRepetido = false;
-        BigDecimal precioLibro = BigDecimal.ZERO;
+        //BigDecimal precioLibro = BigDecimal.ZERO;
         for (int i = 0; i < lstPreciosReferencia.size(); i++) {
             if (i != rowEdit) {
                 if (lstPreciosReferencia.get(i).getNoItem() != null
@@ -386,6 +385,8 @@ public class PreciosReferenciaView implements Serializable {
 
         if (itemRepetido) {
             precioRef.setNoItem("");
+            precioRef.setIdProducto(null);
+            precioRef.setIdNivelEducativo(null);
             msjError = "Este Item ya fue ingresado.";
         } else {
             CatalogoProducto item = null;
@@ -481,25 +482,21 @@ public class PreciosReferenciaView implements Serializable {
                             case 5:
                             case 6:
                                 //procesos antes de la contratacion de 2019
+                                item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                 switch (Integer.parseInt(numItem)) {
                                     case 1:
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 1l);
                                         break;
                                     case 2:
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 3l);
                                         break;
                                     case 3:
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 4l);
                                         break;
                                     case 4:
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 5l);
                                         break;
                                     case 5:
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 6l);
                                         break;
                                     default:
@@ -512,81 +509,22 @@ public class PreciosReferenciaView implements Serializable {
                             case 7:
                             case 8:
                                 //procesos mayor o igual a la contratacion de 2019
+                                item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                 switch (numItem) {
                                     case "1":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 1l);
                                         break;
                                     case "2":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 3l);
                                         break;
                                     case "3":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 4l);
                                         break;
                                     case "4":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 5l);
                                         break;
                                     case "5":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 6l);
-                                        break;
-                                    case "2.1": //grado 1
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 10l);
-                                        precioLibro = new BigDecimal("4.10");
-                                        break;
-                                    case "2.2": //grado 2
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 11l);
-                                        precioLibro = new BigDecimal("4.10");
-                                        break;
-                                    case "2.3": //grado 3
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 12l);
-                                        precioLibro = new BigDecimal("3.62");
-                                        break;
-                                    case "3.1": //grado 4
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 13l);
-                                        precioLibro = new BigDecimal("3.62");
-                                        break;
-                                    case "3.2": //grado 5
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 14l);
-                                        precioLibro = new BigDecimal("3.62");
-                                        break;
-                                    case "3.3": //grado 6
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 15l);
-                                        precioLibro = new BigDecimal("3.62");
-                                        break;
-                                    case "4.1": //grado 7
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 7l);
-                                        precioLibro = new BigDecimal("3.62");
-                                        break;
-                                    case "4.2": //grado 8
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 8l);
-                                        precioLibro = new BigDecimal("3.62");
-                                        break;
-                                    case "4.3": //grado 9
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 9l);
-                                        precioLibro = new BigDecimal("3.62");
-                                        break;
-                                    case "5.1": //1er año bachillerato
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 16l);
-                                        precioLibro = new BigDecimal("2.05");
-                                        break;
-                                    case "5.2": //2do año bachillerato
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 1l);
-                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 17l);
-                                        precioLibro = new BigDecimal("2.05");
                                         break;
                                     default:
                                         item = null;
@@ -597,34 +535,31 @@ public class PreciosReferenciaView implements Serializable {
                                 break;
                             default:
                                 //procesos mayor o igual a la contratacion de 2021
+                                item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                 switch (numItem) {
                                     case "1":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 22l);
                                         break;
                                     case "2":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 3l);
                                         break;
                                     case "3":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 4l);
                                         break;
                                     case "4":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 5l);
                                         break;
                                     case "4.4":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 23l);
                                         break;
                                     case "5":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 6l);
                                         break;
                                     case "5.1":
-                                        item = catalogoRepo.findEntityByPk(CatalogoProducto.class, 54l);
                                         nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 24l);
+                                        break;
+                                    case "6":
+                                        nivel = catalogoRepo.findEntityByPk(NivelEducativo.class, 27l);
                                         break;
                                     default:
                                         item = null;
@@ -743,9 +678,6 @@ public class PreciosReferenciaView implements Serializable {
                 } else if (isProductoIsValid(item.getId())) {
                     precioRef.setIdProducto(item);
                     precioRef.setIdNivelEducativo(nivel);
-                    if (precioLibro.intValue() > 0) {
-                        precioRef.setPrecioReferencia(precioLibro);
-                    }
                 } else {
                     precioRef.setNoItem("");
                     msjError = "El proveedore NO ESTA CALIFICADO para ofertar este ITEM";
@@ -754,7 +686,7 @@ public class PreciosReferenciaView implements Serializable {
         }
     }
 
-    public void agregarPrecio(String noItem) {
+    private void agregarPrecio(String noItem) {
         if (precioRef != null) {
             BigDecimal preRef = BigDecimal.ZERO;
 
@@ -773,62 +705,46 @@ public class PreciosReferenciaView implements Serializable {
                         preRef = preTemp.getPrecioUnitario();
                         break;
                 }
-            }
 
-            if (precioRef.getPrecioReferencia() != null && precioRef.getPrecioReferencia().compareTo(preRef) == 1) {
-                precioRef.setPrecioReferencia(BigDecimal.ZERO);
-                switch (detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
-                    case 1:
-                    case 5:
-                        msjError = "Precio Máximo de Referencia para: <br/>"
-                                + "1)<strong> Parvularia</strong>: - Blusa, Falda y Camisa: $ 4.25 y Pantalon Corto $ 4.00<br />"
-                                + "2)<strong> Básica y Bachillerato</strong>: - Blusa, Falda y Camisa: $ 4.50 y Pantalon Corto y Pantalon: $ 6.00<br/>";
-                        break;
-                    case 2:
-                        if (detalleProcesoAdq.getIdProcesoAdq().getIdAnho().getId().intValue() == 9) {
-                            switch (detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
-                                case 4:
-                                case 5:
-                                    msjError = "Precio Máximo de Referencia para: <br/>"
-                                            + "1)<strong> Parvularia</strong>: $ " + preMaxRefPar.getPrecioMaxMas() + "<br/>"
-                                            + "2)<strong> Primer Ciclo</strong>: $ " + preMaxRefCi.getPrecioMaxMas() + "<br/>"
-                                            + "3)<strong> Segundo Ciclo</strong>: $ " + preMaxRefCii.getPrecioMaxMas() + "<br/>"
-                                            + "4)<strong> Tercer Ciclo</strong>: $ " + preMaxRefCiii.getPrecioMaxMas() + "<br/>"
-                                            + "5)<strong> Bachillerato: $ " + preMaxRefBac.getPrecioMaxMas() + "</strong>";
-                                    break;
-                                case 2:
-                                    msjError = "Precio Máximo de Referencia para: <br/>"
-                                            + "1)<strong> Parvularia</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 22).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "2)<strong> Primer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 3).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "3)<strong> Segundo Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 4).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "4)<strong> Tercer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 5).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "5)<strong> Bachillerato: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 6).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "6)<strong> Empaque y distribución de libros: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 27).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "</strong>";
-                                    break;
-                                case 3:
-                                    msjError = "Precio Máximo de Referencia para: <br/>"
-                                            + "1)<strong> Parvularia</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 22).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "2)<strong> Primer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 3).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "3)<strong> Segundo Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 4).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "4)<strong> Tercer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 5).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
-                                            + "5)<strong> Bachillerato: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 6).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "</strong>";
-                                    break;
-                            }
-                        } else {
+                if (precioRef.getPrecioReferencia() != null && precioRef.getPrecioReferencia().compareTo(preRef) == 1) {
+                    precioRef.setPrecioReferencia(BigDecimal.ZERO);
+                    switch (detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
+                        case 1:
+                        case 5:
                             msjError = "Precio Máximo de Referencia para: <br/>"
-                                    + "1)<strong> Parvularia</strong>: $ " + preMaxRefPar.getPrecioMaxMas() + "<br/>"
-                                    + "2)<strong> Primer Ciclo</strong>: $ " + preMaxRefCi.getPrecioMaxMas() + "<br/>"
-                                    + "3)<strong> Segundo Ciclo</strong>: $ " + preMaxRefCii.getPrecioMaxMas() + "<br/>"
-                                    + "4)<strong> Tercer Ciclo</strong>: $ " + preMaxRefCiii.getPrecioMaxMas() + "<br/>"
-                                    + "5)<strong> Bachillerato: $ " + preMaxRefBac.getPrecioMaxMas() + "</strong>";
-                        }
-                        break;
-                    case 3:
-                        msjError = "Precio Máximo de Referencia para Zapatos escolares de:<br/> "
-                                + "<strong>Parvularia y Básica</strong>: $ 14.60 <br/>"
-                                + "<strong>Bachillerato</strong>: $16.00";
-                        break;
+                                    + "1)<strong> Parvularia</strong>: - Blusa, Falda y Camisa: $ 5.10, Pantalon Corto $ 4.80 y Pantalon largo Clima frio: $ 7.20<br />"
+                                    + "2)<strong> Básica y Bachillerato</strong>: - Blusa, Falda y Camisa: $ 5.40 y Pantalon: $ 7.20<br/>";
+                            break;
+                        case 2:
+                            if (detalleProcesoAdq.getIdProcesoAdq().getIdAnho().getId().intValue() == 9) {
+                                msjError = "Precio Máximo de Referencia para: <br/>"
+                                        + "1)<strong> Parvularia</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 22).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "2)<strong> Primer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 3).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "3)<strong> Segundo Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 4).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "4)<strong> Tercer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 5).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "5)<strong> Bachillerato: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 6).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "6)<strong> Empaque y distribución de libros: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 27).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "</strong>";
+                            } else {
+                                msjError = "Precio Máximo de Referencia para: <br/>"
+                                        + "1)<strong> Parvularia</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 22).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "2)<strong> Primer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 3).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "3)<strong> Segundo Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 4).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "4)<strong> Tercer Ciclo</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 5).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "<br/>"
+                                        + "5)<strong> Bachillerato: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 6).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + "</strong>";
+                            }
+                            break;
+                        case 3:
+                            msjError = "Precio Máximo de Referencia para Zapatos escolares de:<br/> "
+                                    + "<strong>Inicial y Parvularia</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 22).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + " <br/>"
+                                    + "<strong>Ciclo I</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 3).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + " <br/>"
+                                    + "<strong>Ciclo II</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 4).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + " <br/>"
+                                    + "<strong>Ciclo III</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 5).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas() + " <br/>"
+                                    + "<strong>Bachillerato</strong>: $ " + lstPrecios.stream().parallel().filter(pre -> pre.getIdNivelEducativo().getId() == 6).findAny().orElse(new PreciosRefRubro()).getPrecioMaxMas();
+                            break;
+                    }
                 }
+            } else {
+                JsfUtil.mensajeAlerta("Debe de ingresar el número de Item a contratar");
             }
         }
     }
@@ -873,38 +789,6 @@ public class PreciosReferenciaView implements Serializable {
         return preRef;
     }
 
-    /*private BigDecimal getPrecioRefUtiles() {
-        BigDecimal preRef = BigDecimal.ZERO;
-        
-        switch (precioRef.getIdNivelEducativo().getId().intValue()) {
-            case 1: //parvularia
-                preRef = preMaxRefPar.getPrecioMaxMas();
-                break;
-            case 22: //incial y parvularia
-                preRef = preMaxRefPar.getPrecioMaxMas();
-                break;
-            case 3: //ciclo I
-                preRef = preMaxRefCi.getPrecioMaxMas();
-                break;
-            case 4: //ciclo II
-                preRef = preMaxRefCii.getPrecioMaxMas();
-                break;
-            case 5://ciclo III
-                preRef = preMaxRefCiii.getPrecioMaxMas();
-                break;
-            case 23://modalidad flexible y ciclo III
-                preRef = preMaxRefCiii.getPrecioMaxMas();
-                break;
-            case 6: //Bachillerato
-                preRef = preMaxRefBac.getPrecioMaxMas();
-                break;
-            case 24: //modalidad flexible y Bachillerato
-                preRef = preMaxRefBac.getPrecioMaxMas();
-                break;
-        }
-
-        return preRef;
-    }*/
     private boolean isProductoIsValid(Long idProducto) {
         if (lstItem.stream().anyMatch(producto -> (producto.getId().intValue() == idProducto.intValue()))) {
             return true;
