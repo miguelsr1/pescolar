@@ -49,7 +49,7 @@ public class CargaGeneralView implements Serializable {
     private DetRubroMuestraIntere detRubroMuestraInteres;
 
     @Inject
-    private CatalogoRepo proveedorEJB;
+    private CatalogoRepo catalogoRepo;
     @Inject
     private SessionView sessionView;
     @Inject
@@ -82,15 +82,15 @@ public class CargaGeneralView implements Serializable {
     }
 
     public CapaInstPorRubro getCapacidadInstPorRubro() {
-        return detRubroMuestraInteres != null ? proveedorEJB.findDetProveedor(detRubroMuestraInteres, proceso.getId(), CapaInstPorRubro.class) : null;
+        return detRubroMuestraInteres != null ? catalogoRepo.findDetProveedor(detRubroMuestraInteres, proceso.getId(), CapaInstPorRubro.class) : null;
     }
 
     public CapaDistribucionAcre getCapaDistribucionAcre() {
-        return detRubroMuestraInteres != null ? proveedorEJB.findDetProveedor(detRubroMuestraInteres, proceso.getId(), CapaDistribucionAcre.class) : null;
+        return detRubroMuestraInteres != null ? catalogoRepo.findDetProveedor(detRubroMuestraInteres, proceso.getId(), CapaDistribucionAcre.class) : null;
     }
 
     public DetCapaSegunRubro getDetCapaSegunRubro() {
-        return detRubroMuestraInteres != null ? proveedorEJB.findDetProveedor(detRubroMuestraInteres, proceso.getId(), DetCapaSegunRubro.class) : null;
+        return detRubroMuestraInteres != null ? catalogoRepo.findDetProveedor(detRubroMuestraInteres, proceso.getId(), DetCapaSegunRubro.class) : null;
     }
 
     public DetRubroMuestraIntere getDetRubroMuestraInteres() {
@@ -172,7 +172,7 @@ public class CargaGeneralView implements Serializable {
                 municipioDepartamento = getEmpresa().getIdMunicipio().getNombreMunicipio() + ", " + getEmpresa().getIdMunicipio().getCodigoDepartamento().getNombreDepartamento();
                 domicilio = getEmpresa().getDireccionCompleta();
             }
-            detRubroMuestraInteres = proveedorEJB.findDetRubroByAnhoAndRubro(idAnho, getEmpresa().getId());
+            detRubroMuestraInteres = catalogoRepo.findDetRubroByAnhoAndRubro(idAnho, getEmpresa().getId());
             if (detRubroMuestraInteres == null) {
                 JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + proceso.getIdAnho().getAnho());
             } else {
@@ -196,5 +196,10 @@ public class CargaGeneralView implements Serializable {
         }
 
         return Constantes.GO_TO_PRINCIPAL_PAGE;
+    }
+    
+    public void recargarInformacion(){
+        empresa = catalogoRepo.findEntityByPk(Empresa.class, empresa.getId());
+        cargarDetalleCalificacion();
     }
 }

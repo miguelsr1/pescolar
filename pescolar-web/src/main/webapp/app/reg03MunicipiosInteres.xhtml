@@ -26,7 +26,7 @@
                     <p:menubar id="menuBar" styleClass="divSticky"> 
                         <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
                         <p:menuitem value="Modificar" update="frmPrincipal" icon="pi pi-pencil" ajax="true"  onclick="onClick('btnModificar');"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save"  disabled="#{sessionView.usuarioSoloLectura || municipioInteresView.deshabiliar}" action="#{municipioInteresView.guardarMunicipioInteres}"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save"  disabled="true" />
                         <p:menuitem value="Imprimir" ajax="false" icon="pi pi-print" action="#{municipioInteresView.impOfertaGlobal}" />
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
@@ -62,7 +62,9 @@
                                 <p:outputLabel for="pickList" value="Seleccione los municipios en los que tiene interes de participar" />
                                 <p:pickList id="pickList" value="#{municipioInteresView.lstMunicipiosInteres}" converter="muniConverter" var="municipio" 
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-                                            itemLabel=" #{municipio.nombreMunicipio}" itemValue="#{municipio}"/>
+                                            itemLabel=" #{municipio.nombreMunicipio}" itemValue="#{municipio}">
+                                    <p:ajax event="transfer" listener="#{municipioInteresView.onTransfer}"/>
+                                </p:pickList>
                             </div>
                         </div>
                     </div>

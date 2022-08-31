@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
@@ -125,6 +126,23 @@ public class MunicipioInteresView implements Serializable {
         return catalogoRepo.findEntityByPk(Municipio.class, id);
     }
 
+    public void onTransfer(TransferEvent event) {
+        for (Object item : event.getItems()) {
+            if (event.isAdd()) {
+                DisMunicipioIntere disMunicipio = new DisMunicipioIntere();
+                disMunicipio.setEstadoEliminacion(0l);
+                disMunicipio.setFechaInsercion(LocalDate.now());
+                disMunicipio.setIdCapaDistribucion(departamentoCalif);
+                disMunicipio.setIdMunicipio(new Municipio(((MunicipioDto) item).getIdMunicipio()));
+                disMunicipio.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
+
+                disMuniRepo.save(disMunicipio);
+            } else {
+                disMuniRepo.remove(((MunicipioDto) item).getId(), departamentoCalif.getId());
+            }
+        }
+    }
+
     public void guardarMunicipioInteres() {
         List<DisMunicipioIntere> lstMunicipioIntereses = disMuniRepo.findMunicipiosInteres(departamentoCalif);
 
@@ -161,8 +179,10 @@ public class MunicipioInteresView implements Serializable {
                     }
                 }
                 JsfUtil.mensajeUpdate();
+
             } catch (Exception e) {
-                Logger.getLogger(MunicipioInteresView.class.getName()).log(Level.SEVERE, "Error registrando municipios de interes", e);
+                Logger.getLogger(MunicipioInteresView.class
+                        .getName()).log(Level.SEVERE, "Error registrando municipios de interes", e);
                 JsfUtil.mensajeError("Ha ocurrido un error en el registro de los datos.<br/>Reportar por favor al adminsitrador del sistema");
             }
         }
@@ -213,9 +233,11 @@ public class MunicipioInteresView implements Serializable {
 
             if (!jasperPrintList.isEmpty()) {
                 Reportes.generarReporte(jasperPrintList, "oferta_global_" + cargaGeneralView.getEmpresa().getNumeroNit());
+
             }
         } catch (JRException | IOException ex) {
-            Logger.getLogger(MunicipioInteresView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MunicipioInteresView.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -244,6 +266,7 @@ public class MunicipioInteresView implements Serializable {
                 sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
                 cargaGeneralView.cargarDetalleCalificacion();
                 cargarMunInteres();
+
             } else {
                 Logger.getLogger(MunicipioInteresView.class
                         .getName()).log(Level.INFO, "No se pudo convertir el objeto a la clase Empresa{0}", event.getObject());
@@ -276,6 +299,7 @@ public class MunicipioInteresView implements Serializable {
                 cargaGeneralView.setFileName("fotoProveedores/profile.png");
             } else {
                 cargaGeneralView.setFileName("fotoProveedores/" + cargaGeneralView.getEmpresa().getIdPersona().getUrlImagen());
+
             }
         }
     }

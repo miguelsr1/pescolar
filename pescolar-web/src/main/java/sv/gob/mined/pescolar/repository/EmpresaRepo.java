@@ -30,22 +30,8 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
 
     public Boolean guardarCapaInst(CapaDistribucionAcre capaDistribucionAcre, CapaInstPorRubro capaInstPorRubro) {
         try {
-            Query query = em.createQuery("UPDATE CapaInstPorRubro c SET c.capacidadAcreditada = :capaCalificada, c.capacidadPropuesta=:capaPropuesta WHERE c.id=:pId");
-            query.setParameter("capaCalificada", capaInstPorRubro.getCapacidadAcreditada());
-            query.setParameter("capaPropuesta", capaInstPorRubro.getCapacidadPropuesta());
-            /*query.setParameter("idEmpresa", capaInstPorRubro.getIdMuestraInteres().getIdEmpresa().getId());
-            query.setParameter("pIdAnho", capaInstPorRubro.getIdMuestraInteres().getIdAnho().getId());*/
-            query.setParameter("pId", capaInstPorRubro.getId());
-
-            query.executeUpdate();
-
-            query = em.createQuery("UPDATE CapaDistribucionAcre c SET c.codigoDepartamento = :codigoDepartamento WHERE c.id=:pId");
-            query.setParameter("codigoDepartamento", capaDistribucionAcre.getCodigoDepartamento());
-            /*query.setParameter("idEmpresa", capaInstPorRubro.getIdMuestraInteres().getIdEmpresa().getId());
-            query.setParameter("pIdAnho", capaInstPorRubro.getIdMuestraInteres().getIdAnho().getId());*/
-            query.setParameter("pId", capaInstPorRubro.getId());
-
-            query.executeUpdate();
+            em.merge(capaDistribucionAcre);
+            em.merge(capaInstPorRubro);
 
             return true;
         } catch (Exception e) {

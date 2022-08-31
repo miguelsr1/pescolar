@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.web.proveedor.interno;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,10 +98,9 @@ public class DatosGeneralesView implements Serializable {
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona", sessionView.getUsuario().getIdPersona()).build());
             cargaGeneralView.setEmpresa(empresaRepo.findEntityByParam(params));
             cargarDatosEmpresa(cargaGeneralView.getEmpresa());
-            showUpdateEmpresa = true;
-        } else {
-            //El usuario logeado es un usuario MINED
-            cargarDetalleCalificacion();
+        }
+        if (cargaGeneralView.getEmpresa().getId() != null) {
+            cargarDatosEmpresa(cargaGeneralView.getEmpresa());
         }
     }
 
@@ -373,7 +373,7 @@ public class DatosGeneralesView implements Serializable {
     }
 
     public void guardarDatosGenerales() {
-        if (showUpdateEmpresa) {
+        if (showUpdateEmpresa || sessionView.getIsUsuarioAdministrador()) {
             if (cargaGeneralView.getEmpresa().getIdPersoneria().getId().intValue() == 1) {
                 cargaGeneralView.getEmpresa().setRazonSocial(cargaGeneralView.getEmpresa().getIdPersona().getNombreCompletoProveedor());
                 cargaGeneralView.getEmpresa().setTelefonos(cargaGeneralView.getEmpresa().getIdPersona().getNumeroTelefono());
@@ -386,7 +386,7 @@ public class DatosGeneralesView implements Serializable {
                     cargaGeneralView.getEmpresa().setDireccionCompleta(cargaGeneralView.getEmpresa().getIdPersona().getDomicilio());
 
                     cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
-                    cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipioLocal));
+                    cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
                     if (rubroUniforme) {
                         cargaGeneralView.getEmpresa().setCodigoCanton(idCantonLocal);
                         cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
@@ -395,7 +395,7 @@ public class DatosGeneralesView implements Serializable {
                         cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(null);
                     }
                 } else {
-                    cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
+                    cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipioLocal));
                     cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
                     cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
                 }
@@ -417,21 +417,27 @@ public class DatosGeneralesView implements Serializable {
 
             //Si el usuario es proveedor, enviar notificación a cuenta de técnico de paquete escolar
             if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
-                notificarTecnicoPaquete();
+                //notificarTecnicoPaquete();
             }
             JsfUtil.mensajeUpdate();
-            forceRefreshPage();
-        } else {
+        }
+
+        if (sessionView.getIsUsuarioAdministrador()) {
             departamentoCalif.setCodigoDepartamento(catalogoRepo.findEntityByPk(Departamento.class, codigoDepartamentoCalificado));
 
-            if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
-            }
+            departamentoCalif.setFechaModificacion(LocalDate.now());
+            departamentoCalif.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
+            capacidadInst.setFechaModificacion(LocalDate.now());
+            capacidadInst.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
 
             if (empresaRepo.guardarCapaInst(departamentoCalif, capacidadInst)) {
             }
 
             JsfUtil.mensajeUpdate();
         }
+
+        cargaGeneralView.recargarInformacion();
+        cargarDatosEmpresa(cargaGeneralView.getEmpresa());
     }
 
     public void forceRefreshPage() {

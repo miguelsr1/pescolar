@@ -231,6 +231,10 @@ public class SessionView implements Serializable {
         }
     }
 
+    public Boolean getIsUsuarioAdministrador() {
+        return (usuario.getIdTipoUsuario().getIdTipoUsuario().intValue() == 1);
+    }
+
     public Boolean getIsUsuarioDigitador() {
         if (proceso.getDescripcionProcesoAdq().contains("SOBREDEMANDA")) {
             switch (usuario.getIdTipoUsuario().getIdTipoUsuario().intValue()) {

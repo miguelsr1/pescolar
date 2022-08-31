@@ -1,4 +1,4 @@
-package sv.gob.mined.pescolar.repository;
+package sv.gob.mined.pescolar.web.proveedor.interno;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -9,6 +9,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import sv.gob.mined.pescolar.model.Empresa;
+import sv.gob.mined.pescolar.repository.CatalogoGlobal;
+import sv.gob.mined.pescolar.repository.UsuarioRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.RC4Crypter;
 

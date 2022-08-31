@@ -136,7 +136,7 @@
                                     <div class="ui-fluid p-formgrid p-grid">
                                         <div class="p-field p-col-12 p-md-3">
                                             <p:outputLabel value="DUI:"/>
-                                            <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numeroDui}" mask="99999999-9"/>
+                                            <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numeroDui}" mask="99999999-9" disabled="#{not sessionView.isUsuarioAdministrador}"/>
                                         </div>
                                         <div class="p-field p-col-12 p-md-3">
                                             <p:outputLabel value="Departamento: "/>
@@ -293,7 +293,6 @@
                     </div>
                 </div>
             </div>
-
         </h:form>
     </ui:define>
 </ui:composition>
