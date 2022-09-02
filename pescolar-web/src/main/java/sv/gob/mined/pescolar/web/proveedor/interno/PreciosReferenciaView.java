@@ -62,13 +62,6 @@ public class PreciosReferenciaView implements Serializable {
     private Empresa empresa;
     private DetalleProcesoAdq detalleProcesoAdq;
     private PreciosRefRubroEmp precioRef = new PreciosRefRubroEmp();
-    /*private PreciosRefRubro preMaxRefPar = new PreciosRefRubro();
-    private PreciosRefRubro preMaxRefCi = new PreciosRefRubro();
-    private PreciosRefRubro preMaxRefCii = new PreciosRefRubro();
-    private PreciosRefRubro preMaxRefCiii = new PreciosRefRubro();
-    private PreciosRefRubro preMaxRefCiiiMf = new PreciosRefRubro();
-    private PreciosRefRubro preMaxRefBac = new PreciosRefRubro();
-    private PreciosRefRubro preMaxRefBacMf = new PreciosRefRubro();*/
 
     private List<CatalogoProducto> lstItem = new ArrayList();
     private List<PreciosRefRubroEmp> lstPreciosReferencia = new ArrayList();
@@ -260,14 +253,8 @@ public class PreciosReferenciaView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId()).build());
 
         detalleProcesoAdq = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
-
-        //detalleProcesoAdq = JsfUtil.findDetalle(cargaGeneralView.getProcesoAdquisicion(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId());
         empresa = cargaGeneralView.getEmpresa();
-
-        /*preciosReferenciaMB.setEmpresa(cargaGeneralView.getEmpresa());
-        preciosReferenciaMB.setDetalleProcesoAdq(detalleProcesoAdq);
-        preciosReferenciaMB.setCapacidadInst(cargaGeneralView.getCapacidadInstPorRubro());
-        preciosReferenciaMB.cargarDetalleCalificacion();*/
+        
         cargarPrecioRef();
         cargarPreciosMaximos();
     }
@@ -295,37 +282,6 @@ public class PreciosReferenciaView implements Serializable {
         lstPreciosReferencia = participanteRepo.findPreciosRefRubroEmpRubro(cargaGeneralView.getEmpresa(),
                 detalleProcesoAdq.getIdRubroAdq().getId(),
                 detalleProcesoAdq.getIdProcesoAdq().getIdAnho().getId());
-        /*switch (detalleProcesoAdq.getIdProcesoAdq().getIdAnho().getId().intValue()) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                preMaxRefPar = precioRepo.findPreciosRefRubroByNivelEduAndRubro(1l, detalleProcesoAdq);
-                preMaxRefCi = precioRepo.findPreciosRefRubroByNivelEduAndRubro(3l, detalleProcesoAdq);
-                preMaxRefCii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(4l, detalleProcesoAdq);
-                preMaxRefCiii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(5l, detalleProcesoAdq);
-                preMaxRefBac = precioRepo.findPreciosRefRubroByNivelEduAndRubro(6l, detalleProcesoAdq);
-                
-                break;
-            default: //año 2021 año 2022
-                if (detalleProcesoAdq.getIdRubroAdq().getId().intValue() != 1) { //utiles y zapatos
-                    preMaxRefPar = precioRepo.findPreciosRefRubroByNivelEduAndRubro(22l, detalleProcesoAdq);
-                }
-                preMaxRefCi = precioRepo.findPreciosRefRubroByNivelEduAndRubro(3l, detalleProcesoAdq);
-                preMaxRefCii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(4l, detalleProcesoAdq);
-                preMaxRefCiii = precioRepo.findPreciosRefRubroByNivelEduAndRubro(5l, detalleProcesoAdq);
-                preMaxRefBac = precioRepo.findPreciosRefRubroByNivelEduAndRubro(6l, detalleProcesoAdq);
-
-                if (detalleProcesoAdq.getIdRubroAdq().getId().intValue() == 2) { //utiles
-                    preMaxRefCiiiMf = precioRepo.findPreciosRefRubroByNivelEduAndRubro(23l, detalleProcesoAdq);
-                    preMaxRefBacMf = precioRepo.findPreciosRefRubroByNivelEduAndRubro(24l, detalleProcesoAdq);
-                }
-                break;
-        }*/
         PrimeFaces.current().ajax().update("frmPrincipal");
     }
 

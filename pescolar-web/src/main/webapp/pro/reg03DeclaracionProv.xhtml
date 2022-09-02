@@ -1,0 +1,81 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="head">
+        <style>
+            p{
+                text-align:justify;
+                text-justify: inter-word;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="frmPrincipal" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar" styleClass="divSticky"> 
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{declaracionView.guardarAceptarCondiciones}" disabled="#{declaracionView.aceptarCondiciones}" update="menuBar"/>
+                        <p:menuitem value="Imprimir" ajax="false" icon="pi pi-print" action="#{declaracionView.impOfertaGlobal}" disabled="#{not declaracionView.aceptarCondiciones}"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
+                        </f:facet>  
+                    </p:menubar>
+                </div>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header ui-fluid">
+                            <h2>
+                                <i class="pi pi-id-card-o" style="font-size: 15px;" aria-hidden="true"></i>
+                                <p:spacer width="10" height="8"/>
+                                <p:outputLabel id="lblNombreEmpresa" value="Datos de #{declaracionView.empresa.razonSocial}"/>
+                            </h2>
+                        </div>
+
+                        <div class="p-field">
+                            <div class="ui-message ui-staticmessage ui-message-info ui-widget ui-corner-all" style="width: 100%;">
+                                <p>#{declaracionView.preCabecera}</p>
+                                <p>#{declaracionView.cabecera}</p>
+                                <p>#{declaracionView.detalle}</p>
+                                <br/>
+                                <h:panelGrid columns="3" style="text-align: center;">
+                                    <p:outputLabel value="ACEPTO expresamente lo contenido, seleccionando con un cheque la casilla indicada y guardando " style="font-weight: bold; font-size: 12px !important"/>
+                                    <p:spacer width="5"/>
+                                    <p:selectBooleanCheckbox value="#{declaracionView.aceptarDeclaracion}" disabled="true"/>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                        <div class="p-field">
+                            <div class="ui-message ui-staticmessage ui-message-info ui-widget ui-corner-all" style="width: 100%;">
+                                <p:outputLabel value="He leído e ingresado la información exacta acerca de mi Oferta Global para participar en los procesos de compra de los bienes y servicios del Programa Dotación de Uniformes Zapatos y Útiles Escolares #{parametrosMB.anho.anho}, que consta de:" style="font-size: 12px !important"/>
+                                <br/>
+                                <ul>
+                                    <li><p:outputLabel value="Precios" style="font-size: 12px !important"/><br/></li>
+                                    <li><p:outputLabel value="Municipios de interés" style="font-size: 12px !important"/><br/></li>
+                                    <li><p:outputLabel value="Declaración jurada global sobre la aceptación de las adjudicaciones y el cumplimiento de las especificaciones técnicas y plazo y lugar de entrega requerida" style="font-size: 12px !important"/><br/></li>
+                                </ul>
+                                <br/>
+                                <p:outputLabel value="La entiendo y estoy de acuerdo con todo lo expresado en ella, para los procesos de las adjudicaciones correspondientes al rubro en el cual participo, para los procesos correspondientes del año 2021." style="font-size: 12px !important"/>
+                                <br/>
+                                <br/>
+                                <h:panelGrid columns="3" style="text-align: center;">
+                                    <p:outputLabel value="De estar de acuerdo con lo expresado, coloque un cheque aquí: " style="font-weight: bold; font-size: 12px !important"/>
+                                    <p:spacer width="5"/>
+                                    <p:selectBooleanCheckbox value="#{declaracionView.aceptarCondiciones}" disabled="true"/>
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

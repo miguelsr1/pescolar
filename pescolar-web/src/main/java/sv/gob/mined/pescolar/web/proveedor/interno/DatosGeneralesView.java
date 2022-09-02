@@ -19,7 +19,6 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.paradise.view.GuestPreferences;
-import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Canton;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
@@ -94,7 +93,7 @@ public class DatosGeneralesView implements Serializable {
     public void init() {
         if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
             //El usuario logeado es un proveedor
-            sessionView.setAnhoProvedor(11l);
+            sessionView.setAnhoProvedor(11l); //se setea el año proximo de contratación
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona", sessionView.getUsuario().getIdPersona()).build());
             cargaGeneralView.setEmpresa(empresaRepo.findEntityByParam(params));
             cargarDatosEmpresa(cargaGeneralView.getEmpresa());
@@ -534,11 +533,11 @@ public class DatosGeneralesView implements Serializable {
         }
     }
 
-    public void usuarioProveedor() {
+    /*public void usuarioProveedor() {
         //año 2023
         Anho anho = catalogoRepo.findEntityByPk(Anho.class, 11l);
         sessionView.setIdAnho(anho.getId());
         sessionView.setProceso(anho.getProcesoAdquisicionList().get(0));
         guestPreferencesView.setMenuMode("layout-menu-overlay");
-    }
+    }*/
 }
