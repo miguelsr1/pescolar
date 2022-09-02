@@ -168,6 +168,12 @@
                 width: 50%;
                 margin-bottom: 0.5rem;
             }
+            body .ui-panelgrid .ui-panelgrid-cell {
+                border: 1px solid #D3D5D6;
+                background: #ffffff;
+                color: #64686A;
+                padding: 0.4rem !important;
+            }
         </style>
 
     </ui:define>
@@ -208,7 +214,7 @@
                                     <p:inputText style="margin-right: 10px;" id="txtCodigoEntidad" maxlength="5" 
                                                  value="#{estadisticasCensoView.codigoEntidad}" size="4" 
                                                  autocomplete="false" disabled="#{estadisticasCensoView.deshabilitado}" onkeyup="return this.value.length >= 5">
-                                        <p:ajax event="keyup" listener="#{estadisticasCensoView.buscarEntidadEducativa}" update="nombreCE "/>
+                                        <p:ajax event="keyup" listener="#{estadisticasCensoView.buscarEntidadEducativa}" update="nombreCE tabDatos"/>
                                     </p:inputText>
                                     <p:outputLabel id="nombreCE" value="#{estadisticasCensoView.entidadEducativa.nombre}" style="font-weight: bold" />
                                 </div>
@@ -321,23 +327,23 @@
                                             <p:inputText id="txtParPreZapMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
                                     </p:row>
-                                    <p:row style="background-color: #86b8f0;" rendered="#{estadisticasCensoView.mostrarInicial}">
-                                        <p:column>Edu. Inicial + Parvularia</p:column>
-                                        <p:column><p:inputText id="txtIPFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaIniPar.femenimo}"/></p:column>
-                                        <p:column><p:inputText id="txtIPMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaIniPar.masculino}"/></p:column>
-                                        <p:column styleClass="numero"><p:outputLabel id="lblMatIP"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
+                                    <p:row rendered="#{estadisticasCensoView.mostrarInicial}">
+                                        <p:column style="background-color: #86b8f0;">Edu. Inicial + Parvularia</p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtIPFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaIniPar.femenimo}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtIPMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaIniPar.masculino}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero"><p:outputLabel id="lblMatIP"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
 
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblIPUni" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtIPPreUniFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParUni.precioMaxFem}"/>
                                             <p:inputText id="txtIPPreUniMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParUni.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblIPUti" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtIPPreUtiFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParUti.precioMaxFem}"/>
                                             <p:inputText id="txtIPPreUtiMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParUti.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblIPZap" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtIPPreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
                                             <p:inputText id="txtIPPreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
@@ -386,23 +392,23 @@
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                     </p:row>
-                                    <p:row style="background-color: #86b8f0;">
-                                        <p:column>I Ciclo</p:column>
-                                        <p:column><p:inputText id="txtCIFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo1.femenimo}"/></p:column>
-                                        <p:column><p:inputText id="txtCIMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo1.masculino}"/></p:column>
-                                        <p:column styleClass="numero"><p:outputLabel id="lblMatCI"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
+                                    <p:row>
+                                        <p:column style="background-color: #86b8f0;">I Ciclo</p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtCIFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo1.femenimo}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtCIMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo1.masculino}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero"><p:outputLabel id="lblMatCI"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
 
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIUni" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIPreUniFem" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIUni.precioMaxFem}"/>
                                             <p:inputText id="txtCIPreUniMas" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIUni.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIUti" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIPreUtiFem" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIUti.precioMaxFem}"/>
                                             <p:inputText id="txtCIPreUtiMas" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIUti.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIZap" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIPreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIZap.precioMaxFem}"/>
                                             <p:inputText id="txtCIPreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIZap.precioMaxMas}"/>
@@ -450,23 +456,23 @@
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                     </p:row>
-                                    <p:row style="background-color: #86b8f0;">
-                                        <p:column>II Ciclo</p:column>
-                                        <p:column><p:inputText id="txtCIIFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo2.femenimo}"/></p:column>
-                                        <p:column><p:inputText id="txtCIIMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo2.masculino}"/></p:column>
-                                        <p:column styleClass="numero"><p:outputLabel id="lblMatCII"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
+                                    <p:row>
+                                        <p:column style="background-color: #86b8f0;">II Ciclo</p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtCIIFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo2.femenimo}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtCIIMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo2.masculino}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero"><p:outputLabel id="lblMatCII"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
 
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIIUni" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIIPreUniFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIUni.precioMaxFem}"/>
                                             <p:inputText id="txtCIIPreUniMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIUni.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIIUti" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIIPreUtiFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIUti.precioMaxFem}"/>
                                             <p:inputText id="txtCIIPreUtiMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIUti.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIIZap" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIIPreZapFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIZap.precioMaxFem}"/>
                                             <p:inputText id="txtCIIPreZapMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIZap.precioMaxMas}"/>
@@ -514,29 +520,29 @@
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                     </p:row>
-                                    <p:row style="background-color: #86b8f0;">
-                                        <p:column>III Ciclo</p:column>
-                                        <p:column><p:inputText id="txtCIIIFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo3.femenimo}"/></p:column>
-                                        <p:column><p:inputText id="txtCIIIMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo3.masculino}"/></p:column>
-                                        <p:column styleClass="numero"><p:outputLabel id="lblMatCIII"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
+                                    <p:row>
+                                        <p:column style="background-color: #86b8f0;">III Ciclo</p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtCIIIFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo3.femenimo}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtCIIIMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo3.masculino}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero"><p:outputLabel id="lblMatCIII"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
 
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIIIUni" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIIIPreUniFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIIUni.precioMaxFem}"/>
                                             <p:inputText id="txtCIIIPreUniMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIIUni.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIIIUti" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIIIPreUtiFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIIUti.precioMaxFem}"/>
                                             <p:inputText id="txtCIIIPreUtiMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIIUti.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblCIIIZap" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtCIIIPreZapFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIIZap.precioMaxFem}"/>
                                             <p:inputText id="txtCIIIPreZapMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIIZap.precioMaxMas}"/>
                                         </p:column>
                                     </p:row>
-                                    <p:row style="background-color: #86b8f0;" rendered="#{estadisticasCensoView.mostrarModFlex}">
+                                    <p:row rendered="#{estadisticasCensoView.mostrarModFlex}">
                                         <p:column>Modalidad Flexible (Todos los niveles Nocturna y 3er Ciclo Distancia)</p:column>
                                         <p:column><p:inputNumber id="txtCIIIMFFem" emptyValue="zero" onclick="this.setSelectionRange(0, this.value.length);" disabled="#{estadisticasCensoView.isProcesoAdq}" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo3MF.femenimo}" onkeyup="calcularSubTotalMatricula('txtCIIIMFFem', 'txtCIIIMFMas', 'lblMatCIIIMF'); calcularMontoPorNivel('txtCIIIMFFem', 'txtCIIIMFMas', 'CIIIMF');" decimalPlaces="0" minValue="0" inputStyle="text-align: right;"/></p:column>
                                         <p:column><p:inputNumber id="txtCIIIMFMas" emptyValue="zero" onclick="this.setSelectionRange(0, this.value.length);" disabled="#{estadisticasCensoView.isProcesoAdq}" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaCiclo3MF.masculino}" onkeyup="calcularSubTotalMatricula('txtCIIIMFFem', 'txtCIIIMFMas', 'lblMatCIIIMF'); calcularMontoPorNivel('txtCIIIMFFem', 'txtCIIIMFMas', 'CIIIMF');" decimalPlaces="0" minValue="0" inputStyle="text-align: right;"/></p:column>
@@ -592,23 +598,23 @@
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                     </p:row>
-                                    <p:row style="background-color: #86b8f0;">
-                                        <p:column>Media</p:column>
-                                        <p:column><p:inputText id="txtBacFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaBac.femenimo}"/></p:column>
-                                        <p:column><p:inputText id="txtBacMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaBac.masculino}"/></p:column>
-                                        <p:column styleClass="numero"><p:outputLabel id="lblMatBac"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
+                                    <p:row>
+                                        <p:column style="background-color: #86b8f0;">Media</p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtBacFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaBac.femenimo}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;"><p:inputText id="txtBacMas" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaBac.masculino}"/></p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero"><p:outputLabel id="lblMatBac"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
 
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblBacUni" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtBacPreUniFem" style="display: none;" value="#{estadisticasCensoView.preBacUni.precioMaxFem}"/>
                                             <p:inputText id="txtBacPreUniMas" style="display: none;" value="#{estadisticasCensoView.preBacUni.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblBacUti" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtBacPreUtiFem" style="display: none;" value="#{estadisticasCensoView.preBacUti.precioMaxFem}"/>
                                             <p:inputText id="txtBacPreUtiMas" style="display: none;" value="#{estadisticasCensoView.preBacUti.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
                                             <p:inputText id="lblBacZap" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtBacPreZapFem" style="display: none;" value="#{estadisticasCensoView.preBacZap.precioMaxFem}"/>
                                             <p:inputText id="txtBacPreZapMas" style="display: none;" value="#{estadisticasCensoView.preBacZap.precioMaxMas}"/>
