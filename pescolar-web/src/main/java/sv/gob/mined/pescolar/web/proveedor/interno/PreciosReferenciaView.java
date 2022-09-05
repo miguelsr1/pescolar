@@ -785,7 +785,7 @@ public class PreciosReferenciaView implements Serializable {
     }
 
     public void cargarPreciosMaximos() {
-        lstPrecios = precioRepo.getLstPreciosRefRubroByRubro(detalleProcesoAdq);
+        lstPrecios = precioRepo.getLstPreciosRefRubroByRubro(detalleProcesoAdq, false);
         DetalleItemDto det = new DetalleItemDto();
 
         if (detalleProcesoAdq.getIdRubroAdq().getIdRubroUniforme().intValue() == 1) {

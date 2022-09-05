@@ -1,4 +1,4 @@
-package sv.gob.mined.pescolar.web;
+package sv.gob.mined.pescolar.web.proveedor.interno;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,6 +16,7 @@ import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.TecnicoProveedorRepo;
 import sv.gob.mined.pescolar.utils.DescriptorDto;
 import sv.gob.mined.pescolar.utils.JsfUtil;
+import sv.gob.mined.pescolar.web.SessionView;
 
 /**
  *

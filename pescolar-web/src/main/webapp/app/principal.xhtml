@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloProveedores ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
-                                            <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
+                                            <p:commandLink action="reg03InvitarProvedor?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
                                                 <f:setPropertyActionListener value="55" target="#{menuView.idOpcionMenu}" />
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
                                                     <h5>Proveedores</h5>

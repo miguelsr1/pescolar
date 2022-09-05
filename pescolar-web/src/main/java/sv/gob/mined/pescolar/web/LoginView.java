@@ -85,16 +85,7 @@ public class LoginView implements Serializable {
     public void setClaveAcceso(String claveAcceso) {
         this.claveAcceso = claveAcceso;
     }
-
-    /*public void updateClave() {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("Pbkdf2PasswordHash.Iterations", "3072");
-        parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");
-        parameters.put("Pbkdf2PasswordHash.SaltSizeBytes", "64");
-        passwordHash.initialize(parameters);
-
-        System.out.println(passwordHash.generate(claveAccesoPro.toCharArray()));
-    }*/
+    
     public String validarUsuario() {
         return validarLogin(usuario, claveAcceso, UR_WELCOME_USU);
     }

@@ -60,6 +60,7 @@ public class EstadisticasCensoView implements Serializable {
     private Boolean zapatos = true;
     private Boolean declaracion = true;
     private Boolean editDirector = false;
+    private Boolean ceClimaFrio = false;
     private BigInteger totalAlumnosMas = BigInteger.ZERO;
     private BigInteger totalAlumnosFem = BigInteger.ZERO;
     private BigInteger totalMatricula = BigInteger.ZERO;
@@ -167,7 +168,7 @@ public class EstadisticasCensoView implements Serializable {
     private PrecioRefRubroEmpRepo preciosRepo;
     @Inject
     private CatalogoRepo catalogoRepo;
-    @Inject 
+    @Inject
     private Reportes reportes;
     @Inject
     private MailRepo mailRepo;
@@ -857,6 +858,7 @@ public class EstadisticasCensoView implements Serializable {
     public void prepareEdit() {
         deshabilitado = false;
         codigoEntidad = "";
+        ceClimaFrio = false;
         entidadEducativa = new VwCatalogoEntidadEducativa();
         organizacionEducativa = new OrganizacionEducativa();
         estaditicaPar = new EstadisticaCenso();
@@ -870,49 +872,60 @@ public class EstadisticasCensoView implements Serializable {
         if (codigoEntidad != null && codigoEntidad.length() == 5) {
 
             if (procesoAdquisicion != null) {
-                organizacionEducativa = entidadEducativaRepo.getPresidenteOrganismoEscolar(codigoEntidad);
-                organizacionEducativaEncargadoCompra = entidadEducativaRepo.getMiembro(codigoEntidad, "ENCARGADO DE COMPRA");
-                orgTesorero = entidadEducativaRepo.getMiembro(codigoEntidad, "TESORERO");
-                orgConsejal = entidadEducativaRepo.getMiembro(codigoEntidad, "ENCARGADO DE COMPRA");
-
-                if (organizacionEducativa.getIdOrganizacionEducativa() == null) {
-                    organizacionEducativa.setCargo("Presidente Propietario, Director");
-                    organizacionEducativa.setCodigoEntidad(codigoEntidad);
-                    organizacionEducativa.setFirmaContrato(1l);
-                    organizacionEducativa.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
+                entidadEducativa = entidadEducativaRepo.findCeClimaFrioByCodigoEntidad(codigoEntidad);
+                if (entidadEducativa == null) {
+                    entidadEducativa = entidadEducativaRepo.findByPk(codigoEntidad);
+                    ceClimaFrio = false;
                 } else {
-                    nombre = organizacionEducativa.getNombreMiembro();
-                    telefono1 = organizacionEducativa.getTelDirector();
-                    telefono2 = organizacionEducativa.getTelDirector2();
-                    numeroDui = organizacionEducativa.getNumeroDui();
-                    nombreTesorero = orgTesorero.getNombreMiembro();
-                    nombreConsejal = orgConsejal.getNombreMiembro();
-                }
-                if (organizacionEducativaEncargadoCompra.getIdOrganizacionEducativa() == null) {
-                    organizacionEducativaEncargadoCompra.setCargo("ENCARGADO DE COMPRA");
-                    organizacionEducativaEncargadoCompra.setCodigoEntidad(codigoEntidad);
-                    organizacionEducativaEncargadoCompra.setFirmaContrato(0l);
-                    organizacionEducativaEncargadoCompra.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
-                } else {
-                    nombreEncargadoCompras = organizacionEducativaEncargadoCompra.getNombreMiembro();
+                    ceClimaFrio = true;
                 }
 
-                isProcesoAdq = false;
-                entidadEducativa = entidadEducativaRepo.findByPk(codigoEntidad);
-
-                if (procesoAdquisicion.getIdAnho().getId().intValue() < 6) {//menor a 2018
-                    detProAdqUni = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 1).findAny().orElse(new DetalleProcesoAdq());
+                if (entidadEducativa == null) {
+                    JsfUtil.mensajeAlerta("No se encuentra el centro educativo con código: " + codigoEntidad);
                 } else {
-                    detProAdqUni = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 4).findAny().orElse(new DetalleProcesoAdq());
-                    detProAdqUni2 = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 5).findAny().orElse(new DetalleProcesoAdq());
+                    organizacionEducativa = entidadEducativaRepo.getPresidenteOrganismoEscolar(codigoEntidad);
+                    organizacionEducativaEncargadoCompra = entidadEducativaRepo.getMiembro(codigoEntidad, "ENCARGADO DE COMPRA");
+                    orgTesorero = entidadEducativaRepo.getMiembro(codigoEntidad, "TESORERO");
+                    orgConsejal = entidadEducativaRepo.getMiembro(codigoEntidad, "ENCARGADO DE COMPRA");
+
+                    if (organizacionEducativa.getIdOrganizacionEducativa() == null) {
+                        organizacionEducativa.setCargo("Presidente Propietario, Director");
+                        organizacionEducativa.setCodigoEntidad(codigoEntidad);
+                        organizacionEducativa.setFirmaContrato(1l);
+                        organizacionEducativa.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
+                    } else {
+                        nombre = organizacionEducativa.getNombreMiembro();
+                        telefono1 = organizacionEducativa.getTelDirector();
+                        telefono2 = organizacionEducativa.getTelDirector2();
+                        numeroDui = organizacionEducativa.getNumeroDui();
+                        nombreTesorero = orgTesorero.getNombreMiembro();
+                        nombreConsejal = orgConsejal.getNombreMiembro();
+                    }
+                    if (organizacionEducativaEncargadoCompra.getIdOrganizacionEducativa() == null) {
+                        organizacionEducativaEncargadoCompra.setCargo("ENCARGADO DE COMPRA");
+                        organizacionEducativaEncargadoCompra.setCodigoEntidad(codigoEntidad);
+                        organizacionEducativaEncargadoCompra.setFirmaContrato(0l);
+                        organizacionEducativaEncargadoCompra.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
+                    } else {
+                        nombreEncargadoCompras = organizacionEducativaEncargadoCompra.getNombreMiembro();
+                    }
+
+                    isProcesoAdq = false;
+
+                    if (procesoAdquisicion.getIdAnho().getId().intValue() < 6) {//menor a 2018
+                        detProAdqUni = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 1).findAny().orElse(new DetalleProcesoAdq());
+                    } else {
+                        detProAdqUni = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 4).findAny().orElse(new DetalleProcesoAdq());
+                        detProAdqUni2 = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 5).findAny().orElse(new DetalleProcesoAdq());
+                    }
+
+                    detProAdqUti = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 2).findAny().orElse(new DetalleProcesoAdq());
+                    detProAdqZap = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 3).findAny().orElse(new DetalleProcesoAdq());
+
+                    recuperarEstadisticas();
+                    recuperarPreciosMaxRef();
+                    recuperarTechos();
                 }
-
-                detProAdqUti = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 2).findAny().orElse(new DetalleProcesoAdq());
-                detProAdqZap = procesoAdquisicion.getDetalleProcesoAdqList().stream().parallel().filter(det -> det.getIdRubroAdq().getId() == 3).findAny().orElse(new DetalleProcesoAdq());
-
-                recuperarEstadisticas();
-                recuperarPreciosMaxRef();
-                recuperarTechos();
             } else {
                 JsfUtil.mensajeAlerta("Debe de seleccionar un proceso de adquisición.");
             }
@@ -1006,19 +1019,19 @@ public class EstadisticasCensoView implements Serializable {
         if (detProAdqUni == null) {
             JsfUtil.mensajeError("Error en el proceso de adquisicion.");
         } else {
-            List<PreciosRefRubro> lstPrecios = preciosRepo.getLstPreciosRefRubroByRubro(detProAdqUni);
+            List<PreciosRefRubro> lstPrecios = preciosRepo.getLstPreciosRefRubroByRubro(detProAdqUni, ceClimaFrio);
 
             if (lstPrecios.isEmpty()) {
                 JsfUtil.mensajeError("Se deben de registrar los precios máximos de referencia.");
             } else {
-                preParUni = getPrecioMax(lstPrecios, 1);
-                preCicloIUni = getPrecioMax(lstPrecios, 3);
-                preCicloIIUni = getPrecioMax(lstPrecios, 4);
-                preCicloIIIUni = getPrecioMax(lstPrecios, 5);
+                preParUni = getPrecioMax(lstPrecios, 22);
+                preCicloIUni = getPrecioMax(lstPrecios, 2);
+                preCicloIIUni = getPrecioMax(lstPrecios, 2);
+                preCicloIIIUni = getPrecioMax(lstPrecios, 2);
                 preBacUni = getPrecioMax(lstPrecios, 6);
             }
 
-            lstPrecios = preciosRepo.getLstPreciosRefRubroByRubro(detProAdqUti);
+            lstPrecios = preciosRepo.getLstPreciosRefRubroByRubro(detProAdqUti, false);
 
             if (lstPrecios.isEmpty()) {
                 JsfUtil.mensajeError("Se deben de registrar los precios máximos de referencia.");
@@ -1034,7 +1047,7 @@ public class EstadisticasCensoView implements Serializable {
                 preBacUti = getPrecioMax(lstPrecios, 6);
             }
 
-            lstPrecios = preciosRepo.getLstPreciosRefRubroByRubro(detProAdqZap);
+            lstPrecios = preciosRepo.getLstPreciosRefRubroByRubro(detProAdqZap, false);
             if (lstPrecios.isEmpty()) {
                 JsfUtil.mensajeError("Se deben de registrar los precios máximos de referencia.");
             } else {
@@ -1449,7 +1462,7 @@ public class EstadisticasCensoView implements Serializable {
         presupuesto = presupuesto.add(preBacTemp.getPrecioMaxMas().multiply(new BigDecimal(estaditicaBac.getMasculino())).multiply(num));
 
         //Presupuesto de libros
-        if (idRubro == 2 && procesoAdquisicion.getIdAnho().getId().intValue() >= 6) { //mayor o igual de anho 2018
+        /*if (idRubro == 2 && procesoAdquisicion.getIdAnho().getId().intValue() >= 6) { //mayor o igual de anho 2018
 
             switch (procesoAdquisicion.getIdAnho().getId().intValue()) {
                 case 6:
@@ -1479,7 +1492,8 @@ public class EstadisticasCensoView implements Serializable {
                     presupuesto = presupuesto.add(new BigDecimal(estaditicaBacMF.getMasculino().add(estaditicaBacMF.getFemenimo())).multiply(preBacMFUti.getPrecioMaxMas()));
                     break;
             }
-        } else if (procesoAdquisicion.getIdAnho().getId().intValue() >= 9) { //mayor o igual de anho 2018
+        } else */
+        if (procesoAdquisicion.getIdAnho().getId().intValue() >= 9) { //mayor o igual de anho 2018
             switch (idRubro) {
                 case 4:
                 case 5:
@@ -1539,8 +1553,7 @@ public class EstadisticasCensoView implements Serializable {
                 param.put("pIdProceso", procesoAdquisicion.getId());
                 param.put("pInicial", (procesoAdquisicion.getIdAnho().getId().intValue() > 8));
                 param.put("pUsuarioInsercion", sessionView.getUsuario().getIdPersona().getUsuario());
-                
-                
+
                 reportes.generarRptsContractuales(lst, param, codigoEntidad, procesoAdquisicion.getDescripcionProcesoAdq().contains("SOBREDEMANDA"), procesoAdquisicion.getIdAnho().getAnho(), rprString.split(","));
             }
         } catch (Exception e) {
@@ -1601,5 +1614,4 @@ public class EstadisticasCensoView implements Serializable {
             Logger.getLogger(EstadisticasCensoView.class.getName()).log(Level.INFO, "Correo enviado a: {0}", string);
         });
     }*/
-
 }

@@ -40,26 +40,26 @@
 
                         <div class="ui-fluid" jsf:id="pnlFiltro">
                             <div class="p-field p-grid">
-                                <p:outputLabel for="cboRubro" value="#{bundle['compra.rubroAdq']}:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" />
-                                <div class="p-col-12 p-md-10">
-                                    <p:selectOneMenu id="cboRubro" value="#{ofertaBienesServiciosView.idRubro}">
-                                        <f:selectItem itemLabel="Seleccione un rubro" itemValue="null" />
-                                        <f:selectItems value="#{ofertaBienesServiciosView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
-                                        <p:ajax update="pnlFiltro" />
-                                    </p:selectOneMenu>
-                                </div>
-                            </div>
-                            <div class="p-field p-grid">
                                 <p:outputLabel value="#{bundle['ce.codEnt']}:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
                                 <div class="p-col-12 p-md-10">
                                     <p:outputPanel>
                                         <p:inputText id="txtCodigoEntidad" maxlength="5" autocomplete="off" size="5" value="#{ofertaBienesServiciosView.codigoEntidad}"
                                                      requiredMessage="Código de infraestructura" onkeyup="return this.value.length >= 5">
-                                            <p:ajax event="keyup" update="menuBar nombreCE cldFechaApertura" listener="#{ofertaBienesServiciosView.buscarCe}"/>
+                                            <p:ajax event="keyup" update="menuBar cboRubro nombreCE cldFechaApertura" listener="#{ofertaBienesServiciosView.buscarCe}"/>
                                         </p:inputText>
                                         <p:spacer width="10"/>
                                         <p:outputLabel id="nombreCE" style="font-weight: bold" value="#{ofertaBienesServiciosView.entidadEducativa.nombre}"/>
                                     </p:outputPanel>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="cboRubro" value="#{bundle['compra.rubroAdq']}:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" />
+                                <div class="p-col-12 p-md-10">
+                                    <p:selectOneMenu id="cboRubro" value="#{ofertaBienesServiciosView.idRubro}">
+                                        <f:selectItem itemLabel="Seleccione un rubro" itemValue="null" />
+                                        <f:selectItems value="#{ofertaBienesServiciosView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
+                                        <p:ajax update="pnlFiltro" listener="#{ofertaBienesServiciosView.validacionCodigoEntidadByRubro()}"/>
+                                    </p:selectOneMenu>
                                 </div>
                             </div>
                             <div class="p-field p-grid">

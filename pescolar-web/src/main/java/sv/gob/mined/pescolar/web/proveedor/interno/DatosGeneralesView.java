@@ -310,7 +310,8 @@ public class DatosGeneralesView implements Serializable {
         sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
         cargaGeneralView.cargarDetalleCalificacion();
         cargarDetalleCalificacion();
-        showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l);
+
+        showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l);
     }
 
     private void cargarDetalleCalificacion() {
@@ -416,7 +417,7 @@ public class DatosGeneralesView implements Serializable {
 
             //Si el usuario es proveedor, enviar notificación a cuenta de técnico de paquete escolar
             if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
-                //notificarTecnicoPaquete();
+                notificarTecnicoPaquete();
             }
             JsfUtil.mensajeUpdate();
         }
@@ -465,19 +466,21 @@ public class DatosGeneralesView implements Serializable {
                 empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId()).getMailTecnico());
     }
 
-    private void invitacionProveedorPaquete() {
+    public void invitacionProveedorPaquete() {
         StringBuilder sb = new StringBuilder("");
 
         sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.header"), cargaGeneralView.getEmpresa().getRazonSocial()));
         sb = sb.append("<br/>").append("<br/>");
-        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"), JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()), sessionView.getProceso().getIdAnho().getAnho(), RESOURCE_BUNDLE.getString("url")));
+        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"), JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()), sessionView.getProceso().getIdAnho().getAnho(), "<a href=\"".concat(RESOURCE_BUNDLE.getString("url")).concat("\">Clic acá</a>")));
         sb = sb.append("<br/>").append("<br/>");
         sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.footer"));
 
-        mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
-                "rafael.arias@mined.gob.sv",
-                MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
-                sb.toString());
+        mailRepo.enviarMail(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
+                sb.toString(),
+                cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
+                "rafael.arias@mined.gob.sv"
+        );
+        JsfUtil.mensajeInformacion("Se ha enviado la notificación al proveedor.");
     }
 
     public void filtroProveedores() {

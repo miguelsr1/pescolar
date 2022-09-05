@@ -1,4 +1,4 @@
-package sv.gob.mined.pescolar.web;
+package sv.gob.mined.pescolar.web.contratacion;
 
 import java.io.File;
 import sv.gob.mined.pescolar.model.OfertaBienesServicio;
@@ -27,6 +27,7 @@ import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Municipio;
+import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
@@ -39,6 +40,8 @@ import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.enums.TipoOperacion;
 import sv.gob.mined.pescolar.utils.enums.TipoOperador;
+import sv.gob.mined.pescolar.web.RepositorioAplicacionView;
+import sv.gob.mined.pescolar.web.SessionView;
 
 @SuppressWarnings("serial")
 @Named
@@ -71,6 +74,7 @@ public class OfertaBienesServiciosView implements Serializable {
     private SelectItem[] lstEstilos = new SelectItem[0];
 
     private List<Participante> lstParticipantes = new ArrayList();
+    private List<RubrosAmostrarInteres> lstRubros = new ArrayList();
     //private List<RubrosAmostrarInteres> lstRubros = new ArrayList();
     private List<Filtro> params = new ArrayList();
 
@@ -194,9 +198,10 @@ public class OfertaBienesServiciosView implements Serializable {
         return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", false);
     }
 
-//    public List<RubrosAmostrarInteres> getLstRubros() {
-//        return lstRubros;
-//    }
+    public List<RubrosAmostrarInteres> getLstRubros() {
+        return lstRubros;
+    }
+
     public String getCodigoDepartamento() {
         return codigoDepartamento;
     }
@@ -288,13 +293,13 @@ public class OfertaBienesServiciosView implements Serializable {
         if (entidadEducativa == null) {
             JsfUtil.mensajeAlerta("No se ha encontrado el centro escolar con código: " + codigoEntidad);
         } else {
-            params.clear();
-            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
-            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro).build());
-
-            detalleProceso = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
 
             List<Long> lstNiveles = catalogoRepo.getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(sessionView.getIdProcesoAdq(), codigoEntidad);
+            if(lstNiveles.isEmpty()){
+                JsfUtil.mensajeAlerta("El centro escolar no tiene registrado la matricula para el año: "+ sessionView.getAnhoProceso());
+                return;
+            }
+            
             nivelesEducativos = String.join(",", lstNiveles.stream().map(String::valueOf).collect(Collectors.toList()));
             cantidadAlumnos = nivelEducativoRepo.getCantidadTotalByCodEntAndIdProcesoAdq(nivelesEducativos, codigoEntidad, sessionView.getIdProcesoAdq());
 
@@ -302,43 +307,56 @@ public class OfertaBienesServiciosView implements Serializable {
                 JsfUtil.mensajeAlerta("Es necesario registrar las estadisticas para este centro educativo");
             } else {
                 if (sessionView.getCodigoDepartamento() != null) {
-                    String dep = sessionView.getUsuario().getCodigoDepartamento().getId();
-                    if (entidadEducativa.getCodigoDepartamento().getId().equals(dep) || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario().compareTo(1l) == 0) {
-                        params.clear();
+                    lstRubros = catalogoRepo.findRubrosByCe(codigoEntidad, sessionView.getIdProcesoAdq());
 
-                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad.codigoEntidad", codigoEntidad).build());
-                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq.id", detalleProceso.getId()).build());
-                        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "estadoEliminacion", 0l).build());
-
-                        ofertaBienesServicio = ofertaRepo.findEntityByParam(params);
-
-                        switch (operacion) {
-                            case NUEVO:
-                                if (ofertaBienesServicio != null) {
-                                    PrimeFaces.current().executeScript("onClick('btnModificarOferta')");
-                                } else {
-                                    ofertaBienesServicio = new OfertaBienesServicio();
-                                    ofertaBienesServicio.setIdDetProcesoAdq(detalleProceso);
-                                    ofertaBienesServicio.setCodigoEntidad(entidadEducativa);
-                                    cargaItemsPorCe();
-                                }
-                                break;
-                            case MODIFICAR:
-                                if (ofertaBienesServicio == null) {
-                                    JsfUtil.mensajeError("No existe un proceso de contratación para este centro escolar.");
-                                } else {
-                                    cargaItemsPorCe();
-                                }
-                                break;
-                        }
-                    } else {
-                        JsfUtil.mensajeAlerta("El codigo del centro escolar no pertenece al departamento " + JsfUtil.getNombreDepartamentoByCodigo(dep) + "<br/>"
-                                + "Departamento del CE: " + entidadEducativa.getCodigoEntidad() + " es " + entidadEducativa.getCodigoDepartamento().getNombreDepartamento());
+                    if (lstRubros.isEmpty()) {
+                        JsfUtil.mensajeAlerta("No se han registrado rubros de contratación para el código: " + codigoEntidad);
                     }
                 } else {
                     JsfUtil.mensajeAlerta("Debe de seleccionar un departamento y municipio.");
                 }
             }
+        }
+    }
+
+    public void validacionCodigoEntidadByRubro() {
+        params.clear();
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro).build());
+
+        detalleProceso = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
+
+        if (entidadEducativa.getCodigoDepartamento().getId().equals(sessionView.getUsuario().getCodigoDepartamento().getId()) || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario().compareTo(1l) == 0) {
+            params.clear();
+
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad.codigoEntidad", codigoEntidad).build());
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq.id", detalleProceso.getId()).build());
+            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "estadoEliminacion", 0l).build());
+
+            ofertaBienesServicio = ofertaRepo.findEntityByParam(params);
+
+            /*switch (operacion) {
+                case NUEVO:*/
+            if (ofertaBienesServicio != null) {
+                PrimeFaces.current().executeScript("onClick('btnModificarOferta')");
+            } else {
+                ofertaBienesServicio = new OfertaBienesServicio();
+                ofertaBienesServicio.setIdDetProcesoAdq(detalleProceso);
+                ofertaBienesServicio.setCodigoEntidad(entidadEducativa);
+                cargaItemsPorCe();
+            }
+            /*break;
+                case MODIFICAR:
+                    if (ofertaBienesServicio == null) {
+                        JsfUtil.mensajeError("No existe un proceso de contratación para este centro escolar.");
+                    } else {
+                        cargaItemsPorCe();
+                    }
+                    break;
+            }*/
+        } else {
+            JsfUtil.mensajeAlerta("El codigo del centro escolar no pertenece al departamento " + JsfUtil.getNombreDepartamentoByCodigo(sessionView.getUsuario().getCodigoDepartamento().getId()) + "<br/>"
+                    + "Departamento del CE: " + entidadEducativa.getCodigoEntidad() + " es " + entidadEducativa.getCodigoDepartamento().getNombreDepartamento());
         }
     }
 

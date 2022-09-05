@@ -1,0 +1,42 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <ui:define name="content">
+        <h:form id="frmPrincipal" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar" styleClass="divSticky"> 
+                        <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
+                        <p:menuitem value="Modificar" update="frmPrincipal" process="@this" icon="pi pi-pencil" onclick="onClick('btnModificar');" />
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"  update="dvDatosGenerales"/>
+                        <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{cargaGeneralView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
+                        <p:menuitem value="Invitar" icon="pi pi-envelope" action="#{datosGeneralesView.invitacionProveedorPaquete()}"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
+                        </f:facet>
+                    </p:menubar>
+                </div>
+                <p:panel visible="false">
+                    <p:commandButton id="btnModificar" value="ok" action="#{datosGeneralesView.filtroProveedores}" process="@this">
+                        <p:ajax event="dialogReturn" listener="#{datosGeneralesView.empresaSeleccionada}"  update="frmPrincipal pnlFoto dvDatosGenerales" />
+                    </p:commandButton>
+                </p:panel>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid" jsf:id="dvDatosGenerales">
+                        <ui:include src="/app/proveedor/interno/datosGenProveedor.xhtml"/>
+                    </div>
+                </div>
+
+            </div>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
