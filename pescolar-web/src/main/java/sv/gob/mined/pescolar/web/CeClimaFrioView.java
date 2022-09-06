@@ -9,7 +9,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import sv.gob.mined.pescolar.model.Departamento;
+import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
+import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.EntidadEducativaRepo;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.enums.TipoOperador;
@@ -27,7 +30,9 @@ public class CeClimaFrioView implements Serializable {
     private VwCatalogoEntidadEducativa entidadEducativa;
     private List<Filtro> params = new ArrayList();
     private String codigoDepartamento;
-    private String codigoMunicipio;
+    private Long idMunicipio;
+    private String orden;
+    
     List<VwCatalogoEntidadEducativa> lstCentrosEducativos = new ArrayList();
     
     @Inject
@@ -35,6 +40,9 @@ public class CeClimaFrioView implements Serializable {
     
     @Inject
     private EntidadEducativaRepo entidadRepo;
+    
+    @Inject
+    private CatalogoRepo catalogoRepo;
 
     @PostConstruct
     public void init() {
@@ -43,9 +51,9 @@ public class CeClimaFrioView implements Serializable {
 
     public void buscar() {
         params.clear();
-        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento.codigoDepartamento", codigoDepartamento).build());
-        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoMunicipio", codigoMunicipio).build());
-        lstCentrosEducativos = (List<VwCatalogoEntidadEducativa>) entidadRepo.findEntityByParam(params);
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idMunicipio.id", idMunicipio).build());
+        lstCentrosEducativos = (List<VwCatalogoEntidadEducativa>) entidadRepo.findListByParam(params, orden, Boolean.TRUE);
         
     }
     
@@ -78,4 +86,14 @@ public class CeClimaFrioView implements Serializable {
 //        List<Empresa> lstEmpresas = cgRepo.getLstEmpresa();
 //        return lstEmpresas.stream().filter(emp -> emp.getRazonSocial().toLowerCase().contains(queryLowerCase) || emp.getIdPersona().getNumeroDui().contains(query)).collect(Collectors.toList());
 //    }
+    
+    public List<Departamento> getLstDepartamento() {
+        return catalogoRepo.findListByParam(Departamento.class, new ArrayList(), "id", true);
+    }
+
+    public List<Municipio> getLstMunicipio() {
+        params.clear();
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento).build());
+        return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", false);
+    }
 }

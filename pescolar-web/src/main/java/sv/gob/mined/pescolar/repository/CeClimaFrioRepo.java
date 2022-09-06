@@ -11,7 +11,7 @@ import sv.gob.mined.pescolar.model.CeClimaFrio;
 
 /**
  *
- * @author RAREcheverria
+ * @author CQuintanilla
  */
 @Stateless
 public class CeClimaFrioRepo extends AbstractRepository<CeClimaFrio,Long> {
