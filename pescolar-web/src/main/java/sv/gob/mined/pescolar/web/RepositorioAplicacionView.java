@@ -66,7 +66,8 @@ public class RepositorioAplicacionView implements Serializable {
     public List<VwCatalogoEntidadEducativa> findAllEntidadesByCodigoEntidad(String codigoEntidad) {
         return lstEntidades.stream().filter(entidad -> entidad.toString().startsWith(codigoEntidad)).collect(Collectors.toList());
     }
-
+    
+    
     public VwCatalogoEntidadEducativa findEntidadByCodigoEntidad(String codigoEntidad) {
         return lstEntidades.stream().filter(entidad -> entidad.getCodigoEntidad().compareTo(codigoEntidad) == 0).findAny().get();
     }
