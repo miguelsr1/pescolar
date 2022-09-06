@@ -41,14 +41,13 @@
                             <h5>
                                 <i class="pi pi-list verde" style="font-size: 16px;"></i>
                                 <p:spacer width="10"/>
-                                Listo de Precios
+                                Listo de Precios Ofertados
                             </h5>
                             <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus-circle" disabled="true" update="tblDetallePrecio" style="width: 100px;"/>
                         </div>
 
                         <div class="p-formgrid p-grid">
                             <div class="p-field p-col">
-                                <p:outputLabel value="Precios de Referencia" style="font-size: 1.5em;"/>
                                 <p:dataTable id="tblDetallePrecio" widgetVar="tblDetallePrecio" value="#{preciosReferenciaView.lstPreciosReferencia}" var="precio" 
                                              editMode="cell" rowIndexVar="idRow" rowKey="#{precio.idPrecioRefEmp}" lazy="false"
                                              editable="true" rowStyleClass="#{precio.estadoEliminacion eq 1 ? 'filaEliminada' : null}" style="width: 570px !important"

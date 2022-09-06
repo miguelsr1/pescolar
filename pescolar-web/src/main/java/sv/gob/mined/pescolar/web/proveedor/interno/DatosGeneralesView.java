@@ -27,6 +27,7 @@ import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.Municipio;
+import sv.gob.mined.pescolar.model.TecnicoProveedor;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.DiasPlazoContratoRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
@@ -300,8 +301,8 @@ public class DatosGeneralesView implements Serializable {
             JsfUtil.mensajeAlerta("Debe de seleccionar una empresa");
         }
     }
-    
-    public String getDiasPlazo(){
+
+    public String getDiasPlazo() {
         return diasPlazo;
     }
 
@@ -320,11 +321,11 @@ public class DatosGeneralesView implements Serializable {
         cargarDetalleCalificacion();
 
         showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l);
-        
+
         params.clear();
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idAnho.id", sessionView.getIdAnho()).build());
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroInteres.id", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()).build());
-        
+
         diasPlazo = diasPlazoRepo.findEntityByParam(params).getDiasPlazo().toString();
     }
 
@@ -468,6 +469,12 @@ public class DatosGeneralesView implements Serializable {
      * correo a un tecnico MINED para darle seguimiento al registro de la oferta
      */
     private void notificarTecnicoPaquete() {
+        TecnicoProveedor tecnico = empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId());
+        if (tecnico == null) {
+            JsfUtil.mensajeAlerta("Usted no tiene ténico asignado");
+            return;
+        }
+
         StringBuilder sb = new StringBuilder("");
 
         sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.nofitecnico.message"), cargaGeneralView.getEmpresa().getRazonSocial()));
