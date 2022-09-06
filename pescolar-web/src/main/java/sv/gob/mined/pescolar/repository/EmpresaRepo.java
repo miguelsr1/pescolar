@@ -52,7 +52,7 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
         Query q = em.createQuery("SELECT t FROM TecnicoProveedor t WHERE t.idEmpresa.id = :pIdEmpresa", TecnicoProveedor.class);
         q.setParameter("pIdEmpresa", idEmpresa);
 
-        return (TecnicoProveedor) q.getResultList().get(0);
+        return q.getResultList().isEmpty() ? null : (TecnicoProveedor) q.getResultList().get(0);
     }
 
     public Empresa findEmpresaByNit(String nit, Boolean empresa) {
@@ -238,16 +238,16 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
 
     private String getIdGestionByProceso(Long idEmpresa, Long idMuestraInteres) {
         StoredProcedureQuery q = em.createStoredProcedureQuery("SP_GET_ID_GESTION");
-        
-        q.registerStoredProcedureParameter("P_ID_EMPRESA", Long.class,  ParameterMode.IN);
-        q.registerStoredProcedureParameter("P_ID_MUESTRA_INTERES", Integer.class,  ParameterMode.IN);
-        q.registerStoredProcedureParameter("P_ID_GESTION", String.class,  ParameterMode.OUT);
-        
+
+        q.registerStoredProcedureParameter("P_ID_EMPRESA", Long.class, ParameterMode.IN);
+        q.registerStoredProcedureParameter("P_ID_MUESTRA_INTERES", Integer.class, ParameterMode.IN);
+        q.registerStoredProcedureParameter("P_ID_GESTION", String.class, ParameterMode.OUT);
+
         q.setParameter("P_ID_EMPRESA", idEmpresa);
         q.setParameter("P_ID_MUESTRA_INTERES", idMuestraInteres.intValue());
-        
+
         q.execute();
-        
+
         return (String) q.getOutputParameterValue("P_ID_GESTION");
     }
 }

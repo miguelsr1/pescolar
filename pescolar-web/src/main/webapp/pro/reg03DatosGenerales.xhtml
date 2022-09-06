@@ -216,7 +216,7 @@
                                     <div class="p-field p-grid">
                                         <p:outputLabel for="cbDepartamento" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento Calificado:</p:outputLabel>
                                         <div class="p-col-12 p-md-10">
-                                            <p:selectOneMenu id="cbDepartamento" value="#{datosGeneralesView.codigoDepartamentoCalificado}" >
+                                            <p:selectOneMenu id="cbDepartamento" value="#{datosGeneralesView.codigoDepartamentoCalificado}" disabled="true">
                                                 <f:selectItem itemLabel="Seleccione un departamento"/>
                                                 <f:selectItems value="#{repositorioAplicacionView.lstDepartamentos}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.id} - #{depa.nombreDepartamento}"/>
                                             </p:selectOneMenu>
@@ -231,14 +231,14 @@
                                                 <li><p:outputLabel value="Su maquinaria disponible para producción (no cuentan maquinas en des uso);"/><br/></li>
                                                 <li><p:outputLabel value="Personal a contratar para la producción;"/><br/></li>
                                                 <li><p:outputLabel value="Durante los primeros días de ejecución debe coordinarse y realizarse la toma de tallas a los estudiantes;"/><br/></li>
-                                                <li><p:outputLabel value="El período de ejecución de los contratos es de 40 días hábiles y deben cubrirse, sin falta, en ese período (incluye la coordinación de entrega y posibles arreglos a los bienes)."/><br/></li>
+                                                <li><p:outputLabel value="El período de ejecución de los contratos es de #{datosGeneralesView.diasPlazo} días hábiles y deben cubrirse, sin falta, en ese período (incluye la coordinación de entrega y posibles arreglos a los bienes)."/><br/></li>
                                                 <li><p:outputLabel value="Considere también que puede resultar adjudicado por varios centros educativos, lo que supone que deberá coordinar y hacer la toma de tallas con cada uno sin que eso signifique una justificación a incumplir con lo considerado en el literal anterior."/><br/></li>
                                             </ul>
 
                                             <p:outputLabel value="Habiendo leído y tomado en cuenta los literales que anteceden considero que mi Capacidad de Producción es:"/>
                                             <p:spacer width="10"/>
                                             <p:inputNumber id="txtCapacidadPro" value="#{datosGeneralesView.capacidadInst.capacidadPropuesta}" decimalPlaces="0" size="10"
-                                                           inputStyle="text-align: right;" minValue="0"/>
+                                                           inputStyle="text-align: right;" minValue="0" disabled="true" readonly="true"/>
                                             <p:spacer width="5"/>
                                             <p:outputLabel value="piezas"/>
                                         </div>
@@ -248,20 +248,20 @@
                                     <div class="p-field p-grid">
                                         <p:outputLabel for="txtCapacidadAdj" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Capacidad Adjudicada:</p:outputLabel>
                                         <div class="p-col-12 p-md-10">
-                                            <p:inputNumber id="txtCapacidadAdj" value="#{datosGeneralesView.capacidadInst.capacidadAdjudicada}" decimalPlaces="0" size="10" readonly="true" inputStyle="text-align: right"/>
+                                            <p:inputNumber id="txtCapacidadAdj" value="#{datosGeneralesView.capacidadInst.capacidadAdjudicada}" decimalPlaces="0" size="10" readonly="true" inputStyle="text-align: right" disabled="true"/>
                                         </div>
                                     </div>
                                     <div class="p-field p-grid">
                                         <p:outputLabel for="txtCapacidad" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Capacidad Calificada:</p:outputLabel>
                                         <div class="p-col-12 p-md-10">
-                                            <p:inputNumber id="txtCapacidad" value="#{datosGeneralesView.capacidadInst.capacidadAcreditada}" decimalPlaces="0" size="10" readonly="true" inputStyle="text-align: right"/>
+                                            <p:inputNumber id="txtCapacidad" value="#{datosGeneralesView.capacidadInst.capacidadAcreditada}" decimalPlaces="0" size="10" readonly="true" inputStyle="text-align: right" disabled="true"/>
                                         </div>
                                     </div>
 
                                     <div class="p-field p-grid" style="display: #{datosGeneralesView.rubroUniforme?'flex':'none'}">
                                         <p:outputLabel for="cboIva" styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">¿Esta inscrito al IVA si sus ventas han sido superiores a $ 5,714.29?</p:outputLabel>
                                         <div class="p-col-12 p-md-8">
-                                            <p:selectBooleanCheckbox id="cboIva" value="#{datosGeneralesView.inscritoIva}">
+                                            <p:selectBooleanCheckbox id="cboIva" value="#{datosGeneralesView.inscritoIva}" disabled="true">
                                                 <p:ajax update="chDesea" />
                                             </p:selectBooleanCheckbox>
                                         </div>
