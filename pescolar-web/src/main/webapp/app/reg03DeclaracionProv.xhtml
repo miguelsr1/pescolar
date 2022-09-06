@@ -55,7 +55,7 @@
                         </div>
                         <div class="p-field">
                             <div class="ui-message ui-staticmessage ui-message-info ui-widget ui-corner-all" style="width: 100%;">
-                                <p:outputLabel value="He leído e ingresado la información exacta acerca de mi Oferta Global para participar en los procesos de compra de los bienes y servicios del Programa Dotación de Uniformes Zapatos y Útiles Escolares #{parametrosMB.anho.anho}, que consta de:" style="font-size: 12px !important"/>
+                                <p:outputLabel value="He leído e ingresado la información exacta acerca de mi Oferta Global para participar en los procesos de compra de los bienes y servicios del Programa Dotación de Uniformes Zapatos y Útiles Escolares #{sessionView.anhoProceso}, que consta de:" style="font-size: 12px !important"/>
                                 <br/>
                                 <ul>
                                     <li><p:outputLabel value="Precios" style="font-size: 12px !important"/><br/></li>
@@ -63,7 +63,7 @@
                                     <li><p:outputLabel value="Declaración jurada global sobre la aceptación de las adjudicaciones y el cumplimiento de las especificaciones técnicas y plazo y lugar de entrega requerida" style="font-size: 12px !important"/><br/></li>
                                 </ul>
                                 <br/>
-                                <p:outputLabel value="La entiendo y estoy de acuerdo con todo lo expresado en ella, para los procesos de las adjudicaciones correspondientes al rubro en el cual participo, para los procesos correspondientes del año 2021." style="font-size: 12px !important"/>
+                                <p:outputLabel value="La entiendo y estoy de acuerdo con todo lo expresado en ella, para los procesos de las adjudicaciones correspondientes al rubro en el cual participo, para los procesos correspondientes del año #{sessionView.anhoProceso}." style="font-size: 12px !important"/>
                                 <br/>
                                 <br/>
                                 <h:panelGrid columns="3" style="text-align: center;">

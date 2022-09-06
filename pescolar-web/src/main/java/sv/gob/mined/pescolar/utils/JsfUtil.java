@@ -1,9 +1,7 @@
 package sv.gob.mined.pescolar.utils;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -18,8 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -167,7 +163,7 @@ public class JsfUtil {
             case 2:
                 return "SUMINISTRO DE PAQUETES DE UTILES ESCOLARES";
             default:
-                return "PRODUCCION DE ZAPATOS";
+                return "SUMINISTRO DE ZAPATOS ESCOLARES";
         }
     }
 
@@ -186,7 +182,7 @@ public class JsfUtil {
                 param.put("descripcionRubro", (sobredemanda ? "SOBREDEMANDA DE " : "") + "SUMINISTRO DE PAQUETES DE UTILES ESCOLARES");
                 break;
             case 3:
-                param.put("descripcionRubro", (sobredemanda ? "SOBREDEMANDA DE " : "") + "PRODUCCION DE ZAPATOS");
+                param.put("descripcionRubro", (sobredemanda ? "SOBREDEMANDA DE " : "") + "SUMINISTRO DE ZAPATOS ESCOLARES");
                 break;
         }
         return param;

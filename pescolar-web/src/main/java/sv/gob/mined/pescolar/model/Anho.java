@@ -18,6 +18,9 @@ public class Anho implements Serializable {
     private List<DetRubroMuestraIntere> detRubroMuestraIntereList;
 
     @OneToMany(mappedBy = "idAnho", fetch = FetchType.LAZY)
+    private List<DiasPlazoContrato> diasPlazoContratoList;
+
+    @OneToMany(mappedBy = "idAnho", fetch = FetchType.LAZY)
     private List<ProcesoAdquisicion> procesoAdquisicionList;
     @Id
     @Column(name = "ID_ANHO", nullable = false)
@@ -60,5 +63,13 @@ public class Anho implements Serializable {
 
     public void setDetRubroMuestraIntereList(List<DetRubroMuestraIntere> detRubroMuestraIntereList) {
         this.detRubroMuestraIntereList = detRubroMuestraIntereList;
+    }
+
+    public List<DiasPlazoContrato> getDiasPlazoContratoList() {
+        return diasPlazoContratoList;
+    }
+
+    public void setDiasPlazoContratoList(List<DiasPlazoContrato> diasPlazoContratoList) {
+        this.diasPlazoContratoList = diasPlazoContratoList;
     }
 }

@@ -28,6 +28,7 @@ import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.repository.DiasPlazoContratoRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
 import sv.gob.mined.pescolar.repository.MailRepo;
 import sv.gob.mined.pescolar.utils.Constantes;
@@ -55,6 +56,7 @@ public class DatosGeneralesView implements Serializable {
     private Boolean deseaInscribirseIva = false;
     private Boolean showFoto = false;
 
+    private String diasPlazo;
     private String fotoProveedor;
     private String idCanton;
     private String codEntFinanciera;
@@ -88,6 +90,8 @@ public class DatosGeneralesView implements Serializable {
     private CargaGeneralView cargaGeneralView;
     @Inject
     private GuestPreferences guestPreferencesView;
+    @Inject
+    private DiasPlazoContratoRepo diasPlazoRepo;
 
     @PostConstruct
     public void init() {
@@ -296,6 +300,10 @@ public class DatosGeneralesView implements Serializable {
             JsfUtil.mensajeAlerta("Debe de seleccionar una empresa");
         }
     }
+    
+    public String getDiasPlazo(){
+        return diasPlazo;
+    }
 
     private void cargarDatosEmpresa(Empresa emp) {
         cargaGeneralView.setEmpresa(emp);
@@ -312,6 +320,12 @@ public class DatosGeneralesView implements Serializable {
         cargarDetalleCalificacion();
 
         showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l);
+        
+        params.clear();
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idAnho.id", sessionView.getIdAnho()).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroInteres.id", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()).build());
+        
+        diasPlazo = diasPlazoRepo.findEntityByParam(params).getDiasPlazo().toString();
     }
 
     private void cargarDetalleCalificacion() {
