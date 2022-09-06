@@ -117,6 +117,9 @@ public class MenuView implements Serializable {
             lstOpcionMenu = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), idOpcionMenu);
 
             crearArbolMenu();
+        } else if (usuario.getIdTipoUsuario().getIdTipoUsuario() == 9l) { //se verifica que el usuario se uno de tipo proveedor
+            lstOpcionMenu = catalogoRepo.findAllOpcionMenuByUsuarioAndApp(usuario.getIdUsuario(), 55l);
+            crearArbolMenu();
         }
     }
 
@@ -210,37 +213,39 @@ public class MenuView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona.usuario", securityContext.getCallerPrincipal().getName()).build());
         usuario = ((Usuario) catalogoRepo.findListByParam(Usuario.class, params).get(0));
 
-        lstModulos = catalogoRepo.findAllModuloByUsuario(usuario.getIdUsuario());
-
-        for (BigDecimal idModulo : lstModulos) {
-            switch (idModulo.intValue()) {
-                case 1:
-                    showModuloContrataciones = true;
-                    break;
-                case 2:
-                    showModuloConsultas = true;
-                    break;
-                case 3:
-                    showModuloProveedores = true;
-                    break;
-                case 4:
-                    showModuloModificativas = true;
-                    break;
-                case 5:
-                    showModuloCreditos = true;
-                    break;
-                case 6:
-                    showModuloRecepcion = true;
-                    break;
-                case 7:
-                    showModuloPagos = true;
-                    break;
-                case 8:
-                    showModuloMantenimiento = true;
-                    break;
-                case 10:
-                    showModuloLiquidacion = true;
-                    break;
+        if (usuario.getIdTipoUsuario().getIdTipoUsuario() == 9l) {
+        } else {
+            lstModulos = catalogoRepo.findAllModuloByUsuario(usuario.getIdUsuario());
+            for (BigDecimal idModulo : lstModulos) {
+                switch (idModulo.intValue()) {
+                    case 1:
+                        showModuloContrataciones = true;
+                        break;
+                    case 2:
+                        showModuloConsultas = true;
+                        break;
+                    case 3:
+                        showModuloProveedores = true;
+                        break;
+                    case 4:
+                        showModuloModificativas = true;
+                        break;
+                    case 5:
+                        showModuloCreditos = true;
+                        break;
+                    case 6:
+                        showModuloRecepcion = true;
+                        break;
+                    case 7:
+                        showModuloPagos = true;
+                        break;
+                    case 8:
+                        showModuloMantenimiento = true;
+                        break;
+                    case 10:
+                        showModuloLiquidacion = true;
+                        break;
+                }
             }
         }
     }

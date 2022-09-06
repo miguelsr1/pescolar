@@ -8,7 +8,8 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf">
     <ui:define name="content">
         <h:form id="frmPrincipal" prependId="false">
-            
+            <f:event type="preRenderView" listener="#{guestPreferences.setMenuMode('layout-menu-static')}"></f:event>
+
             <div class="p-grid dashboard"> 
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar id="menuBar" styleClass="divSticky"> 

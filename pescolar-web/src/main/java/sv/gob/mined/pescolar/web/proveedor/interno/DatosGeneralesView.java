@@ -19,7 +19,6 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.paradise.view.GuestPreferences;
-import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Canton;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
@@ -29,6 +28,7 @@ import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.repository.DiasPlazoContratoRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
 import sv.gob.mined.pescolar.repository.MailRepo;
 import sv.gob.mined.pescolar.utils.Constantes;
@@ -56,6 +56,7 @@ public class DatosGeneralesView implements Serializable {
     private Boolean deseaInscribirseIva = false;
     private Boolean showFoto = false;
 
+    private String diasPlazo;
     private String fotoProveedor;
     private String idCanton;
     private String codEntFinanciera;
@@ -89,12 +90,14 @@ public class DatosGeneralesView implements Serializable {
     private CargaGeneralView cargaGeneralView;
     @Inject
     private GuestPreferences guestPreferencesView;
+    @Inject
+    private DiasPlazoContratoRepo diasPlazoRepo;
 
     @PostConstruct
     public void init() {
         if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
             //El usuario logeado es un proveedor
-            sessionView.setAnhoProvedor(11l);
+            sessionView.setAnhoProvedor(11l); //se setea el año proximo de contratación
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idPersona", sessionView.getUsuario().getIdPersona()).build());
             cargaGeneralView.setEmpresa(empresaRepo.findEntityByParam(params));
             cargarDatosEmpresa(cargaGeneralView.getEmpresa());
@@ -297,6 +300,10 @@ public class DatosGeneralesView implements Serializable {
             JsfUtil.mensajeAlerta("Debe de seleccionar una empresa");
         }
     }
+    
+    public String getDiasPlazo(){
+        return diasPlazo;
+    }
 
     private void cargarDatosEmpresa(Empresa emp) {
         cargaGeneralView.setEmpresa(emp);
@@ -311,7 +318,14 @@ public class DatosGeneralesView implements Serializable {
         sessionView.setVariableSession("idEmpresa", cargaGeneralView.getEmpresa().getId());
         cargaGeneralView.cargarDetalleCalificacion();
         cargarDetalleCalificacion();
-        showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l);
+
+        showUpdateEmpresa = (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 1l || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l);
+        
+        params.clear();
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idAnho.id", sessionView.getIdAnho()).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroInteres.id", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()).build());
+        
+        diasPlazo = diasPlazoRepo.findEntityByParam(params).getDiasPlazo().toString();
     }
 
     private void cargarDetalleCalificacion() {
@@ -417,7 +431,7 @@ public class DatosGeneralesView implements Serializable {
 
             //Si el usuario es proveedor, enviar notificación a cuenta de técnico de paquete escolar
             if (sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario() == 9l) {
-                //notificarTecnicoPaquete();
+                notificarTecnicoPaquete();
             }
             JsfUtil.mensajeUpdate();
         }
@@ -466,19 +480,21 @@ public class DatosGeneralesView implements Serializable {
                 empresaRepo.getTecnicoProveedor(cargaGeneralView.getEmpresa().getId()).getMailTecnico());
     }
 
-    private void invitacionProveedorPaquete() {
+    public void invitacionProveedorPaquete() {
         StringBuilder sb = new StringBuilder("");
 
         sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.header"), cargaGeneralView.getEmpresa().getRazonSocial()));
         sb = sb.append("<br/>").append("<br/>");
-        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"), JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()), sessionView.getProceso().getIdAnho().getAnho(), RESOURCE_BUNDLE.getString("url")));
+        sb = sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.message"), JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()), sessionView.getProceso().getIdAnho().getAnho(), "<a href=\"".concat(RESOURCE_BUNDLE.getString("url")).concat("\">Clic acá</a>")));
         sb = sb.append("<br/>").append("<br/>");
         sb = sb.append(RESOURCE_BUNDLE.getString("pagoprov.email.footer"));
 
-        mailRepo.enviarMail(cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
-                "rafael.arias@mined.gob.sv",
-                MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
-                sb.toString());
+        mailRepo.enviarMail(MessageFormat.format(RESOURCE_BUNDLE.getString("pagoprov.email.update.titulo"), sessionView.getAnhoProceso()),
+                sb.toString(),
+                cargaGeneralView.getEmpresa().getIdPersona().getEmail(),
+                "rafael.arias@mined.gob.sv"
+        );
+        JsfUtil.mensajeInformacion("Se ha enviado la notificación al proveedor.");
     }
 
     public void filtroProveedores() {
@@ -534,11 +550,11 @@ public class DatosGeneralesView implements Serializable {
         }
     }
 
-    public void usuarioProveedor() {
+    /*public void usuarioProveedor() {
         //año 2023
         Anho anho = catalogoRepo.findEntityByPk(Anho.class, 11l);
         sessionView.setIdAnho(anho.getId());
         sessionView.setProceso(anho.getProcesoAdquisicionList().get(0));
         guestPreferencesView.setMenuMode("layout-menu-overlay");
-    }
+    }*/
 }

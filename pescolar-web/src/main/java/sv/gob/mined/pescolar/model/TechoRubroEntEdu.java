@@ -13,6 +13,8 @@ public class TechoRubroEntEdu implements Serializable {
 
     @Id
     @Column(name = "ID_RUBRO_TECHO", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "techo")
+    @SequenceGenerator(name = "techo", sequenceName = "SEQ_TECHO_RUBRO_ENT_EDU", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @Column(name = "CODIGO_ENTIDAD", length = 5)

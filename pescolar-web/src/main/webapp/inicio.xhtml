@@ -100,7 +100,7 @@
                             <div class="ui-fluid">
                                 <div class="field">
                                     <p:outputLabel id="lblUsuarioRecuperar" value="Usuario:"/>
-                                    <p:inputText value="#{loginView.usuario}" style="margin-top: 0.5rem;"/>
+                                    <p:inputText id="txtUser" value="#{loginView.usuario}" style="margin-top: 0.5rem;"/>
                                 </div>
                             </div>
 
@@ -110,7 +110,7 @@
 
 
                 <f:facet name="footer">
-                    <p:commandButton value="Aceptar" action="#{loginView.asignarNuevaClave()}" style="margin-right: 0.5rem;" process="@this"/>
+                    <p:commandButton value="Aceptar" action="#{loginView.asignarNuevaClave()}" style="margin-right: 0.5rem;" process="@this, txtUser"/>
                     <p:commandButton value="Cancelar" ajax="true" onclick="PF('dlgClave').hide();" process="@this"/>
                 </f:facet>
             </p:dialog>

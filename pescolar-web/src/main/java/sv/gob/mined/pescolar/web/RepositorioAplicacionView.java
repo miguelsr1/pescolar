@@ -12,6 +12,7 @@ import javax.inject.Named;
 import sv.gob.mined.pescolar.model.Anho;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.MunicipioAledanho;
+import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 
@@ -28,6 +29,7 @@ public class RepositorioAplicacionView implements Serializable {
     private List<Anho> lstAnhos;
     private List<MunicipioAledanho> lstMunicipioAledanho;
     private List<VwCatalogoEntidadEducativa> lstEntidades;
+    private List<RubrosAmostrarInteres> lstRubros;
 
     @Inject
     private CatalogoRepo catalogoRepo;

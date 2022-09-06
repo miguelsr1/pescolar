@@ -8,6 +8,7 @@ package sv.gob.mined.pescolar.web.proveedor.interno;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,7 +149,7 @@ public class DeclaracionView implements Serializable {
             if (anho.getId().intValue() > 8) { // anho mayor de 2020
                 //validación de ingreso de todos los item para el rubro de uniforme
                 if (isUniforme) {
-                    List<PreciosRefRubroEmp> lstPreciosReferencia = participanteRepo.findPreciosRefRubroEmpRubro(getEmpresa(), 
+                    List<PreciosRefRubroEmp> lstPreciosReferencia = participanteRepo.findPreciosRefRubroEmpRubro(getEmpresa(),
                             cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), anho.getId());
                     if (lstPreciosReferencia.size() < 12) {
                         todoBien = false;
@@ -190,7 +191,7 @@ public class DeclaracionView implements Serializable {
             param.put("pCorreoPersona", capacidadInst.getIdMuestraInteres().getIdEmpresa().getIdPersona().getEmail());
             param.put("pIdGestion", idGestion);
 
-            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(empresa.getNumeroNit(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), 
+            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(empresa.getNumeroNit(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(),
                     anho.getId());
             lstDatos.get(0).setRubro(JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             if (lstDatos.get(0).getDepartamento().contains("TODO EL PAIS")) {
@@ -250,7 +251,6 @@ public class DeclaracionView implements Serializable {
 
         mailRepo.enviarMail(titulo, mensaje, to, cc, bcc);
     }*/
-
     public void generarNotificacion() {
         StringBuilder sb = new StringBuilder();
         String nombreCanton = "";
@@ -265,9 +265,9 @@ public class DeclaracionView implements Serializable {
         }
 
         NotificacionOfertaProvDto nopd = participanteRepo.getNotificacionOfertaProv(empresa.getId(), anho.getId(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId());
-        
+
         sb.append(preCabecera);
-        
+
         sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("prov_notif_inscripcion_uniforme.email.mensaje"),
                 nopd.getRazonSocial(),
                 nopd.getNumeroNit(),
@@ -281,8 +281,8 @@ public class DeclaracionView implements Serializable {
                 isUniforme ? "Cantón, Municipio y Departamento" : "Municipio y Departamento"));
 
         sb.append(RESOURCE_BUNDLE.getString("prov_notif_inscripcion_uniforme.email.mensaje.tbl_precios.header"));
-        nopd.getLstDetItemOfertaGlobal().forEach((detalle) -> {
-            sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("prov_notif_inscripcion_uniforme.email.mensaje.tbl_precios.detalle"), detalle.getDescripcionItem(), detalle.getPrecioMaxReferencia(), detalle.getPrecioUnitario()));
+        nopd.getLstDetItemOfertaGlobal().forEach((det) -> {
+            sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("prov_notif_inscripcion_uniforme.email.mensaje.tbl_precios.detalle"), det.getDescripcionItem(), det.getPrecioMaxReferencia(), (det.getPrecioUnitario() == null ? BigDecimal.ZERO : det.getPrecioUnitario())));
         });
         sb.append(RESOURCE_BUNDLE.getString("prov_notif_inscripcion_uniforme.email.mensaje.tbl_precios.fin"));
 

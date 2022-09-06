@@ -49,7 +49,7 @@
                                 <h:panelGrid columns="3" style="text-align: center;">
                                     <p:outputLabel value="ACEPTO expresamente lo contenido, seleccionando con un cheque la casilla indicada y guardando " style="font-weight: bold; font-size: 12px !important"/>
                                     <p:spacer width="5"/>
-                                    <p:selectBooleanCheckbox value="#{declaracionView.aceptarDeclaracion}"/>
+                                    <p:selectBooleanCheckbox value="#{declaracionView.aceptarDeclaracion}" disabled="true"/>
                                 </h:panelGrid>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                 <h:panelGrid columns="3" style="text-align: center;">
                                     <p:outputLabel value="De estar de acuerdo con lo expresado, coloque un cheque aquí: " style="font-weight: bold; font-size: 12px !important"/>
                                     <p:spacer width="5"/>
-                                    <p:selectBooleanCheckbox value="#{declaracionView.aceptarCondiciones}"/>
+                                    <p:selectBooleanCheckbox value="#{declaracionView.aceptarCondiciones}" disabled="true"/>
                                 </h:panelGrid>
                             </div>
                         </div>

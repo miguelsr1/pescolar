@@ -180,14 +180,14 @@
 
     <ui:define name="title">Listado de ofertas registradas</ui:define>
     <ui:define name="content">
-        <h:form id="form" prependId="false">
+        <h:form id="form" prependId="false" onkeypress="if (event.keyCode == 13) { return false; }">
             <div class="p-grid dashboard"> 
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar>
                         <p:menuitem value="Nuevo"  icon="pi pi-file" />
                         <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" />
-                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{estadisticasCensoView.guardar}" disabled="#{sessionView.usuarioSoloLectura}"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
@@ -269,18 +269,18 @@
 
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblIni2Uni" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtIni2PreUniFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParUni.precioMaxFem}"/>
-                                            <p:inputText id="txtIni2PreUniMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParUni.precioMaxMas}"/>
+                                            <p:inputText id="txtIni2PreUniFem" style="" size="4" value="#{estadisticasCensoView.preParUni.precioMaxFem}"/>
+                                            <p:inputText id="txtIni2PreUniMas" style="" size="4" value="#{estadisticasCensoView.preParUni.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblIni2Uti" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtIni2PreUtiFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParUti.precioMaxFem}"/>
-                                            <p:inputText id="txtIni2PreUtiMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParUti.precioMaxMas}"/>
+                                            <p:inputText id="txtIni2PreUtiFem" style="" size="4" value="#{estadisticasCensoView.preParUti.precioMaxFem}"/>
+                                            <p:inputText id="txtIni2PreUtiMas" style="" size="4" value="#{estadisticasCensoView.preParUti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblIni2Zap" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtIni2PreZapFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
-                                            <p:inputText id="txtIni2PreZapMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
+                                            <p:inputText id="txtIni2PreZapFem" style="" size="4" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
+                                            <p:inputText id="txtIni2PreZapMas" style="" size="4" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
                                     </p:row>
                                     <p:row rendered="#{estadisticasCensoView.mostrarInicial}">
@@ -291,18 +291,18 @@
 
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblIni3Uni" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtIni3PreUniFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParUni.precioMaxFem}"/>
-                                            <p:inputText id="txtIni3PreUniMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParUni.precioMaxMas}"/>
+                                            <p:inputText id="txtIni3PreUniFem" style="" size="4" value="#{estadisticasCensoView.preParUni.precioMaxFem}"/>
+                                            <p:inputText id="txtIni3PreUniMas" style="" size="4" value="#{estadisticasCensoView.preParUni.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblIni3Uti" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtIni3PreUtiFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParUti.precioMaxFem}"/>
-                                            <p:inputText id="txtIni3PreUtiMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParUti.precioMaxMas}"/>
+                                            <p:inputText id="txtIni3PreUtiFem" style="" size="4" value="#{estadisticasCensoView.preParUti.precioMaxFem}"/>
+                                            <p:inputText id="txtIni3PreUtiMas" style="" size="4" value="#{estadisticasCensoView.preParUti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblIni3Zap" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtIni3PreZapFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
-                                            <p:inputText id="txtIni3PreZapMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
+                                            <p:inputText id="txtIni3PreZapFem" style="" size="4" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
+                                            <p:inputText id="txtIni3PreZapMas" style="" size="4" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
                                     </p:row>
                                     <p:row>
@@ -313,18 +313,18 @@
 
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblParUni" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtParPreUniFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParUni.precioMaxFem}"/>
-                                            <p:inputText id="txtParPreUniMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParUni.precioMaxMas}"/>
+                                            <p:inputText id="txtParPreUniFem" style="" size="4" value="#{estadisticasCensoView.preParUni.precioMaxFem}"/>
+                                            <p:inputText id="txtParPreUniMas" style="" size="4" value="#{estadisticasCensoView.preParUni.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblParUti" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtParPreUtiFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParUti.precioMaxFem}"/>
-                                            <p:inputText id="txtParPreUtiMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParUti.precioMaxMas}"/>
+                                            <p:inputText id="txtParPreUtiFem" style="" size="4" value="#{estadisticasCensoView.preParUti.precioMaxFem}"/>
+                                            <p:inputText id="txtParPreUtiMas" style="" size="4" value="#{estadisticasCensoView.preParUti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero">
                                             <p:inputText id="lblParZap" size="5" readonly="true" styleClass="numero"/>
-                                            <p:inputText id="txtParPreZapFem" style="display: none;" size="4" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
-                                            <p:inputText id="txtParPreZapMas" style="display: none;" size="4" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
+                                            <p:inputText id="txtParPreZapFem" style="" size="4" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
+                                            <p:inputText id="txtParPreZapMas" style="" size="4" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
                                     </p:row>
                                     <p:row rendered="#{estadisticasCensoView.mostrarInicial}">

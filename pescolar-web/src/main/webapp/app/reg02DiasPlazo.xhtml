@@ -10,24 +10,18 @@
             <div class="p-grid dashboard"> 
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar id="menuBar" styleClass="divSticky"> 
-                        <p:menuitem value="Nuevo" icon="pi pi-file-o" id="mtmNuevo" disabled="true"/>
+                        <p:menuitem value="Nuevo" icon="pi pi-file-o" id="mtmNuevo" action="#{diasPlazoContratoView.nuevo()}" />
                         <p:menuitem value="Modificar" icon="pi pi-pencil" id="mtmModificar" disabled="true"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{diasPlazoContratoView.guardar()}"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false"/>
                         <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/principal.xhtml"/>
 
                         <f:facet  name="options">  
-                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}"/>
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
                         </f:facet>
                     </p:menubar>
                 </div>
-
-                <p:panel visible="false">
-                    <p:commandButton id="btnModificarOferta" action="#{ofertaBienesServiciosView.editarOferta()}" process="@this, cboRubro, txtCodigoEntidad">
-                        <p:confirm header="Confirmación" message="Ya existe una oferta para este Centro Educativo, ¿Desea editar la oferta?" icon="pi pi-exclamation-triangle"/>
-                    </p:commandButton>
-                </p:panel>
 
                 <div class="p-col-12">
                     <div class="card">
@@ -40,32 +34,18 @@
 
                         <div class="ui-fluid" jsf:id="pnlFiltro">
                             <div class="p-field p-grid">
-                                <p:outputLabel value="#{bundle['ce.codEnt']}:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
-                                <div class="p-col-12 p-md-10">
-                                    <p:outputPanel>
-                                        <p:inputText id="txtCodigoEntidad" maxlength="5" autocomplete="off" size="5" value="#{ofertaBienesServiciosView.codigoEntidad}"
-                                                     requiredMessage="Código de infraestructura" onkeyup="return this.value.length >= 5">
-                                            <p:ajax event="keyup" update="menuBar cboRubro nombreCE cldFechaApertura" listener="#{ofertaBienesServiciosView.buscarCe}"/>
-                                        </p:inputText>
-                                        <p:spacer width="10"/>
-                                        <p:outputLabel id="nombreCE" style="font-weight: bold" value="#{ofertaBienesServiciosView.entidadEducativa.nombre}"/>
-                                    </p:outputPanel>
-                                </div>
-                            </div>
-                            <div class="p-field p-grid">
                                 <p:outputLabel for="cboRubro" value="#{bundle['compra.rubroAdq']}:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" />
                                 <div class="p-col-12 p-md-10">
-                                    <p:selectOneMenu id="cboRubro" value="#{ofertaBienesServiciosView.idRubro}">
-                                        <f:selectItem itemLabel="Seleccione un rubro" itemValue="null" />
-                                        <f:selectItems value="#{ofertaBienesServiciosView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
-                                        <p:ajax update="pnlFiltro" listener="#{ofertaBienesServiciosView.validacionCodigoEntidadByRubro()}"/>
+                                    <p:selectOneMenu id="cboRubro" value="#{diasPlazoContratoView.idRubro}">
+                                        <f:selectItem itemLabel="Seleccione un rubro" noSelectionOption="true"/>
+                                        <f:selectItems value="#{sessionView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
                                     </p:selectOneMenu>
                                 </div>
                             </div>
                             <div class="p-field p-grid">
-                                <p:outputLabel value="Fecha de registro:" for="cldFechaApertura" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                                <p:outputLabel value="Número de días:" for="txtDias" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
                                 <div class="p-col-12 p-md-10">
-                                    <p:calendar id="cldFechaApertura" value="#{ofertaBienesServiciosView.oferta.fechaApertura}" pattern="dd/MM/yyyy" size="11" requiredMessage="Fecha de apertura de la oferta" />
+                                    <p:inputNumber id="txtDias" value="#{diasPlazoContratoView.numeroDias}" />
                                 </div>
                             </div>
                         </div> 
@@ -73,43 +53,34 @@
                     <div class="card">
                         <div class="card-header overview-box blue" style="display: block;" >
                             <h5>
-                                Lista de Proveedores
+                                Lista de Registros
                                 <i class="pi pi-list"></i>
-                                <p:commandButton id="btoExportar" value=" Exportar" icon="pi pi-upload" style="float: right; font-size: 12px;"/>
-                                <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus" style="float: right; font-size: 12px; margin-right: 5px;" action="#{ofertaBienesServiciosView.agregarProveedor()}" update="pnoCantidad"/>
                             </h5>
                         </div>
 
-                        <p:dataTable id="tblParticipantes" value="#{ofertaBienesServiciosView.oferta.participantesList}" var="participante" 
-                                     emptyMessage="No se han agregado proveedores" rowIndexVar="rowId" styleClass="ui-datatable-borderless ui-datatable-reflow"
-                                     rowKey="#{participante.id}" rowStyleClass="#{participante.estadoEliminacion eq 1 ? 'filaEliminada' : null}"
+                        <p:dataTable id="tblDias" value="#{diasPlazoContratoView.lstDias}" var="dia" 
+                                     emptyMessage="No se han agregado registros" rowIndexVar="rowId" styleClass="ui-datatable-borderless ui-datatable-reflow"
+                                     rowKey="#{dia.id}" rowStyleClass="#{dia.estadoEliminacion ? 'filaEliminada' : null}"
                                      lazy="false">
 
                             <p:column headerText="Id" width="40" styleClass="centrado">
-                                <p:outputLabel value="#{participante.id}" />
+                                <p:outputLabel value="#{dia.id}" />
                             </p:column>
 
-                            <p:column headerText="NIT" width="120" rendered="#{!sessionView.isUsuarioDigitador}">
-                                <p:outputLabel value="#{participante.idEmpresa.numeroNit}" />
+                            <p:column headerText="Rubro" >
+                                <p:outputLabel value="#{dia.idRubroInteres.descripcionRubro}" />
                             </p:column>
 
-                            <p:column headerText="Proveedor" rendered="#{!sessionView.isUsuarioDigitador}"> 
-                                <p:outputLabel value="#{participante.idEmpresa.razonSocial}" />
+                            <p:column headerText="Número días" > 
+                                <p:outputLabel value="#{dia.diasPlazo}" />
                             </p:column>
 
                             <p:column headerText="Eliminar" width="40" styleClass="centrado">
-                                <p:commandLink  process="@this" >
-                                    <p:outputLabel rendered="#{!participante.eliminar}"> <i class="fa fa-trash"></i></p:outputLabel>
-                                    <p:outputLabel rendered="#{participante.eliminar}"> <i class="fa fa-minus-circle"></i></p:outputLabel>
-                                    <f:viewParam name="idParticipante" value="#{participante.id}"/>
-                                </p:commandLink>
-                            </p:column>
+                                <p:commandLink action="#{diasPlazoContratoView.eliminarDia}" update="tblDias" >
+                                    <p:outputLabel rendered="#{dia.estadoEliminacion}"> <i class="pi pi-check-circle negrita" ></i></p:outputLabel>
+                                    <p:outputLabel rendered="#{not dia.estadoEliminacion}"> <i class="pi pi-minus-circle rojo negrita"></i></p:outputLabel>
 
-                            <p:column headerText="Ver Oferta" width="40" styleClass="centrado">
-                                <p:commandLink >
-                                    <f:param name="idParticipante" value="#{participante.id}"/>
-                                    <f:param name="txtCodigoEntidad" value="#{participante.idOferta.codigoEntidad.codigoEntidad}"/>
-                                    <i class="fa fa-eye" style="font-size: 17px;"></i>
+                                    <f:setPropertyActionListener value="#{dia}" target="#{diasPlazoContratoView.diasPlazoContrato}"/>                                     <f:setPropertyActionListener value="#{idRow}" target="#{preciosReferenciaView.idRow}"/>  
                                 </p:commandLink>
                             </p:column>
                         </p:dataTable>
