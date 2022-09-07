@@ -335,8 +335,6 @@ public class OfertaBienesServiciosView implements Serializable {
 
             ofertaBienesServicio = ofertaRepo.findEntityByParam(params);
 
-            /*switch (operacion) {
-                case NUEVO:*/
             if (ofertaBienesServicio != null) {
                 PrimeFaces.current().executeScript("onClick('btnModificarOferta')");
             } else {
@@ -345,15 +343,6 @@ public class OfertaBienesServiciosView implements Serializable {
                 ofertaBienesServicio.setCodigoEntidad(entidadEducativa);
                 cargaItemsPorCe();
             }
-            /*break;
-                case MODIFICAR:
-                    if (ofertaBienesServicio == null) {
-                        JsfUtil.mensajeError("No existe un proceso de contratación para este centro escolar.");
-                    } else {
-                        cargaItemsPorCe();
-                    }
-                    break;
-            }*/
         } else {
             JsfUtil.mensajeAlerta("El codigo del centro escolar no pertenece al departamento " + JsfUtil.getNombreDepartamentoByCodigo(sessionView.getUsuario().getCodigoDepartamento().getId()) + "<br/>"
                     + "Departamento del CE: " + entidadEducativa.getCodigoEntidad() + " es " + entidadEducativa.getCodigoDepartamento().getNombreDepartamento());
@@ -361,8 +350,6 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     private void cargaItemsPorCe() {
-        /*deshabilitar = !current.getIdDetProcesoAdq().getHabilitarRegistro();
-        abrirDialogCe = true;*/
         if (!getOferta().getIdDetProcesoAdq().getHabilitar()) {
             JsfUtil.mensajeInformacion("El registro de contratos ha sido deshabilitado por el Administrador.");
         } else {

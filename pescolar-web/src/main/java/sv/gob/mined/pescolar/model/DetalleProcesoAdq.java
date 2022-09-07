@@ -85,4 +85,9 @@ public class DetalleProcesoAdq implements Serializable {
     public void setDetRubroMuestraIntereList(List<DetRubroMuestraIntere> detRubroMuestraIntereList) {
         this.detRubroMuestraIntereList = detRubroMuestraIntereList;
     }
+
+    @Override
+    public String toString() {
+        return "DetalleProcesoAdq{" + "id=" + id + '}';
+    }
 }

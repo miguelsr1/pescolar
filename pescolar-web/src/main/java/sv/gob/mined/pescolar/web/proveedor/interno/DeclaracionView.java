@@ -224,33 +224,6 @@ public class DeclaracionView implements Serializable {
         }
     }
 
-    /*private void enviarNotificacionModProv() {
-        String titulo;
-        String mensaje;
-        Date fecha = new Date();
-        List<String> to = new ArrayList();
-        List<String> cc = new ArrayList();
-        List<String> bcc = new ArrayList();
-
-        SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
-
-        cc.add("carlos.enrique.villegas@admin.mined.edu.sv");
-        cc.add("rene.brizuela@mined.gob.sv");
-
-        bcc.add(JsfUtil.getValorFromBundleByKey("cuenta1.name"));
-        bcc.add("miguel.sanchez@mined.gob.sv");
-        to.add(empresa.getIdPersona().getEmail());
-
-        titulo = MessageFormat.format(UTIL_CORREO.getString("prov_notif_inscripcion.email.titulo"), capacidadInst.getIdMuestraInteres().getIdAnho().getAnho());
-        mensaje = MessageFormat.format(UTIL_CORREO.getString("prov_notif_inscripcion.email.mensaje"),
-                sdfHora.format(fecha).split(":")[0], sdfHora.format(fecha).split(":")[1],
-                Herramientas.getNumDia(fecha), Herramientas.getNomMes(fecha), Herramientas.getNumAnyo(fecha),
-                empresa.getIdPersona().getEmail(), empresa.getIdPersona().getNombreCompleto(), empresa.getIdPersona().getNumeroDui(), idGestion,
-                sdfHora.format(fecha).split(":")[0], sdfHora.format(fecha).split(":")[1],
-                Herramientas.getNumDia(fecha), Herramientas.getNomMes(fecha), Herramientas.getNumAnyo(fecha));
-
-        mailRepo.enviarMail(titulo, mensaje, to, cc, bcc);
-    }*/
     public void generarNotificacion() {
         StringBuilder sb = new StringBuilder();
         String nombreCanton = "";
@@ -270,7 +243,7 @@ public class DeclaracionView implements Serializable {
 
         sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("prov_notif_inscripcion_uniforme.email.mensaje"),
                 nopd.getRazonSocial(),
-                nopd.getNumeroNit(),
+                nopd.getNumeroDui(),
                 nopd.getDescripcionRubro(),
                 nopd.getPrograma(),
                 isUniforme ? nombreCanton.concat(",").concat(nopd.getUbicacionPer()) : nopd.getUbicacionPer(),

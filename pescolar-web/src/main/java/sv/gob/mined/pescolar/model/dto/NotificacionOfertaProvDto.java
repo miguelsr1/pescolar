@@ -26,7 +26,7 @@ public class NotificacionOfertaProvDto implements Serializable {
     @Id
     private Long idEmpresa;
     private String razonSocial;
-    private String numeroNit;
+    private String numeroDui;
     private String descripcionRubro;
     private String programa;
     private String ubicacionPer;
@@ -58,12 +58,12 @@ public class NotificacionOfertaProvDto implements Serializable {
         this.razonSocial = razonSocial;
     }
 
-    public String getNumeroNit() {
-        return numeroNit;
+    public String getNumeroDui() {
+        return numeroDui;
     }
 
-    public void setNumeroNit(String numeroNit) {
-        this.numeroNit = numeroNit;
+    public void setNumeroDui(String numeroNit) {
+        this.numeroDui = numeroNit;
     }
 
     public String getDescripcionRubro() {

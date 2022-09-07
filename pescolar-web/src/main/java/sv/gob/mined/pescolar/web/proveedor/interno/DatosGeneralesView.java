@@ -291,6 +291,22 @@ public class DatosGeneralesView implements Serializable {
     }
 
     // </editor-fold>
+    public String getNombrePieza() {
+        if (detalleProcesoAdq != null || detalleProcesoAdq.getId() != null) {
+            switch (detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
+                case 4:
+                case 5:
+                    return "Piezas";
+                case 2:
+                    return "Paquetes";
+                default:
+                    return "Pares";
+            }
+        } else {
+            return "";
+        }
+    }
+
     public void empresaSeleccionada(SelectEvent event) {
         if (event.getObject() != null) {
             if (event.getObject() instanceof Empresa) {

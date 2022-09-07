@@ -200,4 +200,9 @@ public class OfertaBienesServicio implements Serializable {
         this.participantesList = participantesList;
     }
 
+    @Override
+    public String toString() {
+        return "OfertaBienesServicio{" + "id=" + id + '}';
+    }
+
 }
