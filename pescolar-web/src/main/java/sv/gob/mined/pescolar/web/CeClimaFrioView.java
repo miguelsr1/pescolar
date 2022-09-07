@@ -29,11 +29,11 @@ public class CeClimaFrioView implements Serializable {
 
     private VwCatalogoEntidadEducativa entidadEducativa;
     private List<Filtro> params = new ArrayList();
+    private List<VwCatalogoEntidadEducativa> lstCheck = new ArrayList();
+    private List<VwCatalogoEntidadEducativa> lstCentrosEducativos = new ArrayList();
     private String codigoDepartamento;
     private Long idMunicipio;
     private String orden;
-    
-    List<VwCatalogoEntidadEducativa> lstCentrosEducativos = new ArrayList();
     
     @Inject
     private SessionView sessionView;

@@ -109,7 +109,12 @@
                             </div>
 
                             <div class="p-formgrid p-grid">
-                                <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCentrosEducativos}" var="cfrio" rowIndexVar="rowId" rowKey="#{cfrio.codigoEntidad}">
+                                <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCentrosEducativos}" var="cfrio" rowIndexVar="rowId" 
+                                             rowKey="#{cfrio.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}">
+                                    <p:ajax event="rowSelectCheckbox"  />
+                                    <p:ajax event="rowUnselectCheckbox"  />
+                                    <p:ajax event="toggleSelect"  />
+
                                     <p:column headerText="#" width="5%">
                                         <p:outputLabel value="#{rowId + 1}"/>
                                     </p:column>
@@ -119,11 +124,7 @@
                                     <p:column headerText="NOMBRE DEL CENTRO" width="65%">
                                         <p:outputLabel value="#{cfrio.nombre}" />
                                     </p:column>
-                                    <p:column headerText="Operaciones" width="20%">
-                                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" oncomplete="PF('delTecnicoDlg').show()" >
-                                            <f:setPropertyActionListener value="#{tec}" target="#{tecnicoProveedorView.tecnicoProveedor}" />
-                                        </p:commandButton>
-                                    </p:column>
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                                 </p:dataTable>
                             </div>
                         </div>
