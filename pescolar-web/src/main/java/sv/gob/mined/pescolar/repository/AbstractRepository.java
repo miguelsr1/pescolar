@@ -118,7 +118,7 @@ public abstract class AbstractRepository<Entity, Primary> {
             Path path = root;
 
             //Adición de campos de ordenamiento
-            if (orderBy.split("\\.").length > 1) {
+            if (orderBy.split("\\.").length >= 1) {
                 for (String clave : orderBy.split("\\.")) {
                     path = path.get(clave);
                 }

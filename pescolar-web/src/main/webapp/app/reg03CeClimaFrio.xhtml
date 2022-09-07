@@ -35,7 +35,7 @@
         </style>
     </ui:define>
 
-    <ui:define name="title">Clima Frio</ui:define>
+    <ui:define name="title">C.E. Clima Frio</ui:define>
     <ui:define name="content">
         <h:form id="form" prependId="false">
             <div class="p-grid dashboard"> 
@@ -43,7 +43,7 @@
                     <p:menubar>
                         <p:menuitem value="Nuevo"  icon="pi pi-file" />
                         <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
-                        <p:menuitem value="Buscar"  icon="pi pi-search" />
+                        <p:menuitem value="Buscar"  icon="pi pi-search" actionListener = "#{ceClimaFrioView.buscar()}" update="tblCeClimaFrio"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
@@ -53,7 +53,7 @@
                         </f:facet>
                     </p:menubar>
 
-                    <p:hotkey bind="ctrl+shift+f" actionListener="#{ofertaBienesServiciosView.buscar()}"/>
+                    <p:hotkey bind="ctrl+shift+f" actionListener="#{ceClimaFrioView.buscar()}"/>
                 </div>
                 <div class="p-col-12">
                     <div class="card ui-fluid">
@@ -65,39 +65,33 @@
                         </div>
 
                         <div class="p-col-12">
-                            <div class="card ui-fluid" jsf:id="dvDatosGenerales">
-                                <div class="p-col-12">
-                                    <div class="p-field p-grid">
-                                        <p:outputLabel for="cboDepa" styleClass="p-col-12 p-mb-1 p-md-2 p-mb-md-0">Departamento</p:outputLabel>
-                                        <div class="p-col-12 p-md-4">
-                                            <p:selectOneMenu id="cboDepa" value="#{ofertaBienesServiciosView.codigoDepartamento}">
-                                                <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
-                                                <f:selectItems value="#{ofertaBienesServiciosView.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombreDepartamento}"/>
-                                                <p:ajax update="cboMuni"/>
-                                            </p:selectOneMenu>
-                                        </div>
-                                    
-                                        <p:outputLabel for="cboMuni" styleClass="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Municipio</p:outputLabel>
-                                        <div class="p-col-12 p-md-4">
-                                            <p:selectOneMenu id="cboMuni" value="#{ofertaBienesServiciosView.idMunicipio}">
-                                                <f:selectItem itemLabel="Seleccione un valor"/>
-                                                <f:selectItems value="#{ofertaBienesServiciosView.lstMunicipio}" var="mun" itemValue="#{mun.id}" itemLabel="#{mun.nombreMunicipio}"/>
-                                            </p:selectOneMenu>
-                                        </div>
+
+                            <div class="p-col-12">
+                                <div class="p-field p-grid">
+                                    <p:outputLabel for="cboDepa" styleClass="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Departamento</p:outputLabel>
+                                    <div class="p-col-12 p-md-3">
+                                        <p:selectOneMenu id="cboDepa" value="#{ceClimaFrioView.codigoDepartamento}">
+                                            <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
+                                            <f:selectItems value="#{ceClimaFrioView.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombreDepartamento}"/>
+                                            <p:ajax update="cboMuni"/>
+                                        </p:selectOneMenu>
                                     </div>
-                                    <div class="p-field p-grid">
-                                        <p:outputLabel value="Código Infraestructura:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
-                                        <div class="p-col-12 p-md-9">
-                                            <p:inputText style="margin-right: 10px;" id="txtCodigoEntidad" maxlength="5" 
-                                                         value="#{estadisticasCensoView.codigoEntidad}" size="4" 
-                                                         autocomplete="false" disabled="#{estadisticasCensoView.deshabilitado}" onkeyup="return this.value.length >= 5">
-                                                <p:ajax event="keyup" listener="#{estadisticasCensoView.buscarEntidadEducativa}" update="nombreCE "/>
-                                            </p:inputText>
-                                            <p:outputLabel id="nombreCE" value="#{estadisticasCensoView.entidadEducativa.nombre}" style="font-weight: bold" />
-                                        </div>
+
+                                    <p:outputLabel for="cboMuni" styleClass="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Municipio</p:outputLabel>
+                                    <div class="p-col-12 p-md-3">
+                                        <p:selectOneMenu id="cboMuni" value="#{ceClimaFrioView.idMunicipio}">
+                                            <f:selectItem itemLabel="Seleccione un valor"/>
+                                            <f:selectItems value="#{ceClimaFrioView.lstMunicipio}" var="mun" itemValue="#{mun.id}" itemLabel="#{mun.nombreMunicipio}"/>
+                                        </p:selectOneMenu>
                                     </div>
-                                    <div class="p-field p-grid">
-                                        <p:commandButton value="Agregar" action="#{tecnicoProveedorView.guardar()}" icon="pi pi-plus" style="width: 100px;"/>
+
+                                    <p:outputLabel for="cbOrden" styleClass="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Orden</p:outputLabel>
+                                    <div class="p-col-12 p-md-1">
+                                        <p:selectOneMenu id="cbOrden" value="#{ceClimaFrioView.orden}">
+                                            <f:selectItem itemLabel="Seleccione un valor"/>
+                                            <f:selectItem itemLabel="Codigo" itemValue="codigoEntidad"/>
+                                            <f:selectItem itemLabel="Nombre" itemValue="nombre"/>
+                                        </p:selectOneMenu>
                                     </div>
                                 </div>
                             </div>
@@ -115,29 +109,26 @@
                             </div>
 
                             <div class="p-formgrid p-grid">
-                                <div class="p-field p-col">
-                                    <p:dataTable id="tblTecnicos" value="#{tecnicoProveedorView.lstTecnicoProveedor}" var="tec" rowIndexVar="rowId" rowKey="#{tec.idTecnico}">
-                                        <p:column headerText="#">
-                                            <p:outputLabel value="#{rowId + 1}"/>
-                                        </p:column>
-                                        <p:column headerText="CENTRO">
-                                            <!--p:outputLabel value="#{tec.idEmpresa.idPersona.numeroDui}" /-->
-                                        </p:column>
-                                        <p:column headerText="Operaciones">
-                                            <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" oncomplete="PF('delTecnicoDlg').show()" >
-                                                <f:setPropertyActionListener value="#{tec}" target="#{tecnicoProveedorView.tecnicoProveedor}" />
-                                            </p:commandButton>
-                                        </p:column>
-                                    </p:dataTable>
-                                </div>
+                                <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCentrosEducativos}" var="cfrio" rowIndexVar="rowId" 
+                                             rowKey="#{cfrio.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}">
+                                    <p:ajax event="rowSelectCheckbox"  />
+                                    <p:ajax event="rowUnselectCheckbox"  />
+                                    <p:ajax event="toggleSelect"  />
+
+                                    <p:column headerText="#" width="5%">
+                                        <p:outputLabel value="#{rowId + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="CODIGO" width="10%">
+                                        <p:outputLabel value="#{cfrio.codigoEntidad}" />
+                                    </p:column>
+                                    <p:column headerText="NOMBRE DEL CENTRO" width="65%">
+                                        <p:outputLabel value="#{cfrio.nombre}" />
+                                    </p:column>
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                </p:dataTable>
                             </div>
                         </div>
                     </div>
-
-                    <p:confirmDialog widgetVar="delTecnicoDlg" showEffect="fade" width="300" message="¿Esta seguro de eliminar el registro seleccionado?" header="Confirmar" severity="warn">
-                        <p:commandButton value="Si" icon="pi pi-check" actionListener="#{tecnicoProveedorView.eliminar()}" process="@this" oncomplete="PF('delTecnicoDlg').hide()" update="tblTecnicos"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('delPersonaDlg').hide()" />
-                    </p:confirmDialog>
                 </div>
             </div>
         </h:form>
