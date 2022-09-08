@@ -336,8 +336,8 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
         notificacionOfertaProvDto = q.getResultList().isEmpty() ? null : (NotificacionOfertaProvDto) q.getResultList().get(0);
 
         if (notificacionOfertaProvDto != null) {
-            notificacionOfertaProvDto.setLstDetItemOfertaGlobal(reporteRepo.getLstItemOfertaGlobal(notificacionOfertaProvDto.getNumeroNit(), idRubroInteres, idAnho));
-            notificacionOfertaProvDto.setLstMunIntOfertaGlobal(reporteRepo.getLstMunIntOfertaGlobal(notificacionOfertaProvDto.getNumeroNit(), idRubroInteres, idAnho));
+            notificacionOfertaProvDto.setLstDetItemOfertaGlobal(reporteRepo.getLstItemOfertaGlobal(notificacionOfertaProvDto.getNumeroDui(), idRubroInteres, idAnho));
+            notificacionOfertaProvDto.setLstMunIntOfertaGlobal(reporteRepo.getLstMunIntOfertaGlobal(notificacionOfertaProvDto.getNumeroDui(), idRubroInteres, idAnho));
         }
         return notificacionOfertaProvDto;
     }

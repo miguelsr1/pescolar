@@ -44,7 +44,7 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
         Query q = em.createQuery("SELECT e FROM Empresa e WHERE e.idPersona.numeroDui = :pNumeroDui OR  e.numeroNit like :pNumeroNit OR e.razonSocial like :pRazonSocial", Empresa.class);
         q.setParameter("pNumeroDui", valor.toUpperCase());
         q.setParameter("pNumeroNit", "%" + valor.toUpperCase() + "%");
-        q.setParameter("pRazonSocial", "%" + valor.toUpperCase().replace(" ", "") + "%");
+        q.setParameter("pRazonSocial", "%" + valor.toUpperCase() + "%");
         return q.getResultList();
     }
 

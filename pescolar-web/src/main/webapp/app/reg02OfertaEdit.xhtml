@@ -71,13 +71,15 @@
                         </div> 
                     </div>
                     <div class="card">
-                        <div class="card-header overview-box blue" style="display: block;" >
+                        <div class="card-header overview-box blue" >
                             <h5>
                                 Lista de Proveedores
                                 <i class="pi pi-list"></i>
-                                <p:commandButton id="btoExportar" value=" Exportar" icon="pi pi-upload" style="float: right; font-size: 12px;"/>
-                                <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus" style="float: right; font-size: 12px; margin-right: 5px;" action="#{ofertaBienesServiciosView.agregarProveedor()}" update="pnoCantidad"/>
                             </h5>
+                            <div style="float: right; ">
+                            <p:commandButton id="btoExportar" value=" Exportar" icon="pi pi-upload" style="font-size: 12px;margin-right: 5px;"/>
+                            <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus" style="float: right; font-size: 12px;" action="#{ofertaBienesServiciosView.agregarProveedor()}" update="pnoCantidad"/>
+                            </div>
                         </div>
 
                         <p:dataTable id="tblParticipantes" value="#{ofertaBienesServiciosView.oferta.participantesList}" var="participante" 
@@ -125,7 +127,7 @@
 
 
             <p:dialog id="dlgProveedor" widgetVar="dlgProveedor" header="Seleccione un proveedor" closable="true" style="font-size: 11px;" minWidth="1000" width="1000" height="500"
-                      modal="true" position="center center" onShow="PF('dlgProveedor').initPosition()"
+                      modal="true" position="center center" onShow="PF('dlgProveedor').initPosition()" 
                       dynamic="true" responsive="true" resizable="false" hideEffect="fade" showEffect="fade">
                 <p:outputPanel id="pnoCantidad">
                     <div class="p-col-12">
