@@ -56,7 +56,6 @@
     <class>sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto</class>
     <class>sv.gob.mined.pescolar.model.TecnicoProveedor</class>
     <class>sv.gob.mined.pescolar.model.EmpresaNoItem</class>
-    <class>sv.gob.mined.pescolar.model.DiasPlazoContrato</class>
     <class>sv.gob.mined.pescolar.model.EmpresaPreciosRef</class>
     <class>sv.gob.mined.pescolar.model.dto.NotificacionOfertaProvDto</class>
     <class>sv.gob.mined.pescolar.model.OrganizacionEducativa</class>
