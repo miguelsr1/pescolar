@@ -1,6 +1,6 @@
 package sv.gob.mined.pescolar.repository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,7 +72,7 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
         if (detRubro.getAceptacionTerminos()) {
 
         } else {
-            detRubro.setFechaModificacion(LocalDate.now());
+            detRubro.setFechaModificacion(LocalDateTime.now());
             detRubro.setDatosVerificados(true);
             detRubro.setAceptacionTerminos(true);
             detRubro.setUsuarioModificacion(usuario);
@@ -249,5 +249,20 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
         q.execute();
 
         return (String) q.getOutputParameterValue("P_ID_GESTION");
+    }
+
+    public List<DetRubroMuestraIntere> findAvanceDigiProv(Long idAnho, Long idRubro) {
+        Query q = em.createQuery("SELECT d FROM DetRubroMuestraIntere d WHERE d.idAnho.id = :pIdAnho and d.idRubroInteres.id = :pIdRubro ORDER BY d.fechaModificacion ASC", DetRubroMuestraIntere.class);
+        q.setParameter("pIdAnho", idAnho);
+        q.setParameter("pIdRubro", idRubro);
+        return q.getResultList();
+    }
+
+    public TecnicoProveedor findTecnicoByDuiProv(String dui, Long idAnho) {
+        Query q = em.createQuery("SELECT t FROM TecnicoProveedor t WHERE t.idAnho.id=:pIdAnho and t.idEmpresa.idPersona.numeroDui=:pDui", TecnicoProveedor.class);
+        q.setParameter("pIdAnho", idAnho);
+        q.setParameter("pDui", dui);
+
+        return q.getResultList().isEmpty() ? new TecnicoProveedor("") : (TecnicoProveedor) q.getSingleResult();
     }
 }

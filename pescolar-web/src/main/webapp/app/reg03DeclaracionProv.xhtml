@@ -23,6 +23,7 @@
                     <p:menubar id="menuBar" styleClass="divSticky"> 
                         <p:menuitem value="Guardar" icon="pi pi-save" action="#{declaracionView.guardarAceptarCondiciones}" disabled="#{declaracionView.aceptarCondiciones}" update="menuBar"/>
                         <p:menuitem value="Imprimir" ajax="false" icon="pi pi-print" action="#{declaracionView.impOfertaGlobal}" disabled="#{not declaracionView.aceptarCondiciones}"/>
+                        <p:menuitem value="Notificar" icon="pi pi-envelope" action="#{declaracionView.generarNotificacion()}" />
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>

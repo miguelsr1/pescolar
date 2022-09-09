@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
+import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.dto.DeclaracionJurada;
@@ -174,7 +175,7 @@ public class Reportes {
                 } else if (rpt.contains("Uti")) {
                     param.put("descripcionRubro", (sobredemanda ? "SOBREDEMANDA DE " : "") + "SUMINISTRO DE PAQUETES DE UTILES ESCOLARES");
                 } else {
-                    param.put("descripcionRubro", (sobredemanda ? "SOBREDEMANDA DE " : "") + "PRODUCCION DE ZAPATOS");
+                    param.put("descripcionRubro", (sobredemanda ? "SOBREDEMANDA DE " : "") + "SUMINISTRO DE ZAPATOS ESCOLARES");
                 }
 
                 if (rpt.contains("rptCertUti_2017")) {
@@ -313,8 +314,8 @@ public class Reportes {
         }
     }
 
-    public List<OfertaGlobal> getLstOfertaGlobal(String nit, Long idRubro, Long idAnho) {
-        return reportesFacade.getLstOfertaGlobal(nit, idRubro, idAnho);
+    public List<OfertaGlobal> getLstOfertaGlobal(DetRubroMuestraIntere idMuestraInteres) {
+        return reportesFacade.getLstOfertaGlobal(idMuestraInteres);
     }
     
     public List<DeclaracionJurada> getDeclaracionJurada(Empresa empresa, Long idRubro, Long idAnho, String ciudad) {

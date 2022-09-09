@@ -45,6 +45,13 @@ public class TecnicoProveedor implements Serializable {
     @Column(name = "ESTADO_ELIMINACION")
     private Boolean estadoEliminacion;
 
+    public TecnicoProveedor() {
+    }
+
+    public TecnicoProveedor(String mailTecnico) {
+        this.mailTecnico = mailTecnico;
+    }
+
     public Long getIdTecnico() {
         return idTecnico;
     }
