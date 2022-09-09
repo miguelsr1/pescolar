@@ -44,7 +44,7 @@
                         <p:menuitem value="Nuevo"  icon="pi pi-file" />
                         <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" actionListener = "#{ceClimaFrioView.buscar()}" update="tblCeClimaFrio"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="ceClimaFrioView.deshabilitado"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
@@ -111,9 +111,10 @@
                             <div class="p-formgrid p-grid">
                                 <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCentrosEducativos}" var="cfrio" rowIndexVar="rowId" 
                                              rowKey="#{cfrio.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}">
-                                    <p:ajax event="rowSelectCheckbox"  />
-                                    <p:ajax event="rowUnselectCheckbox"  />
-                                    <p:ajax event="toggleSelect"  />
+                                    
+                                    <p:ajax event="toggleSelect" listener="#{ceClimaFrioView.onAllRowsSelect}" />
+                                    <p:ajax event="rowSelectCheckbox" listener="#{ceClimaFrioView.onRowSelect}" />
+                                    <p:ajax event="rowUnselectCheckbox" listener="#{ceClimaFrioView.onRowUnselect}" />
 
                                     <p:column headerText="#" width="5%">
                                         <p:outputLabel value="#{rowId + 1}"/>

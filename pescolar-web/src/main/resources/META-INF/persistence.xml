@@ -56,12 +56,12 @@
     <class>sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto</class>
     <class>sv.gob.mined.pescolar.model.TecnicoProveedor</class>
     <class>sv.gob.mined.pescolar.model.EmpresaNoItem</class>
-    <class>sv.gob.mined.pescolar.model.DiasPlazoContrato</class>
     <class>sv.gob.mined.pescolar.model.EmpresaPreciosRef</class>
     <class>sv.gob.mined.pescolar.model.dto.NotificacionOfertaProvDto</class>
     <class>sv.gob.mined.pescolar.model.OrganizacionEducativa</class>
     <class>sv.gob.mined.pescolar.model.dto.contratacion.VwRptCertificacionPresupuestaria</class>
     <class>sv.gob.mined.pescolar.model.CeClimaFrio</class>
+    <class>sv.gob.mined.pescolar.model.DiasPlazoContrato</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>

@@ -9,6 +9,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.ToggleSelectEvent;
+import org.primefaces.context.PrimeRequestContext;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
@@ -34,6 +37,7 @@ public class CeClimaFrioView implements Serializable {
     private String codigoDepartamento;
     private Long idMunicipio;
     private String orden;
+    private Boolean deshabilitado;
     
     @Inject
     private SessionView sessionView;
@@ -59,7 +63,10 @@ public class CeClimaFrioView implements Serializable {
     
    
     public void guardar() {
-//        if (tecnicoProveedor.getIdTecnico() == null) {
+        
+      if (!lstCheck.isEmpty()) {
+          
+         lstCheck.forEach((n) -> System.out.println(n.getCodigoEntidad()));
 //            tecnicoProveedor.setEstadoEliminacion(Boolean.FALSE);
 //            tecnicoProveedor.setFechaInsercion(LocalDate.now());
 //            tecnicoProveedor.setIdAnho(sessionView.getProceso().getIdAnho());
@@ -70,7 +77,7 @@ public class CeClimaFrioView implements Serializable {
 //            lstTecnicoProveedor.add(tecnicoProveedor);
 //            tecnicoProveedor = new TecnicoProveedor();
 //            JsfUtil.mensajeInsert();
-//        }
+      }
     }
 
     public void eliminar() {
@@ -87,6 +94,23 @@ public class CeClimaFrioView implements Serializable {
 //        return lstEmpresas.stream().filter(emp -> emp.getRazonSocial().toLowerCase().contains(queryLowerCase) || emp.getIdPersona().getNumeroDui().contains(query)).collect(Collectors.toList());
 //    }
     
+    public void onAllRowsSelect(ToggleSelectEvent tse){
+        
+        
+    }
+    
+    
+    public void onRowSelect(SelectEvent se){
+        lstCheck.add((VwCatalogoEntidadEducativa) se.getObject());
+        lstCheck.forEach((n) -> System.out.println(n.getCodigoEntidad()));
+        
+    }
+    
+    public void onRowUnselect(SelectEvent use){
+    
+    
+    }
+    
     public List<Departamento> getLstDepartamento() {
         return catalogoRepo.findListByParam(Departamento.class, new ArrayList(), "id", true);
     }
@@ -96,4 +120,6 @@ public class CeClimaFrioView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento).build());
         return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", false);
     }
+    
+    
 }

@@ -8,35 +8,42 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import org.hibernate.envers.Audited;
+import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 
 /**
  *
  * @author CQuintanilla
  */
-
 @Entity
 @Table(name = "CE_CLIMA_FRIO")
-@Audited
 public class CeClimaFrio implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "ID_CE", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CE_CLIMA_FRIO" )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CE_CLIMA_FRIO")
     @SequenceGenerator(name = "SEQ_CE_CLIMA_FRIO", sequenceName = "SEQ_CE_CLIMA_FRIO", allocationSize = 1, initialValue = 1)
     private Long idCe;
-    @Size(max = 5)
+    /*@Size(max = 5)
     @Column(name = "CODIGO_ENTIDAD")
-    private String codigoEntidad;
+    private String codigoEntidad;*/
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CODIGO_ENTIDAD")
+    private VwCatalogoEntidadEducativa codigoEntidad;
+
     @Size(max = 25)
     @Column(name = "USUARIO")
     private String usuario;
@@ -61,11 +68,11 @@ public class CeClimaFrio implements Serializable {
         this.idCe = idCe;
     }
 
-    public String getCodigoEntidad() {
+    public VwCatalogoEntidadEducativa getCodigoEntidad() {
         return codigoEntidad;
     }
 
-    public void setCodigoEntidad(String codigoEntidad) {
+    public void setCodigoEntidad(VwCatalogoEntidadEducativa codigoEntidad) {
         this.codigoEntidad = codigoEntidad;
     }
 
@@ -117,5 +124,5 @@ public class CeClimaFrio implements Serializable {
     public String toString() {
         return "sv.gob.mined.pescolar.model.CeClimaFrio[ idCe=" + idCe + " ]";
     }
-    
+
 }
