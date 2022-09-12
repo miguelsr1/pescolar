@@ -3,6 +3,9 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.annotations.Where;
 
@@ -41,7 +44,7 @@ public class DetRubroMuestraIntere implements Serializable {
     private String usuarioModificacion;
 
     @Column(name = "FECHA_MODIFICACION")
-    private LocalDate fechaModificacion;
+    private LocalDateTime fechaModificacion;
 
     @Column(name = "FECHA_ELIMINACION")
     private LocalDate fechaEliminacion;
@@ -69,6 +72,9 @@ public class DetRubroMuestraIntere implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_ANHO")
     private Anho idAnho;
+
+    @Transient
+    private String fechaModificacionStr;
 
     public Anho getIdAnho() {
         return idAnho;
@@ -134,11 +140,11 @@ public class DetRubroMuestraIntere implements Serializable {
         this.fechaEliminacion = fechaEliminacion;
     }
 
-    public LocalDate getFechaModificacion() {
+    public LocalDateTime getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(LocalDate fechaModificacion) {
+    public void setFechaModificacion(LocalDateTime fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
@@ -188,5 +194,18 @@ public class DetRubroMuestraIntere implements Serializable {
 
     public void setPreciosRefRubroEmpList(List<PreciosRefRubroEmp> preciosRefRubroEmpList) {
         this.preciosRefRubroEmpList = preciosRefRubroEmpList;
+    }
+
+    public String getFechaModificacionStr() {
+        if (fechaModificacion == null) {
+            return "";
+        } else {
+            return fechaModificacion.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "DetRubroMuestraIntere{" + "id=" + id + '}';
     }
 }

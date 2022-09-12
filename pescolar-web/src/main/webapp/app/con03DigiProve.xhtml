@@ -1,0 +1,93 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <ui:define name="content">
+        <h:form id="frmPrincipal" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar" styleClass="divSticky"> 
+                        <p:menuitem value="Nuevo" disabled="true"/>
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
+                        <p:menuitem value="Imprimir" disabled="true" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
+                        </f:facet>  
+                    </p:menubar>
+                </div>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid" jsf:id="dvDatosGenerales">
+                        <div class="p-col-12 p-md-8">
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="cboRubro" value="#{bundle['compra.rubroAdq']}:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0" />
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu id="cboRubro" value="#{consultaAvanceDigiProView.idRubro}">
+                                        <f:selectItem itemLabel="Seleccione un rubro" itemValue="null" />
+                                        <f:selectItems value="#{consultaAvanceDigiProView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <p:commandButton value="Buscar" action="#{consultaAvanceDigiProView.buscarDatos()}" update="tblPro" style="width: 150px;" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h5>
+                                <i class="pi pi-list verde" style="font-size: 16px;"></i>
+                                <p:spacer width="10"/>
+                                Lista de Proveedor a digitados
+                            </h5>
+                        </div>
+
+                        <div class="p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <p:dataTable id="tblPro" value="#{consultaAvanceDigiProView.lstDetMuestra}" var="det" rowIndexVar="rowId" >
+                                    <p:column headerText="#">
+                                        <p:outputLabel value="#{rowId + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="DUI">
+                                        <p:outputLabel value="#{det.idEmpresa.idPersona.numeroDui}" />
+                                    </p:column>
+                                    <p:column headerText="Proveedor">
+                                        <p:outputLabel value="#{det.idEmpresa.razonSocial}" />
+                                    </p:column>
+                                    <p:column headerText="Rubro">
+                                        <p:outputLabel value="#{det.idRubroInteres.descripcionRubro}" />
+                                    </p:column>
+                                    <p:column headerText="Departamento">
+                                        <p:outputLabel value="#{det.idEmpresa.idMunicipio.codigoDepartamento.nombreDepartamento}" />
+                                    </p:column>
+                                    <p:column headerText="Tecnico Asignado">
+                                        <p:outputLabel value="#{consultaAvanceDigiProView.getTecnico(det.idEmpresa.idPersona.numeroDui)}" />
+                                    </p:column>
+                                    <p:column headerText="Ult.Fecha.Modif">
+                                        <p:outputLabel value="#{det.fechaModificacion}" />
+                                    </p:column>
+                                    <p:column headerText="Ult.Usuario.Modif">
+                                        <p:outputLabel value="#{det.usuarioModificacion}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+        </h:form>
+    </ui:define>
+</ui:composition>

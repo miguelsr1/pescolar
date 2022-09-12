@@ -139,6 +139,6 @@ public class ValidarProveedorView implements Serializable {
             usuarioRepo.guardarPasswordProv(idEmpresa, catalogoGlobal.encriptar(pass1));
         }
 
-        return "inicio.xhtml";
+        return "inicio?faces-redirect=true";
     }
 }

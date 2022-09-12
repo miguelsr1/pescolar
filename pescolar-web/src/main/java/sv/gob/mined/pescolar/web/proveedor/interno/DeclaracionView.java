@@ -191,8 +191,7 @@ public class DeclaracionView implements Serializable {
             param.put("pCorreoPersona", capacidadInst.getIdMuestraInteres().getIdEmpresa().getIdPersona().getEmail());
             param.put("pIdGestion", idGestion);
 
-            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(empresa.getNumeroNit(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(),
-                    anho.getId());
+            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(cargaGeneralView.getDetRubroMuestraInteres());
             lstDatos.get(0).setRubro(JsfUtil.getNombreRubroById(capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()));
             if (lstDatos.get(0).getDepartamento().contains("TODO EL PAIS")) {
                 param.put("productor", Boolean.TRUE);
@@ -237,9 +236,9 @@ public class DeclaracionView implements Serializable {
             }
         }
 
-        NotificacionOfertaProvDto nopd = participanteRepo.getNotificacionOfertaProv(empresa.getId(), anho.getId(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId());
+        NotificacionOfertaProvDto nopd = participanteRepo.getNotificacionOfertaProv(cargaGeneralView.getDetRubroMuestraInteres());
 
-        sb.append(preCabecera);
+        sb.append(preCabecera).append("\n");
 
         sb.append(MessageFormat.format(RESOURCE_BUNDLE.getString("prov_notif_inscripcion_uniforme.email.mensaje"),
                 nopd.getRazonSocial(),

@@ -198,7 +198,7 @@ public class PreciosReferenciaView implements Serializable {
             param.put("pCorreoPersona", cargaGeneralView.getEmpresa().getIdPersona().getEmail());
             param.put("pIdGestion", idGestion);
 
-            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(cargaGeneralView.getEmpresa().getNumeroNit(), cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), cargaGeneralView.getProcesoAdquisicion().getIdAnho().getId());
+            List<OfertaGlobal> lstDatos = reportes.getLstOfertaGlobal(cargaGeneralView.getDetRubroMuestraInteres());
             lstDatos.get(0).setRubro(JsfUtil.getNombreRubroById(cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId()));
             if (lstDatos.get(0).getDepartamento().contains("TODO EL PAIS")) {
                 param.put("productor", Boolean.TRUE);
