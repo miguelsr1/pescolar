@@ -43,7 +43,7 @@
                     <p:menubar>
                         <p:menuitem value="Nuevo"  icon="pi pi-file" />
                         <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
-                        <p:menuitem value="Buscar"  icon="pi pi-search" actionListener = "#{ceClimaFrioView.buscar()}" update="tblCeClimaFrio"/>
+                        <p:menuitem value="Buscar"  icon="pi pi-search" actionListener = "#{ceClimaFrioView.buscar()}" update="tblCeDisponibles"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" disabled="ceClimaFrioView.deshabilitado"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
@@ -53,7 +53,7 @@
                         </f:facet>
                     </p:menubar>
 
-                    <p:hotkey bind="ctrl+shift+f" actionListener="#{ceClimaFrioView.buscar()}"/>
+                    <p:hotkey bind="ctrl+shift+f" actionListener="#{ceClimaFrioView.buscar(0)}"/>
                 </div>
                 <div class="p-col-12">
                     <div class="card ui-fluid">
@@ -109,8 +109,8 @@
                             </div>
 
                             <div class="p-formgrid p-grid">
-                                <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCentrosEducativos}" var="cfrio" rowIndexVar="rowId" 
-                                             rowKey="#{cfrio.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}">
+                                <p:dataTable id="tblCeDisponibles" value="#{ceClimaFrioView.lstCeNoSeleccionados}" var="cfrio" rowIndexVar="rowId" 
+                                             rowKey="#{cfrio.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}" scrollable="true" scrollHeight="150">
                                     
                                     <p:ajax event="toggleSelect" listener="#{ceClimaFrioView.onAllRowsSelect}" />
                                     <p:ajax event="rowSelectCheckbox" listener="#{ceClimaFrioView.onRowSelect}" />
@@ -122,8 +122,33 @@
                                     <p:column headerText="CODIGO" width="10%">
                                         <p:outputLabel value="#{cfrio.codigoEntidad}" />
                                     </p:column>
-                                    <p:column headerText="NOMBRE DEL CENTRO" width="65%">
+                                    <p:column headerText="NOMBRE DEL CENTRO" width="60%">
                                         <p:outputLabel value="#{cfrio.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="SELECCIONADO" width="5%">
+                                        <p:outputLabel value="#{cfrio.telefono1}" />
+                                    </p:column>
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                </p:dataTable>
+                                
+                                <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCeNoSeleccionados}" var="cfrio" rowIndexVar="rowId" 
+                                             rowKey="#{cfrio.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}" scrollable="true" scrollHeight="150">
+                                    
+                                    <p:ajax event="toggleSelect" listener="#{ceClimaFrioView.onAllRowsSelect}" />
+                                    <p:ajax event="rowSelectCheckbox" listener="#{ceClimaFrioView.onRowSelect}" />
+                                    <p:ajax event="rowUnselectCheckbox" listener="#{ceClimaFrioView.onRowUnselect}" />
+
+                                    <p:column headerText="#" width="5%">
+                                        <p:outputLabel value="#{rowId + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="CODIGO" width="10%">
+                                        <p:outputLabel value="#{cfrio.codigoEntidad}" />
+                                    </p:column>
+                                    <p:column headerText="NOMBRE DEL CENTRO" width="60%">
+                                        <p:outputLabel value="#{cfrio.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="SELECCIONADO" width="5%">
+                                        <p:outputLabel value="#{cfrio.telefono1}" />
                                     </p:column>
                                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                                 </p:dataTable>

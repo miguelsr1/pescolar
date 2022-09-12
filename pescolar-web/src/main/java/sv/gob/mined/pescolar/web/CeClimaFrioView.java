@@ -14,8 +14,10 @@ import org.primefaces.event.ToggleSelectEvent;
 import org.primefaces.context.PrimeRequestContext;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Municipio;
-import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
+import sv.gob.mined.pescolar.model.CeClimaFrio;
+import sv.gob.mined.pescolar.model.view.VwCeClimaFrio;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.repository.EntidadEducativaClimaFrio;
 import sv.gob.mined.pescolar.repository.EntidadEducativaRepo;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.enums.TipoOperador;
@@ -30,10 +32,11 @@ import sv.gob.mined.pescolar.utils.enums.TipoOperador;
 @ViewScoped
 public class CeClimaFrioView implements Serializable {
 
-    private VwCatalogoEntidadEducativa entidadEducativa;
+    private CeClimaFrio entidadEducativa;
     private List<Filtro> params = new ArrayList();
-    private List<VwCatalogoEntidadEducativa> lstCheck = new ArrayList();
-    private List<VwCatalogoEntidadEducativa> lstCentrosEducativos = new ArrayList();
+    private List<VwCeClimaFrio> lstCheck = new ArrayList();
+    private List<VwCeClimaFrio> lstCeNoSeleccionados = new ArrayList();
+    private List<VwCeClimaFrio> lstCeClimaFrio = new ArrayList();
     private String codigoDepartamento;
     private Long idMunicipio;
     private String orden;
@@ -43,7 +46,7 @@ public class CeClimaFrioView implements Serializable {
     private SessionView sessionView;
     
     @Inject
-    private EntidadEducativaRepo entidadRepo;
+    private EntidadEducativaClimaFrio entidadCFRepo;
     
     @Inject
     private CatalogoRepo catalogoRepo;
@@ -53,11 +56,12 @@ public class CeClimaFrioView implements Serializable {
         
     }
 
-    public void buscar() {
+    public void buscar(Integer busqueda) {
         params.clear();
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento).build());
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idMunicipio.id", idMunicipio).build());
-        lstCentrosEducativos = (List<VwCatalogoEntidadEducativa>) entidadRepo.findListByParam(params, orden, Boolean.TRUE);
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "entidadFrio", busqueda).build());
+        lstCeNoSeleccionados = (List<VwCeClimaFrio>) entidadCFRepo.findListByParam(params, orden, Boolean.TRUE);
         
     }
     
@@ -101,7 +105,7 @@ public class CeClimaFrioView implements Serializable {
     
     
     public void onRowSelect(SelectEvent se){
-        lstCheck.add((VwCatalogoEntidadEducativa) se.getObject());
+        lstCheck.add((VwCeClimaFrio) se.getObject());
         lstCheck.forEach((n) -> System.out.println(n.getCodigoEntidad()));
         
     }

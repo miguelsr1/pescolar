@@ -62,6 +62,7 @@
     <class>sv.gob.mined.pescolar.model.dto.contratacion.VwRptCertificacionPresupuestaria</class>
     <class>sv.gob.mined.pescolar.model.CeClimaFrio</class>
     <class>sv.gob.mined.pescolar.model.DiasPlazoContrato</class>
+    <class>sv.gob.mined.pescolar.model.view.VwCeClimaFrio</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>

@@ -27,6 +27,7 @@ import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
  * @author CQuintanilla
  */
 @Entity
+@Audited
 @Table(name = "CE_CLIMA_FRIO")
 public class CeClimaFrio implements Serializable {
 
