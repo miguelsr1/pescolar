@@ -33,6 +33,11 @@
         <filter-name>Character Encoding Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
+    
+    <error-page>
+        <error-code>403</error-code>
+        <location>/access</location>
+    </error-page>
         
     
     <!--SECURIDAD-->

@@ -292,7 +292,7 @@ public class DatosGeneralesView implements Serializable {
 
     // </editor-fold>
     public String getNombrePieza() {
-        if (detalleProcesoAdq != null || detalleProcesoAdq.getId() != null) {
+        if (detalleProcesoAdq != null && detalleProcesoAdq.getId() != null) {
             switch (detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
                 case 4:
                 case 5:
@@ -342,7 +342,11 @@ public class DatosGeneralesView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idAnho.id", sessionView.getIdAnho()).build());
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroInteres.id", capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId()).build());
 
-        diasPlazo = diasPlazoRepo.findEntityByParam(params).getDiasPlazo().toString();
+        if (diasPlazoRepo.findEntityByParam(params) != null) {
+            diasPlazo = diasPlazoRepo.findEntityByParam(params).getDiasPlazo().toString();
+        } else {
+            JsfUtil.mensajeAlerta("No se han regitrado los días de plazo del contrato para el rubro: " + getNombreRubroProveedor());
+        }
     }
 
     private void cargarDetalleCalificacion() {
@@ -572,12 +576,4 @@ public class DatosGeneralesView implements Serializable {
             cargaGeneralView.getEmpresa().getIdPersona().setUrlImagen(fotoProveedor);
         }
     }
-
-    /*public void usuarioProveedor() {
-        //año 2023
-        Anho anho = catalogoRepo.findEntityByPk(Anho.class, 11l);
-        sessionView.setIdAnho(anho.getId());
-        sessionView.setProceso(anho.getProcesoAdquisicionList().get(0));
-        guestPreferencesView.setMenuMode("layout-menu-overlay");
-    }*/
 }

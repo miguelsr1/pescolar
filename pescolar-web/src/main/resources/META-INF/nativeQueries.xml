@@ -26,9 +26,7 @@
             FROM 
                 VW_RPT_CABECERA_OFERTA_GLOBAL 
             WHERE 
-                nit_empresa=?1 and 
-                id_rubro_interes=?2 and
-                id_anho=?3
+                id_muestra_interes=?1 
             ]]>
         </query>
     </named-native-query>
@@ -100,9 +98,7 @@
                 id_anho             as idAnho
             from vw_prov_notificacion_cabecera 
             where 
-                id_empresa=?1 and 
-                id_anho=?2 and
-                id_rubro_interes=?3
+                ID_MUESTRA_INTERES=?1
             ]]>
         </query>
     </named-native-query>

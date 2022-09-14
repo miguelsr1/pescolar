@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import sv.gob.mined.pescolar.model.Anho;
+import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
 import sv.gob.mined.pescolar.model.DisMunicipioIntere;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.PreciosRefRubro;
@@ -78,39 +79,34 @@ public class ReportesRepo {
         }
     }
 
-    public List<OfertaGlobal> getLstOfertaGlobal(String nit, Long idRubro, Long idAnho) {
+    public List<OfertaGlobal> getLstOfertaGlobal(DetRubroMuestraIntere idMuestraInteres) {
 
         List<OfertaGlobal> lstRpt;
-        Anho anho = em.find(Anho.class, idAnho);
         Query q = em.createNamedQuery("DatosProveDto.ofertaGlobal", OfertaGlobal.class);
-        q.setParameter(1, nit);
-        q.setParameter(2, idRubro);
-        q.setParameter(3, idAnho);
+        q.setParameter(1, idMuestraInteres.getId());
 
         lstRpt = q.getResultList();
 
-        lstRpt.get(0).setAnho(anho.getAnho());
-        lstRpt.get(0).setLstDetItemOfertaGlobal(getLstItemOfertaGlobal(nit, idRubro, idAnho));
-        lstRpt.get(0).setLstMunIntOfertaGlobal(getLstMunIntOfertaGlobal(nit, idRubro, idAnho));
+        lstRpt.get(0).setAnho(idMuestraInteres.getIdAnho().getAnho());
+        lstRpt.get(0).setLstDetItemOfertaGlobal(getLstItemOfertaGlobal(idMuestraInteres));
+        lstRpt.get(0).setLstMunIntOfertaGlobal(getLstMunIntOfertaGlobal(idMuestraInteres));
 
         return lstRpt;
     }
 
-    public List<DetItemOfertaGlobal> getLstItemOfertaGlobal(String nit, Long idRubro, Long idAnho) {
+    public List<DetItemOfertaGlobal> getLstItemOfertaGlobal(DetRubroMuestraIntere idMuestraInteres) {
         PreciosRefRubroEmp preTem;
         List<DetItemOfertaGlobal> lst = new ArrayList();
-        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.idEmpresa.numeroNit=:nit and p.idMuestraInteres.idRubroInteres.id=:pIdRubro AND p.idMuestraInteres.idAnho.id=:pIdAnho and p.idProducto.id not in (1) ORDER BY cast(p.noItem as integer)", PreciosRefRubroEmp.class);
-        q.setParameter("nit", nit);
-        q.setParameter("pIdRubro", idRubro);
-        q.setParameter("pIdAnho", idAnho);
+        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.idMuestraInteres.id=:pId and p.idProducto.id not in (1) ORDER BY cast(p.noItem as integer)", PreciosRefRubroEmp.class);
+        q.setParameter("pId", idMuestraInteres.getId());
         List<PreciosRefRubroEmp> lstPrecios = q.getResultList();
 
         q = em.createQuery("SELECT p FROM PreciosRefRubro p WHERE p.idRubroInteres.id = :pIdRubro AND p.idAnho.id = :pIdAnho ORDER BY p.idNivelEducativo.orden2", PreciosRefRubro.class);
-        q.setParameter("pIdRubro", idRubro);
-        q.setParameter("pIdAnho", idAnho);
+        q.setParameter("pIdRubro", idMuestraInteres.getIdRubroInteres().getId());
+        q.setParameter("pIdAnho", idMuestraInteres.getIdAnho().getId());
         List<PreciosRefRubro> lstPrecioMax = q.getResultList();
 
-        switch (idRubro.intValue()) {
+        switch (idMuestraInteres.getIdRubroInteres().getId().intValue()) {
             case 1:
             case 4:
                 for (int i = 0; i < 13; i++) {
@@ -274,7 +270,7 @@ public class ReportesRepo {
                     }
 
                     int pos = i + 1;
-                    lstPrecios.stream().parallel().filter(pme -> pme.getNoItem().equals(String.valueOf(pos))).findAny().orElse(new PreciosRefRubroEmp()).getPrecioReferencia();
+                    det.setPrecioUnitario(lstPrecios.stream().parallel().filter(pme -> pme.getNoItem().equals(String.valueOf(pos))).findAny().orElse(new PreciosRefRubroEmp()).getPrecioReferencia());
 
                     lst.add(det);
                 }
@@ -283,12 +279,10 @@ public class ReportesRepo {
         return lst;
     }
 
-    public List<DetMunIntOfertaGlobal> getLstMunIntOfertaGlobal(String nit, Long idRubro, Long idAnho) {
+    public List<DetMunIntOfertaGlobal> getLstMunIntOfertaGlobal(DetRubroMuestraIntere idMuestraInteres) {
         List<DetMunIntOfertaGlobal> lst = new ArrayList();
-        Query q = em.createQuery("SELECT d FROM DisMunicipioIntere d WHERE d.idCapaDistribucion.idMuestraInteres.idEmpresa.numeroNit=:nit and d.idCapaDistribucion.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idCapaDistribucion.idMuestraInteres.idAnho.id=:pIdAnho ORDER BY d.idMunicipio.codigoDepartamento.id, d.idMunicipio.codigoMunicipio ASC", DisMunicipioIntere.class);
-        q.setParameter("nit", nit);
-        q.setParameter("pIdRubro", idRubro);
-        q.setParameter("pIdAnho", idAnho);
+        Query q = em.createQuery("SELECT d FROM DisMunicipioIntere d WHERE d.idCapaDistribucion.idMuestraInteres.id=:pIdMuestraInteres ORDER BY d.idMunicipio.codigoDepartamento.id, d.idMunicipio.codigoMunicipio ASC", DisMunicipioIntere.class);
+        q.setParameter("pIdMuestraInteres", idMuestraInteres.getId());
         List<DisMunicipioIntere> lstMunicipios = q.getResultList();
 
         lstMunicipios.forEach(disMunicipioInteres -> {

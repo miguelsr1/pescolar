@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.Departamento;
+import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Participante;
@@ -325,19 +326,17 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
         return q.getResultList();
     }
 
-    public NotificacionOfertaProvDto getNotificacionOfertaProv(Long idEmpresa, Long idAnho, Long idRubroInteres) {
+    public NotificacionOfertaProvDto getNotificacionOfertaProv(DetRubroMuestraIntere idMuestraInteres) {
         NotificacionOfertaProvDto notificacionOfertaProvDto;
 
         Query q = em.createNamedQuery("Proveedor.NotificacionOfertaProv", NotificacionOfertaProvDto.class);
-        q.setParameter(1, idEmpresa);
-        q.setParameter(2, idAnho);
-        q.setParameter(3, idRubroInteres);
+        q.setParameter(1, idMuestraInteres.getId());
 
         notificacionOfertaProvDto = q.getResultList().isEmpty() ? null : (NotificacionOfertaProvDto) q.getResultList().get(0);
 
         if (notificacionOfertaProvDto != null) {
-            notificacionOfertaProvDto.setLstDetItemOfertaGlobal(reporteRepo.getLstItemOfertaGlobal(notificacionOfertaProvDto.getNumeroDui(), idRubroInteres, idAnho));
-            notificacionOfertaProvDto.setLstMunIntOfertaGlobal(reporteRepo.getLstMunIntOfertaGlobal(notificacionOfertaProvDto.getNumeroDui(), idRubroInteres, idAnho));
+            notificacionOfertaProvDto.setLstDetItemOfertaGlobal(reporteRepo.getLstItemOfertaGlobal(idMuestraInteres));
+            notificacionOfertaProvDto.setLstMunIntOfertaGlobal(reporteRepo.getLstMunIntOfertaGlobal(idMuestraInteres));
         }
         return notificacionOfertaProvDto;
     }
