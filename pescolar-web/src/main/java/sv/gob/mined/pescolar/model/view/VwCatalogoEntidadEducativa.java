@@ -1,10 +1,7 @@
 package sv.gob.mined.pescolar.model.view;
 
 import java.io.Serializable;
-import java.util.List;
-
 import javax.persistence.*;
-import sv.gob.mined.pescolar.model.CeClimaFrio;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Municipio;
 
@@ -41,10 +38,6 @@ public class VwCatalogoEntidadEducativa implements Serializable {
     @JoinColumn(name = "ID_MUNICIPIO", referencedColumnName = "ID_MUNICIPIO")
     @ManyToOne(fetch = FetchType.EAGER)
     private Municipio idMunicipio;
-    
-    @OneToMany(mappedBy = "codigoEntidad", fetch = FetchType.LAZY)
-    private List<CeClimaFrio> ceClimaFrioList;
-    
     
 
     public VwCatalogoEntidadEducativa() {
@@ -150,16 +143,6 @@ public class VwCatalogoEntidadEducativa implements Serializable {
         this.idMunicipio = idMunicipio;
     }
 
-    public List<CeClimaFrio> getCeClimaFrioList() {
-        return ceClimaFrioList;
-    }
-
-    public void setCeClimaFrioList(List<CeClimaFrio> ceClimaFrioList) {
-        this.ceClimaFrioList = ceClimaFrioList;
-    }
-
-    
-    
     @Override
     public String toString() {
         return codigoEntidad + " - " + nombre;

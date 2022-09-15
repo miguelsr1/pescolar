@@ -10,8 +10,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,18 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "VW_CE_CLIMA_FRIO")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VwCeClimaFrio.findAll", query = "SELECT v FROM VwCeClimaFrio v"),
-    @NamedQuery(name = "VwCeClimaFrio.findByCodigoEntidad", query = "SELECT v FROM VwCeClimaFrio v WHERE v.codigoEntidad = :codigoEntidad"),
-    @NamedQuery(name = "VwCeClimaFrio.findByNombre", query = "SELECT v FROM VwCeClimaFrio v WHERE v.nombre = :nombre"),
-    @NamedQuery(name = "VwCeClimaFrio.findByDireccion", query = "SELECT v FROM VwCeClimaFrio v WHERE v.direccion = :direccion"),
-    @NamedQuery(name = "VwCeClimaFrio.findByTelefono1", query = "SELECT v FROM VwCeClimaFrio v WHERE v.telefono1 = :telefono1"),
-    @NamedQuery(name = "VwCeClimaFrio.findByTelefono2", query = "SELECT v FROM VwCeClimaFrio v WHERE v.telefono2 = :telefono2"),
-    @NamedQuery(name = "VwCeClimaFrio.findByFax", query = "SELECT v FROM VwCeClimaFrio v WHERE v.fax = :fax"),
-    @NamedQuery(name = "VwCeClimaFrio.findByCodigoDepartamento", query = "SELECT v FROM VwCeClimaFrio v WHERE v.codigoDepartamento = :codigoDepartamento"),
-    @NamedQuery(name = "VwCeClimaFrio.findByCodigoMunicipio", query = "SELECT v FROM VwCeClimaFrio v WHERE v.codigoMunicipio = :codigoMunicipio"),
-    @NamedQuery(name = "VwCeClimaFrio.findByIdMunicipio", query = "SELECT v FROM VwCeClimaFrio v WHERE v.idMunicipio = :idMunicipio"),
-    @NamedQuery(name = "VwCeClimaFrio.findByEntidadFrio", query = "SELECT v FROM VwCeClimaFrio v WHERE v.entidadFrio = :entidadFrio")})
 public class VwCeClimaFrio implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -78,6 +64,8 @@ public class VwCeClimaFrio implements Serializable {
     @Size(max = 5)
     @Column(name = "ENTIDAD_FRIO")
     private Integer entidadFrio;
+    @Column(name = "ESTADO_ELIMINACION")
+    private Integer estadoEliminacion;
 
     public VwCeClimaFrio() {
     }
@@ -160,6 +148,14 @@ public class VwCeClimaFrio implements Serializable {
 
     public void setEntidadFrio(Integer entidadFrio) {
         this.entidadFrio = entidadFrio;
+    }
+
+    public Integer getEstadoEliminacion() {
+        return estadoEliminacion;
+    }
+
+    public void setEstadoEliminacion(Integer estadoEliminacion) {
+        this.estadoEliminacion = estadoEliminacion;
     }
     
 }

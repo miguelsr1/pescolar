@@ -24,4 +24,11 @@ public class CeClimaFrioRepo extends AbstractRepository<CeClimaFrio,Long> {
         super(CeClimaFrio.class);
     }
     
+    public void guardarCeClimaFrio(CeClimaFrio ceClimaFrio) {
+        if (ceClimaFrio.getIdCe()== null) {
+            em.persist(ceClimaFrio);
+        } else {
+            em.merge(ceClimaFrio);
+        }
+    }
 }
