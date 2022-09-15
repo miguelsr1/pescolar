@@ -31,7 +31,8 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
         loginToContinue = @LoginToContinue(
                 loginPage = "/inicio.xhtml",
                 errorPage = "/access.xhtml", // DRAFT API - must be set to empty for now
-                useForwardToLogin = true
+                useForwardToLogin = false,
+                useForwardToLoginExpression = ""
         )
 )
 @ApplicationScoped
