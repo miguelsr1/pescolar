@@ -39,6 +39,9 @@ public class Empresa implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ID_MUNICIPIO")
     private Municipio idMunicipio;
+	
+    @OneToMany(mappedBy = "idEmpresa")
+    private List<ListaNegraEmpresa> listaNegraEmpresaList;
 
     @Column(name = "NOMBRE_COMERCIAL", length = 254)
     private String nombreComercial;
@@ -344,6 +347,14 @@ public class Empresa implements Serializable {
 
     public void setDetRubroMuestraIntereList(List<DetRubroMuestraIntere> detRubroMuestraIntereList) {
         this.detRubroMuestraIntereList = detRubroMuestraIntereList;
+    }
+
+    public List<ListaNegraEmpresa> getListaNegraEmpresaList() {
+        return listaNegraEmpresaList;
+    }
+
+    public void setListaNegraEmpresaList(List<ListaNegraEmpresa> listaNegraEmpresaList) {
+        this.listaNegraEmpresaList = listaNegraEmpresaList;
     }
 
     @Override
