@@ -1,4 +1,4 @@
-package sv.gob.mined.pescolar.model.dto;
+package sv.gob.mined.pescolar.web;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ import sv.gob.mined.pescolar.utils.JsfUtil;
  */
 @Named
 @ViewScoped
-public class PersonaController implements Serializable {
+public class PersonaView implements Serializable {
 
     private Departamento departamento = new Departamento();
     private Persona current = new Persona();
