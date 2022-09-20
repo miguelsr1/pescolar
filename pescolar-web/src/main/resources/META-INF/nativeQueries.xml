@@ -79,6 +79,40 @@
         </query>
     </named-native-query>
     
+    <named-native-query name="Contratacion.ResguardoTotal" 
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto">
+        <query>
+            <![CDATA[
+            select 
+                rownum          as idRow, 
+                codigo_entidad  as codigoEntidad, 
+                id_anho         as idAnho, 
+                id_producto     as idProducto, 
+                no_item         as noItem, 
+                cantidad
+            from (select ofe.codigo_entidad, pro.id_anho, det.id_producto, det.no_item, sum(det.cantidad) cantidad
+                from resguardo res
+                    inner join detalle_resguardo det on res.id_resguardo = det.id_resguardo
+                    inner join contratos_ordenes_compras con on res.id_contrato = con.id_contrato
+                    inner join resoluciones_adjudicativas res on con.id_resolucion_adj = res.id_resolucion_adj
+                    inner join participantes par on par.id_participante = res.id_participante
+                    inner join oferta_bienes_servicios ofe on ofe.id_oferta = par.id_oferta
+                    inner join detalle_proceso_adq dpa on ofe.id_det_proceso_adq = dpa.id_det_proceso_adq
+                    inner join proceso_adquisicion pro on dpa.id_proceso_adq = pro.id_proceso_adq
+                where 
+                    res.estado_eliminacion = 0 and
+                    det.estado_eliminacion = 0 and
+                    con.estado_eliminacion = 0 and
+                    res.estado_eliminacion = 0 and
+                    par.estado_eliminacion = 0 and
+                    ofe.estado_eliminacion = 0 and
+                    ofe.codigo_entidad = ?1 and
+                    pro.id_anho = ?2
+                group by 
+                    ofe.codigo_entidad, pro.id_anho, det.id_producto, det.no_item)
+            ]]>
+        </query>
+    </named-native-query>
     <named-native-query name="Proveedor.NotificacionOfertaProv" 
                         result-class="sv.gob.mined.pescolar.model.dto.NotificacionOfertaProvDto">
         <query>
