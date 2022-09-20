@@ -43,7 +43,7 @@
                     <p:menubar>
                         <p:menuitem value="Nuevo"  icon="pi pi-file" />
                         <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
-                        <p:menuitem value="Buscar"  icon="pi pi-search" actionListener = "#{empListaNegraView.buscarEmp()}"/>
+                        <p:menuitem value="Buscar"  icon="pi pi-search" actionListener = "#{empListaNegraView.buscarEmp()}" update="pnlEmpresa"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" actionListener = "#{empListaNegraView.guardar}" disabled="empListaNegraView.deshabilitado" />
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
@@ -53,7 +53,7 @@
                         </f:facet>
                     </p:menubar>
 
-                    <p:hotkey bind="ctrl+shift+f" actionListener="#{empListaNegraView.buscarEmp()}"/>
+                    <p:hotkey bind="ctrl+shift+f" actionListener="#{empListaNegraView.buscarEmp()}" update="pnlEmpresa"/>
                 </div>
                 <div class="p-col-12">
                     <div class="card ui-fluid">
@@ -66,7 +66,7 @@
 
                         <div class="p-col-12">
                             <div class="p-field p-grid">
-                                <p:outputLabel for="nitEmp" styleClass="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Departamento</p:outputLabel>
+                                <p:outputLabel for="nitEmp" styleClass="p-col-12 p-mb-1 p-md-1 p-mb-md-0">Documento</p:outputLabel>
                                 <div class="p-col-12 p-md-2">
                                     <p:inputText id="nitEmp" style="width: 100%;" value="#{empListaNegraView.nitEmpresa}" onkeyup="queryEmpresa(this.value);" />
                                 </div>
@@ -91,56 +91,57 @@
                                     Información General de proveedor
                                 </h5>
                             </div>
+                            <p:accordionPanel id="pnlEmpresa">
+                                <div class="p-col-12 p-md-8">
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel value="D.U.I./N.I.T.:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                        <div class="p-col-12 p-md-9">
+                                            <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.numeroNit}" />
+                                        </div>
+                                    </div>
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel value="Municipio y Departamento:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                        <div class="p-col-12 p-md-9">
+                                            <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.municipioDepartamento}" />
+                                        </div>
+                                    </div>
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel value="Domicilio: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                        <div class="p-col-12 p-md-9">
+                                            <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.domicilio}" />
+                                        </div>
+                                    </div>
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel value="Teléfonos: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                        <div class="p-col-12 p-md-9">
+                                            <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.telefonos} , #{cargaGeneralView.empresa.numeroCelular}" />
+                                        </div>
+                                    </div>
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel value="Estado de registro: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                        <div class="p-col-12 p-md-9">
+                                            <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.idEstadoRegistro.descripcionEstado}" />
+                                        </div>
+                                    </div>
+                                    <div class="p-field p-grid">
+                                        <p:outputLabel value="Rubro a participar: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                        <div class="p-col-12 p-md-9">
+                                            <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.nombreRubroProveedor}" />
+                                        </div>
+                                    </div>
 
-                            <div class="p-col-12 p-md-8">
-                                <div class="p-field p-grid">
-                                    <p:outputLabel value="D.U.I./N.I.T.:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
-                                    <div class="p-col-12 p-md-9">
-                                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.numeroNit}" />
-                                    </div>
+                                    <p:commandLink id="foto" action="#{cargaGeneralView.dlgFotografia}" disabled="#{cargaGeneralView.capacidadInstPorRubro eq null}">
+                                        <p:ajax event="dialogReturn" listener="#{datosGeneralesView.updateFrm}" update="pnlEmpresa"/>
+                                        <p:graphicImage rendered="#{cargaGeneralView.showFoto}" value="/DynamicImageServlet?file=#{cargaGeneralView.empresa.idPersona.urlImagen}" width="120"/>
+                                    </p:commandLink>
                                 </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel value="Municipio y Departamento:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
-                                    <div class="p-col-12 p-md-9">
-                                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.municipioDepartamento}" />
-                                    </div>
-                                </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel value="Domicilio: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
-                                    <div class="p-col-12 p-md-9">
-                                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.domicilio}" />
-                                    </div>
-                                </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel value="Teléfonos: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
-                                    <div class="p-col-12 p-md-9">
-                                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.telefonos} , #{cargaGeneralView.empresa.numeroCelular}" />
-                                    </div>
-                                </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel value="Estado de registro: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
-                                    <div class="p-col-12 p-md-9">
-                                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.empresa.idEstadoRegistro.descripcionEstado}" />
-                                    </div>
-                                </div>
-                                <div class="p-field p-grid">
-                                    <p:outputLabel value="Rubro a participar: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
-                                    <div class="p-col-12 p-md-9">
-                                        <p:outputLabel styleClass="negrita" value="#{cargaGeneralView.nombreRubroProveedor}" />
-                                    </div>
-                                </div>
-
-                                <p:commandLink id="foto" action="#{cargaGeneralView.dlgFotografia}" disabled="#{cargaGeneralView.capacidadInstPorRubro eq null}">
-                                    <p:ajax event="dialogReturn" listener="#{datosGeneralesView.updateFrm}" update="pnlFoto"/>
-                                    <p:graphicImage rendered="#{cargaGeneralView.showFoto}" value="/DynamicImageServlet?file=#{cargaGeneralView.empresa.idPersona.urlImagen}" width="120"/>
-                                </p:commandLink>
-                            </div>
+                            </p:accordionPanel>
                         </div>
                     </div>
                 </div>
             </div>
-            <p:confirmDialog widgetVar="delClimaFrioDlg" showEffect="fade" width="300" message="¿Esta seguro de eliminar el registro seleccionado?" header="Confirmar" severity="warn">
-                <p:commandButton value="Si" icon="pi pi-check" actionListener="#{empListaNegraView.eliminar()}" process="@this" oncomplete="PF('delClimaFrioDlg').hide()" update="tblCeClimaFrio"/>
+            <p:confirmDialog widgetVar="delListaNegra" showEffect="fade" width="300" message="¿Esta seguro de eliminar el registro seleccionado?" header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" actionListener="#{empListaNegraView.eliminar()}" process="@this" oncomplete="PF('delClimaFrioDlg').hide()" update="pnlEmpresa"/>
                 <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('delPersonaDlg').hide()" />
             </p:confirmDialog>
         </h:form>
