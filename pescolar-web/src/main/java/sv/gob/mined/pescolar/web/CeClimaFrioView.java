@@ -10,10 +10,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleSelectEvent;
-import org.primefaces.context.PrimeRequestContext;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.CeClimaFrio;
@@ -73,10 +71,10 @@ public class CeClimaFrioView implements Serializable {
         params.clear();
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento", codigoDepartamento).build());
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idMunicipio", idMunicipio).build());
-        //params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "entidadFrio", busqueda).build());
-        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "estadoEliminacion", busqueda).build());
-
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "estadoEliminacion", busqueda).build());  
+        
         if (busqueda == 1) {
+            
             lstCeNoSeleccionados = (List<VwCeClimaFrio>) entidadCFRepo.findListByParam(params, orden, Boolean.TRUE);
         } else {
             lstCeClimaFrio = (List<VwCeClimaFrio>) entidadCFRepo.findListByParam(params, orden, Boolean.TRUE);

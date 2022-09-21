@@ -161,7 +161,7 @@
             </div>
             <p:confirmDialog widgetVar="delClimaFrioDlg" showEffect="fade" width="300" message="¿Esta seguro de eliminar el registro seleccionado?" header="Confirmar" severity="warn">
                 <p:commandButton value="Si" icon="pi pi-check" actionListener="#{ceClimaFrioView.eliminar()}" process="@this" oncomplete="PF('delClimaFrioDlg').hide()" update="tblCeClimaFrio"/>
-                <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('delPersonaDlg').hide()" />
+                <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('delClimaFrioDlg').hide()" />
             </p:confirmDialog>
         </h:form>
         <h:outputStylesheet name="personalizadas.css" library="css"/>
