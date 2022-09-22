@@ -6,19 +6,10 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
-import sv.gob.mined.app.web.util.JsfUtil;
-import sv.gob.mined.app.web.util.VarSession;
-import sv.gob.mined.paquescolar.ejb.PersonaEJB;
-import sv.gob.mined.paquescolar.ejb.UtilEJB;
-import sv.gob.mined.paquescolar.model.Departamento;
-import sv.gob.mined.paquescolar.model.Genero;
-import sv.gob.mined.paquescolar.model.Persona;
-import sv.gob.mined.paquescolar.model.TipoUsuario;
-import sv.gob.mined.paquescolar.model.Usuario;
+//import sv.gob.mined.app.web.util.VarSession;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Genero;
 import sv.gob.mined.pescolar.model.Persona;
@@ -61,20 +52,20 @@ public class PersonaView implements Serializable {
     private Date fechaFinLogin;
     private BigDecimal idGenero = BigDecimal.ZERO;
 
-    @EJB
+    /*@EJB
     private PersonaEJB personaEJB;
     @EJB
-    private UtilEJB utilEJB;
+    private UtilEJB utilEJB;*/
 
     /**
      * Creates a new instance of PersonaController
      */
-    public PersonaController() {
-        edicion.setPrimerNombre("");
+    public PersonaView() {
+        /*edicion.setPrimerNombre("");
         edicion.setSegundoNombre("");
         edicion.setPrimerApellido("");
         edicion.setSegundoApellido("");
-        edicion.setAcasada("");
+        edicion.setAcasada("");*/
     }
 
     public String getEmailPer() {
@@ -100,7 +91,7 @@ public class PersonaView implements Serializable {
     public List<Persona> completeUser(String query) {
         List<Persona> lstUsers = new ArrayList();
         if (query.trim().length() > 3) {
-            lstUsers = personaEJB.buscarUsuarioByUsuarioOrNombre(query);
+            //lstUsers = personaEJB.buscarUsuarioByUsuarioOrNombre(query);
         }
         return lstUsers;
     }
@@ -146,13 +137,13 @@ public class PersonaView implements Serializable {
     public void guardarUsuario() {
         edicion.setEmail(emailPer);
         edicion.setUsuario(usuario1);
-        edicion.setIdGenero(utilEJB.find(Genero.class, idGenero));
+        //edicion.setIdGenero(utilEJB.find(Genero.class, idGenero));
 
         if (edicion.getId() == null) {
             if (clave1.isEmpty()) {
                     JsfUtil.mensajeAlerta("Debe de asignar una clave de acceso al usuario.");
                 } else {
-                    edicion.setClaveAcceso(personaEJB.encriptarclave(clave1));
+                    /*edicion.setClaveAcceso(personaEJB.encriptarclave(clave1));
                     List<Persona> lista = personaEJB.buscarNitPersona(edicion.getNumeroNit());
                     if (lista.isEmpty()) {
                         List<Persona> lista2 = personaEJB.buscarUsuario(usuario1);
@@ -192,14 +183,14 @@ public class PersonaView implements Serializable {
                         }
                     } else {
                         JsfUtil.mensajeError("Ya existe usuario con mismo numero NIT");
-                    }
+                    }*/
                 }
         }else{
             if (cambiarClave) {
                     if (clave1.isEmpty()) {
                         JsfUtil.mensajeAlerta("Debe de asignar una clave de acceso al usuario.");
                     } else {
-                        edicion.setClaveAcceso(personaEJB.encriptarclave(clave1));
+                        //edicion.setClaveAcceso(personaEJB.encriptarclave(clave1));
                         modificarUsuario();
                     }
                 } else {
@@ -211,26 +202,26 @@ public class PersonaView implements Serializable {
     private void modificarUsuario() {
         if (periodoDeAcceso) {
             usuarioObj.setRangoFechaLogin((short) 1);
-            usuarioObj.setFechaInicioLogin(fechaInicioLogin);
-            usuarioObj.setFechaFinLogin(fechaFinLogin);
+           /* usuarioObj.setFechaInicioLogin(fechaInicioLogin);
+            usuarioObj.setFechaFinLogin(fechaFinLogin);*/
         } else {
             usuarioObj.setRangoFechaLogin((short) 0);
             usuarioObj.setFechaInicioLogin(null);
             usuarioObj.setFechaFinLogin(null);
         }
 
-        edicion.setUsuarioModificacion(VarSession.getVariableSession("Usuario").toString());
+        /*edicion.setUsuarioModificacion(VarSession.getVariableSession("Usuario").toString());
         edicion.setFechaModificacion(new Date());
 
-        personaEJB.edit(edicion);
+        personaEJB.edit(edicion);*/
 
         usuarioObj.setActivo(usuarioActivo ? (short) 1 : 0);
-        usuarioObj.setFechaModificacion(new Date());
-        usuarioObj.setUsuarioModificacion(VarSession.getVariableSession("Usuario").toString());
+        /*usuarioObj.setFechaModificacion(new Date());
+        usuarioObj.setUsuarioModificacion(VarSession.getVariableSession("Usuario").toString());*/
         usuarioObj.setIdTipoUsuario(idTipoUsuario);
-        usuarioObj.setCodigoDepartamento(departamento.getCodigoDepartamento());
+        //usuarioObj.setCodigoDepartamento(departamento.getCodigoDepartamento());
 
-        personaEJB.setOpcionesUsuario(usuarioObj, edicion);
+        //personaEJB.setOpcionesUsuario(usuarioObj, edicion);
 
         JsfUtil.mensajeUpdate();
         prepareCreate();
@@ -318,12 +309,12 @@ public class PersonaView implements Serializable {
     }
 
     public List<TipoUsuario> getLstTipoUsuario() {
-        return personaEJB.getLstTipoUsuario();
+        return null; //personaEJB.getLstTipoUsuario();
     }
 
     public void validarPassword() {
         errorPassword = false;
-        errorPassword = personaEJB.validarPassword(clave1, clave2);
+        //errorPassword = personaEJB.validarPassword(clave1, clave2);
     }
 
     public String getClave1() {
@@ -373,7 +364,7 @@ public class PersonaView implements Serializable {
          */
         if (edicion != null) {
             emailPer = edicion.getEmail();
-            if (edicion.getIdPersona() != null) {
+            /*if (edicion.getIdPersona() != null) {
                 cargarDatosPersonaEdicion();
             } else {
                 edicion = personaEJB.buscarNitPersona(nit).isEmpty() ? null : personaEJB.buscarNitPersona(nit).get(0);
@@ -382,7 +373,7 @@ public class PersonaView implements Serializable {
                 } else {
                     cargarDatosPersonaEdicion();
                 }
-            }
+            }*/
         }
     }
 
@@ -397,14 +388,14 @@ public class PersonaView implements Serializable {
         usuarioActivo = usuarioObj.getActivo().intValue() == 1;
         periodoDeAcceso = usuarioObj.getRangoFechaLogin().intValue() == 1;
         if (periodoDeAcceso) {
-            fechaInicioLogin = usuarioObj.getFechaInicioLogin();
-            fechaFinLogin = usuarioObj.getFechaFinLogin();
+            /*fechaInicioLogin = usuarioObj.getFechaInicioLogin();
+            fechaFinLogin = usuarioObj.getFechaFinLogin();*/
         } else {
             fechaInicioLogin = null;
             fechaFinLogin = null;
         }
 
-        idGenero = edicion.getIdGenero().getIdGenero();
+        //idGenero = edicion.getIdGenero().getIdGenero();
 
         usuario1 = edicion.getUsuario();
         dialogFiltroPersona = false;
@@ -413,7 +404,7 @@ public class PersonaView implements Serializable {
     }
 
     public List<Genero> getLstGenero() {
-        return personaEJB.getLstGenero();
+        return null;//personaEJB.getLstGenero();
     }
 
     public Date getFechaVencimientoClave() {

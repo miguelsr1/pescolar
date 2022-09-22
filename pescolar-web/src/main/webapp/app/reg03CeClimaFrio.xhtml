@@ -96,65 +96,63 @@
                         </div>
                     </div>
 
-                    <div class="p-col-12">
-                        <div class="card ui-fluid">
-                            <div class="card-header overview-box">
-                                <h5>
-                                    <i class="pi pi-list verde" style="font-size: 16px;"></i>
-                                    <p:spacer width="10"/>
-                                    Lista de Centros Disponibles
-                                </h5>
-                            </div>
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h5>
+                                <i class="pi pi-list verde" style="font-size: 16px;"></i>
+                                <p:spacer width="10"/>
+                                Lista de Centros Disponibles
+                            </h5>
+                        </div>
 
-                            <div class="p-formgrid p-grid">
-                                <p:dataTable id="tblCeDisponibles" value="#{ceClimaFrioView.lstCeNoSeleccionados}" var="cdis" rowIndexVar="rowId" 
-                                             rowKey="#{cdis.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}" scrollable="true" scrollHeight="150">
+                        <div class="p-formgrid p-grid">
+                            <p:dataTable id="tblCeDisponibles" value="#{ceClimaFrioView.lstCeNoSeleccionados}" var="cdis" rowIndexVar="rowId" 
+                                         rowKey="#{cdis.codigoEntidad}" selection="#{ceClimaFrioView.lstCheck}" scrollable="true" scrollHeight="150">
 
-                                    <p:ajax event="toggleSelect" listener="#{ceClimaFrioView.onAllRowsSelect}" />
-                                    <p:ajax event="rowSelectCheckbox" listener="#{ceClimaFrioView.onRowSelect}" />
-                                    <p:ajax event="rowUnselectCheckbox" listener="#{ceClimaFrioView.onRowUnselect}" />
+                                <p:ajax event="toggleSelect" listener="#{ceClimaFrioView.onAllRowsSelect}" />
+                                <p:ajax event="rowSelectCheckbox" listener="#{ceClimaFrioView.onRowSelect}" />
+                                <p:ajax event="rowUnselectCheckbox" listener="#{ceClimaFrioView.onRowUnselect}" />
 
-                                    <p:column headerText="#" width="5%">
-                                        <p:outputLabel value="#{rowId + 1}"/>
-                                    </p:column>
-                                    <p:column headerText="CODIGO" width="10%">
-                                        <p:outputLabel value="#{cdis.codigoEntidad}" />
-                                    </p:column>
-                                    <p:column headerText="NOMBRE DEL CENTRO" width="75%">
-                                        <p:outputLabel value="#{cdis.nombre}" />
-                                    </p:column>
-                                    <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
-                                </p:dataTable>
-                            </div>
+                                <p:column headerText="#" width="5%">
+                                    <p:outputLabel value="#{rowId + 1}"/>
+                                </p:column>
+                                <p:column headerText="CODIGO" width="10%">
+                                    <p:outputLabel value="#{cdis.codigoEntidad}" />
+                                </p:column>
+                                <p:column headerText="NOMBRE DEL CENTRO" width="75%">
+                                    <p:outputLabel value="#{cdis.nombre}" />
+                                </p:column>
+                                <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
+                            </p:dataTable>
+                        </div>
 
 
-                            <div class="card-header overview-box">
-                                <h5>
-                                    <i class="pi pi-list blue" style="font-size: 16px;"></i>
-                                    <p:spacer width="10" height="50"/>
-                                    Lista de Centros Seleccionados
-                                </h5>
-                            </div>
+                        <div class="card-header overview-box">
+                            <h5>
+                                <i class="pi pi-list blue" style="font-size: 16px;"></i>
+                                <p:spacer width="10" height="50"/>
+                                Lista de Centros Seleccionados
+                            </h5>
+                        </div>
 
-                            <div class="p-formgrid p-grid">
-                                <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCeClimaFrio}" var="cfrio" rowIndexVar="rowId" rowKey="#{cfrio.codigoEntidad}"
-                                             scrollable="true" scrollHeight="160">
-                                    <p:column headerText="#" width="5%">
-                                        <p:outputLabel value="#{rowId + 1}"/>
-                                    </p:column>
-                                    <p:column headerText="CODIGO" width="10%">
-                                        <p:outputLabel value="#{cfrio.codigoEntidad}" />
-                                    </p:column>
-                                    <p:column headerText="NOMBRE DEL CENTRO" width="75%">
-                                        <p:outputLabel value="#{cfrio.nombre}" />
-                                    </p:column>
-                                    <p:column headerText="Borrar" style="width:10%;text-align:center">
-                                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" oncomplete="PF('delClimaFrioDlg').show()" >
-                                            <f:setPropertyActionListener value="#{cfrio}" target="#{ceClimaFrioView.entidadBorrar}" />
-                                        </p:commandButton>
-                                    </p:column>
-                                </p:dataTable>
-                            </div>
+                        <div class="p-formgrid p-grid">
+                            <p:dataTable id="tblCeClimaFrio" value="#{ceClimaFrioView.lstCeClimaFrio}" var="cfrio" rowIndexVar="rowId" rowKey="#{cfrio.codigoEntidad}"
+                                         scrollable="true" scrollHeight="160">
+                                <p:column headerText="#" width="5%">
+                                    <p:outputLabel value="#{rowId + 1}"/>
+                                </p:column>
+                                <p:column headerText="CODIGO" width="10%">
+                                    <p:outputLabel value="#{cfrio.codigoEntidad}" />
+                                </p:column>
+                                <p:column headerText="NOMBRE DEL CENTRO" width="75%">
+                                    <p:outputLabel value="#{cfrio.nombre}" />
+                                </p:column>
+                                <p:column headerText="Borrar" style="width:10%;text-align:center">
+                                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" oncomplete="PF('delClimaFrioDlg').show()" >
+                                        <f:setPropertyActionListener value="#{cfrio}" target="#{ceClimaFrioView.entidadBorrar}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
                         </div>
                     </div>
                 </div>
