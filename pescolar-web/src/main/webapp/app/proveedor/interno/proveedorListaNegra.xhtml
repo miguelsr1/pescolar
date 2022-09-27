@@ -1,0 +1,84 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <div class="card-header overview-box blue">
+        <h5>
+            <i class="pi pi-id-card" style="font-size: 16px;" aria-hidden="true"></i>
+            <p:spacer width="10" height="8"/>
+            Datos de #{empListaNegraView.empresa.razonSocial}
+        </h5>
+    </div>
+    <p:accordionPanel id="pnlFoto">
+        <p:tab title="Información General">
+            <div class="p-col-12 p-md-8">
+                <div class="p-field p-grid">
+                    <p:outputLabel value="D.U.I./N.I.T.:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-9">
+                        <p:outputLabel styleClass="negrita" value="#{empListaNegraView.empresa.numeroNit}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Municipio y Departamento:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-9">
+                        <p:outputLabel styleClass="negrita" value="#{empListaNegraView.municipioDepartamento}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Domicilio: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-9">
+                        <p:outputLabel styleClass="negrita" value="#{empListaNegraView.domicilio}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Teléfonos: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-9">
+                        <p:outputLabel styleClass="negrita" value="#{empListaNegraView.empresa.telefonos} , #{empListaNegraView.empresa.numeroCelular}" />
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Estado de registro: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-9">
+                        <p:outputLabel styleClass="negrita" value="#{empListaNegraView.empresa.idEstadoRegistro.descripcionEstado}" />
+                    </div>
+                </div>
+
+                <p:commandLink id="foto" action="#{cargaGeneralView.dlgFotografia}" disabled="#{cargaGeneralView.capacidadInstPorRubro eq null}">
+                    <p:ajax event="dialogReturn" listener="#{datosGeneralesView.updateFrm}" update="pnlFoto"/>
+                    <p:graphicImage rendered="#{cargaGeneralView.showFoto}" value="/DynamicImageServlet?file=#{cargaGeneralView.empresa.idPersona.urlImagen}" width="120"/>
+                </p:commandLink>
+            </div>
+        </p:tab>
+
+        <p:tab title="Registro en Lista negra">
+            <div class="p-col-12 p-md-8">
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Tipo de Sanción:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-9">
+                        <p:selectOneMenu id="cboMuni" value="#{empListaNegraView.listaNegraEmpresa.idTipoSancion.idTipoSancion}">
+                            <f:selectItem itemLabel="Seleccione Tipo Sanción" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{empListaNegraView.lstSancion}" var="san" itemValue="#{san.idTipoSancion}" itemLabel="#{san.descripcionSancion}"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Dias de Sanción:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-2">
+                        <p:inputNumber decimalPlaces="0" id="dias" value="#{empListaNegraView.listaNegraEmpresa.tiempoSancion}" style="width:100%"/>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <p:outputLabel value="Observación: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-9">
+                        <p:inputTextarea rows="4" cols="150" counter="display" maxlength="500"
+                                         counterTemplate="{0} Max. caracteres faltantes." autoResize="false"/>
+                        <h:outputText id="display" class="block" />
+                    </div>
+                </div>
+            </div>
+        </p:tab>
+    </p:accordionPanel>
+</ui:composition>
+

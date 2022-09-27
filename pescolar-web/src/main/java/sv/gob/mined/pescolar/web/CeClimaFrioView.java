@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleSelectEvent;
 import sv.gob.mined.pescolar.model.Departamento;
@@ -98,6 +99,7 @@ public class CeClimaFrioView implements Serializable {
             }
             buscar();
             JsfUtil.mensajeInsert();
+            PrimeFaces.current().executeScript("PF('tblCeDisponibles').unselectAllRows();");
         }
     }
 

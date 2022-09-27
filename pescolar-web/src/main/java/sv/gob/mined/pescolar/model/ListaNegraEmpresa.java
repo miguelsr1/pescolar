@@ -10,11 +10,14 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,15 +32,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "LISTA_NEGRA_EMPRESA")
 @XmlRootElement
-
+@NamedQueries({
+    @NamedQuery(name = "ListaNegraEmpresa.findAll", query = "SELECT l FROM ListaNegraEmpresa l")})
 public class ListaNegraEmpresa implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ID_LISTA_NEGRA")
-    private BigDecimal idListaNegra;
+    @Column(name = "ID_LISTA_NEGRA", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LISTA_NEGRA_EMPRESA")
+    @SequenceGenerator(name = "SEQ_LISTA_NEGRA_EMPRESA", sequenceName = "SEQ_LISTA_NEGRA_EMPRESA", allocationSize = 1, initialValue = 1)
+    private Long idListaNegra;
     @Column(name = "TIEMPO_SANCION")
     private Integer tiempoSancion;
     @Size(max = 500)
@@ -54,19 +58,23 @@ public class ListaNegraEmpresa implements Serializable {
     @JoinColumn(name = "ID_EMPRESA", referencedColumnName = "ID_EMPRESA")
     @ManyToOne
     private Empresa idEmpresa;
+    
+    @JoinColumn(name = "ID_TIPO_SANCION", referencedColumnName = "ID_TIPO_SANCION")
+    @ManyToOne
+    private TipoSancion idTipoSancion;
 
     public ListaNegraEmpresa() {
     }
 
-    public ListaNegraEmpresa(BigDecimal idListaNegra) {
+    public ListaNegraEmpresa(Long idListaNegra) {
         this.idListaNegra = idListaNegra;
     }
 
-    public BigDecimal getIdListaNegra() {
+    public Long getIdListaNegra() {
         return idListaNegra;
     }
 
-    public void setIdListaNegra(BigDecimal idListaNegra) {
+    public void setIdListaNegra(Long idListaNegra) {
         this.idListaNegra = idListaNegra;
     }
 
@@ -108,6 +116,17 @@ public class ListaNegraEmpresa implements Serializable {
 
     public void setEstadoEliminacion(Short estadoEliminacion) {
         this.estadoEliminacion = estadoEliminacion;
+    }
+
+    public TipoSancion getIdTipoSancion() {
+        if (idTipoSancion == null || idTipoSancion.getIdTipoSancion()== null){
+            idTipoSancion = new TipoSancion();
+        }
+        return idTipoSancion;
+    }
+
+    public void setIdTipoSancion(TipoSancion idTipoSancion) {
+        this.idTipoSancion = idTipoSancion;
     }
 
     public Empresa getIdEmpresa() {
