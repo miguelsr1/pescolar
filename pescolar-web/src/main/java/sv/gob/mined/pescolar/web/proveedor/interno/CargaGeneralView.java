@@ -175,6 +175,7 @@ public class CargaGeneralView implements Serializable {
             detRubroMuestraInteres = catalogoRepo.findDetRubroByAnhoAndRubro(idAnho, getEmpresa().getId());
             if (detRubroMuestraInteres == null) {
                 JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + proceso.getIdAnho().getAnho());
+                return;
             } else {
                 rubroProveedor = JsfUtil.getNombreRubroById(detRubroMuestraInteres.getIdRubroInteres().getId());
             }

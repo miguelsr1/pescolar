@@ -24,7 +24,7 @@
                 </div>
                 <p:panel visible="false">
                     <p:commandButton id="btnModificar" value="ok" action="#{datosGeneralesView.filtroProveedores}" process="@this">
-                        <p:ajax event="dialogReturn" listener="#{datosGeneralesView.empresaSeleccionada}"  update="frmPrincipal pnlFoto pnlModif dvDatosGenerales" />
+                        <p:ajax event="dialogReturn" listener="#{datosGeneralesView.empresaSeleccionada}"  update="frmPrincipal pnlFoto pnlModif dvDatosGenerales tabPer" />
                     </p:commandButton>
                 </p:panel>
 
@@ -91,7 +91,7 @@
                                     </div>
                                 </p:tab>
 
-                                <p:tab title="#{datosGeneralesView.tapPersona}" rendered="#{datosGeneralesView.tapPersona ne ''}">
+                                <p:tab title="#{datosGeneralesView.tapPersona}" rendered="#{datosGeneralesView.tapPersona ne ''}" id="tabPer">
                                     <div class="ui-fluid p-formgrid p-grid">
                                         <div class="p-field p-col-12 p-md-3">
                                             <p:outputLabel value="Primer Nombre:"/>
@@ -136,7 +136,7 @@
                                     <div class="ui-fluid p-formgrid p-grid">
                                         <div class="p-field p-col-12 p-md-3">
                                             <p:outputLabel value="DUI:"/>
-                                            <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numeroDui}" mask="99999999-9" disabled="#{sessionView.isUsuarioAdministrador}" />
+                                            <p:inputMask value="#{cargaGeneralView.empresa.idPersona.numeroDui}" mask="99999999-9" disabled="#{not sessionView.isUsuarioAdministrador}" />
                                         </div>
                                         <div class="p-field p-col-12 p-md-3">
                                             <p:outputLabel value="Departamento: "/>
@@ -151,11 +151,12 @@
                                             <p:selectOneMenu id="cboMunicipio" value="#{datosGeneralesView.idMunicipio}">
                                                 <f:selectItem noSelectionOption="true" itemLabel="Seleccione un municipio" />
                                                 <f:selectItems value="#{datosGeneralesView.lstMunicipios}" var="munP" itemValue="#{munP.id}" itemLabel="#{munP.codigoMunicipio} - #{munP.nombreMunicipio}"/>
+                                                <p:ajax update="#{datosGeneralesView.rubroUniforme?'cboCanton':''}"/>
                                             </p:selectOneMenu>
                                         </div>
                                         <div class="p-field p-col-12 p-md-3">
                                             <p:outputLabel value="Cantón:" rendered="#{datosGeneralesView.rubroUniforme}"/>
-                                            <p:selectOneMenu id="cboCanton" value="#{datosGeneralesView.idCanton}" rendered="#{proveedorController.rubroUniforme}">
+                                            <p:selectOneMenu id="cboCanton" value="#{datosGeneralesView.idCanton}" rendered="#{datosGeneralesView.rubroUniforme}">
                                                 <f:selectItem noSelectionOption="true" itemLabel="Seleccione un cantón" />
                                                 <f:selectItems value="#{datosGeneralesView.lstCantones}" var="canP" itemValue="#{canP.codigoCanton}" itemLabel="#{canP.codigoCanton} - #{canP.nombreCanton}"/>
                                             </p:selectOneMenu>
@@ -194,14 +195,14 @@
                                                 <p:selectOneMenu id="cboMunicipioLocal" value="#{datosGeneralesView.idMunicipioLocal}">
                                                     <f:selectItem noSelectionOption="true" itemLabel="Seleccione un municipio" />
                                                     <f:selectItems value="#{datosGeneralesView.lstMunicipiosLocal}" var="munP" itemValue="#{munP.id}" itemLabel="#{munP.codigoMunicipio} - #{munP.nombreMunicipio}"/>
-                                                    <p:ajax update="cboCantonLocal"/>
+                                                    <p:ajax update="#{datosGeneralesView.rubroUniforme?'cboCantonLocal':''}"/>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Cantón:" rendered="#{datosGeneralesView.rubroUniforme}"/>
                                                 <p:selectOneMenu id="cboCantonLocal" value="#{datosGeneralesView.idCantonLocal}" rendered="#{datosGeneralesView.rubroUniforme}">
                                                     <f:selectItem noSelectionOption="true" itemLabel="Seleccione un cantón" />
-                                                    <f:selectItems value="#{datosGeneralesMB.lstCantonLocal}" var="canton" itemValue="#{canton.codigoCanton}" itemLabel="#{canton.codigoCanton} - #{canton.nombreCanton}"/>
+                                                    <f:selectItems value="#{datosGeneralesView.lstCantonesLocal}" var="canton" itemValue="#{canton.codigoCanton}" itemLabel="#{canton.codigoCanton} - #{canton.nombreCanton}"/>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-field p-col-12 p-md-12">

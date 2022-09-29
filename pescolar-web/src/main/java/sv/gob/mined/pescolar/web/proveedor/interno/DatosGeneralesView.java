@@ -73,6 +73,8 @@ public class DatosGeneralesView implements Serializable {
     private Long idMunicipioLocal;
 
     private List<Filtro> params = new ArrayList();
+    private List<Canton> lstCantones = new ArrayList<>();
+    private List<Canton> lstCantonesLocal = new ArrayList<>();
 
     private DetalleProcesoAdq detalleProcesoAdq;
     private CapaDistribucionAcre departamentoCalif;
@@ -379,6 +381,8 @@ public class DatosGeneralesView implements Serializable {
                 if (rubroUniforme) {
                     idCanton = cargaGeneralView.getEmpresa().getIdPersona().getCodigoCanton();
                     idCantonLocal = cargaGeneralView.getEmpresa().getCodigoCanton();
+                    lstCantones = catalogoRepo.getLstCantonByMunicipio(idMunicipio);
+                    lstCantonesLocal = catalogoRepo.getLstCantonByMunicipio(idMunicipioLocal);
                 }
 
                 deshabiliar = false;
