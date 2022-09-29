@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @SqlResultSetMapping(name = "defaultResguadoDto",
-        entities = @EntityResult(entityClass = ResguardoDto.class))
+      entities = @EntityResult(entityClass = ResguardoDto.class))
 public class ResguardoDto implements Serializable {
 
     @Id

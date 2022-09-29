@@ -2,7 +2,7 @@ package sv.gob.mined.pescolar.utils;
 
 /**
  *
- * @author MISanchez
+ * @author Carlos Quintanilla
  */
 public class RC4Crypter {
 

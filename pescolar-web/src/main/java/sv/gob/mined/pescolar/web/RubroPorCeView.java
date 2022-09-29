@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import lombok.Getter;
 import lombok.Setter;
 import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
@@ -65,12 +64,14 @@ public class RubroPorCeView implements Serializable {
         prepareEdit();
         //setProcesoAdquisicion(sessionView.getProceso());
         
+        /*
         Query q = em.createQuery("select pa from ProcesoAdquisicion pa where pa.id = 24", ProcesoAdquisicion.class);
         procesoAdquisicion = (ProcesoAdquisicion) q.getSingleResult();
         
         if (getProcesoAdquisicion() == null || getProcesoAdquisicion().getId() == null) {
             JsfUtil.mensajeAlerta("Debe de seleccionar un proceso de adquisición.");
         }
+        */
         listrubrosamostrarinteres = rubrosamostrarinteresrepo.findAll();
         rubroporce = null;
     }
@@ -104,10 +105,10 @@ public class RubroPorCeView implements Serializable {
             if (entidadEducativa == null) {
                 JsfUtil.mensajeAlerta("No se encuentra el centro educativo con código: " + getCodigoEntidad());
             } else {
-                listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad, Long.valueOf("24")); //getProcesoAdquisicion().getId());
+                listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad); 
             }
             //} else {
-            JsfUtil.mensajeAlerta("Debe de seleccionar un proceso de adquisición.");
+            //JsfUtil.mensajeAlerta("Debe de seleccionar un proceso de adquisición.");
             //}
 
             ////PrimeFaces.current().executeScript("actualizarDatos();");
@@ -115,10 +116,12 @@ public class RubroPorCeView implements Serializable {
     }
 
     public Boolean validarGuardar() {
+        /*
         if (getProcesoAdquisicion() == null) {
             JsfUtil.mensajeAlerta("Debe de seleccionar un proceso de adquisición.");
             return false;
         }
+        */
         if (codigoEntidad == null) {
             JsfUtil.mensajeAlerta("Debe de seleccionar un centro educativo.");
             return false;
@@ -145,19 +148,19 @@ public class RubroPorCeView implements Serializable {
 
     public void guardar() {
         if (validarGuardar()) {
-            if (rubroporceRepo.existeRubro(codigoEntidad, Long.valueOf(codigoRubro), procesoAdquisicion.getId())) {
+            if (rubroporceRepo.existeRubro(codigoEntidad, Long.valueOf(codigoRubro))) {
                 JsfUtil.mensajeAlerta("El rubro seleccionado ya existe en la lista.");
             } else {
                 rubroporce = new RubroPorCe();
                 rubroporce.setCodigoEntidad(entidadEducativa);
-                rubroporce.setIdProcesoAdq(procesoAdquisicion);
+                rubroporce.setIdProcesoAdq(null);
                 rubroporce.setIdRubroInteres(rubrosamostrarinteresrepo.listarrubroporid(codigoRubro));
                 rubroporce.setFecha(LocalDate.now());
                 rubroporce.setEstadoEliminacion(Boolean.FALSE);
                 rubroporce.setUsuario(sessionView.getUsuario().getIdPersona().getUsuario());
                 rubroporceRepo.save(rubroporce);
                 rubroporce = null;
-                listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad, Long.valueOf("24")); //getProcesoAdquisicion().getId());
+                listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad);
                 JsfUtil.mensajeInsert();
             }
         }
@@ -170,7 +173,7 @@ public class RubroPorCeView implements Serializable {
                 rubroporce.setFecha(LocalDate.now());
                 rubroporce.setUsuario(sessionView.getUsuario().getIdPersona().getUsuario());
                 rubroporceRepo.update(rubroporce);
-                listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad, Long.valueOf("24")); //getProcesoAdquisicion().getId());
+                listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad); 
                 JsfUtil.mensajeInformacion("El registro ha sido eliminado");
             } else {
                 JsfUtil.mensajeAlerta("Debe de seleccionar un registro a eliminar.");
