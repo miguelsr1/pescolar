@@ -26,35 +26,31 @@ public class RubroPorCeRepo extends AbstractRepository<RubroPorCe, Long> {
         super(RubroPorCe.class);
     }
 
-    public List<RubroPorCe> listarnoborradosporce(String codEntidad, Long idProcesoAdq) {
+    public List<RubroPorCe> listarnoborradosporce(String codEntidad) {
         List<RubroPorCe> lista = new ArrayList();
-        if (codEntidad != null && !codEntidad.isBlank() && idProcesoAdq != null) {
+        if (codEntidad != null && !codEntidad.isBlank() ) {
             Query q;
             q = em.createQuery("SELECT rpc "
                     + "FROM RubroPorCe rpc "
                     + "WHERE rpc.codigoEntidad.codigoEntidad =:pCodEntidad "
-                    + "and rpc.idProcesoAdq.id =:pIdProcesoAdq "
                     + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
             q.setParameter("pCodEntidad", codEntidad);
-            q.setParameter("pIdProcesoAdq", idProcesoAdq);
             lista = q.getResultList();
         }
         return lista;
     }
 
-    public Boolean existeRubro(String codEntidad, Long idRubroInt, Long idProcesoAdq) {
+    public Boolean existeRubro(String codEntidad, Long idRubroInt) {
         Boolean valor = false;
-        if (codEntidad != null && !codEntidad.isBlank() && idRubroInt != null && idProcesoAdq != null) {
+        if (codEntidad != null && !codEntidad.isBlank() && idRubroInt != null ) {
             Query q;
             q = em.createQuery("SELECT count(rpc.id) "
                     + "FROM RubroPorCe rpc "
                     + "WHERE rpc.codigoEntidad.codigoEntidad =:pCodEntidad "
                     + "and rpc.idRubroInteres.id =:pIdRubroInt "
-                    + "and rpc.idProcesoAdq.id =:pIdProcesoAdq "
                     + "and rpc.estadoEliminacion = 0 ", Long.class);
             q.setParameter("pCodEntidad", codEntidad);
             q.setParameter("pIdRubroInt", idRubroInt);
-            q.setParameter("pIdProcesoAdq", idProcesoAdq);
 
             Long contador = (Long) q.getSingleResult();
             if (contador == 0) {

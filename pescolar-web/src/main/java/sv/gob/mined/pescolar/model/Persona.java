@@ -14,6 +14,8 @@ public class Persona implements Serializable {
 
     @Id
     @Column(name = "ID_PERSONA", nullable = false)
+    @GeneratedValue(generator = "SEQ_PERSONA", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(sequenceName = "SEQ_PERSONA", name = "SEQ_PERSONA", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
