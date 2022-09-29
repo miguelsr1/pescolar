@@ -66,6 +66,7 @@
     <class>sv.gob.mined.pescolar.model.ListaNegraEmpresa</class>
     <class>sv.gob.mined.pescolar.model.RubroPorCe</class>
     <class>sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto</class>
+    <class>sv.gob.mined.pescolar.model.TipoSancion</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>

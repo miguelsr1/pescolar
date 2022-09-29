@@ -7,28 +7,22 @@ package sv.gob.mined.pescolar.repository;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import sv.gob.mined.pescolar.model.ListaNegraEmpresa;
+import sv.gob.mined.pescolar.model.TipoSancion;
 
 /**
  *
  * @author CQuintanilla
  */
 @Stateless
-public class EmpListaNegraRepo extends AbstractRepository<ListaNegraEmpresa,Long> {
+public class TipoSancionRepo extends AbstractRepository<TipoSancion,Long> {
 
     @PersistenceContext(unitName = "paquetePU")
     private EntityManager em;
 
     
-    public EmpListaNegraRepo() {
-        super(ListaNegraEmpresa.class);
+    public TipoSancionRepo() {
+        super(TipoSancion.class);
     }
     
-    public void guardarListaNegra(ListaNegraEmpresa lisNegra) {
-        if (lisNegra.getIdListaNegra()== null) {
-            em.persist(lisNegra);
-        } else {
-            em.merge(lisNegra);
-        }
-    }
+   
 }
