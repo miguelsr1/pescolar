@@ -352,7 +352,7 @@ public class DatosGeneralesView implements Serializable {
     private void cargarDetalleCalificacion() {
         capacidadInst = cargaGeneralView.getCapacidadInstPorRubro();
         if (capacidadInst == null) {
-            //JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + cargaGeneralView.getProcesoAdquisicion().getIdAnho());
+            JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + cargaGeneralView.getProcesoAdquisicion().getIdAnho());
         } else {
             detalleProcesoAdq = JsfUtil.findDetalleByRubroAndAnho(cargaGeneralView.getProcesoAdquisicion(),
                     capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId(),
