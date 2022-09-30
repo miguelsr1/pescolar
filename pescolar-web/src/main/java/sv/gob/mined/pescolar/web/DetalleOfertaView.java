@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,7 @@ public class DetalleOfertaView implements Serializable {
     private Boolean activarFiltro = false;
 
     private BigInteger cantidadTotal = BigInteger.ZERO;
+    private BigInteger cantidadTotalResguardo = BigInteger.ZERO;
 
     private BigDecimal montoTotal = BigDecimal.ZERO;
     private BigDecimal saldoActual = BigDecimal.ZERO;
@@ -78,6 +80,7 @@ public class DetalleOfertaView implements Serializable {
 
     private List<PreciosRefRubroEmp> lstPreciosEmp = new ArrayList<>();
     private List<Participante> lstParticipantes = new ArrayList<>();
+    private List<DetalleOferta> lstDetalleResguaro = new ArrayList<>();
 
     @Inject
     private OfertaRepo ofertaRepo;
@@ -199,7 +202,7 @@ public class DetalleOfertaView implements Serializable {
                             det.setPrecioUnitario(preRefEmp.getPrecioReferencia());
                             det.setEstadoEliminacion(0l);
                             det.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
-                            det.setFechaInsercion(LocalDate.now());
+                            det.setFechaInsercion(LocalDateTime.now());
                             det.setModificativa(0l);
                             det.setIdParticipante(participante);
 
@@ -209,10 +212,15 @@ public class DetalleOfertaView implements Serializable {
                     }
                 }
             }
+            verificarItemsEnResguardo();
         } else {
             //bandera para monstrar mensaje que el proveedor no tiene precios de referencia ingresados
             mostrarMsjPrecio = true;
         }
+    }
+    
+    private void verificarItemsEnResguardo(){
+        lstDetalleResguaro = resolucionRepo.findItemsEnResguardo(codigoEntidad, sessionView.getIdAnho(), sessionView.getUsuario().getIdPersona().getUsuario());
     }
 
     private void cargarReserva() {
@@ -229,6 +237,10 @@ public class DetalleOfertaView implements Serializable {
 
     public List<Participante> getLstParticipantes() {
         return lstParticipantes;
+    }
+
+    public List<DetalleOferta> getLstDetalleResguaro() {
+        return lstDetalleResguaro;
     }
 
     public void setLstParticipantes(List<Participante> lstParticipantes) {
@@ -340,6 +352,17 @@ public class DetalleOfertaView implements Serializable {
 
         return cantidadTotal;
     }
+    
+    public BigInteger getCantidadResguardo() {
+        cantidadTotalResguardo = BigInteger.ZERO;
+        if (resAdj != null && resAdj.getIdParticipante() != null) {
+            for (DetalleOferta detalleOferta : lstDetalleResguaro) {
+                cantidadTotalResguardo = cantidadTotalResguardo.add(detalleOferta.getCantidad());
+            }
+        }
+
+        return cantidadTotal;
+    }
 
     public BigDecimal getMontoSaldo() {
         if (idParticipante == null || idParticipante.compareTo(0l) == 0) {
@@ -384,7 +407,7 @@ public class DetalleOfertaView implements Serializable {
         det.setEstadoEliminacion(0l);
         det.setCantidad(BigInteger.ZERO);
         det.setPrecioUnitario(BigDecimal.ZERO);
-        det.setFechaInsercion(LocalDate.now());
+        det.setFechaInsercion(LocalDateTime.now());
         det.setIdParticipante(resAdj.getIdParticipante());
         det.setUsuarioInsercion("ADMIN");
 

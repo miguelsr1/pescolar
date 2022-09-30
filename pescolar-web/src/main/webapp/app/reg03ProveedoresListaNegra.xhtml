@@ -15,7 +15,7 @@
                         <p:menuitem value="Buscar" update="frmPrincipal" process="@this" icon="pi pi-search" onclick="onClick('btnModificar');" />
                         <p:menuitem value="Guardar" icon="pi pi-save" actionListener = "#{empListaNegraView.guardar}" disabled="#{empListaNegraView.deshabilitadoGuardar}"  update="dvDatosGenerales"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
-                        <p:menuitem value="Principal" icon="pi pi-home" action="#{cargaGeneralView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{cargaGeneralView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}" process="@this"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
@@ -31,6 +31,34 @@
                 <div class="p-col-12">
                     <div class="card ui-fluid" jsf:id="dvDatosGenerales">
                         <ui:include src="/app/proveedor/interno/proveedorListaNegra.xhtml"/>
+                    </div>
+
+                    <div class="card ui-fluid">
+                        <div class="p-col-12 p-md-8">
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Tipo de Sanción:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu id="cboMuni" value="#{empListaNegraView.listaNegraEmpresa.idTipoSancion.idTipoSancion}">
+                                        <f:selectItem itemLabel="Seleccione Tipo Sanción" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{empListaNegraView.lstSancion}" var="san" itemValue="#{san.idTipoSancion}" itemLabel="#{san.descripcionSancion}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Dias de Sanción:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-2">
+                                    <p:inputNumber decimalPlaces="0" id="dias" value="#{empListaNegraView.listaNegraEmpresa.tiempoSancion}" style="width:100%"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Observación: " styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:inputTextarea rows="4" cols="150" counter="display" maxlength="500" value="#{empListaNegraView.listaNegraEmpresa.observacion}"
+                                                     counterTemplate="{0} Max. caracteres faltantes." autoResize="false"/>
+                                    <h:outputText id="display" class="block" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

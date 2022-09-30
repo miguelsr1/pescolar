@@ -110,7 +110,8 @@
                                     </div>
                                     <div class="p-col-12 p-md-4" style="display: #{menuView.showModuloMantenimiento ? 'block':'none'}; margin: 0 auto;">
                                         <div class="overview-box" style="text-align: center !important">
-                                            <p:commandLink action="presentacionResultados?faces-redirect=true" >
+                                             <p:commandLink action="empty?faces-redirect=true" actionListener="#{guestPreferences.setMenuMode('layout-menu-static')}">
+                                                <f:setPropertyActionListener value="21" target="#{menuView.idOpcionMenu}" />
                                                 <div class="modulo moduloCeleste" style="height: 180px; padding-top: 25px;" >
                                                     <h5>Mantenimiento</h5>
                                                     <br/>

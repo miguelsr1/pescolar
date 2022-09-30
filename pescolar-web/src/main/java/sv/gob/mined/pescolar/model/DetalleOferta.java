@@ -5,12 +5,14 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.Where;
 
 @Table(name = "DETALLE_OFERTAS")
 @Entity
 @Where(clause = "ESTADO_ELIMINACION = 0")
 public class DetalleOferta implements Serializable {
+
     @Id
     @Column(name = "ID_DETALLE_OFE", nullable = false)
     private Long id;
@@ -43,7 +45,7 @@ public class DetalleOferta implements Serializable {
     private String usuarioInsercion;
 
     @Column(name = "FECHA_INSERCION", nullable = false)
-    private LocalDate fechaInsercion;
+    private LocalDateTime fechaInsercion;
 
     @Column(name = "USUARIO_MODIFICACION", length = 25)
     private String usuarioModificacion;
@@ -60,8 +62,8 @@ public class DetalleOferta implements Serializable {
     @Column(name = "MODIFICATIVA", nullable = false)
     private Long modificativa;
 
-    @Column(name = "CANTIDAD_OFERTADA")
-    private Long cantidadOfertada;
+    @Column(name = "CANTIDAD_RESGUARDO", nullable = false, precision = 18, scale = 2)
+    private BigInteger cantidadResguardo;
 
     @Column(name = "ESTILO_ZAPATO", length = 20)
     private String estiloZapato;
@@ -74,12 +76,12 @@ public class DetalleOferta implements Serializable {
         this.estiloZapato = estiloZapato;
     }
 
-    public Long getCantidadOfertada() {
-        return cantidadOfertada;
+    public BigInteger getCantidadResguardo() {
+        return cantidadResguardo;
     }
 
-    public void setCantidadOfertada(Long cantidadOfertada) {
-        this.cantidadOfertada = cantidadOfertada;
+    public void setCantidadResguardo(BigInteger cantidadResguardo) {
+        this.cantidadResguardo = cantidadResguardo;
     }
 
     public Long getModificativa() {
@@ -122,11 +124,11 @@ public class DetalleOferta implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public LocalDate getFechaInsercion() {
+    public LocalDateTime getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(LocalDate fechaInsercion) {
+    public void setFechaInsercion(LocalDateTime fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 
