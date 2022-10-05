@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .invoice {
+                padding: 2rem;
+            }
+            .invoice-summary {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+            }
+            .invoice-details {
+                width: 15rem;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+            }
+            .invoice-details .invoice-value {
+                text-align: right;
+            }
+            .invoice-details > div {
+                width: 50%;
+                margin-bottom: 0.5rem;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Rubro por Centro Educativo</ui:define>
+    <ui:define name="content">
+        <h:form id="form" prependId="false">
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar>
+                        <p:menuitem value="Nuevo"  icon="pi pi-file" 
+                                    actionListener="#{rubroPorCeView.nuevo()}" 
+                                    update="txtCodigoEntidad nombreCE cbRubros tblRubroPorCe"/>
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
+                        <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
+                        <p:menuitem value="Guardar" actionListener="#{rubroPorCeView.guardar()}" 
+                                    icon="pi pi-save" disabled="rubroPorCeView.deshabilitado"
+                                    update="tblRubroPorCe" />
+                        <p:menuitem value="Eliminar" actionListener="#{rubroPorCeView.eliminar()}" 
+                                    icon="pi pi-delete" disabled="rubroPorCeView.deshabilitado"
+                                    update="tblRubroPorCe" />
+                        <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" 
+                                    actionListener="#{guestPreferences.ocultarMenu()}"/>
+
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
+                        </f:facet>
+                    </p:menubar>
+
+                </div>
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h5>
+                                Filtro de busqueda Centros Educativo
+                                <i class="pi pi-filter" ></i>
+                            </h5>
+                        </div>
+
+                        <div class="p-field p-grid">
+                            <p:outputLabel value="Código Infraestructura:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                            <div class="p-col-12 p-md-10">
+                                <p:inputText style="margin-right: 10px;" id="txtCodigoEntidad" maxlength="5" 
+                                             value="#{rubroPorCeView.codigoEntidad}" size="4" 
+                                             autocomplete="off" disabled="#{rubroPorCeView.deshabilitado}" onkeyup="return this.value.length >= 5">
+                                    <p:ajax event="keyup" listener="#{rubroPorCeView.buscarEntidadEducativa}" update="nombreCE tblRubroPorCe"/>
+                                </p:inputText>
+                                <p:outputLabel id="nombreCE" value="#{rubroPorCeView.entidadEducativa.nombre}" style="font-weight: bold" />
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+
+                            <p:outputLabel for="cbRubros" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Rubros a contratar:</p:outputLabel>
+                            <div class="p-col-12 p-md-10">
+                                <p:selectOneMenu id="cbRubros" value="#{rubroPorCeView.codigoRubro}">
+                                    <f:selectItem itemLabel="Seleccione un valor"/>
+                                    <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscar" 
+                                                   itemValue="#{lstrubrosbuscar.id}" itemLabel="#{lstrubrosbuscar.nombreCorto}" />
+                                </p:selectOneMenu>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h5>
+                                <i class="pi pi-list verde" style="font-size: 16px;"></i>
+                                <p:spacer width="10"/>
+                                Lista de Centros Seleccionados
+                            </h5>
+                        </div>
+
+                        <div class="p-formgrid p-grid">
+                            <p:dataTable id="tblRubroPorCe" 
+                                         value="#{rubroPorCeView.listrubroporce}" 
+                                         var="rubce" 
+                                         rowIndexVar="rowId" 
+                                         rowKey="#{rubce.id}" 
+                                         selection="#{rubroPorCeView.rubroporce}"
+                                         selectionMode="single"
+                                         >
+
+                                <p:column headerText="#" width="5%">
+                                    <p:outputLabel value="#{rowId + 1}"/>
+                                </p:column>
+                                <p:column headerText="CODIGO" width="10%">
+                                    <p:outputLabel value="#{rubce.codigoEntidad}" />
+                                </p:column>
+                                <p:column headerText="NOMBRE DEL CENTRO" width="65%">
+                                    <p:outputLabel value="#{rubce.codigoEntidad.nombre}" />
+                                </p:column>
+                                <p:column headerText="RUBRO A CONTRATAR" width="20%">
+                                    <p:outputLabel value="#{rubce.idRubroInteres.nombreCorto}" />
+                                </p:column>
+                                <p:column headerText="Borrar" style="width:10%;text-align:center">
+                                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" 
+                                                     actionListener="#{rubroPorCeView.eliminar()}" >
+                                        <f:setPropertyActionListener value="#{rubce}" target="#{rubroPorCeView.rubroporce}" />
+                                        <p:confirm header="Confirmar" 
+                                                   message="¿Esta seguro de eliminar el registro seleccionado?" 
+                                                   icon="pi pi-exclamation-triangle" />
+                                    </p:commandButton>
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" process="@this" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" process="@this" />
+            </p:confirmDialog> 
+        </h:form>
+        <h:outputStylesheet name="personalizadas.css" library="css"/>
+    </ui:define>
+</ui:composition>
