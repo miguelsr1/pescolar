@@ -10,17 +10,20 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
  *
- * @author misanchez
+ * @author Carlos Quintanilla
  */
 @Entity
 @Table(name = "TIPO_USUARIO")
@@ -33,6 +36,8 @@ public class TipoUsuario implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
+    @GeneratedValue(generator = "SEQ_TIPO_USUARIO", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(sequenceName = "SEQ_TIPO_USUARIO", name = "SEQ_TIPO_USUARIO", allocationSize = 1, initialValue = 1)
     @Column(name = "ID_TIPO_USUARIO")
     private Long idTipoUsuario;
     @Size(max = 40)

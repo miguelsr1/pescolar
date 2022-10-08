@@ -1,0 +1,149 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Mantenimiento de Tipo de Usuario</ui:define>
+    <ui:define name="content">
+        <h:form id="form" prependId="false">
+            <p:menubar id="menuBar"> 
+                <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
+                            action="#{tipoUsuarioView.nuevo()}" update="pnlTipoUsuario tblTipoUsuario menuBar">
+                    <p:resetInput target="pnlOpciones" /> 
+                </p:menuitem>
+
+                <p:menuitem value="Guardar" 
+                            icon="fa fa-save" 
+                            update="pnlTipoUsuario tblTipoUsuario menuBar" 
+                            action="#{tipoUsuarioView.guardar()}"
+                            disabled="#{menuController.usuarioSoloLectura || tipoUsuarioView.deshabilitado}" 
+                            process="@this"
+                            >
+                    <p:confirm header="Confirmar" 
+                               message="¿Esta seguro de guardar el registro?" 
+                               icon="pi pi-exclamation-triangle" />
+
+                </p:menuitem>
+                <p:menuitem value="Eliminar" icon="fa fa-trash" update="pnlTipoUsuario tblTipoUsuario menuBar" action="#{tipoUsuarioView.eliminar()}"
+                            disabled="#{menuController.usuarioSoloLectura || tipoUsuarioView.deshabilitado}"
+                            process="@this"
+                            >
+                    <p:confirm header="Confirmar" 
+                               message="¿Esta seguro que desea eliminar el registro?" 
+                               icon="pi pi-exclamation-triangle" />
+                </p:menuitem>
+                <p:menuitem value="Imprimir" icon="fa fa-print" disabled="true" />
+                <p:menuitem value="Principal" icon="fa fa-home" url="#{request.contextPath}/app/inicial.mined" />
+                <f:facet  name="options">  
+                    <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
+                </f:facet>  
+            </p:menubar>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card">
+                        <h3>
+                            <i class="fa fa-user blue" style="font-size: 16px;"></i>
+                            <p:spacer width="10" height="8"/>
+                            <p:outputLabel value="Tipos de Usuario" style="font-weight: bold;" />
+                        </h3>
+
+                        <p:outputPanel id="pnlTipoUsuario" >
+                            <p:panelGrid id="pngTipoUsuario" columns="4" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4" 
+                                         style="width: 100%; border:0px none; background-color:transparent;"
+                                         styleClass="form-group ui-panelgrid-blank"
+                                         layout="grid" 
+                                         >
+                                <p:outputLabel value="Descripción"  />
+                                <p:inputText id="txtdescripcion" 
+                                             value="#{tipoUsuarioView.tipousuario.descripcion}" 
+                                             disabled="#{tipoUsuarioView.deshabilitado}" 
+                                             autocomplete="off"
+                                             maxlength="100"
+                                             style="width: 100%;"
+                                             >
+                                    <p:ajax event="keyup" global="false"/>
+                                </p:inputText>
+
+                                <p:outputLabel value="Administrador" />
+                                <p:selectBooleanButton value="#{tipoUsuarioView.booladministrador}" 
+                                                       offLabel="No" 
+                                                       offIcon="pi pi-times"
+                                                       onLabel="Sí"
+                                                       onIcon="pi pi-check"
+                                                       disabled="#{tipoUsuarioView.deshabilitado}"
+                                                       />
+
+                                <p:outputLabel value="Rol" />
+                                <p:inputText id="txtrol" 
+                                             value="#{tipoUsuarioView.tipousuario.rol}" 
+                                             disabled="#{tipoUsuarioView.deshabilitado}" 
+                                             autocomplete="off"
+                                             maxlength="100"
+                                             style="width: 100%;"
+                                             >
+                                    <p:ajax event="keyup" global="false"/>
+                                </p:inputText>
+
+
+
+                            </p:panelGrid>
+                        </p:outputPanel>
+
+                    </div>
+
+                    <div class="p-formgrid p-grid">
+                        <p:dataTable id="tblTipoUsuario" 
+                                     value="#{tipoUsuarioView.listtipousuario}" 
+                                     var="tipusu" 
+                                     rowIndexVar="rowId" 
+                                     rowKey="#{tipusu.idTipoUsuario}" 
+                                     selection="#{tipoUsuarioView.tipousuario}"
+                                     selectionMode="single"
+                                     paginator="true" 
+                                     rows="10"
+                                     rowsPerPageTemplate="5,10,25,50,100" paginatorPosition="bottom" 
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     >
+
+                            <p:ajax event="rowSelect" listener="#{tipoUsuarioView.onItemSelect}" update="form"  />
+                            <p:ajax event="rowUnselect" listener="#{tipoUsuarioView.onItemUnselect()}" update="form" />
+
+                            <p:column headerText="#" width="5%">
+                                <p:outputLabel value="#{rowId + 1}"/>
+                            </p:column>
+                            <p:column headerText="Descripción" width="35%">
+                                <p:outputLabel value="#{tipusu.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Administrador" width="25%">
+                                <p:outputLabel value="#{(tipusu.administrador==1)?'Sí':'No'}" />
+                            </p:column>
+                            <p:column headerText="Rol" width="29%">
+                                <p:outputLabel value="#{tipusu.rol}" />
+                            </p:column>
+                            <p:column headerText="Borrar" style="width:6%;text-align:center">
+                                <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" 
+                                                 actionListener="#{tipoUsuarioView.eliminar()}" >
+                                    <f:setPropertyActionListener value="#{tipusu}" target="#{tipoUsuarioView.tipousuario}" />
+                                    <p:confirm header="Confirmar" 
+                                               message="¿Esta seguro de eliminar el registro seleccionado?" 
+                                               icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" process="@this" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" process="@this" />
+            </p:confirmDialog> 
+
+        </h:form>
+    </ui:define>
+</ui:composition>

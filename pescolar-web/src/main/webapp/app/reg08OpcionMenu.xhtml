@@ -1,0 +1,209 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Mantenimiento de Opciones de Menú</ui:define>
+    <ui:define name="content">
+        <h:form id="form" prependId="false">
+            <p:menubar id="menuBar"> 
+                <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
+                            action="#{opcionMenuView.nuevo()}" update="pnlOpciones tblOpciones menuBar">
+                    <p:resetInput target="pnlOpciones" /> 
+                </p:menuitem>
+
+                <p:menuitem value="Guardar" 
+                            icon="fa fa-save" 
+                            update="pnlOpciones tblOpciones menuBar" 
+                            action="#{opcionMenuView.guardar()}"
+                            disabled="#{menuController.usuarioSoloLectura || opcionMenuView.deshabilitado}" 
+                            process="@this"
+                            >
+                    <p:confirm header="Confirmar" 
+                               message="¿Esta seguro de guardar el registro?" 
+                               icon="pi pi-exclamation-triangle" />
+
+                </p:menuitem>
+                <p:menuitem value="Eliminar" icon="fa fa-trash" update="pnlOpciones tblOpciones menuBar" action="#{opcionMenuView.eliminar()}"
+                            disabled="#{menuController.usuarioSoloLectura || opcionMenuView.deshabilitado}"
+                            process="@this"
+                            >
+                    <p:confirm header="Confirmar" 
+                               message="¿Esta seguro que desea eliminar el registro?" 
+                               icon="pi pi-exclamation-triangle" />
+                </p:menuitem>
+                <p:menuitem value="Imprimir" icon="fa fa-print" disabled="true" />
+                <p:menuitem value="Principal" icon="fa fa-home" url="#{request.contextPath}/app/inicial.mined" />
+                <f:facet  name="options">  
+                    <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
+                </f:facet>  
+            </p:menubar>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card">
+                        <h3>
+                            <i class="fa fa-user blue" style="font-size: 16px;"></i>
+                            <p:spacer width="10" height="8"/>
+                            <p:outputLabel value="Opciones de Menú" style="font-weight: bold;" />
+                        </h3>
+
+                        <p:outputPanel id="pnlOpciones" >
+                            <p:panelGrid id="pngOpciones" columns="4" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4" 
+                                         style="width: 100%; border:0px none; background-color:transparent;"
+                                         styleClass="form-group ui-panelgrid-blank"
+                                         layout="grid" 
+                                         >
+                                <p:outputLabel value="Opción Superior" for="menupadre" />
+                                <p:selectOneMenu id="menupadre" 
+                                                 value="#{opcionMenuView.opcionmenu.opcIdOpcMenu.idOpcMenu}" 
+                                                 disabled="#{opcionMenuView.deshabilitado}" 
+                                                 style="width: 100%;"
+                                                 >
+                                    <p:ajax event="change" global="false"/>
+                                    <f:selectItem itemLabel="Seleccione una Opción" itemValue="" />
+                                    <f:selectItems value="#{opcionMenuView.listopcionespadre}" var="opp" 
+                                                   itemValue="#{opp.idOpcMenu}" itemLabel="#{opp.nombreOpcion}"/>
+                                </p:selectOneMenu>                    
+
+                                <p:outputLabel value="Nombre Opción" />
+                                <p:inputText id="txtnombreopcion" 
+                                             value="#{opcionMenuView.opcionmenu.nombreOpcion}" 
+                                             disabled="#{opcionMenuView.deshabilitado}" 
+                                             autocomplete="off"
+                                             maxlength="100"
+                                             style="width: 100%;"
+                                             >
+                                    <p:ajax event="keyup" global="false"/>
+                                </p:inputText>
+
+                                <p:outputLabel value="Nombre Panel" />
+                                <p:inputText id="txtnombrepanel" 
+                                             value="#{opcionMenuView.opcionmenu.nombrePanel}" 
+                                             disabled="#{opcionMenuView.deshabilitado}" 
+                                             autocomplete="off"
+                                             maxlength="100"
+                                             style="width: 100%;"
+                                             >
+                                    <p:ajax event="keyup" global="false"/>
+                                </p:inputText>
+
+                                <p:outputLabel value="Ícono" />
+                                <p:inputText id="txticono" 
+                                             value="#{opcionMenuView.opcionmenu.icono}" 
+                                             disabled="#{opcionMenuView.deshabilitado}" 
+                                             maxlength="100"
+                                             style="width: 100%;"
+                                             >
+                                    <p:ajax event="keyup" global="false"/>
+                                </p:inputText>
+
+                                <p:outputLabel value="Orden" />
+                                <p:inputNumber id="txtnumero" 
+                                               value="#{opcionMenuView.opcionmenu.orden}" 
+                                               minValue="0"
+                                               decimalPlaces="0"
+                                               thousandSeparator=","
+                                               disabled="#{opcionMenuView.deshabilitado}"
+                                               style="width: 100%;"
+                                               >
+                                    <p:ajax event="keyup" global="false"/>
+                                </p:inputNumber>
+
+                                <p:outputLabel value="Código Pantalla" />
+                                <p:inputText id="txtcodigopantalla" 
+                                             value="#{opcionMenuView.opcionmenu.icono}" 
+                                             disabled="#{opcionMenuView.deshabilitado}" 
+                                             maxlength="100"
+                                             style="width: 100%;"
+                                             >
+                                    <p:ajax event="keyup" global="false"/>
+                                </p:inputText>
+
+
+                                <p:outputLabel value="Módulo"  />
+                                <p:selectOneMenu id="modulos" 
+                                                 value="#{opcionMenuView.opcionmenu.app.idModulo}" 
+                                                 disabled="#{opcionMenuView.deshabilitado}"
+                                                 style="width: 100%;"
+                                                 >
+                                    <p:ajax event="change" global="false"/>
+                                    <f:selectItems value="#{opcionMenuView.listmodulos}" var="lstmod" 
+                                                   itemValue="#{lstmod.idModulo}" itemLabel="#{lstmod.nombreModulo}"/>
+                                </p:selectOneMenu>  
+
+                            </p:panelGrid>
+                        </p:outputPanel>
+
+                    </div>
+
+                    <div class="p-formgrid p-grid">
+                        <p:dataTable id="tblOpciones" 
+                                     value="#{opcionMenuView.listopciones}" 
+                                     var="opc" 
+                                     rowIndexVar="rowId" 
+                                     rowKey="#{opc.idOpcMenu}" 
+                                     selection="#{opcionMenuView.opcionmenu}"
+                                     selectionMode="single"
+                                     paginator="true" 
+                                     rows="10"
+                                     rowsPerPageTemplate="5,10,25,50,100" paginatorPosition="bottom" 
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     >
+
+                            <p:ajax event="rowSelect" listener="#{opcionMenuView.onItemSelect}" update="form"  />
+                            <p:ajax event="rowUnselect" listener="#{opcionMenuView.onItemUnselect()}" update="form" />
+
+                            <p:column headerText="#" width="5%">
+                                <p:outputLabel value="#{rowId + 1}"/>
+                            </p:column>
+                            <p:column headerText="Menú Superior" width="15%">
+                                <p:outputLabel value="#{(opc.opcIdOpcMenu==null)?'':opc.opcIdOpcMenu.nombreOpcion}" />
+                            </p:column>
+                            <p:column headerText="Nombre Opción" width="20%">
+                                <p:outputLabel value="#{opc.nombreOpcion}" />
+                            </p:column>
+                            <p:column headerText="Nombre Panel" width="20%">
+                                <p:outputLabel value="#{opc.nombrePanel}" />
+                            </p:column>
+                            <p:column headerText="Ícono" width="10%">
+                                <p:outputLabel value="#{opc.icono}" />
+                            </p:column>
+                            <p:column headerText="Orden" width="7%">
+                                <p:outputLabel value="#{opc.orden}" />
+                            </p:column>
+                            <p:column headerText="Código Pantalla" width="7%">
+                                <p:outputLabel value="#{opc.codPantalla}" />
+                            </p:column>
+                            <p:column headerText="Módulo" width="10%">
+                                <p:outputLabel value="#{(opc.app==null)?'':opc.app.nombreModulo}" />
+                            </p:column>
+                            <p:column headerText="Borrar" style="width:6%;text-align:center">
+                                <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" 
+                                                 actionListener="#{opcionMenuView.eliminar()}" >
+                                    <f:setPropertyActionListener value="#{opc}" target="#{opcionMenuView.opcionmenu}" />
+                                    <p:confirm header="Confirmar" 
+                                               message="¿Esta seguro de eliminar el registro seleccionado?" 
+                                               icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" process="@this" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" process="@this" />
+            </p:confirmDialog> 
+
+        </h:form>
+    </ui:define>
+</ui:composition>
