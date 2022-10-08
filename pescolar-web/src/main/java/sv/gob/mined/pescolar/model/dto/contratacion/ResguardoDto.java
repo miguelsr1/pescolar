@@ -23,6 +23,7 @@ public class ResguardoDto implements Serializable {
     private String codigoEntidad;
     private Long idAnho;
     private Long idProducto;
+    private Long idNivelEducativo;
     private String noItem;
     private BigDecimal cantidad;
 
@@ -72,6 +73,14 @@ public class ResguardoDto implements Serializable {
 
     public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public Long getIdNivelEducativo() {
+        return idNivelEducativo;
+    }
+
+    public void setIdNivelEducativo(Long idNivelEducativo) {
+        this.idNivelEducativo = idNivelEducativo;
     }
     
 }

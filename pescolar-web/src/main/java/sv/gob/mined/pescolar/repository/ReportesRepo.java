@@ -147,7 +147,7 @@ public class ReportesRepo {
                             break;
                         case 9:
                             det.setDescripcionItem("Confección Pantalón Básica (I, II y III ciclo)");
-                            det.setPrecioMaxReferencia(new BigDecimal("5.40"));
+                            det.setPrecioMaxReferencia(new BigDecimal("7.20"));
                             break;
                         case 10:
                             det.setDescripcionItem("Confección Blusa Bachillerato");

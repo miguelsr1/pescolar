@@ -8,221 +8,239 @@
     <ui:define name="title">Mantenimiento de Usuarios</ui:define>
     <ui:define name="content">
         <h:form id="form" prependId="false">
-            <p:menubar id="menuBar"> 
-                <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
-                            action="#{usuarioView.prepareCreate}" update="pnlUsuario pnlAcceso menuBar">
-                    <p:resetInput target="pnlUsuario pnlAcceso" /> 
-                </p:menuitem>
 
-                <p:menuitem value="Modificar" icon="fa fa-edit" process="@this" 
-                            action="#{usuarioView.prepareEdit}" 
-                            update="pnlUsuario pnlAcceso dialogFiltro menuBar"
-                            disabled="#{usuarioView.deshabilitadoModificar}"
-                            >
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar"> 
+                        <p:menuitem value="Nuevo" icon="pi pi-file-o" process="@this" 
+                                    action="#{usuarioView.prepareCreate}" update="pnlUsuario pnlAcceso menuBar">
+                            <p:resetInput target="pnlUsuario pnlAcceso" /> 
+                        </p:menuitem>
 
-                </p:menuitem>
-                <p:menuitem value="Guardar" 
-                            icon="fa fa-save" 
-                            update="pnlUsuario pnlAcceso menuBar" 
-                            action="#{usuarioView.guardarUsuario()}"
-                            disabled="#{menuController.usuarioSoloLectura || usuarioView.deshabilitado}" 
-                            process="@this"
-                            >
-                    <p:confirm header="Confirmar" 
-                               message="¿Esta seguro de guardar el registro?" 
-                               icon="pi pi-exclamation-triangle" />
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" process="@this" 
+                                    action="#{usuarioView.prepareEdit}" 
+                                    update="pnlUsuario pnlAcceso dialogFiltro menuBar"
+                                    disabled="#{usuarioView.deshabilitadoModificar}"
+                                    >
 
-                </p:menuitem>
-                <p:menuitem value="Eliminar" icon="fa fa-trash" update="pnlUsuario pnlAcceso menuBar" action="#{usuarioView.eliminarUsuario}"
-                            disabled="#{menuController.usuarioSoloLectura || usuarioView.deshabilitado || usuarioView.deshabilitadoModificar}"
-                            process="@this"
-                            >
-                    <p:confirm header="Confirmar" 
-                               message="¿Esta seguro que desea eliminar el registro?" 
-                               icon="pi pi-exclamation-triangle" />
-                </p:menuitem>
-                <p:menuitem value="Imprimir" icon="fa fa-print" disabled="true" />
-                <p:menuitem value="Principal" icon="fa fa-home" url="#{request.contextPath}/app/inicial.mined" />
-                <f:facet  name="options">  
-                    <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
-                </f:facet>  
-            </p:menubar>
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <div class="card">
-                        <h3>
-                            <i class="fa fa-user blue" style="font-size: 16px;"></i>
-                            <p:spacer width="10" height="8"/>
-                            <p:outputLabel value="Registro de Usuarios" style="font-weight: bold;" />
-                        </h3>
+                        </p:menuitem>
+                        <p:menuitem value="Guardar" 
+                                    icon="pi pi-save" 
+                                    update="pnlUsuario pnlAcceso menuBar" 
+                                    action="#{usuarioView.guardarUsuario()}"
+                                    disabled="#{menuController.usuarioSoloLectura || usuarioView.deshabilitado}" 
+                                    process="@this"
+                                    >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro de guardar el registro?" 
+                                       icon="pi pi-exclamation-triangle" />
+
+                        </p:menuitem>
+                        <p:menuitem value="Eliminar" icon="pi pi-trash" update="pnlUsuario pnlAcceso menuBar" action="#{usuarioView.eliminarUsuario}"
+                                    disabled="#{menuController.usuarioSoloLectura || usuarioView.deshabilitado || usuarioView.deshabilitadoModificar}"
+                                    process="@this"
+                                    >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro que desea eliminar el registro?" 
+                                       icon="pi pi-exclamation-triangle" />
+                        </p:menuitem>
+                        <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{cargaGeneralView.gotoPrincipalPage()}" />
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout}" process="@this"/>
+                        </f:facet>  
+                    </p:menubar>
+                </div>
+
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box ">
+                            <h5>
+                                <i class="pi pi-user blue" style="font-size: 16px;"></i>
+                                <p:spacer width="10" height="8"/>
+                                <p:outputLabel value="Registro de Usuarios" style="font-weight: bold;" />
+                            </h5>
+                        </div>
 
                         <p:outputPanel id="pnlUsuario" >
-                            <p:panelGrid id="pngUsuario" columns="2" columnClasses="col2_label,col10" 
-                                         style="width: 100%; border:0px none; background-color:transparent;"
-                                         styleClass="form-group ui-panelgrid-blank">
-                                <p:outputLabel value="Búsqueda" for="cmdBuscarPersona" />
-                                <p:commandButton id="cmdBuscarPersona" 
-                                                 value="Buscar Persona" 
-                                                 icon="pi pi-search" 
-                                                 process="@this" 
-                                                 update="pnlUsuario txtperbuscar tblBuscarPersona" 
-                                                 onclick="PF('dialogFiltro').show()"
-                                                 action="#{usuarioView.iniciarventanabuscar()}"
-                                                 />
-                                <p:outputLabel value="Género" for="genero" />
-                                <p:selectOneMenu id="genero" 
-                                                 value="#{usuarioView.personaObj.idGenero.id}" 
-                                                 disabled="#{usuarioView.deshabilitado}" 
-                                                 >
-                                    <p:ajax event="change" global="false"/>
-                                    <f:selectItem itemLabel="Seleccione un Genero" itemValue="0" />
-                                    <f:selectItems value="#{usuarioView.listGenero}" var="gen" 
-                                                   itemValue="#{gen.id}" itemLabel="#{gen.descripcionGenero}"/>
-                                </p:selectOneMenu>                    
 
-                                <p:outputLabel value="Nombres " for="primernombre"/>
-                                <h:panelGroup style="">
-                                    <p:inputText id="primernombre" 
-                                                 placeholder="Primer Nombre" 
-                                                 value="#{usuarioView.personaObj.primerNombre}" 
+                            <div class="ui-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Búsqueda" for="cmdBuscarPersona" />
+                                    <p:commandButton id="cmdBuscarPersona" 
+                                                     value="Buscar Persona" 
+                                                     icon="pi pi-search" 
+                                                     process="@this" 
+                                                     update="pnlUsuario txtperbuscar tblBuscarPersona" 
+                                                     onclick="PF('dialogFiltro').show()"
+                                                     action="#{usuarioView.iniciarventanabuscar()}"
+                                                     />
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Género" for="genero" />
+                                    <p:selectOneMenu id="genero" 
+                                                     value="#{usuarioView.personaObj.idGenero.id}" 
+                                                     disabled="#{usuarioView.deshabilitado}" 
+                                                     >
+                                        <p:ajax event="change" global="false"/>
+                                        <f:selectItem itemLabel="Seleccione un Genero" itemValue="0" />
+                                        <f:selectItems value="#{usuarioView.listGenero}" var="gen" 
+                                                       itemValue="#{gen.id}" itemLabel="#{gen.descripcionGenero}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="p-field p-col-12">
+
+                                    <p:outputLabel value="Nombres " for="primernombre"/>
+                                    <h:panelGroup style="">
+                                        <p:inputText id="primernombre" 
+                                                     placeholder="Primer Nombre" 
+                                                     value="#{usuarioView.personaObj.primerNombre}" 
+                                                     disabled="#{usuarioView.deshabilitado}" 
+                                                     required="true" 
+                                                     requiredMessage="Debe ingresar por lo menos un NOMBRE" >
+                                            <p:ajax event="keyup" global="false"/>
+                                        </p:inputText>
+
+                                        <p:spacer width="10" height="8"/>
+                                        <p:inputText id="segundonombre" 
+                                                     placeholder="Segundo Nombre" 
+                                                     value="#{usuarioView.personaObj.segundoNombre}" 
+                                                     disabled="#{usuarioView.deshabilitado}">
+                                            <p:ajax event="keyup" global="false"/>
+                                        </p:inputText>
+                                        <p:spacer width="10" height="8"/>
+                                        <p:inputText id="primerapellido" placeholder="Primer Apellido" 
+                                                     value="#{usuarioView.personaObj.primerApellido}" 
+                                                     disabled="#{usuarioView.deshabilitado}" 
+                                                     required="true" 
+                                                     requiredMessage="Debe ingresar por lo menos un APELLIDO">
+
+                                            <p:ajax event="keyup" global="false"/></p:inputText>
+                                        <p:spacer width="10" height="8"/>
+                                        <p:inputText id="segundoapellido" 
+                                                     placeholder="Segundo Apellido" 
+                                                     value="#{usuarioView.personaObj.segundoApellido}" 
+                                                     disabled="#{usuarioView.deshabilitado}">
+                                            <p:ajax event="keyup" global="false"/>
+                                        </p:inputText>
+                                    </h:panelGroup>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Dui:" for="txtDui" />
+                                    <p:inputMask id="txtDui" value="#{usuarioView.personaObj.numeroDui}" 
+                                                 mask="99999999-9" 
                                                  disabled="#{usuarioView.deshabilitado}" 
                                                  required="true" 
-                                                 requiredMessage="Debe ingresar por lo menos un NOMBRE" >
+                                                 requiredMessage="Debe ingresar el DUI">
                                         <p:ajax event="keyup" global="false"/>
-                                    </p:inputText>
-
-                                    <p:spacer width="10" height="8"/>
-                                    <p:inputText id="segundonombre" 
-                                                 placeholder="Segundo Nombre" 
-                                                 value="#{usuarioView.personaObj.segundoNombre}" 
-                                                 disabled="#{usuarioView.deshabilitado}">
-                                        <p:ajax event="keyup" global="false"/>
-                                    </p:inputText>
-                                    <p:spacer width="10" height="8"/>
-                                    <p:inputText id="primerapellido" placeholder="Primer Apellido" 
-                                                 value="#{usuarioView.personaObj.primerApellido}" 
+                                    </p:inputMask>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="NIT:" for="txtNit"/>
+                                    <p:inputMask id="txtNit" 
+                                                 value="#{usuarioView.personaObj.numeroNit}" 
+                                                 mask="9999-999999-999-9" 
                                                  disabled="#{usuarioView.deshabilitado}" 
                                                  required="true" 
-                                                 requiredMessage="Debe ingresar por lo menos un APELLIDO">
-
-                                        <p:ajax event="keyup" global="false"/></p:inputText>
-                                    <p:spacer width="10" height="8"/>
-                                    <p:inputText id="segundoapellido" 
-                                                 placeholder="Segundo Apellido" 
-                                                 value="#{usuarioView.personaObj.segundoApellido}" 
-                                                 disabled="#{usuarioView.deshabilitado}">
+                                                 requiredMessage="Debe ingresar el NIT">
+                                        <p:ajax event="keyup" global="false"/>
+                                    </p:inputMask>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="e-Mail: " />
+                                    <p:inputText id="correo" 
+                                                 value="#{usuarioView.personaObj.email}" 
+                                                 disabled="#{usuarioView.deshabilitado}" 
+                                                 size="40">
                                         <p:ajax event="keyup" global="false"/>
                                     </p:inputText>
-                                </h:panelGroup>
-                                <p:outputLabel value="Dui:" for="txtDui" />
-                                <p:inputMask id="txtDui" value="#{usuarioView.personaObj.numeroDui}" 
-                                             mask="99999999-9" 
-                                             disabled="#{usuarioView.deshabilitado}" 
-                                             required="true" 
-                                             requiredMessage="Debe ingresar el DUI">
-                                    <p:ajax event="keyup" global="false"/>
-                                </p:inputMask>
-
-                                <p:outputLabel value="NIT:" for="txtNit"/>
-                                <p:inputMask id="txtNit" 
-                                             value="#{usuarioView.personaObj.numeroNit}" 
-                                             mask="9999-999999-999-9" 
-                                             disabled="#{usuarioView.deshabilitado}" 
-                                             required="true" 
-                                             requiredMessage="Debe ingresar el NIT">
-                                    <p:ajax event="keyup" global="false"/>
-                                </p:inputMask>
-
-                                <p:outputLabel value="e-Mail: " />
-                                <p:inputText id="correo" 
-                                             value="#{usuarioView.personaObj.email}" 
-                                             disabled="#{usuarioView.deshabilitado}" 
-                                             size="40">
-                                    <p:ajax event="keyup" global="false"/>
-                                </p:inputText>
-
-                                <p:outputLabel value="Tipo Usuario:" for="cboTipoUsuario"/>
-                                <p:selectOneMenu id="cboTipoUsuario" 
-                                                 value="#{usuarioView.usuarioObj.idTipoUsuario.idTipoUsuario}" 
-                                                 disabled="#{usuarioView.deshabilitado}" required="true" 
-                                                 requiredMessage="Debe seleccionar un Tipo de Usuario" >
-                                    <p:ajax event="change" global="false"/>
-                                    <f:selectItem itemLabel="Seleccione un Tipo de Usuario" itemValue="0" />
-                                    <f:selectItems value="#{usuarioView.listTipoUsuario}" var="lsttu"
-                                                   itemValue="#{lsttu.idTipoUsuario}" itemLabel="#{lsttu.descripcion}" />
-                                </p:selectOneMenu>
-
-                                <p:outputLabel value="Departamento:"  />
-                                <p:selectOneMenu id="cboDepartamento" 
-                                                 value="#{usuarioView.usuarioObj.codigoDepartamento.id}" 
-                                                 disabled="#{usuarioView.deshabilitado}" >
-                                    <p:ajax event="change" global="false"/>
-                                    <f:selectItem itemLabel="Seleccione un departamento" itemValue="" /> 
-                                    <f:selectItems value="#{usuarioView.listDepartamento}" var="lstdep"
-                                                   itemValue="#{lstdep.id}" itemLabel="#{lstdep.nombreDepartamento}" />
-                                </p:selectOneMenu>
-
-                                <p:outputLabel value="Usuario:" for="usu"/>
-                                <p:inputText id="usu" value="#{usuarioView.personaObj.usuario}" 
-                                             disabled="#{usuarioView.deshabilitado}" 
-                                             required="true" 
-                                             requiredMessage="Debe ingresar un Nombre de Usuario" >
-                                    <p:ajax event="keyup" global="false"/>
-                                </p:inputText>
-
-                                <p:outputLabel value="Fecha Vencimiento Contraseña:" />
-                                <p:calendar pattern="dd/MM/yyyy" value="#{usuarioView.usuarioObj.fechaVencimientoClave}" 
-                                            mindate="#{usuarioView.fechaVencimientoClave}" navigator="true" 
-                                            disabled="#{usuarioView.deshabilitado}">
-                                    <p:ajax event="dateSelect" global="false"/>
-                                </p:calendar>
-
-                                <p:outputLabel value="Reiniciar Contraseña" rendered="#{usuarioView.showCambiarClave}"/>
-                                <p:selectBooleanCheckbox  value="#{usuarioView.cambiarClave}" 
-                                                          disabled="#{usuarioView.deshabilitado}" 
-                                                          rendered="#{usuarioView.showCambiarClave}">
-                                    <p:ajax update="pnlUsuario" async="true"/>
-                                </p:selectBooleanCheckbox>
-
-                                <p:outputLabel value="Cambiar Contraseña" rendered="#{!usuarioView.deshabilitadoModificar}"/>
-                                <p:selectBooleanCheckbox  value="#{usuarioView.deshabilitarcambioclave}" 
-                                                          disabled="#{usuarioView.deshabilitado}" 
-                                                          rendered="#{!usuarioView.deshabilitadoModificar}">
-                                    <p:ajax update="pnlUsuario" global="false" async="true" listener="#{usuarioView.onClickCambioClave()}"/>
-                                </p:selectBooleanCheckbox>
-
-                                <p:outputLabel for="pass1" value="Contraseña:" rendered="#{usuarioView.visibleClave}" />  
-                                <h:panelGroup style="">
-                                    <p:password id="pass1" value="#{usuarioView.password}" disabled="#{usuarioView.deshabilitado}" 
-                                                required="true" requiredMessage="Debe ingresar la Clave de Acceso" 
-                                                rendered="#{usuarioView.visibleClave}"
-                                                >
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Tipo Usuario:" for="cboTipoUsuario"/>
+                                    <p:selectOneMenu id="cboTipoUsuario" 
+                                                     value="#{usuarioView.usuarioObj.idTipoUsuario.idTipoUsuario}" 
+                                                     disabled="#{usuarioView.deshabilitado}" required="true" 
+                                                     requiredMessage="Debe seleccionar un Tipo de Usuario" >
+                                        <p:ajax event="change" global="false"/>
+                                        <f:selectItem itemLabel="Seleccione un Tipo de Usuario" itemValue="0" />
+                                        <f:selectItems value="#{usuarioView.listTipoUsuario}" var="lsttu"
+                                                       itemValue="#{lsttu.idTipoUsuario}" itemLabel="#{lsttu.descripcion}" />
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Departamento:"  />
+                                    <p:selectOneMenu id="cboDepartamento" 
+                                                     value="#{usuarioView.usuarioObj.codigoDepartamento.id}" 
+                                                     disabled="#{usuarioView.deshabilitado}" >
+                                        <p:ajax event="change" global="false"/>
+                                        <f:selectItem itemLabel="Seleccione un departamento" itemValue="" /> 
+                                        <f:selectItems value="#{usuarioView.listDepartamento}" var="lstdep"
+                                                       itemValue="#{lstdep.id}" itemLabel="#{lstdep.nombreDepartamento}" />
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Usuario:" for="usu"/>
+                                    <p:inputText id="usu" value="#{usuarioView.personaObj.usuario}" 
+                                                 disabled="#{usuarioView.deshabilitado}" 
+                                                 required="true" 
+                                                 requiredMessage="Debe ingresar un Nombre de Usuario" >
                                         <p:ajax event="keyup" global="false"/>
-                                    </p:password>
-                                    <p:spacer width="10" height="8"/>
-                                    <h:panelGroup rendered="#{usuarioView.visibleClave}">
-                                        <p:password id="pass2" value="#{usuarioView.password2}" disabled="#{usuarioView.deshabilitado}" placeholder="Confirmación"> 
+                                    </p:inputText>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Fecha Vencimiento Contraseña:" />
+                                    <p:calendar pattern="dd/MM/yyyy" value="#{usuarioView.usuarioObj.fechaVencimientoClave}" 
+                                                mindate="#{usuarioView.fechaVencimientoClave}" navigator="true" 
+                                                disabled="#{usuarioView.deshabilitado}">
+                                        <p:ajax event="dateSelect" global="false"/>
+                                    </p:calendar>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Reiniciar Contraseña" rendered="#{usuarioView.showCambiarClave}"/>
+                                    <p:selectBooleanCheckbox  value="#{usuarioView.cambiarClave}" 
+                                                              disabled="#{usuarioView.deshabilitado}" 
+                                                              rendered="#{usuarioView.showCambiarClave}">
+                                        <p:ajax update="pnlUsuario" async="true"/>
+                                    </p:selectBooleanCheckbox>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel value="Cambiar Contraseña" rendered="#{!usuarioView.deshabilitadoModificar}"/>
+                                    <p:selectBooleanCheckbox  value="#{usuarioView.deshabilitarcambioclave}" 
+                                                              disabled="#{usuarioView.deshabilitado}" 
+                                                              rendered="#{!usuarioView.deshabilitadoModificar}">
+                                        <p:ajax update="pnlUsuario" global="false" async="true" listener="#{usuarioView.onClickCambioClave()}"/>
+                                    </p:selectBooleanCheckbox>
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <p:outputLabel for="pass1" value="Contraseña:" rendered="#{usuarioView.visibleClave}" />  
+                                    <h:panelGroup style="">
+                                        <p:password id="pass1" value="#{usuarioView.password}" disabled="#{usuarioView.deshabilitado}" 
+                                                    required="true" requiredMessage="Debe ingresar la Clave de Acceso" 
+                                                    rendered="#{usuarioView.visibleClave}"
+                                                    >
                                             <p:ajax event="keyup" global="false"/>
                                         </p:password>
+                                        <p:spacer width="10" height="8"/>
+                                        <h:panelGroup rendered="#{usuarioView.visibleClave}">
+                                            <p:password id="pass2" value="#{usuarioView.password2}" disabled="#{usuarioView.deshabilitado}" placeholder="Confirmación"> 
+                                                <p:ajax event="keyup" global="false"/>
+                                            </p:password>
 
-                                        <h:panelGroup id="pngPassword">
-                                            <p:graphicImage value="#{pageContext.servletContext.contextPath}/resources/images/error.png" rendered="#{usuarioView.errorPassword}"/>
-                                            <p:outputLabel value="  Las contraseñas no coinciden!" style="color: red; vertical-align: top" rendered="#{usuarioView.errorPassword}"/>
+                                            <h:panelGroup id="pngPassword">
+                                                <p:graphicImage value="#{pageContext.servletContext.contextPath}/resources/images/error.png" rendered="#{usuarioView.errorPassword}"/>
+                                                <p:outputLabel value="  Las contraseñas no coinciden!" style="color: red; vertical-align: top" rendered="#{usuarioView.errorPassword}"/>
+                                            </h:panelGroup>
                                         </h:panelGroup>
                                     </h:panelGroup>
-                                </h:panelGroup>
-
-
-
-
-                            </p:panelGrid>
+                                </div>
+                            </div>
                         </p:outputPanel>
 
                     </div>
 
                     <div class="card clearfix">
                         <h1>
-                            <i class="fa fa-lock blue" style="font-size: 16px;"></i>
+                            <i class="pi pi-lock blue" style="font-size: 16px;"></i>
                             <p:spacer width="10" height="8"/>
                             <p:outputLabel value="Períodos de acceso" style="font-weight: bold;"/>
                         </h1>
@@ -305,11 +323,11 @@
                     </p:dataTable>
                 </div>
                 <f:facet name="footer">
-                    <p:commandButton value="Buscar" icon="ui-icon-search" 
+                    <p:commandButton value="Buscar" icon="pi pi-search" 
                                      process="@this"
                                      actionListener="#{usuarioView.buscarUsuario()}" 
                                      update="tblBuscarPersona" />
-                    <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" 
+                    <p:commandButton process="@this" value="Cerrar" icon="pi pi-times" 
                                      onclick="PF('dialogFiltro').hide()"
                                      update="pnlUsuario pnlAcceso dialogFiltro menuBar"/>
                 </f:facet>

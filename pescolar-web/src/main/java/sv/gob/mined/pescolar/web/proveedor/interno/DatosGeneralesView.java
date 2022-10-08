@@ -73,6 +73,8 @@ public class DatosGeneralesView implements Serializable {
     private Long idMunicipioLocal;
 
     private List<Filtro> params = new ArrayList();
+    private List<Canton> lstCantones = new ArrayList<>();
+    private List<Canton> lstCantonesLocal = new ArrayList<>();
 
     private DetalleProcesoAdq detalleProcesoAdq;
     private CapaDistribucionAcre departamentoCalif;
@@ -352,7 +354,7 @@ public class DatosGeneralesView implements Serializable {
     private void cargarDetalleCalificacion() {
         capacidadInst = cargaGeneralView.getCapacidadInstPorRubro();
         if (capacidadInst == null) {
-            //JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + cargaGeneralView.getProcesoAdquisicion().getIdAnho());
+            JsfUtil.mensajeAlerta("No se han cargado los datos de este proveedor para el proceso de contratación del año " + cargaGeneralView.getProcesoAdquisicion().getIdAnho());
         } else {
             detalleProcesoAdq = JsfUtil.findDetalleByRubroAndAnho(cargaGeneralView.getProcesoAdquisicion(),
                     capacidadInst.getIdMuestraInteres().getIdRubroInteres().getId(),
@@ -379,6 +381,8 @@ public class DatosGeneralesView implements Serializable {
                 if (rubroUniforme) {
                     idCanton = cargaGeneralView.getEmpresa().getIdPersona().getCodigoCanton();
                     idCantonLocal = cargaGeneralView.getEmpresa().getCodigoCanton();
+                    lstCantones = catalogoRepo.getLstCantonByMunicipio(idMunicipio);
+                    lstCantonesLocal = catalogoRepo.getLstCantonByMunicipio(idMunicipioLocal);
                 }
 
                 deshabiliar = false;

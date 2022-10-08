@@ -62,16 +62,6 @@ public class RubroPorCeView implements Serializable {
     @PostConstruct
     public void init() {
         prepareEdit();
-        //setProcesoAdquisicion(sessionView.getProceso());
-        
-        /*
-        Query q = em.createQuery("select pa from ProcesoAdquisicion pa where pa.id = 24", ProcesoAdquisicion.class);
-        procesoAdquisicion = (ProcesoAdquisicion) q.getSingleResult();
-        
-        if (getProcesoAdquisicion() == null || getProcesoAdquisicion().getId() == null) {
-            JsfUtil.mensajeAlerta("Debe de seleccionar un proceso de adquisición.");
-        }
-        */
         listrubrosamostrarinteres = rubrosamostrarinteresrepo.findAll();
         rubroporce = null;
     }

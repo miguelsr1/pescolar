@@ -89,8 +89,9 @@
                 id_anho         as idAnho, 
                 id_producto     as idProducto, 
                 no_item         as noItem, 
+                id_nivel_educativo as idNivelEducativo,
                 cantidad
-            from (select ofe.codigo_entidad, pro.id_anho, det.id_producto, det.no_item, sum(det.cantidad) cantidad
+            from (select ofe.codigo_entidad, pro.id_anho, det.id_producto, det.no_item, det.id_nivel_educativo, sum(det.cantidad) cantidad
                 from resguardo res
                     inner join detalle_resguardo det on res.id_resguardo = det.id_resguardo
                     inner join contratos_ordenes_compras con on res.id_contrato = con.id_contrato
@@ -109,7 +110,7 @@
                     ofe.codigo_entidad = ?1 and
                     pro.id_anho = ?2
                 group by 
-                    ofe.codigo_entidad, pro.id_anho, det.id_producto, det.no_item)
+                    ofe.codigo_entidad, pro.id_anho, det.id_producto, det.no_item, det.id_nivel_educativo)
             ]]>
         </query>
     </named-native-query>

@@ -254,7 +254,7 @@ public class PreciosReferenciaView implements Serializable {
 
         detalleProcesoAdq = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
         empresa = cargaGeneralView.getEmpresa();
-        
+
         cargarPrecioRef();
         cargarPreciosMaximos();
     }
@@ -666,6 +666,7 @@ public class PreciosReferenciaView implements Serializable {
                     precioRef.setPrecioReferencia(BigDecimal.ZERO);
                     switch (detalleProcesoAdq.getIdRubroAdq().getId().intValue()) {
                         case 1:
+                        case 4:
                         case 5:
                             msjError = "Precio Máximo de Referencia para: <br/>"
                                     + "1)<strong> Parvularia</strong>: - Blusa, Falda y Camisa: $ 5.10, Pantalon Corto $ 4.80 y Pantalon largo Clima frio: $ 7.20<br />"
@@ -708,35 +709,33 @@ public class PreciosReferenciaView implements Serializable {
     private BigDecimal getPrecioRefUniforme() {
         BigDecimal preRef = BigDecimal.ZERO;
 
-        switch (precioRef.getIdProducto().getId().intValue()) {
-            case 29:
-            case 30:
-            case 44:
-                switch (precioRef.getIdNivelEducativo().getId().intValue()) {
-                    case 1:
-                        preRef = new BigDecimal("4.25");
+        //precios max solo para 2023
+        switch (precioRef.getIdNivelEducativo().getId().intValue()) {
+            case 22: //inicial y parvularia
+                switch (precioRef.getIdProducto().getId().intValue()) {
+                    case 29://camisa
+                    case 30://blusa
+                    case 44://falda
+                        preRef = new BigDecimal("5.10");
                         break;
-                    case 2:
-                    case 6:
-                        preRef = new BigDecimal("4.50");
+                    case 31://pantalon corto
+                        preRef = new BigDecimal("4.80");
                         break;
-                }
-                break;
-            case 31:
-                switch (precioRef.getIdNivelEducativo().getId().intValue()) {
-                    case 1:
-                        preRef = new BigDecimal("4.00");
+                    case 32://pantalon largo parvularia
+                        preRef = new BigDecimal("7.50");
                         break;
                 }
                 break;
-            case 34:
-                switch (precioRef.getIdNivelEducativo().getId().intValue()) {
-                    case 1:
-                        preRef = new BigDecimal("6.00");
+            case 2: //basica
+            case 6: //media
+                switch (precioRef.getIdProducto().getId().intValue()) {
+                    case 29://camisa
+                    case 30://blusa
+                    case 44://falda
+                        preRef = new BigDecimal("5.40");
                         break;
-                    case 2:
-                    case 6:
-                        preRef = new BigDecimal("6.00");
+                    case 34://pantalon
+                        preRef = new BigDecimal("7.20");
                         break;
                 }
                 break;

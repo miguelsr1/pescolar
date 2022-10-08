@@ -1,6 +1,7 @@
 package sv.gob.mined.pescolar.repository;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -273,8 +274,8 @@ public class CatalogoRepo {
     }
 
     public List<Canton> getLstCantonByMunicipio(Long idMunicipio) {
-        Query q = entityManager().createQuery("SELECT c FROM Canton c WHERE c.idMunicipio=:id ORDER BY c.codigoCanton", Canton.class);
-        q.setParameter("id", idMunicipio);
+        Query q = entityManager().createQuery("SELECT c FROM Canton c WHERE c.idMunicipio= :id ORDER BY c.codigoCanton", Canton.class);
+        q.setParameter("id", new BigInteger(idMunicipio.toString()));
         return q.getResultList();
     }
 
