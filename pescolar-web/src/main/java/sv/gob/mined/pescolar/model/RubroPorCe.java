@@ -170,7 +170,7 @@ public class RubroPorCe implements Serializable {
 
     @Override
     public String toString() {
-        return "sv.gob.mined.pescolar.model.RubroPorCe[ idRubro=" + getId() + " ]";
+        return "sv.gob.mined.pescolar.model.RubroPorCe[ id=" + getId() + " ]";
     }
 
 }

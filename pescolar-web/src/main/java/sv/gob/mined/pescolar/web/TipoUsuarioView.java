@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.primefaces.event.SelectEvent;
+import sv.gob.mined.pescolar.model.TipoUsuOpcMenu;
 import sv.gob.mined.pescolar.model.TipoUsuario;
 import sv.gob.mined.pescolar.repository.TipoUsuarioRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
@@ -48,8 +49,8 @@ public class TipoUsuarioView implements Serializable {
         booladministrador = false;
         llenarListaTipoUsuario();
     }
-    
-     public void nuevo() {
+
+    public void nuevo() {
         tipousuario = new TipoUsuario();
         deshabilitado = false;
     }
@@ -98,7 +99,7 @@ public class TipoUsuarioView implements Serializable {
             q = em.createQuery("select tu from TipoUsuario tu where tu.rol = '" + tipousuario.getRol() + "' and tu.idTipoUsuario <> " + tipousuario.getIdTipoUsuario(), TipoUsuario.class);
         }
         if (!q.getResultList().isEmpty()) {
-            JsfUtil.mensajeAlerta("La descripción para el tipo de usuario ya existe en la lista");
+            JsfUtil.mensajeAlerta("El rol ingresado ya existe en la lista");
             return false;
         }
 
@@ -137,7 +138,7 @@ public class TipoUsuarioView implements Serializable {
 
         Query q;
 
-        q = em.createQuery("select tuom from TipoUsuOpcMenu tuom where tuom.idTipoUsuario = " + tipousuario.getIdTipoUsuario() + " ");
+        q = em.createQuery("select tuom from TipoUsuOpcMenu tuom where tuom.idTipoUsuario.idTipoUsuario = " + tipousuario.getIdTipoUsuario() + " ", TipoUsuOpcMenu.class);
 
         if (!q.getResultList().isEmpty()) {
             JsfUtil.mensajeAlerta("Existen registros de opciones de menú relacionados a este rol y no puede ser eliminado");
@@ -169,11 +170,10 @@ public class TipoUsuarioView implements Serializable {
         tipousuario = null;
         deshabilitado = true;
     }
-    
+
     //**************************************************************************
     //****************************** Getter y Setter ***************************
     //**************************************************************************
-
     public List<TipoUsuario> getListtipousuario() {
         return listtipousuario;
     }
@@ -205,7 +205,5 @@ public class TipoUsuarioView implements Serializable {
     public void setBooladministrador(Boolean booladministrador) {
         this.booladministrador = booladministrador;
     }
-    
-    
 
 }
