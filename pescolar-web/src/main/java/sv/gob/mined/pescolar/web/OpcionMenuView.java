@@ -17,6 +17,7 @@ import javax.persistence.Query;
 import org.primefaces.event.SelectEvent;
 import sv.gob.mined.pescolar.model.Modulo;
 import sv.gob.mined.pescolar.model.OpcionMenu;
+import sv.gob.mined.pescolar.model.TipoUsuOpcMenu;
 import sv.gob.mined.pescolar.repository.OpcionMenuRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
@@ -99,13 +100,13 @@ public class OpcionMenuView implements Serializable {
                     opcionmenu.setOpcIdOpcMenu(null);
                 }
             }
-            
-            if (opcionmenu.getApp()!= null) {
-                if (opcionmenu.getApp().getIdModulo()== 0) {
+
+            if (opcionmenu.getApp() != null) {
+                if (opcionmenu.getApp().getIdModulo() == 0) {
                     opcionmenu.setApp(null);
                 }
             }
-            
+
             if (opcionmenu.getIdOpcMenu() == null) {
                 opcionmenurepo.save(opcionmenu);
                 JsfUtil.mensajeInsert();
@@ -132,7 +133,14 @@ public class OpcionMenuView implements Serializable {
         q = em.createQuery("select op from OpcionMenu op where op.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " ", OpcionMenu.class);
 
         if (!q.getResultList().isEmpty()) {
-            JsfUtil.mensajeAlerta("Existen registros relacionados a esta opción y no puede ser eliminada");
+            JsfUtil.mensajeAlerta("Existen otras opciones de menú relacionadas a esta opción y no puede ser eliminada");
+            return false;
+        }
+
+        q = em.createQuery("select tuom from TipoUsuOpcMenu tuom where tuom.idOpcMenu.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " ", TipoUsuOpcMenu.class);
+
+        if (!q.getResultList().isEmpty()) {
+            JsfUtil.mensajeAlerta("Existen registros de roles relacionados a esta opción de menú y no puede ser eliminada");
             return false;
         }
 
