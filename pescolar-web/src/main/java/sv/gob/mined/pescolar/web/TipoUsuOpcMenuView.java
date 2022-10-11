@@ -54,8 +54,11 @@ public class TipoUsuOpcMenuView implements Serializable {
     }
 
     public void nuevo() {
+        llenarListaTipoUsuarioOpcionMenu();
+        
         tipousuopcmenu = new TipoUsuOpcMenu();
         deshabilitado = false;
+        
         listopcionmenu.clear();
     }
 
@@ -71,7 +74,7 @@ public class TipoUsuOpcMenuView implements Serializable {
     private void llenarListaTipoUsuarioOpcionMenu() {
         tipousuopcmenu = null;
         Query q;
-        q = em.createQuery("select tu from TipoUsuOpcMenu tu", TipoUsuOpcMenu.class);
+        q = em.createQuery("select tu from TipoUsuOpcMenu tu order by tu.idTipoUsuario", TipoUsuOpcMenu.class);
         listtipousuopcmenu = q.getResultList();
 
     }
@@ -80,9 +83,13 @@ public class TipoUsuOpcMenuView implements Serializable {
         Query q;
         q = em.createQuery("select opc from OpcionMenu opc "
                 + "where opc.idOpcMenu not in ("
-                + "select opc2.idOpcMenu.idOpcMenu TipoUsuOpcMenu opc2 where opc2.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + ""
+                + "select opc2.idOpcMenu.idOpcMenu from TipoUsuOpcMenu opc2 where opc2.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + ""
                 + ") ", OpcionMenu.class);
         listtipousuario = q.getResultList();
+
+        
+        q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario(), TipoUsuOpcMenu.class);
+        listtipousuopcmenu = q.getResultList();
     }
 
     private Boolean validarGuardar() {
@@ -253,7 +260,5 @@ public class TipoUsuOpcMenuView implements Serializable {
     public void setListtipousuopcmenu(List<TipoUsuOpcMenu> listtipousuopcmenu) {
         this.listtipousuopcmenu = listtipousuopcmenu;
     }
-    
-    
 
 }

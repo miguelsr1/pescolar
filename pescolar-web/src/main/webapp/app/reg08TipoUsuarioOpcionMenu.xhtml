@@ -11,7 +11,7 @@
             <p:menubar id="menuBar"> 
                 <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
                             action="#{tipoUsuOpcMenuView.nuevo()}" update="pnlTipoUsuario tblTipoUsuario menuBar">
-                    <p:resetInput target="pnlOpciones" /> 
+                    <p:resetInput target="pnlTipoUsuario" /> 
                 </p:menuitem>
 
                 <p:menuitem value="Guardar" 
@@ -61,7 +61,7 @@
                                                  disabled="#{tipoUsuOpcMenuView.deshabilitado}"
                                                  style="width: 100%;"
                                                  >
-                                    <p:ajax event="change" listener="#{tipoUsuOpcMenuView.onClickTipoUsuario()}" global="false" update="cmbopcmen"/>
+                                    <p:ajax event="change" listener="#{tipoUsuOpcMenuView.onClickTipoUsuario()}" global="false" update="cmbopcmen tblTipoUsuario"/>
                                     <f:selectItem itemLabel="Seleccione uno" itemValue="0"/>
                                     <f:selectItems value="#{tipoUsuOpcMenuView.listtipousuario}" var="lsttu" 
                                                    itemValue="#{lsttu.idTipoUsuario}" itemLabel="#{lsttu.descripcion}"/>
