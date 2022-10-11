@@ -421,12 +421,12 @@ public class DatosGeneralesView implements Serializable {
 
                 if (mismaDireccion) {
                     idMunicipioLocal = idMunicipio;
-                    idCantonLocal = idCanton;
                     cargaGeneralView.getEmpresa().setDireccionCompleta(cargaGeneralView.getEmpresa().getIdPersona().getDomicilio());
-
                     cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
                     cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
+                    
                     if (rubroUniforme) {
+                        idCantonLocal = idCanton;
                         cargaGeneralView.getEmpresa().setCodigoCanton(idCantonLocal);
                         cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
                     } else {
@@ -436,13 +436,13 @@ public class DatosGeneralesView implements Serializable {
                 } else {
                     cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipioLocal));
                     cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
-                    cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
+                    //cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
                 }
 
             } else if (rubroUniforme) {
                 cargaGeneralView.getEmpresa().setCodigoCanton(idCantonLocal);
-                cargaGeneralView.getEmpresa().setIdMunicipio(new Municipio(idMunicipioLocal));
-                cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(new Municipio(idMunicipio));
+                cargaGeneralView.getEmpresa().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipioLocal));
+                cargaGeneralView.getEmpresa().getIdPersona().setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, idMunicipio));
                 cargaGeneralView.getEmpresa().getIdPersona().setCodigoCanton(idCanton);
             }
 
@@ -578,6 +578,14 @@ public class DatosGeneralesView implements Serializable {
             showFoto = false;
         } else {
             cargaGeneralView.getEmpresa().getIdPersona().setUrlImagen(fotoProveedor);
+        }
+    }
+
+    public void generarItems() {
+        if (departamentoCalif != null && departamentoCalif.getId() != null) {
+            empresaRepo.calcularNoItems(departamentoCalif.getIdMuestraInteres().getId());
+        } else {
+            JsfUtil.mensajeAlerta("No posee oferta 2023");
         }
     }
 }

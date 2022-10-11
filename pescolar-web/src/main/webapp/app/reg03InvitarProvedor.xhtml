@@ -17,6 +17,7 @@
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{cargaGeneralView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
                         <p:menuitem value="Invitar" icon="pi pi-envelope" action="#{datosGeneralesView.invitacionProveedorPaquete()}"/>
+                        <p:menuitem value="Generar Items" icon="pi pi-share-alt" action="#{datosGeneralesView.generarItems()}" rendered="#{sessionView.usuario.idPersona.usuario eq 'MISANCHEZ'}"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>

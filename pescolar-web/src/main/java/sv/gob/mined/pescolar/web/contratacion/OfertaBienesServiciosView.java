@@ -285,6 +285,10 @@ public class OfertaBienesServiciosView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idRubroAdq.id", idRubro).build());
         lstParticipantes = (List<Participante>) catalogoRepo.findListByParam(Participante.class, params, "idOferta.id", Boolean.TRUE);
+        
+        if(lstParticipantes.isEmpty()){
+            JsfUtil.mensajeAlerta("No se encontraron datos.");
+        }
     }
 
     public void buscarCe() {
