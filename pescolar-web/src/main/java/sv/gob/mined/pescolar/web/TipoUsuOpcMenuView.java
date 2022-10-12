@@ -28,31 +28,31 @@ import sv.gob.mined.pescolar.utils.JsfUtil;
 @Named
 @ViewScoped
 public class TipoUsuOpcMenuView implements Serializable {
-
+    
     private List<TipoUsuario> listtipousuario = new ArrayList();
     private List<OpcionMenu> listopcionmenu = new ArrayList();
     private List<TipoUsuOpcMenu> listtipousuopcmenu = new ArrayList();
-
+    
     private TipoUsuOpcMenu tipousuopcmenu = new TipoUsuOpcMenu();
-
+    
     private Boolean deshabilitado = true;
-
+    
     @PersistenceContext(unitName = "paquetePU")
     private EntityManager em;
-
+    
     @Inject
     private SessionView sessionView;
     @Inject
     private TipoUsuOpcMenuRepo tipousuopcmenurepo;
-
+    
     @PostConstruct
     public void init() {
         deshabilitado = true;
-
+        
         llenarListaTipoUsuario();
         llenarListaTipoUsuarioOpcionMenu();
     }
-
+    
     public void nuevo() {
         llenarListaTipoUsuarioOpcionMenu();
         
@@ -61,39 +61,42 @@ public class TipoUsuOpcMenuView implements Serializable {
         
         listopcionmenu.clear();
     }
-
+    
     private void llenarListaTipoUsuario() {
         Query q;
         q = em.createQuery("select tu from TipoUsuario tu", TipoUsuario.class);
         listtipousuario = q.getResultList();
-
+        
         listopcionmenu.clear();
-
+        
     }
-
+    
     private void llenarListaTipoUsuarioOpcionMenu() {
         tipousuopcmenu = null;
         Query q;
         q = em.createQuery("select tu from TipoUsuOpcMenu tu order by tu.idTipoUsuario", TipoUsuOpcMenu.class);
         listtipousuopcmenu = q.getResultList();
-
+        
     }
-
+    
     public void onClickTipoUsuario() {
         Query q;
         q = em.createQuery("select opc from OpcionMenu opc "
                 + "where opc.idOpcMenu not in ("
-                + "select opc2.idOpcMenu.idOpcMenu from TipoUsuOpcMenu opc2 where opc2.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + ""
+                + "   select opc2.idOpcMenu.idOpcMenu "
+                + "   from TipoUsuOpcMenu opc2 "
+                + "   where opc2.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()) + ""
                 + ") ", OpcionMenu.class);
-        listtipousuario = q.getResultList();
-
+        listopcionmenu = q.getResultList();
         
-        q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario(), TipoUsuOpcMenu.class);
+        tipousuopcmenu.getIdOpcMenu().setIdOpcMenu((long) 0);
+        
+        q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()), TipoUsuOpcMenu.class);
         listtipousuopcmenu = q.getResultList();
     }
-
+    
     private Boolean validarGuardar() {
-
+        
         if (tipousuopcmenu.getIdTipoUsuario() == null) {
             JsfUtil.mensajeAlerta("Debe seleccionar un tipo de usuario");
             return false;
@@ -118,7 +121,7 @@ public class TipoUsuOpcMenuView implements Serializable {
             JsfUtil.mensajeAlerta("Debe seleccionar una opción de menú");
             return false;
         }
-
+        
         Query q;
         if (tipousuopcmenu.getId() == null) {
             q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idOpcMenu.idOpcMenu = " + tipousuopcmenu.getIdOpcMenu().getIdOpcMenu() + " and tu.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + " ", TipoUsuOpcMenu.class);
@@ -129,28 +132,28 @@ public class TipoUsuOpcMenuView implements Serializable {
             JsfUtil.mensajeAlerta("La relación tipo de usuario y opción menú ya existe en la lista");
             return false;
         }
-
+        
         return true;
     }
-
+    
     public void guardar() {
         if (validarGuardar()) {
             if (tipousuopcmenu.getIdTipoUsuario() == null) {
                 tipousuopcmenurepo.save(tipousuopcmenu);
                 JsfUtil.mensajeInsert();
-
+                
             } else {
                 tipousuopcmenurepo.update(tipousuopcmenu);
                 JsfUtil.mensajeUpdate();
             }
-
+            
             llenarListaTipoUsuarioOpcionMenu();
             llenarListaTipoUsuario();
             deshabilitado = true;
         }
-
+        
     }
-
+    
     private Boolean validarEliminar() {
         if (tipousuopcmenu.getId() == null) {
             JsfUtil.mensajeAlerta("Debe seleccionar un registro para eliminar");
@@ -158,7 +161,7 @@ public class TipoUsuOpcMenuView implements Serializable {
         }
         return true;
     }
-
+    
     public void eliminar() {
         if (validarEliminar()) {
             tipousuopcmenurepo.delete(tipousuopcmenu);
@@ -167,10 +170,10 @@ public class TipoUsuOpcMenuView implements Serializable {
             deshabilitado = true;
         }
     }
-
+    
     public void onItemSelect(SelectEvent event) {
         tipousuopcmenu = (TipoUsuOpcMenu) event.getObject();
-
+        
         if (tipousuopcmenu.getIdTipoUsuario() == null) {
             TipoUsuario tmp = new TipoUsuario();
             tmp.setIdTipoUsuario((long) 0);
@@ -181,11 +184,11 @@ public class TipoUsuOpcMenuView implements Serializable {
             tmp.setIdOpcMenu((long) 0);
             tipousuopcmenu.setIdOpcMenu(tmp);
         }
-
+        
         llenarListaTipoUsuario();
         deshabilitado = false;
     }
-
+    
     public void onItemUnselect() {
         tipousuopcmenu = null;
         llenarListaTipoUsuario();
@@ -198,40 +201,40 @@ public class TipoUsuOpcMenuView implements Serializable {
     public List<TipoUsuario> getListtipousuario() {
         return listtipousuario;
     }
-
+    
     public void setListtipousuario(List<TipoUsuario> listtipousuario) {
         this.listtipousuario = listtipousuario;
     }
-
+    
     public List<OpcionMenu> getListopcionmenu() {
         return listopcionmenu;
     }
-
+    
     public void setListopcionmenu(List<OpcionMenu> listopcionmenu) {
         this.listopcionmenu = listopcionmenu;
     }
-
+    
     public TipoUsuOpcMenu getTipousuopcmenu() {
         if (tipousuopcmenu == null) {
             TipoUsuOpcMenu tmpusuopcmenu = new TipoUsuOpcMenu();
             TipoUsuario tmptipousuario = new TipoUsuario();
             tmptipousuario.setIdTipoUsuario((long) 0);
-
+            
             OpcionMenu tmpopcionmenu = new OpcionMenu();
             tmpopcionmenu.setIdOpcMenu((long) 0);
-
+            
             tmpusuopcmenu.setIdTipoUsuario(tmptipousuario);
             tmpusuopcmenu.setIdOpcMenu(tmpopcionmenu);
             return tmpusuopcmenu;
-
+            
         } else {
             if (tipousuopcmenu.getIdOpcMenu() == null) {
                 TipoUsuario tmptipousuario = new TipoUsuario();
                 tmptipousuario.setIdTipoUsuario((long) 0);
-
+                
                 OpcionMenu tmpopcionmenu = new OpcionMenu();
                 tmpopcionmenu.setIdOpcMenu((long) 0);
-
+                
                 tipousuopcmenu.setIdTipoUsuario(tmptipousuario);
                 tipousuopcmenu.setIdOpcMenu(tmpopcionmenu);
                 return tipousuopcmenu;
@@ -240,25 +243,25 @@ public class TipoUsuOpcMenuView implements Serializable {
             }
         }
     }
-
+    
     public void setTipousuopcmenu(TipoUsuOpcMenu tipousuopcmenu) {
         this.tipousuopcmenu = tipousuopcmenu;
     }
-
+    
     public Boolean getDeshabilitado() {
         return deshabilitado;
     }
-
+    
     public void setDeshabilitado(Boolean deshabilitado) {
         this.deshabilitado = deshabilitado;
     }
-
+    
     public List<TipoUsuOpcMenu> getListtipousuopcmenu() {
         return listtipousuopcmenu;
     }
-
+    
     public void setListtipousuopcmenu(List<TipoUsuOpcMenu> listtipousuopcmenu) {
         this.listtipousuopcmenu = listtipousuopcmenu;
     }
-
+    
 }

@@ -55,23 +55,30 @@
                                          styleClass="form-group ui-panelgrid-blank"
                                          layout="grid" 
                                          >
+                                
                                 <p:outputLabel value="Tipo de Usuario"  />
                                 <p:selectOneMenu id="cmbtipusu" 
                                                  value="#{tipoUsuOpcMenuView.tipousuopcmenu.idTipoUsuario.idTipoUsuario}" 
                                                  disabled="#{tipoUsuOpcMenuView.deshabilitado}"
                                                  style="width: 100%;"
                                                  >
-                                    <p:ajax event="change" listener="#{tipoUsuOpcMenuView.onClickTipoUsuario()}" global="false" update="cmbopcmen tblTipoUsuario"/>
+                                    <p:ajax event="change" listener="#{tipoUsuOpcMenuView.onClickTipoUsuario()}" 
+                                            global="false" update="cmbopcmen tblTipoUsuario"
+                                            process="@this"
+                                            />
                                     <f:selectItem itemLabel="Seleccione uno" itemValue="0"/>
                                     <f:selectItems value="#{tipoUsuOpcMenuView.listtipousuario}" var="lsttu" 
                                                    itemValue="#{lsttu.idTipoUsuario}" itemLabel="#{lsttu.descripcion}"/>
                                 </p:selectOneMenu> 
+                                
 
                                 <p:outputLabel value="Opción de Menú" />
                                 <p:selectOneMenu id="cmbopcmen" 
                                                  value="#{tipoUsuOpcMenuView.tipousuopcmenu.idOpcMenu.idOpcMenu}" 
                                                  disabled="#{tipoUsuOpcMenuView.deshabilitado}"
                                                  style="width: 100%;"
+                                                 filter="true"
+                                                 filterMatchMode="contains"
                                                  >
                                     <p:ajax event="change" global="false"/>
                                     <f:selectItem itemLabel="Seleccione uno" itemValue="0"/>
