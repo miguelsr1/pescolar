@@ -72,6 +72,15 @@
                         </div>
 
                         <div class="p-field p-grid">
+                            <p:outputLabel value="Tipo de búsqueda:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                            <div class="p-col-12 p-md-10">
+                                <p:selectOneRadio id="opttipobuscar" value="0">
+                                    <f:selectItem itemLabel="Por Centro" itemValue="0"/>
+                                    <f:selectItem itemLabel="Por Municipio" itemValue="1"/>
+                                </p:selectOneRadio>
+                            </div>
+                        </div> 
+                        <div class="p-field p-grid">
                             <p:outputLabel value="Código Infraestructura:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
                             <div class="p-col-12 p-md-10">
                                 <p:inputText style="margin-right: 10px;" id="txtCodigoEntidad" maxlength="5" 
@@ -82,17 +91,77 @@
                                 <p:outputLabel id="nombreCE" value="#{rubroPorCeView.entidadEducativa.nombre}" style="font-weight: bold" />
                             </div>
                         </div>
-                        <div class="p-field p-grid">
 
-                            <p:outputLabel for="cbRubros" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Rubros a contratar:</p:outputLabel>
+                        <div class="p-field p-grid">
+                            <p:outputLabel for="cbdep" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento:</p:outputLabel>
                             <div class="p-col-12 p-md-10">
-                                <p:selectOneMenu id="cbRubros" value="#{rubroPorCeView.codigoRubro}">
+                                <p:selectOneMenu id="cbdep" value="#{rubroPorCeView.codigoRubro}"
+                                                 style=" width: 95%;"
+                                                 >
                                     <f:selectItem itemLabel="Seleccione un valor"/>
                                     <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscar" 
                                                    itemValue="#{lstrubrosbuscar.id}" itemLabel="#{lstrubrosbuscar.nombreCorto}" />
                                 </p:selectOneMenu>
                             </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel for="cbmuni" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Municipio:</p:outputLabel>
+                            <div class="p-col-12 p-md-10">
+                                <p:selectOneMenu id="cbmuni" value="#{rubroPorCeView.codigoRubro}"
+                                                 style=" width: 95%;"
+                                                 >
+                                    <f:selectItem itemLabel="Seleccione un valor"/>
+                                    <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscar" 
+                                                   itemValue="#{lstrubrosbuscar.id}" itemLabel="#{lstrubrosbuscar.nombreCorto}" />
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel for="dtcen" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Centros:</p:outputLabel>
+                            <div class="p-col-12 p-md-10">
+                                <p:dataTable id="dtcen" 
+                                             value="#{rubroPorCeView.listrubroporce}" 
+                                             var="cence" 
+                                             rowIndexVar="rowId" 
+                                             rowKey="#{rubce.id}" 
+                                             selection="#{rubroPorCeView.rubroporce}"
+                                             selectionMode="multiple"
+                                             scrollable="true"
+                                             scrollHeight="190"
+                                             style="width: 95%;"
+                                             >
 
+                                    <p:column headerText="#" width="5%">
+                                        <p:outputLabel value="#{rowId + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="CODIGO" width="10%">
+                                        <p:outputLabel value="#{cence.codigoEntidad}" />
+                                    </p:column>
+                                    <p:column headerText="NOMBRE DEL CENTRO" width="45%">
+                                        <p:outputLabel value="#{cence.codigoEntidad.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="DEPARTAMENTO" width="20%">
+                                        <p:outputLabel value="#{cence.idRubroInteres.nombreCorto}" />
+                                    </p:column>
+                                    <p:column headerText="MUNICIPIO" width="20%">
+                                        <p:outputLabel value="#{cence.idRubroInteres.nombreCorto}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-grid">
+                            <p:outputLabel for="cbRubros" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Rubros a contratar:</p:outputLabel>
+                            <div class="p-col-12 p-md-10">
+                                <p:selectOneMenu id="cbRubros" value="#{rubroPorCeView.codigoRubro}"
+                                                 style=" width: 95%;"
+                                                 >
+                                    <f:selectItem itemLabel="Seleccione un valor"/>
+                                    <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscar" 
+                                                   itemValue="#{lstrubrosbuscar.id}" itemLabel="#{lstrubrosbuscar.nombreCorto}" />
+                                </p:selectOneMenu>
+                            </div>
                         </div>
                     </div>
 

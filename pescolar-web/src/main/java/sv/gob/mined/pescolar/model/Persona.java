@@ -84,7 +84,7 @@ public class Persona implements Serializable {
     @Column(name = "USUARIO", length = 25)
     private String usuario;
 
-    @Column(name = "PASSWORD", length = 100)
+    @Column(name = "CLAVE_ACCESO", length = 100)
     private String claveAcceso;
 
     @Column(name = "FECHA_INSERCION", nullable = false)
