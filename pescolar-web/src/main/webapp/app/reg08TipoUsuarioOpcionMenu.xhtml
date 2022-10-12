@@ -8,54 +8,57 @@
     <ui:define name="title">Mantenimiento de Relación Tipo de Usuario y Opciones de Menú</ui:define>
     <ui:define name="content">
         <h:form id="form" prependId="false">
-            <p:menubar id="menuBar"> 
-                <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
-                            action="#{tipoUsuOpcMenuView.nuevo()}" update="pnlTipoUsuario tblTipoUsuario menuBar">
-                    <p:resetInput target="pnlTipoUsuario" /> 
-                </p:menuitem>
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar"> 
+                        <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
+                                    action="#{tipoUsuOpcMenuView.nuevo()}" update="pnlTipoUsuario tblTipoUsuario menuBar">
+                            <p:resetInput target="pnlTipoUsuario" /> 
+                        </p:menuitem>
 
-                <p:menuitem value="Guardar" 
-                            icon="fa fa-save" 
-                            update="pnlTipoUsuario tblTipoUsuario menuBar" 
-                            action="#{tipoUsuOpcMenuView.guardar()}"
-                            disabled="#{menuController.usuarioSoloLectura || tipoUsuOpcMenuView.deshabilitado}" 
-                            process="@this"
-                            >
-                    <p:confirm header="Confirmar" 
-                               message="¿Esta seguro de guardar el registro?" 
-                               icon="pi pi-exclamation-triangle" />
+                        <p:menuitem value="Guardar" 
+                                    icon="fa fa-save" 
+                                    update="pnlTipoUsuario tblTipoUsuario menuBar" 
+                                    action="#{tipoUsuOpcMenuView.guardar()}"
+                                    disabled="#{menuController.usuarioSoloLectura || tipoUsuOpcMenuView.deshabilitado}" 
+                                    process="@this"
+                                    >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro de guardar el registro?" 
+                                       icon="pi pi-exclamation-triangle" />
 
-                </p:menuitem>
-                <p:menuitem value="Eliminar" icon="fa fa-trash" update="pnlTipoUsuario tblTipoUsuario menuBar" action="#{tipoUsuOpcMenuView.eliminar()}"
-                            disabled="#{menuController.usuarioSoloLectura || tipoUsuOpcMenuView.deshabilitado}"
-                            process="@this"
-                            >
-                    <p:confirm header="Confirmar" 
-                               message="¿Esta seguro que desea eliminar el registro?" 
-                               icon="pi pi-exclamation-triangle" />
-                </p:menuitem>
-                <p:menuitem value="Imprimir" icon="fa fa-print" disabled="true" />
-                <p:menuitem value="Principal" icon="fa fa-home" url="#{request.contextPath}/app/inicial.mined" />
-                <f:facet  name="options">  
-                    <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
-                </f:facet>  
-            </p:menubar>
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <div class="card">
-                        <h3>
-                            <i class="fa fa-user blue" style="font-size: 16px;"></i>
-                            <p:spacer width="10" height="8"/>
-                            <p:outputLabel value="Relaciones Tipo Usuario y Opciones de Menú" style="font-weight: bold;" />
-                        </h3>
-
+                        </p:menuitem>
+                        <p:menuitem value="Eliminar" icon="fa fa-trash" update="pnlTipoUsuario tblTipoUsuario menuBar" action="#{tipoUsuOpcMenuView.eliminar()}"
+                                    disabled="#{menuController.usuarioSoloLectura || tipoUsuOpcMenuView.deshabilitado}"
+                                    process="@this"
+                                    >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro que desea eliminar el registro?" 
+                                       icon="pi pi-exclamation-triangle" />
+                        </p:menuitem>
+                        <p:menuitem value="Imprimir" icon="fa fa-print" disabled="true" />
+                        <p:menuitem value="Principal" icon="fa fa-home" url="#{request.contextPath}/app/inicial.mined" />
+                        <f:facet  name="options">  
+                            <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
+                        </f:facet>  
+                    </p:menubar>
+                </div>
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h3>
+                                <i class="fa fa-user blue" style="font-size: 16px;"></i>
+                                <p:spacer width="10" height="8"/>
+                                <p:outputLabel value="Relaciones Tipo Usuario y Opciones de Menú" style="font-weight: bold;" />
+                            </h3>
+                        </div>
                         <p:outputPanel id="pnlTipoUsuario" >
                             <p:panelGrid id="pngTipoUsuario" columns="4" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4" 
                                          style="width: 100%; border:0px none; background-color:transparent;"
                                          styleClass="form-group ui-panelgrid-blank"
                                          layout="grid" 
                                          >
-                                
+
                                 <p:outputLabel value="Tipo de Usuario"  />
                                 <p:selectOneMenu id="cmbtipusu" 
                                                  value="#{tipoUsuOpcMenuView.tipousuopcmenu.idTipoUsuario.idTipoUsuario}" 
@@ -70,7 +73,7 @@
                                     <f:selectItems value="#{tipoUsuOpcMenuView.listtipousuario}" var="lsttu" 
                                                    itemValue="#{lsttu.idTipoUsuario}" itemLabel="#{lsttu.descripcion}"/>
                                 </p:selectOneMenu> 
-                                
+
 
                                 <p:outputLabel value="Opción de Menú" />
                                 <p:selectOneMenu id="cmbopcmen" 
@@ -85,13 +88,11 @@
                                     <f:selectItems value="#{tipoUsuOpcMenuView.listopcionmenu}" var="lstopc" 
                                                    itemValue="#{lstopc.idOpcMenu}" itemLabel="#{lstopc.nombreOpcion}"/>
                                 </p:selectOneMenu> 
-
                             </p:panelGrid>
                         </p:outputPanel>
-
                     </div>
 
-                    <div class="p-formgrid p-grid">
+                    <div class="card ui-fluid">
                         <p:dataTable id="tblTipoUsuario" 
                                      value="#{tipoUsuOpcMenuView.listtipousuopcmenu}" 
                                      var="tipusu" 
@@ -126,13 +127,10 @@
                                                icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>
                             </p:column>
-
                         </p:dataTable>
                     </div>
                 </div>
             </div>
-
-
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
                 <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" process="@this" />
