@@ -84,7 +84,7 @@ public class Persona implements Serializable {
     @Column(name = "USUARIO", length = 25)
     private String usuario;
 
-    @Column(name = "PASSWORD", length = 100)
+    @Column(name = "CLAVE_ACCESO", length = 100)
     private String claveAcceso;
 
     @Column(name = "FECHA_INSERCION", nullable = false)
@@ -225,13 +225,14 @@ public class Persona implements Serializable {
         this.fechaInsercion = fechaInsercion;
     }
 
-    public String getClaveAcceso() {
+       public String getClaveAcceso() {
         return claveAcceso;
     }
 
     public void setClaveAcceso(String claveAcceso) {
         this.claveAcceso = claveAcceso;
     }
+    
 
     public String getUsuario() {
         return usuario;
