@@ -11,7 +11,7 @@
             <div class="p-grid dashboard"> 
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar id="menuBar" styleClass="divSticky"> 
-                        <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="true"/>
+                        <p:menuitem value="Nuevo" icon="pi pi-file" ajax="true" process="@this" disabled="#{sessionView.isUsuarioAdministrador}" action="#{datosGeneralesView.nuevo()}"/>
                         <p:menuitem value="Modificar" update="frmPrincipal" process="@this" icon="pi pi-pencil" onclick="onClick('btnModificar');" />
                         <p:menuitem value="Guardar" icon="pi pi-save" disabled="#{sessionView.usuarioSoloLectura || datosGeneralesView.deshabiliar}" action="#{datosGeneralesView.guardarDatosGenerales}" update="dvDatosGenerales pnlModif"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
@@ -178,7 +178,7 @@
                                             </p:outputPanel>
                                         </div>
                                     </div>
-                                    <p:panel id="pnlDireccionLocal" header="Ubicación del Local" visible="#{datosGeneralesView.personaNatural}">
+                                    <p:panel id="pnlDireccionLocal" header="Ubicación del Local" rendered="#{datosGeneralesView.personaNatural}">
                                         <div class="ui-fluid p-formgrid p-grid">
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Departamento: "/>

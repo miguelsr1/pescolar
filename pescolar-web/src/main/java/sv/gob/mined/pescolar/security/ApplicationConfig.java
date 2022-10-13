@@ -18,7 +18,7 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
  */
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "java:/PaqueteDS",
-        callerQuery = "select clave_acceso from persona where usuario = ?",
+        callerQuery = "select password from persona where usuario = ?",
         groupsQuery = "select tusu.rol from persona per inner join usuario usu on usu.id_persona = per.id_persona inner join tipo_usuario tusu on usu.id_tipo_usuario = tusu.id_tipo_usuario where per.usuario = ?",
         hashAlgorithm = Pbkdf2PasswordHash.class,
         priorityExpression = "#{100}",

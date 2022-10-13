@@ -1,5 +1,6 @@
 package sv.gob.mined.pescolar.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
@@ -170,7 +171,7 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
 
         List<PreciosRefRubroEmp> lstPre = q.getResultList();
         Long idEmpTemp = 0l;
-        EmpresaPreciosRef emp = null;
+        EmpresaPreciosRef emp = new EmpresaPreciosRef();
 
         for (PreciosRefRubroEmp precios : lstPre) {
 
@@ -265,4 +266,83 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
 
         return q.getResultList().isEmpty() ? new TecnicoProveedor("") : (TecnicoProveedor) q.getSingleResult();
     }
+
+    public void calcularNoItems(Long idMuestraInt) {
+        Query q = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.estadoEliminacion = 0 and p.idMuestraInteres.id=:pIdMuestraInt ORDER BY p.idEmpresa", PreciosRefRubroEmp.class);
+        q.setParameter("pIdMuestraInt", idMuestraInt);
+
+        List<PreciosRefRubroEmp> lstPre = q.getResultList();
+        Long idEmpTemp = 0l;
+        EmpresaNoItem emp = new EmpresaNoItem();
+
+        for (PreciosRefRubroEmp precios : lstPre) {
+
+            if (idEmpTemp.intValue() == 0) {
+                idEmpTemp = precios.getIdEmpresa().getId();
+                emp = new EmpresaNoItem();
+                emp.setIdEmpresa(idEmpTemp);
+                emp.setIdMuestraInteres(idMuestraInt);
+            } else if (idEmpTemp.intValue() == precios.getIdEmpresa().getId().intValue()) {
+
+            } else {
+                em.persist(emp);
+
+                idEmpTemp = precios.getIdEmpresa().getId();
+                emp = new EmpresaNoItem();
+                emp.setIdEmpresa(idEmpTemp);
+                emp.setIdMuestraInteres(idMuestraInt);
+            }
+
+            switch (precios.getNoItem()) {
+                case "1":
+                    emp.setItem1("1");
+                    break;
+                case "2":
+                    emp.setItem2("2");
+                    break;
+                case "3":
+                    emp.setItem3("3");
+                    break;
+                case "4":
+                    emp.setItem4("4");
+                    break;
+                case "4.4":
+                    emp.setItem44("44");
+                    break;
+                case "5":
+                    emp.setItem5("5");
+                    break;
+                case "5.1":
+                    emp.setItem51("51");
+                    break;
+                case "6":
+                    emp.setItem6("6");
+                    break;
+                case "7":
+                    emp.setItem7("7");
+                    break;
+                case "8":
+                    emp.setItem8("8");
+                    break;
+                case "9":
+                    emp.setItem9("9");
+                    break;
+                case "10":
+                    emp.setItem10("10");
+                    break;
+                case "11":
+                    emp.setItem11("11");
+                    break;
+                case "12":
+                    emp.setItem12("12");
+                    break;
+                case "13":
+                    emp.setItem13("13");
+                    break;
+            }
+        }
+
+        em.persist(emp);
+    }
+
 }

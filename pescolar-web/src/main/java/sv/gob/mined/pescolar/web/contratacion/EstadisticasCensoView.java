@@ -1024,11 +1024,31 @@ public class EstadisticasCensoView implements Serializable {
             if (lstPrecios.isEmpty()) {
                 JsfUtil.mensajeError("Se deben de registrar los precios máximos de referencia.");
             } else {
-                preParUni = getPrecioMax(lstPrecios, 22);
-                preCicloIUni = getPrecioMax(lstPrecios, 2);
-                preCicloIIUni = getPrecioMax(lstPrecios, 2);
-                preCicloIIIUni = getPrecioMax(lstPrecios, 2);
-                preBacUni = getPrecioMax(lstPrecios, 6);
+                preParUni = new PreciosRefRubro();
+
+                if (ceClimaFrio) {
+                    preParUni.setPrecioMaxFem(new BigDecimal("12.30"));
+                    preParUni.setPrecioMaxMas(new BigDecimal("12.30"));
+                } else {
+                    preParUni.setPrecioMaxFem(new BigDecimal("10.20"));
+                    preParUni.setPrecioMaxMas(new BigDecimal("9.90"));
+                }
+
+                preCicloIUni = new PreciosRefRubro();
+                preCicloIUni.setPrecioMaxFem(new BigDecimal("10.80"));
+                preCicloIUni.setPrecioMaxMas(new BigDecimal("12.60"));
+
+                preCicloIIUni = new PreciosRefRubro();
+                preCicloIIUni.setPrecioMaxFem(new BigDecimal("10.80"));
+                preCicloIIUni.setPrecioMaxMas(new BigDecimal("12.60"));
+                
+                preCicloIIIUni = new PreciosRefRubro();
+                preCicloIIIUni.setPrecioMaxFem(new BigDecimal("10.80"));
+                preCicloIIIUni.setPrecioMaxMas(new BigDecimal("12.60"));
+                
+                preBacUni = new PreciosRefRubro();
+                preBacUni.setPrecioMaxFem(new BigDecimal("10.80"));
+                preBacUni.setPrecioMaxMas(new BigDecimal("12.60"));
             }
 
             lstPrecios = preciosRepo.getLstPreciosRefRubroByRubro(detProAdqUti, false);

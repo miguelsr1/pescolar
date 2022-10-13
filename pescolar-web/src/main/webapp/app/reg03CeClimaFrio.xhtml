@@ -70,7 +70,7 @@
                                 <div class="p-col-12 p-md-3">
                                     <p:selectOneMenu id="cboDepa" value="#{ceClimaFrioView.codigoDepartamento}">
                                         <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
-                                        <f:selectItems value="#{ceClimaFrioView.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombreDepartamento}"/>
+                                        <f:selectItems value="#{ceClimaFrioView.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.id} - #{depa.nombreDepartamento}"/>
                                         <p:ajax update="cboMuni"/>
                                     </p:selectOneMenu>
                                 </div>
@@ -79,7 +79,7 @@
                                 <div class="p-col-12 p-md-3">
                                     <p:selectOneMenu id="cboMuni" value="#{ceClimaFrioView.idMunicipio}">
                                         <f:selectItem itemLabel="Seleccione un valor"/>
-                                        <f:selectItems value="#{ceClimaFrioView.lstMunicipio}" var="mun" itemValue="#{mun.id}" itemLabel="#{mun.nombreMunicipio}"/>
+                                        <f:selectItems value="#{ceClimaFrioView.lstMunicipio}" var="mun" itemValue="#{mun.id}" itemLabel="#{mun.codigoMunicipio} - #{mun.nombreMunicipio}"/>
                                     </p:selectOneMenu>
                                 </div>
 

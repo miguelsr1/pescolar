@@ -8,47 +8,51 @@
     <ui:define name="title">Mantenimiento de Opciones de Menú</ui:define>
     <ui:define name="content">
         <h:form id="form" prependId="false">
-            <p:menubar id="menuBar"> 
-                <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
-                            action="#{opcionMenuView.nuevo()}" update="pnlOpciones tblOpciones menuBar">
-                    <p:resetInput target="pnlOpciones" /> 
-                </p:menuitem>
+            <div class="p-grid dashboard"> 
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="menuBar"> 
+                        <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
+                                    action="#{opcionMenuView.nuevo()}" update="pnlOpciones tblOpciones menuBar">
+                            <p:resetInput target="pnlOpciones" /> 
+                        </p:menuitem>
 
-                <p:menuitem value="Guardar" 
-                            icon="fa fa-save" 
-                            update="pnlOpciones tblOpciones menuBar" 
-                            action="#{opcionMenuView.guardar()}"
-                            disabled="#{menuController.usuarioSoloLectura || opcionMenuView.deshabilitado}" 
-                            process="@this"
-                            >
-                    <p:confirm header="Confirmar" 
-                               message="¿Esta seguro de guardar el registro?" 
-                               icon="pi pi-exclamation-triangle" />
+                        <p:menuitem value="Guardar" 
+                                    icon="pi pi-save" 
+                                    update="pnlOpciones tblOpciones menuBar" 
+                                    action="#{opcionMenuView.guardar()}"
+                                    disabled="#{menuController.usuarioSoloLectura || opcionMenuView.deshabilitado}" 
+                                    process="@this"
+                                    >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro de guardar el registro?" 
+                                       icon="pi pi-exclamation-triangle" />
 
-                </p:menuitem>
-                <p:menuitem value="Eliminar" icon="fa fa-trash" update="pnlOpciones tblOpciones menuBar" action="#{opcionMenuView.eliminar()}"
-                            disabled="#{menuController.usuarioSoloLectura || opcionMenuView.deshabilitado}"
-                            process="@this"
-                            >
-                    <p:confirm header="Confirmar" 
-                               message="¿Esta seguro que desea eliminar el registro?" 
-                               icon="pi pi-exclamation-triangle" />
-                </p:menuitem>
-                <p:menuitem value="Imprimir" icon="fa fa-print" disabled="true" />
-                <p:menuitem value="Principal" icon="fa fa-home" url="#{request.contextPath}/app/inicial.mined" />
-                <f:facet  name="options">  
-                    <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
-                </f:facet>  
-            </p:menubar>
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <div class="card">
-                        <h3>
-                            <i class="fa fa-user blue" style="font-size: 16px;"></i>
-                            <p:spacer width="10" height="8"/>
-                            <p:outputLabel value="Opciones de Menú" style="font-weight: bold;" />
-                        </h3>
+                        </p:menuitem>
+                        <p:menuitem value="Eliminar" icon="pi pi-trash" update="pnlOpciones tblOpciones menuBar" action="#{opcionMenuView.eliminar()}"
+                                    disabled="#{menuController.usuarioSoloLectura || opcionMenuView.deshabilitado}"
+                                    process="@this"
+                                    >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro que desea eliminar el registro?" 
+                                       icon="pi pi-exclamation-triangle" />
+                        </p:menuitem>
+                        <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
+                        <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/inicial.mined" />
+                        <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
+                        </f:facet>  
+                    </p:menubar>
+                </div>
 
+                <div class="p-col-12">
+                    <div class="card ui-fluid">
+                        <div class="card-header overview-box">
+                            <h3>
+                                <i class="fa fa-user blue" style="font-size: 16px;"></i>
+                                <p:spacer width="10" height="8"/>
+                                <p:outputLabel value="Opciones de Menú" style="font-weight: bold;" />
+                            </h3>
+                        </div>
                         <p:outputPanel id="pnlOpciones" >
                             <p:panelGrid id="pngOpciones" columns="4" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4" 
                                          style="width: 100%; border:0px none; background-color:transparent;"
@@ -138,7 +142,7 @@
 
                     </div>
 
-                    <div class="p-formgrid p-grid">
+                    <div class="card ui-fluid">
                         <p:dataTable id="tblOpciones" 
                                      value="#{opcionMenuView.listopciones}" 
                                      var="opc" 
@@ -191,19 +195,13 @@
 
                         </p:dataTable>
                     </div>
-
-
-
                 </div>
             </div>
-
-
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
                 <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" process="@this" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" process="@this" />
             </p:confirmDialog> 
-
         </h:form>
     </ui:define>
 </ui:composition>

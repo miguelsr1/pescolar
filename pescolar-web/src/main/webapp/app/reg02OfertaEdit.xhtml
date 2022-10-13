@@ -55,8 +55,8 @@
                             <div class="p-field p-grid">
                                 <p:outputLabel for="cboRubro" value="#{bundle['compra.rubroAdq']}:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" />
                                 <div class="p-col-12 p-md-10">
-                                    <p:selectOneMenu id="cboRubro" value="#{ofertaBienesServiciosView.idRubro}">
-                                        <f:selectItem itemLabel="Seleccione un rubro" itemValue="null" />
+                                    <p:selectOneMenu id="cboRubro" value="#{ofertaBienesServiciosView.idRubro}" required="true" requiredMessage="Debe de seleccionar un rubro de contratación" converterMessage="Debe de seleccionar un rubro de contratación">
+                                        <f:selectItem itemLabel="Seleccione un rubro" itemValue="null" noSelectionOption="true"/>
                                         <f:selectItems value="#{ofertaBienesServiciosView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
                                         <p:ajax update="pnlFiltro" listener="#{ofertaBienesServiciosView.validacionCodigoEntidadByRubro()}"/>
                                     </p:selectOneMenu>

@@ -133,7 +133,7 @@ public class MunicipioInteresView implements Serializable {
                 disMunicipio.setEstadoEliminacion(0l);
                 disMunicipio.setFechaInsercion(LocalDate.now());
                 disMunicipio.setIdCapaDistribucion(departamentoCalif);
-                disMunicipio.setIdMunicipio(new Municipio(((MunicipioDto) item).getIdMunicipio()));
+                disMunicipio.setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, ((MunicipioDto) item).getIdMunicipio()));
                 disMunicipio.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
 
                 disMuniRepo.save(disMunicipio);
@@ -166,7 +166,7 @@ public class MunicipioInteresView implements Serializable {
                     disMunicipio.setEstadoEliminacion(0l);
                     disMunicipio.setFechaInsercion(LocalDate.now());
                     disMunicipio.setIdCapaDistribucion(departamentoCalif);
-                    disMunicipio.setIdMunicipio(new Municipio(mun.getIdMunicipio()));
+                    disMunicipio.setIdMunicipio(catalogoRepo.findEntityByPk(Municipio.class, mun.getIdMunicipio()));
                     disMunicipio.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
                     lstMunicipioIntereses.add(disMunicipio);
                 }
