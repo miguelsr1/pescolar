@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.context.spi.AlterableContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -29,7 +26,6 @@ import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.enums.TipoOperador;
-import sv.gob.mined.pescolar.web.proveedor.interno.CargaGeneralView;
 
 /**
  *
@@ -63,9 +59,6 @@ public class SessionView implements Serializable {
     @Inject
     private CatalogoRepo catalogoRepo;
     
-    @Inject
-    private BeanManager beanManager;
-
     @PostConstruct
     public void init() {
         params = new ArrayList();
@@ -338,13 +331,6 @@ public class SessionView implements Serializable {
      * @return
      */
     public String gotoPrincipalPage() {
-        AlterableContext ctxSession = (AlterableContext) beanManager.getContext(SessionScoped.class);
-        for (Bean<?> bean : beanManager.getBeans(CargaGeneralView.class)) {
-            Object instance = ctxSession.get(bean);
-            if (instance != null) {
-                ctxSession.destroy(bean);
-            }
-        }
 
         return Constantes.GO_TO_PRINCIPAL_PAGE;
     }

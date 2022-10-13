@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.paradise.view.GuestPreferences;
 import sv.gob.mined.pescolar.model.Canton;
 import sv.gob.mined.pescolar.model.CapaDistribucionAcre;
 import sv.gob.mined.pescolar.model.CapaInstPorRubro;
@@ -91,8 +90,6 @@ public class DatosGeneralesView implements Serializable {
     private SessionView sessionView;
     @Inject
     private CargaGeneralView cargaGeneralView;
-    @Inject
-    private GuestPreferences guestPreferencesView;
     @Inject
     private DiasPlazoContratoRepo diasPlazoRepo;
 
