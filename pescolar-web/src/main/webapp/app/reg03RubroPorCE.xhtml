@@ -48,10 +48,20 @@
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
                         <p:menuitem value="Guardar" actionListener="#{rubroPorCeView.guardar()}" 
                                     icon="pi pi-save" disabled="rubroPorCeView.deshabilitado"
-                                    update="tblRubroPorCe" />
-                        <p:menuitem value="Eliminar" actionListener="#{rubroPorCeView.eliminar()}" 
+                                    update="tblRubroPorCe"   >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro de guardar el registro?" 
+                                       icon="pi pi-exclamation-triangle" />
+
+                        </p:menuitem>
+                        <p:menuitem value="Eliminar" actionListener="#{rubroPorCeView.eliminarenlote()}" 
                                     icon="pi pi-delete" disabled="rubroPorCeView.deshabilitado"
-                                    update="tblRubroPorCe" />
+                                    update="tblRubroPorCe"   >
+                            <p:confirm header="Confirmar" 
+                                       message="¿Esta seguro de eliminar la selección de registros?" 
+                                       icon="pi pi-exclamation-triangle" />
+
+                        </p:menuitem>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" 
                                     actionListener="#{guestPreferences.ocultarMenu()}"/>
@@ -74,62 +84,93 @@
                         <div class="p-field p-grid">
                             <p:outputLabel value="Tipo de búsqueda:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
                             <div class="p-col-12 p-md-10">
-                                <p:selectOneRadio id="opttipobuscar" value="0">
+                                <p:selectOneRadio id="opttipobuscar" value="#{rubroPorCeView.tiposeleccion}">
+                                    <p:ajax event="valueChange" listener="#{rubroPorCeView.onClickOption()}" update="form"/>
                                     <f:selectItem itemLabel="Por Centro" itemValue="0"/>
                                     <f:selectItem itemLabel="Por Municipio" itemValue="1"/>
                                 </p:selectOneRadio>
                             </div>
                         </div> 
-                        <div class="p-field p-grid">
-                            <p:outputLabel value="Código Infraestructura:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                        <div class="p-field p-grid" >
+                            <p:outputLabel value="Código Infraestructura:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" rendered="#{(rubroPorCeView.tiposeleccion=='0')?true:false}" />
                             <div class="p-col-12 p-md-10">
                                 <p:inputText style="margin-right: 10px;" id="txtCodigoEntidad" maxlength="5" 
                                              value="#{rubroPorCeView.codigoEntidad}" size="4" 
-                                             autocomplete="off" disabled="#{rubroPorCeView.deshabilitado}" onkeyup="return this.value.length >= 5">
+                                             autocomplete="off" disabled="#{rubroPorCeView.deshabilitado}" onkeyup="return this.value.length >= 5"
+                                             rendered="#{(rubroPorCeView.tiposeleccion=='0')?true:false}"
+                                             >
                                     <p:ajax event="keyup" listener="#{rubroPorCeView.buscarEntidadEducativa}" update="nombreCE tblRubroPorCe"/>
                                 </p:inputText>
-                                <p:outputLabel id="nombreCE" value="#{rubroPorCeView.entidadEducativa.nombre}" style="font-weight: bold" />
+                                <p:outputLabel id="nombreCE" value="#{rubroPorCeView.entidadEducativa.nombre}" style="font-weight: bold" rendered="#{(rubroPorCeView.tiposeleccion=='0')?true:false}" />
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <p:outputLabel for="cbRubrosA" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" rendered="#{(rubroPorCeView.tiposeleccion=='0')?true:false}">Rubros a contratar:</p:outputLabel>
+                            <div class="p-col-12 p-md-10">
+                                <p:selectOneMenu id="cbRubrosA" value="#{rubroPorCeView.codigoRubro}"
+                                                 style=" width: 95%;"
+                                                 rendered="#{(rubroPorCeView.tiposeleccion=='0')?true:false}"
+                                                 >
+                                    <f:selectItem itemLabel="Seleccione un valor"/>
+                                    <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscarA" 
+                                                   itemValue="#{lstrubrosbuscarA.id}" itemLabel="#{lstrubrosbuscarA.nombreCorto}" />
+                                </p:selectOneMenu>
                             </div>
                         </div>
 
-                        <div class="p-field p-grid">
-                            <p:outputLabel for="cbdep" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento:</p:outputLabel>
+                        <div class="p-field p-grid" >
+                            <p:outputLabel for="cbdep" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}">Departamento:</p:outputLabel>
                             <div class="p-col-12 p-md-10">
-                                <p:selectOneMenu id="cbdep" value="#{rubroPorCeView.codigoRubro}"
+                                <p:selectOneMenu id="cbdep" value="#{rubroPorCeView.iddepartamento}"
                                                  style=" width: 95%;"
+                                                 filter="true"
+                                                 filterMatchMode="contains"
+                                                 rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}"
                                                  >
-                                    <f:selectItem itemLabel="Seleccione un valor"/>
-                                    <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscar" 
-                                                   itemValue="#{lstrubrosbuscar.id}" itemLabel="#{lstrubrosbuscar.nombreCorto}" />
+                                    <p:ajax event="change" listener="#{rubroPorCeView.onSelectDepartamento()}" update="cbmuni dtcen tblRubroPorCe"/>
+                                    <f:selectItem itemLabel="Seleccione un valor" itemValue=""/>
+                                    <f:selectItems value="#{rubroPorCeView.listdepartamento}" var="lstdep" 
+                                                   itemValue="#{lstdep.id}" itemLabel="#{lstdep.nombreDepartamento}" />
                                 </p:selectOneMenu>
                             </div>
                         </div>
-                        <div class="p-field p-grid">
-                            <p:outputLabel for="cbmuni" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Municipio:</p:outputLabel>
+                        <div class="p-field p-grid" >
+                            <p:outputLabel for="cbmuni" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}">Municipio:</p:outputLabel>
                             <div class="p-col-12 p-md-10">
-                                <p:selectOneMenu id="cbmuni" value="#{rubroPorCeView.codigoRubro}"
+                                <p:selectOneMenu id="cbmuni" value="#{rubroPorCeView.idmunicipio}"
                                                  style=" width: 95%;"
+                                                 filter="true"
+                                                 filterMatchMode="contains"
+                                                 rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}"
                                                  >
-                                    <f:selectItem itemLabel="Seleccione un valor"/>
-                                    <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscar" 
-                                                   itemValue="#{lstrubrosbuscar.id}" itemLabel="#{lstrubrosbuscar.nombreCorto}" />
+                                    <p:ajax event="change" listener="#{rubroPorCeView.onSelectMunicipio()}" update="dtcen tblRubroPorCe"/>
+                                    <f:selectItem itemLabel="Seleccione un valor" itemValue=""/>
+                                    <f:selectItems value="#{rubroPorCeView.listmunicipio}" var="lstmuni" 
+                                                   itemValue="#{lstmuni.id}" itemLabel="#{lstmuni.nombreMunicipio}" />
                                 </p:selectOneMenu>
                             </div>
                         </div>
-                        <div class="p-field p-grid">
-                            <p:outputLabel for="dtcen" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Centros:</p:outputLabel>
+                        <div class="p-field p-grid" >
+                            <p:outputLabel for="dtcen" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}">Centros:</p:outputLabel>
                             <div class="p-col-12 p-md-10">
                                 <p:dataTable id="dtcen" 
-                                             value="#{rubroPorCeView.listrubroporce}" 
+                                             value="#{rubroPorCeView.listentidadeseducativas}" 
                                              var="cence" 
                                              rowIndexVar="rowId" 
-                                             rowKey="#{rubce.id}" 
-                                             selection="#{rubroPorCeView.rubroporce}"
-                                             selectionMode="multiple"
+                                             rowKey="#{cence.codigoEntidad}" 
+                                             selection="#{rubroPorCeView.seleccionentidadEducativa}"
                                              scrollable="true"
                                              scrollHeight="190"
                                              style="width: 95%;"
+                                             rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}"
                                              >
+
+                                    <p:ajax event="rowSelect" listener="#{rubroPorCeView.onSelectListaCE()}" update="tblRubroPorCe" />
+                                    <p:ajax event="rowSelectCheckbox" listener="#{rubroPorCeView.onSelectListaCE()}" update="tblRubroPorCe" />
+                                    <p:ajax event="rowUnselectCheckbox" listener="#{rubroPorCeView.onSelectListaCE()}" update="tblRubroPorCe" />
+                                    <p:ajax event="toggleSelect" listener="#{rubroPorCeView.onSelectListaCE()}" update="tblRubroPorCe" />
+
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center;"/>
 
                                     <p:column headerText="#" width="5%">
                                         <p:outputLabel value="#{rowId + 1}"/>
@@ -137,14 +178,14 @@
                                     <p:column headerText="CODIGO" width="10%">
                                         <p:outputLabel value="#{cence.codigoEntidad}" />
                                     </p:column>
+                                    <p:column headerText="DEPARTAMENTO" width="19%">
+                                        <p:outputLabel value="#{cence.codigoDepartamento.nombreDepartamento}" />
+                                    </p:column>
+                                    <p:column headerText="MUNICIPIO" width="19%">
+                                        <p:outputLabel value="#{cence.idMunicipio.nombreMunicipio}" />
+                                    </p:column>
                                     <p:column headerText="NOMBRE DEL CENTRO" width="45%">
-                                        <p:outputLabel value="#{cence.codigoEntidad.nombre}" />
-                                    </p:column>
-                                    <p:column headerText="DEPARTAMENTO" width="20%">
-                                        <p:outputLabel value="#{cence.idRubroInteres.nombreCorto}" />
-                                    </p:column>
-                                    <p:column headerText="MUNICIPIO" width="20%">
-                                        <p:outputLabel value="#{cence.idRubroInteres.nombreCorto}" />
+                                        <p:outputLabel value="#{cence.nombre}" />
                                     </p:column>
 
                                 </p:dataTable>
@@ -152,10 +193,11 @@
                         </div>
 
                         <div class="p-field p-grid">
-                            <p:outputLabel for="cbRubros" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Rubros a contratar:</p:outputLabel>
+                            <p:outputLabel for="cbRubros" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0" rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}">Rubros a contratar:</p:outputLabel>
                             <div class="p-col-12 p-md-10">
                                 <p:selectOneMenu id="cbRubros" value="#{rubroPorCeView.codigoRubro}"
                                                  style=" width: 95%;"
+                                                 rendered="#{(rubroPorCeView.tiposeleccion=='1')?true:false}"
                                                  >
                                     <f:selectItem itemLabel="Seleccione un valor"/>
                                     <f:selectItems value="#{rubroPorCeView.listrubrosamostrarinteres}" var="lstrubrosbuscar" 
@@ -180,9 +222,11 @@
                                          var="rubce" 
                                          rowIndexVar="rowId" 
                                          rowKey="#{rubce.id}" 
-                                         selection="#{rubroPorCeView.rubroporce}"
+                                         selection="#{rubroPorCeView.listseleccionrubroporce}"
                                          selectionMode="single"
                                          >
+
+                                <p:column selectionMode="multiple" style="width:16px;text-align:center;"/>
 
                                 <p:column headerText="#" width="5%">
                                     <p:outputLabel value="#{rowId + 1}"/>
