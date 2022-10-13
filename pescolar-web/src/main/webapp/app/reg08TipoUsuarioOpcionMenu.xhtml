@@ -37,9 +37,10 @@
                                        icon="pi pi-exclamation-triangle" />
                         </p:menuitem>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
-                        <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/inicial.mined" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
+                        
                         <f:facet  name="options">  
-                            <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
+                            <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
                         </f:facet>  
                     </p:menubar>
                 </div>

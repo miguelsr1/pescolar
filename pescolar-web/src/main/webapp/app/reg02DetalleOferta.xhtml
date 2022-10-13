@@ -115,6 +115,12 @@
                         <p:menuitem value="Nuevo"  icon="pi pi-plus" action="#{ofertaBienesServiciosView.nuevo()}"/>
                         <p:menuitem value="Modificar" icon="pi pi-pencil" action="#{detalleOfertaView.editarOferta()}" update="dvDatos"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" action="#{ofertaBienesServiciosView.buscar()}" />
+                        <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
+                        
+                         <f:facet  name="options">  
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
+                        </f:facet>
                     </p:menubar>
                 </div>
                 <div class="p-col-12 p-md-8 ">

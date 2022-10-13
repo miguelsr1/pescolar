@@ -15,7 +15,7 @@
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
                         <p:menuitem value="Guardar" icon="pi pi-save"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false"/>
-                        <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/principal.xhtml"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}"/>

@@ -15,7 +15,7 @@
                         <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
                         <p:menuitem value="Imprimir" disabled="true" />
-                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>

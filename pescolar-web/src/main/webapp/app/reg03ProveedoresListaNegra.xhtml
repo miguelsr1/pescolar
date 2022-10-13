@@ -15,7 +15,7 @@
                         <p:menuitem value="Buscar" update="frmPrincipal" process="@this" icon="pi pi-search" onclick="onClick('btnModificar');" />
                         <p:menuitem value="Guardar" icon="pi pi-save" actionListener = "#{empListaNegraView.guardar}" disabled="#{empListaNegraView.deshabilitadoGuardar}"  update="dvDatosGenerales"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
-                        <p:menuitem value="Principal" icon="pi pi-home" action="#{cargaGeneralView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}" process="@this"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>

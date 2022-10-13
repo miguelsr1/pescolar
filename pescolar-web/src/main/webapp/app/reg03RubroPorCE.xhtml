@@ -63,7 +63,8 @@
 
                         </p:menuitem>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
-                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" 
+                        <p:menuitem value="Principal" icon="pi pi-home" 
+                                    action="#{sessionView.gotoPrincipalPage()}" 
                                     actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.spi.AlterableContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -22,9 +25,11 @@ import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.Usuario;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.enums.TipoOperador;
+import sv.gob.mined.pescolar.web.proveedor.interno.CargaGeneralView;
 
 /**
  *
@@ -57,6 +62,9 @@ public class SessionView implements Serializable {
 
     @Inject
     private CatalogoRepo catalogoRepo;
+    
+    @Inject
+    private BeanManager beanManager;
 
     @PostConstruct
     public void init() {
@@ -322,5 +330,22 @@ public class SessionView implements Serializable {
         anho = catalogoRepo.findEntityByPk(Anho.class, idAnho);
         proceso = anho.getProcesoAdquisicionList().stream().filter(pro -> pro.getPadreIdProcesoAdq() == null).findFirst().get();
         anhoProceso = anho.getAnho() + " :: " + proceso.getDescripcionProcesoAdq();
+    }
+    
+    /**
+     * Destruye el bean en sesión y redirecciona a la página de inicio
+     *
+     * @return
+     */
+    public String gotoPrincipalPage() {
+        AlterableContext ctxSession = (AlterableContext) beanManager.getContext(SessionScoped.class);
+        for (Bean<?> bean : beanManager.getBeans(CargaGeneralView.class)) {
+            Object instance = ctxSession.get(bean);
+            if (instance != null) {
+                ctxSession.destroy(bean);
+            }
+        }
+
+        return Constantes.GO_TO_PRINCIPAL_PAGE;
     }
 }

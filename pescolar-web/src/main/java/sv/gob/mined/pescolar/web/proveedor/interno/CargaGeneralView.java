@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.context.spi.AlterableContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,8 +49,7 @@ public class CargaGeneralView implements Serializable {
     private CatalogoRepo catalogoRepo;
     @Inject
     private SessionView sessionView;
-    @Inject
-    private BeanManager beanManager;
+    
 
     @PostConstruct
     public void ini() {
@@ -186,7 +182,7 @@ public class CargaGeneralView implements Serializable {
      * Destruye el bean en sesión y redirecciona a la página de inicio
      *
      * @return
-     */
+     
     public String gotoPrincipalPage() {
         AlterableContext ctxSession = (AlterableContext) beanManager.getContext(SessionScoped.class);
         for (Bean<?> bean : beanManager.getBeans(CargaGeneralView.class)) {
@@ -197,7 +193,7 @@ public class CargaGeneralView implements Serializable {
         }
 
         return Constantes.GO_TO_PRINCIPAL_PAGE;
-    }
+    }*/
     
     public void recargarInformacion(){
         empresa = catalogoRepo.findEntityByPk(Empresa.class, empresa.getId());
