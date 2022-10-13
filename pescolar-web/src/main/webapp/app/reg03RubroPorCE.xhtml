@@ -223,7 +223,7 @@
                                          rowIndexVar="rowId" 
                                          rowKey="#{rubce.id}" 
                                          selection="#{rubroPorCeView.listseleccionrubroporce}"
-                                         selectionMode="single"
+                                         
                                          >
 
                                 <p:column selectionMode="multiple" style="width:16px;text-align:center;"/>
@@ -234,7 +234,7 @@
                                 <p:column headerText="CODIGO" width="10%">
                                     <p:outputLabel value="#{rubce.codigoEntidad}" />
                                 </p:column>
-                                <p:column headerText="NOMBRE DEL CENTRO" width="65%">
+                                <p:column headerText="NOMBRE DEL CENTRO" width="60%">
                                     <p:outputLabel value="#{rubce.codigoEntidad.nombre}" />
                                 </p:column>
                                 <p:column headerText="RUBRO A CONTRATAR" width="20%">
@@ -242,7 +242,9 @@
                                 </p:column>
                                 <p:column headerText="Borrar" style="width:10%;text-align:center">
                                     <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this" 
-                                                     actionListener="#{rubroPorCeView.eliminar()}" >
+                                                     actionListener="#{rubroPorCeView.eliminar()}" 
+                                                     update="tblRubroPorCe"
+                                                     >
                                         <f:setPropertyActionListener value="#{rubce}" target="#{rubroPorCeView.rubroporce}" />
                                         <p:confirm header="Confirmar" 
                                                    message="¿Esta seguro de eliminar el registro seleccionado?" 

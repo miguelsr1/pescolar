@@ -364,7 +364,30 @@ public class RubroPorCeView implements Serializable {
                 rubroporce.setFecha(LocalDate.now());
                 rubroporce.setUsuario(sessionView.getUsuario().getIdPersona().getUsuario());
                 rubroporceRepo.update(rubroporce);
-                listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad);
+
+                if (tiposeleccion.equals("0")) {
+                    listrubroporce = rubroporceRepo.listarnoborradosporce(codigoEntidad);
+                } else {
+                    String listcodigos = "";
+
+                    for (int i = 0; i < seleccionentidadEducativa.size(); i++) {
+                        listcodigos = listcodigos + "," + "'" + seleccionentidadEducativa.get(i).getCodigoEntidad() + "'";
+                    }
+
+                    if (!seleccionentidadEducativa.isEmpty()) {
+                        if (listcodigos.length() > 1) {
+                            Query q;
+                            q = em.createQuery("SELECT rpc "
+                                    + "FROM RubroPorCe rpc "
+                                    + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
+                                    + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
+                            listrubroporce = q.getResultList();
+                        }
+
+                    }
+
+                }
+
                 JsfUtil.mensajeInformacion("El registro ha sido eliminado");
             } else {
                 JsfUtil.mensajeAlerta("Debe de seleccionar un registro a eliminar.");
@@ -384,7 +407,7 @@ public class RubroPorCeView implements Serializable {
                         listseleccionrubroporce.get(i).setFecha(LocalDate.now());
                         listseleccionrubroporce.get(i).setUsuario(sessionView.getUsuario().getIdPersona().getUsuario());
                         rubroporceRepo.update(listseleccionrubroporce.get(i));
-                        JsfUtil.mensajeInformacion("El registro ha sido eliminado");
+
                     }
                 }
             }
@@ -411,6 +434,8 @@ public class RubroPorCeView implements Serializable {
                 }
 
             }
+
+            JsfUtil.mensajeInformacion("La selección de registros ha sido eliminada");
 
         } else {
             JsfUtil.mensajeAlerta("Debe de seleccionar un registro a eliminar.");
