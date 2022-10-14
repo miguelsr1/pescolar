@@ -4,6 +4,7 @@
  */
 package sv.gob.mined.pescolar.repository;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,4 +41,8 @@ public class RubrosAmostrarInteresRepo extends AbstractRepository<RubrosAmostrar
         return entrubro;
     }
 
+    public List<RubrosAmostrarInteres> getLstRubros(){
+        Query q = em.createQuery("SELECT r FROM RubrosAmostrarInteres r WHERE r.id in (2,3,4,5) ORDER BY r.id", RubrosAmostrarInteres.class);
+        return q.getResultList();
+    }
 }

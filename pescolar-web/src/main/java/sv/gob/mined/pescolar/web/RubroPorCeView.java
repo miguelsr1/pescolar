@@ -74,7 +74,7 @@ public class RubroPorCeView implements Serializable {
     @PostConstruct
     public void init() {
         prepareEdit();
-        listrubrosamostrarinteres = rubrosamostrarinteresrepo.findAll();
+        listrubrosamostrarinteres = rubrosamostrarinteresrepo.getLstRubros();
         listentidadeseducativas.clear();
         Query q = em.createQuery("select dep from Departamento dep order by dep.id", Departamento.class);
         listdepartamento = q.getResultList();

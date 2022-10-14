@@ -198,8 +198,8 @@ public class CargaGeneralView implements Serializable {
 
         return Constantes.GO_TO_PRINCIPAL_PAGE;
     }
-    
-    public void recargarInformacion(){
+
+    public void recargarInformacion() {
         empresa = catalogoRepo.findEntityByPk(Empresa.class, empresa.getId());
         cargarDetalleCalificacion();
     }

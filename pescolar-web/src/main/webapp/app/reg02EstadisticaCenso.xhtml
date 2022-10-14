@@ -189,7 +189,7 @@
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" action="#{estadisticasCensoView.guardar}" disabled="#{sessionView.usuarioSoloLectura}"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
-                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true" actionListener="#{guestPreferences.ocultarMenu()}"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>

@@ -16,7 +16,7 @@
                         <p:menuitem value="Modificar" update="frmPrincipal" icon="pi pi-pencil" ajax="true"  onclick="onClick('btnModificar');"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" action="#{preciosReferenciaView.guardarPreciosRef}" update="tblDetallePrecio"/>
                         <p:menuitem value="Imprimir" ajax="false" icon="pi pi-print" action="#{preciosReferenciaView.impOfertaGlobal}" />
-                        <p:menuitem value="Principal" icon="pi pi-home" action="/app/principal?faces-redirect=true"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>

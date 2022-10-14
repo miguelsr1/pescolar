@@ -11,7 +11,7 @@
             <div class="p-grid dashboard"> 
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar id="menuBar"> 
-                        <p:menuitem value="Nuevo" icon="fa fa-file-o" process="@this" 
+                        <p:menuitem value="Nuevo" icon="pi pi-file-o" process="@this" 
                                     action="#{tipoUsuarioView.nuevo()}" update="pnlTipoUsuario tblTipoUsuario menuBar">
                             <p:resetInput target="pnlTipoUsuario" /> 
                         </p:menuitem>
@@ -37,9 +37,9 @@
                                        icon="pi pi-exclamation-triangle" />
                         </p:menuitem>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
-                        <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/inicial.mined" />
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
                         <f:facet  name="options">  
-                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{guestPreferences.logout}" process="@this"/>
+                            <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
                         </f:facet>  
                     </p:menubar>
                 </div>

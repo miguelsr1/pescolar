@@ -73,18 +73,18 @@
                     </div>
                 </div>
 
-                <div class="p-field p-grid">
-                    <p:outputLabel value="Porcetaje de cumpliento de capacidad-items:" rendered="#{!ofertaBienesServiciosView.detalleProceso.idProcesoAdq.idAnho.anho eq '2021'}" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
+                <!--div class="p-field p-grid" >
+                    <p:outputLabel value="Porcetaje de cumpliento de capacidad-items:" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
                     <div class="p-col-12 p-md-8">
-                        <p:outputLabel value="#{capaEmpresa.porcentajeCapacidadItem}" rendered="#{!ofertaBienesServiciosView.detalleProceso.idProcesoAdq.idAnho.anho eq '2021'}">
+                        <p:outputLabel value="{capaEmpresa.porcentajeCapacidadItem}" >
                             <f:convertNumber pattern="#,##0.000"/>
                         </p:outputLabel>
                     </div>
-                </div>
+                </div-->
 
                 <div class="p-field p-grid">
-                    <p:outputLabel value="Porcetaje de cumpliento de capacidad:" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
-                    <div class="p-col-12 p-md-8">
+                    <p:outputLabel value="Porcetaje de cumpliento de capacidad:" class="p-col-12 p-mb-6 p-md-6 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-6">
                         <p:outputLabel value="#{capaEmpresa.porcentajeCapacidad}">
                             <f:convertNumber pattern="#,##0.000"/>
                         </p:outputLabel>
@@ -92,8 +92,8 @@
                 </div>
 
                 <div class="p-field p-grid">
-                    <p:outputLabel value="Porcetaje de cumpliento por Nota de pruebas:" class="p-col-12 p-mb-4 p-md-4 p-mb-md-0"/>
-                    <div class="p-col-12 p-md-8">
+                    <p:outputLabel value="Porcetaje de cumpliento por Nota de pruebas:" class="p-col-12 p-mb-6 p-md-6 p-mb-md-0"/>
+                    <div class="p-col-12 p-md-6">
                         <p:outputLabel value="#{capaEmpresa.porcentajeNota}">
                             <f:convertNumber pattern="#,##0.000"/>
                         </p:outputLabel>
@@ -107,7 +107,7 @@
                     <f:setPropertyActionListener value="#{capaEmpresa}" target="#{ofertaBienesServiciosView.proveedorSeleccionado}" />
                 </p:commandButton>
 
-                <p:commandButton oncomplete="PF('dlgDetalleProveedor').show()" update="dlgDetalleProveedor" icon="pi pi-eye"
+                <p:commandButton oncomplete="PF('dlgDetalleProveedor').show()" update="tabView:tblDetallePrecio" icon="pi pi-eye"
                                  class="rounded-button ui-button-help" action="#{ofertaBienesServiciosView.cargarDetalleProveedor(capaEmpresa.idEmpresa)}" />
             </div>
         </div>

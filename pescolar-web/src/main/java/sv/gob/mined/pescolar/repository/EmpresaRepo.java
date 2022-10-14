@@ -296,6 +296,7 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
             switch (precios.getNoItem()) {
                 case "1":
                     emp.setItem1("1");
+                    emp.setItem22("22");
                     break;
                 case "2":
                     emp.setItem2("2");

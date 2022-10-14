@@ -15,7 +15,7 @@
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
                         <p:menuitem value="Guardar" icon="pi pi-save"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false"/>
-                        <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/principal.xhtml"/>
+                        <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}"/>
@@ -191,7 +191,7 @@
                       modal="true" position="center center" onShow="PF('dlgDetalleProveedor').initPosition()"
                       dynamic="true" responsive="true" resizable="false" hideEffect="fade" showEffect="fade">
                 <h:panelGrid columns="1" >
-                    <p:tabView>
+                    <p:tabView id="tabView">
                         <p:tab title="Fotos productos"  rendered="#{ofertaMB.rubro eq 3}">
                             <p:outputPanel id="pnlProductos">
                                 <h:panelGrid columns="2">

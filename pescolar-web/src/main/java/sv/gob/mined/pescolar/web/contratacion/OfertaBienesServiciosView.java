@@ -483,12 +483,12 @@ public class OfertaBienesServiciosView implements Serializable {
         return false;
     }
 
-    public void cargarDetalleProveedor(BigDecimal idEmpresa) {
+    public void cargarDetalleProveedor(Long idEmpresa) {
         empresaSeleccionada = catalogoRepo.findEntityByPk(Empresa.class, idEmpresa);
-        File carpetaNfs = new File("/imagenes/PaqueteEscolar/Fotos_Zapatos/" + empresaSeleccionada.getNumeroNit() + "/");
+        //File carpetaNfs = new File("/imagenes/PaqueteEscolar/Fotos_Zapatos/" + empresaSeleccionada.getNumeroNit() + "/");
         lstPrecios = preciosRepo.getLstPreciosByIdEmpresaAndIdProcesoAdq(empresaSeleccionada.getId(), detalleProceso.getIdProcesoAdq().getIdAnho().getId(), mapItems.get("idNivelesCe"));
 
-        if (carpetaNfs.list() != null) {
+        /*if (carpetaNfs.list() != null) {
             lstEstilos = new SelectItem[carpetaNfs.list().length + 1];
             int i = 0;
             lstEstilos[i] = new SelectItem("-", "Seleccione");
@@ -497,6 +497,6 @@ public class OfertaBienesServiciosView implements Serializable {
                 lstEstilos[i] = new SelectItem(string, string);
                 i++;
             }
-        }
+        }*/
     }
 }

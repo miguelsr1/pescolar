@@ -22,6 +22,7 @@ import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.Usuario;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.enums.TipoOperador;
@@ -57,7 +58,7 @@ public class SessionView implements Serializable {
 
     @Inject
     private CatalogoRepo catalogoRepo;
-
+    
     @PostConstruct
     public void init() {
         params = new ArrayList();
@@ -322,5 +323,15 @@ public class SessionView implements Serializable {
         anho = catalogoRepo.findEntityByPk(Anho.class, idAnho);
         proceso = anho.getProcesoAdquisicionList().stream().filter(pro -> pro.getPadreIdProcesoAdq() == null).findFirst().get();
         anhoProceso = anho.getAnho() + " :: " + proceso.getDescripcionProcesoAdq();
+    }
+    
+    /**
+     * Destruye el bean en sesión y redirecciona a la página de inicio
+     *
+     * @return
+     */
+    public String gotoPrincipalPage() {
+
+        return Constantes.GO_TO_PRINCIPAL_PAGE;
     }
 }
