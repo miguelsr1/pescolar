@@ -66,8 +66,8 @@
                                                  style="width: 100%;"
                                                  >
                                     <p:ajax event="change" listener="#{tipoUsuOpcMenuView.onClickTipoUsuario()}" 
-                                            global="false" update="cmbopcmen tblTipoUsuario"
-                                            process="@this"
+                                            global="true" update="cmbopcmen tblTipoUsuario"
+                                            
                                             />
                                     <f:selectItem itemLabel="Seleccione uno" itemValue="0"/>
                                     <f:selectItems value="#{tipoUsuOpcMenuView.listtipousuario}" var="lsttu" 
@@ -85,8 +85,7 @@
                                                  >
                                     <p:ajax event="change" global="false"/>
                                     <f:selectItem itemLabel="Seleccione uno" itemValue="0"/>
-                                    <f:selectItems value="#{tipoUsuOpcMenuView.listopcionmenu}" var="lstopc" 
-                                                   itemValue="#{lstopc.idOpcMenu}" itemLabel="#{lstopc.nombreOpcion}"/>
+                                    <f:selectItems value="#{tipoUsuOpcMenuView.opcionesgroup}" />
                                 </p:selectOneMenu> 
                             </p:panelGrid>
                         </p:outputPanel>

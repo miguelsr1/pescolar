@@ -223,8 +223,12 @@
                                          rowIndexVar="rowId" 
                                          rowKey="#{rubce.id}" 
                                          selection="#{rubroPorCeView.listseleccionrubroporce}"
-                                         
+
                                          >
+                                <p:ajax event="rowSelect" update="tblRubroPorCe" />
+                                <p:ajax event="rowSelectCheckbox" update="tblRubroPorCe" />
+                                <p:ajax event="rowUnselectCheckbox" update="tblRubroPorCe" />
+                                <p:ajax event="toggleSelect" update="tblRubroPorCe" />
 
                                 <p:column selectionMode="multiple" style="width:16px;text-align:center;"/>
 
