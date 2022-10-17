@@ -11,14 +11,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.primefaces.event.SelectEvent;
 import sv.gob.mined.pescolar.model.Modulo;
 import sv.gob.mined.pescolar.model.OpcionMenu;
-import sv.gob.mined.pescolar.model.TipoUsuOpcMenu;
 import sv.gob.mined.pescolar.repository.OpcionMenuRepo;
+import sv.gob.mined.pescolar.repository.TipoUsuOpcMenuRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
 /**
@@ -37,19 +34,21 @@ public class OpcionMenuView implements Serializable {
 
     private Boolean deshabilitado = true;
 
-    @PersistenceContext(unitName = "paquetePU")
-    private EntityManager em;
-
+    //@PersistenceContext(unitName = "paquetePU")
+    //private EntityManager em;
     @Inject
     private SessionView sessionView;
     @Inject
     private OpcionMenuRepo opcionmenurepo;
+    @Inject
+    private TipoUsuOpcMenuRepo tipousuopcmenurepo;
 
     @PostConstruct
     public void init() {
-        Query q;
-        q = em.createQuery("select mod from Modulo mod", Modulo.class);
-        listmodulos = q.getResultList();
+        //Query q;
+        //q = em.createQuery("select mod from Modulo mod", Modulo.class);
+        //listmodulos = q.getResultList();
+        listmodulos = opcionmenurepo.listarmodulos();
 
         llenarListaOpciones();
     }
@@ -61,10 +60,12 @@ public class OpcionMenuView implements Serializable {
 
     private void llenarListaOpciones() {
         opcionmenu = null;
-        Query q;
-        q = em.createQuery("select om from OpcionMenu om order by om.app asc, om.opcIdOpcMenu asc, om.orden asc", OpcionMenu.class);
-        listopciones = q.getResultList();
-        listopcionespadre = q.getResultList();
+        //Query q;
+        //q = em.createQuery("select om from OpcionMenu om order by om.app asc, om.opcIdOpcMenu asc, om.orden asc", OpcionMenu.class);
+        //listopciones = q.getResultList();
+        listopciones = opcionmenurepo.listaropcionmenu();
+        //listopcionespadre = q.getResultList();
+        listopcionespadre = opcionmenurepo.listaropcionmenu();
     }
 
     private Boolean validarGuardar() {
@@ -78,16 +79,24 @@ public class OpcionMenuView implements Serializable {
             return false;
         }
 
-        Query q;
+        //Query q;
         if (opcionmenu.getIdOpcMenu() == null) {
-            q = em.createQuery("select op from OpcionMenu op where op.opcIdOpcMenu.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " and op.nombreOpcion = '" + opcionmenu.getNombreOpcion() + "'", OpcionMenu.class);
+            //q = em.createQuery("select op from OpcionMenu op where op.opcIdOpcMenu.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " and op.nombreOpcion = '" + opcionmenu.getNombreOpcion() + "'", OpcionMenu.class);
+            if (!opcionmenurepo.listaropcionmenuporpadreynombreopcion(opcionmenu.getOpcIdOpcMenu().getIdOpcMenu(), opcionmenu.getNombreOpcion()).isEmpty()) {
+                JsfUtil.mensajeAlerta("La opción ya existe en la lista");
+                return false;
+            }
         } else {
-            q = em.createQuery("select op from OpcionMenu op where op.opcIdOpcMenu.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " and op.nombreOpcion = '" + opcionmenu.getNombreOpcion() + "' and op.idOpcMenu <> " + opcionmenu.getIdOpcMenu(), OpcionMenu.class);
+            //q = em.createQuery("select op from OpcionMenu op where op.opcIdOpcMenu.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " and op.nombreOpcion = '" + opcionmenu.getNombreOpcion() + "' and op.idOpcMenu <> " + opcionmenu.getIdOpcMenu(), OpcionMenu.class);
+            if (!opcionmenurepo.listaropcionmenuporpadreynombreopcionconotroid(opcionmenu.getOpcIdOpcMenu().getIdOpcMenu(), opcionmenu.getNombreOpcion(), opcionmenu.getIdOpcMenu()).isEmpty()) {
+                JsfUtil.mensajeAlerta("La opción ya existe en la lista");
+                return false;
+            }
         }
-        if (!q.getResultList().isEmpty()) {
-            JsfUtil.mensajeAlerta("La opción ya existe en la lista");
-            return false;
-        }
+        //if (!q.getResultList().isEmpty()) {
+        //    JsfUtil.mensajeAlerta("La opción ya existe en la lista");
+        //    return false;
+        //}
 
         return true;
     }
@@ -128,18 +137,15 @@ public class OpcionMenuView implements Serializable {
             return false;
         }
 
-        Query q;
-
-        q = em.createQuery("select op from OpcionMenu op where op.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " ", OpcionMenu.class);
-
-        if (!q.getResultList().isEmpty()) {
+        //Query q;
+        //q = em.createQuery("select op from OpcionMenu op where op.opcIdOpcMenu.idOpcMenu = " + opcionmenu.getIdOpcMenu() + " ", OpcionMenu.class);
+        if (!opcionmenurepo.listaropcionmenuhijos(opcionmenu.getIdOpcMenu()).isEmpty()) {
             JsfUtil.mensajeAlerta("Existen otras opciones de menú relacionadas a esta opción y no puede ser eliminada");
             return false;
         }
 
-        q = em.createQuery("select tuom from TipoUsuOpcMenu tuom where tuom.idOpcMenu.idOpcMenu = " + opcionmenu.getOpcIdOpcMenu().getIdOpcMenu() + " ", TipoUsuOpcMenu.class);
-
-        if (!q.getResultList().isEmpty()) {
+        //q = em.createQuery("select tuom from TipoUsuOpcMenu tuom where tuom.idOpcMenu.idOpcMenu = " + opcionmenu.getIdOpcMenu() + " ", TipoUsuOpcMenu.class);
+        if (!tipousuopcmenurepo.listartipousuopcmenuportipousuario(opcionmenu.getIdOpcMenu()).isEmpty()) {
             JsfUtil.mensajeAlerta("Existen registros de roles relacionados a esta opción de menú y no puede ser eliminada");
             return false;
         }

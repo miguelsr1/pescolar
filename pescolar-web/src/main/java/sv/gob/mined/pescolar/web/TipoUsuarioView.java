@@ -11,12 +11,9 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.primefaces.event.SelectEvent;
-import sv.gob.mined.pescolar.model.TipoUsuOpcMenu;
 import sv.gob.mined.pescolar.model.TipoUsuario;
+import sv.gob.mined.pescolar.repository.TipoUsuOpcMenuRepo;
 import sv.gob.mined.pescolar.repository.TipoUsuarioRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
@@ -35,13 +32,14 @@ public class TipoUsuarioView implements Serializable {
     private Boolean deshabilitado = true;
     private Boolean booladministrador = false;
 
-    @PersistenceContext(unitName = "paquetePU")
-    private EntityManager em;
-
+    //@PersistenceContext(unitName = "paquetePU")
+    //private EntityManager em;
     @Inject
     private SessionView sessionView;
     @Inject
     private TipoUsuarioRepo tipousuariorepo;
+    @Inject
+    private TipoUsuOpcMenuRepo tipousuopcmenurepo;
 
     @PostConstruct
     public void init() {
@@ -57,9 +55,10 @@ public class TipoUsuarioView implements Serializable {
 
     private void llenarListaTipoUsuario() {
         tipousuario = null;
-        Query q;
-        q = em.createQuery("select tu from TipoUsuario tu", TipoUsuario.class);
-        listtipousuario = q.getResultList();
+        //Query q;
+        //q = em.createQuery("select tu from TipoUsuario tu", TipoUsuario.class);
+        //listtipousuario = q.getResultList();
+        listtipousuario = tipousuariorepo.listartipousuario();
 
     }
 
@@ -82,26 +81,42 @@ public class TipoUsuarioView implements Serializable {
             return false;
         }
 
-        Query q;
+        //Query q;
         if (tipousuario.getIdTipoUsuario() == null) {
-            q = em.createQuery("select tu from TipoUsuario tu where tu.descripcion = '" + tipousuario.getDescripcion() + "' ", TipoUsuario.class);
+            //q = em.createQuery("select tu from TipoUsuario tu where tu.descripcion = '" + tipousuario.getDescripcion() + "' ", TipoUsuario.class);
+            if (!tipousuariorepo.listartipousuariopordescripcion(tipousuario.getDescripcion()).isEmpty()) {
+                JsfUtil.mensajeAlerta("La descripción para el tipo de usuario ya existe en la lista");
+                return false;
+            }
         } else {
-            q = em.createQuery("select tu from TipoUsuario tu where tu.descripcion = '" + tipousuario.getDescripcion() + "' and tu.idTipoUsuario <> " + tipousuario.getIdTipoUsuario(), TipoUsuario.class);
+            //q = em.createQuery("select tu from TipoUsuario tu where tu.descripcion = '" + tipousuario.getDescripcion() + "' and tu.idTipoUsuario <> " + tipousuario.getIdTipoUsuario(), TipoUsuario.class);
+            if (!tipousuariorepo.listartipousuariopordescripcionconotroid(tipousuario.getDescripcion(), tipousuario.getIdTipoUsuario()).isEmpty()) {
+                JsfUtil.mensajeAlerta("La descripción para el tipo de usuario ya existe en la lista");
+                return false;
+            }
         }
-        if (!q.getResultList().isEmpty()) {
-            JsfUtil.mensajeAlerta("La descripción para el tipo de usuario ya existe en la lista");
-            return false;
-        }
+        //if (!q.getResultList().isEmpty()) {
+        //    JsfUtil.mensajeAlerta("La descripción para el tipo de usuario ya existe en la lista");
+        //    return false;
+        //}
 
         if (tipousuario.getIdTipoUsuario() == null) {
-            q = em.createQuery("select tu from TipoUsuario tu where tu.rol = '" + tipousuario.getRol() + "' ", TipoUsuario.class);
+            //q = em.createQuery("select tu from TipoUsuario tu where tu.rol = '" + tipousuario.getRol() + "' ", TipoUsuario.class);
+            if (!tipousuariorepo.listartipousuarioporrol(tipousuario.getRol()).isEmpty()) {
+                JsfUtil.mensajeAlerta("El rol ingresado ya existe en la lista");
+                return false;
+            }
         } else {
-            q = em.createQuery("select tu from TipoUsuario tu where tu.rol = '" + tipousuario.getRol() + "' and tu.idTipoUsuario <> " + tipousuario.getIdTipoUsuario(), TipoUsuario.class);
+            //q = em.createQuery("select tu from TipoUsuario tu where tu.rol = '" + tipousuario.getRol() + "' and tu.idTipoUsuario <> " + tipousuario.getIdTipoUsuario(), TipoUsuario.class);
+            if (!tipousuariorepo.listartipousuarioporrolconotroid(tipousuario.getRol(), tipousuario.getIdTipoUsuario()).isEmpty()) {
+                JsfUtil.mensajeAlerta("El rol ingresado ya existe en la lista");
+                return false;
+            }
         }
-        if (!q.getResultList().isEmpty()) {
-            JsfUtil.mensajeAlerta("El rol ingresado ya existe en la lista");
-            return false;
-        }
+        //if (!q.getResultList().isEmpty()) {
+        //    JsfUtil.mensajeAlerta("El rol ingresado ya existe en la lista");
+        //    return false;
+        //}
 
         return true;
     }
@@ -136,11 +151,10 @@ public class TipoUsuarioView implements Serializable {
             return false;
         }
 
-        Query q;
+        //Query q;
 
-        q = em.createQuery("select tuom from TipoUsuOpcMenu tuom where tuom.idTipoUsuario.idTipoUsuario = " + tipousuario.getIdTipoUsuario() + " ", TipoUsuOpcMenu.class);
-
-        if (!q.getResultList().isEmpty()) {
+        //q = em.createQuery("select tuom from TipoUsuOpcMenu tuom where tuom.idTipoUsuario.idTipoUsuario = " + tipousuario.getIdTipoUsuario() + " ", TipoUsuOpcMenu.class);
+        if (!tipousuopcmenurepo.listartipousuopcmenuportipousuario(tipousuario.getIdTipoUsuario()).isEmpty()) {
             JsfUtil.mensajeAlerta("Existen registros de opciones de menú relacionados a este rol y no puede ser eliminado");
             return false;
         }
