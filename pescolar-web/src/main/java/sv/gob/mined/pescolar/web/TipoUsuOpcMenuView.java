@@ -13,14 +13,13 @@ import javax.faces.model.SelectItemGroup;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.primefaces.event.SelectEvent;
 import sv.gob.mined.pescolar.model.OpcionMenu;
 import sv.gob.mined.pescolar.model.TipoUsuOpcMenu;
 import sv.gob.mined.pescolar.model.TipoUsuario;
+import sv.gob.mined.pescolar.repository.OpcionMenuRepo;
 import sv.gob.mined.pescolar.repository.TipoUsuOpcMenuRepo;
+import sv.gob.mined.pescolar.repository.TipoUsuarioRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
 /**
@@ -41,13 +40,16 @@ public class TipoUsuOpcMenuView implements Serializable {
 
     private List<SelectItem> opcionesgroup = new ArrayList();
 
-    @PersistenceContext(unitName = "paquetePU")
-    private EntityManager em;
-
+    //@PersistenceContext(unitName = "paquetePU")
+    //private EntityManager em;
     @Inject
     private SessionView sessionView;
     @Inject
     private TipoUsuOpcMenuRepo tipousuopcmenurepo;
+    @Inject
+    private TipoUsuarioRepo tipousuariorepo;
+    @Inject
+    private OpcionMenuRepo opcionmenurepo;
 
     @PostConstruct
     public void init() {
@@ -68,9 +70,10 @@ public class TipoUsuOpcMenuView implements Serializable {
     }
 
     private void llenarListaTipoUsuario() {
-        Query q;
-        q = em.createQuery("select tu from TipoUsuario tu", TipoUsuario.class);
-        listtipousuario = q.getResultList();
+        //Query q;
+        //q = em.createQuery("select tu from TipoUsuario tu", TipoUsuario.class);
+        //listtipousuario = q.getResultList();
+        listtipousuario = tipousuariorepo.listartipousuario();
 
         listopcionmenu.clear();
         opcionesgroup.clear();
@@ -79,21 +82,23 @@ public class TipoUsuOpcMenuView implements Serializable {
 
     private void llenarListaTipoUsuarioOpcionMenu() {
         tipousuopcmenu = null;
-        Query q;
-        q = em.createQuery("select tu from TipoUsuOpcMenu tu order by tu.idTipoUsuario", TipoUsuOpcMenu.class);
-        listtipousuopcmenu = q.getResultList();
+        //Query q;
+        //q = em.createQuery("select tu from TipoUsuOpcMenu tu order by tu.idTipoUsuario", TipoUsuOpcMenu.class);
+        //listtipousuopcmenu = q.getResultList();
+        listtipousuopcmenu = tipousuopcmenurepo.listartipousuopcmenu();
 
     }
 
     public void onClickTipoUsuario() {
-        Query q;
-        q = em.createQuery("select opc from OpcionMenu opc "
-                + "where opc.idOpcMenu not in ("
-                + "   select opc2.idOpcMenu.idOpcMenu "
-                + "   from TipoUsuOpcMenu opc2 "
-                + "   where opc2.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()) + " "
-                + ") order by opc.orden ", OpcionMenu.class);
-        listopcionmenu = q.getResultList();
+        //Query q;
+        //q = em.createQuery("select opc from OpcionMenu opc "
+        //        + "where opc.idOpcMenu not in ("
+        //        + "   select opc2.idOpcMenu.idOpcMenu "
+        //        + "   from TipoUsuOpcMenu opc2 "
+        //        + "   where opc2.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()) + " "
+        //        + ") order by opc.orden ", OpcionMenu.class);
+        //listopcionmenu = q.getResultList();
+        listopcionmenu = opcionmenurepo.listaropcionmenuexcluyente(((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()));
 
         opcionesgroup = new ArrayList<>();
         String idsinpadre = "";
@@ -132,15 +137,16 @@ public class TipoUsuOpcMenuView implements Serializable {
         }
 
         for (int i = 0; i < listopcionmenu.size(); i++) {
-            q = em.createQuery("select opc from OpcionMenu opc "
-                    + "where opc.opcIdOpcMenu.idOpcMenu = " + listopcionmenu.get(i).getIdOpcMenu() + " "
-                    + "and opc.idOpcMenu not in ("
-                    + "   select opc2.idOpcMenu.idOpcMenu "
-                    + "   from TipoUsuOpcMenu opc2 "
-                    + "   where opc2.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()) + " "
-                    + ") order by opc.orden ", OpcionMenu.class);
+            //q = em.createQuery("select opc from OpcionMenu opc "
+            //        + "where opc.opcIdOpcMenu.idOpcMenu = " + listopcionmenu.get(i).getIdOpcMenu() + " "
+            //        + "and opc.idOpcMenu not in ("
+            //        + "   select opc2.idOpcMenu.idOpcMenu "
+            //        + "   from TipoUsuOpcMenu opc2 "
+            //        + "   where opc2.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()) + " "
+            //        + ") order by opc.orden ", OpcionMenu.class);
 
-            List<OpcionMenu> resultado = q.getResultList();
+            //List<OpcionMenu> resultado = q.getResultList();
+            List<OpcionMenu> resultado = opcionmenurepo.listaropcionmenuhijosexcluyente(listopcionmenu.get(i).getIdOpcMenu(), ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()));
 
             if (!resultado.isEmpty()) {
                 SelectItemGroup padregroup = new SelectItemGroup(listopcionmenu.get(i).getNombreOpcion());
@@ -179,9 +185,10 @@ public class TipoUsuOpcMenuView implements Serializable {
         // }
         tipousuopcmenu.getIdOpcMenu().setIdOpcMenu((long) 0);
 
-        q = em.createQuery("select tu from TipoUsuOpcMenu tu "
-                + "where tu.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()), TipoUsuOpcMenu.class);
-        listtipousuopcmenu = q.getResultList();
+        //q = em.createQuery("select tu from TipoUsuOpcMenu tu "
+        //        + "where tu.idTipoUsuario.idTipoUsuario = " + ((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()), TipoUsuOpcMenu.class);
+        //listtipousuopcmenu = q.getResultList();
+        listtipousuopcmenu = tipousuopcmenurepo.listartipousuopcmenuportipousuario(((tipousuopcmenu.getIdTipoUsuario() == null) ? 0 : (tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() == null) ? 0 : tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()));
     }
 
     private Boolean validarGuardar() {
@@ -211,16 +218,24 @@ public class TipoUsuOpcMenuView implements Serializable {
             return false;
         }
 
-        Query q;
+        //Query q;
         if (tipousuopcmenu.getId() == null) {
-            q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idOpcMenu.idOpcMenu = " + tipousuopcmenu.getIdOpcMenu().getIdOpcMenu() + " and tu.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + " ", TipoUsuOpcMenu.class);
+            //q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idOpcMenu.idOpcMenu = " + tipousuopcmenu.getIdOpcMenu().getIdOpcMenu() + " and tu.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + " ", TipoUsuOpcMenu.class);
+            if (!tipousuopcmenurepo.listartipousuopcmenuporopcionmenuytipousuario(tipousuopcmenu.getIdOpcMenu().getIdOpcMenu(), tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario()).isEmpty()) {
+                JsfUtil.mensajeAlerta("La relación tipo de usuario y opción menú ya existe en la lista");
+                return false;
+            }
         } else {
-            q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idOpcMenu.idOpcMenu = " + tipousuopcmenu.getIdOpcMenu().getIdOpcMenu() + " and tu.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + " and tu.id <> " + tipousuopcmenu.getId(), TipoUsuOpcMenu.class);
+            //q = em.createQuery("select tu from TipoUsuOpcMenu tu where tu.idOpcMenu.idOpcMenu = " + tipousuopcmenu.getIdOpcMenu().getIdOpcMenu() + " and tu.idTipoUsuario.idTipoUsuario = " + tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario() + " and tu.id <> " + tipousuopcmenu.getId(), TipoUsuOpcMenu.class);
+            if (!tipousuopcmenurepo.listartipousuopcmenuporopcionmenuytipousuarioconotroid(tipousuopcmenu.getIdOpcMenu().getIdOpcMenu(), tipousuopcmenu.getIdTipoUsuario().getIdTipoUsuario(), tipousuopcmenu.getId()).isEmpty()) {
+                JsfUtil.mensajeAlerta("La relación tipo de usuario y opción menú ya existe en la lista");
+                return false;
+            }
         }
-        if (!q.getResultList().isEmpty()) {
-            JsfUtil.mensajeAlerta("La relación tipo de usuario y opción menú ya existe en la lista");
-            return false;
-        }
+        //if (!q.getResultList().isEmpty()) {
+        //    JsfUtil.mensajeAlerta("La relación tipo de usuario y opción menú ya existe en la lista");
+        //    return false;
+        //}
 
         return true;
     }

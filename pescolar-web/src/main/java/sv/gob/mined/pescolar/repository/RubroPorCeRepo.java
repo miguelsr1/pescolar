@@ -10,6 +10,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import sv.gob.mined.pescolar.model.Departamento;
+import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubroPorCe;
 
 /**
@@ -28,7 +30,7 @@ public class RubroPorCeRepo extends AbstractRepository<RubroPorCe, Long> {
 
     public List<RubroPorCe> listarnoborradosporce(String codEntidad) {
         List<RubroPorCe> lista = new ArrayList();
-        if (codEntidad != null && !codEntidad.isBlank() ) {
+        if (codEntidad != null && !codEntidad.isBlank()) {
             Query q;
             q = em.createQuery("SELECT rpc "
                     + "FROM RubroPorCe rpc "
@@ -42,7 +44,7 @@ public class RubroPorCeRepo extends AbstractRepository<RubroPorCe, Long> {
 
     public Boolean existeRubro(String codEntidad, Long idRubroInt) {
         Boolean valor = false;
-        if (codEntidad != null && !codEntidad.isBlank() && idRubroInt != null ) {
+        if (codEntidad != null && !codEntidad.isBlank() && idRubroInt != null) {
             Query q;
             q = em.createQuery("SELECT count(rpc.id) "
                     + "FROM RubroPorCe rpc "
@@ -60,6 +62,30 @@ public class RubroPorCeRepo extends AbstractRepository<RubroPorCe, Long> {
             }
         }
         return valor;
+    }
+
+    public List<RubroPorCe> listarrubrosporrango(String rango) {
+        Query q;
+        q = em.createQuery("SELECT rpc "
+                + "FROM RubroPorCe rpc "
+                + "WHERE rpc.codigoEntidad.codigoEntidad in (" + rango + ") "
+                + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
+        return q.getResultList();
+    }
+
+    public List<Departamento> listardepartamentos() {
+        Query q = em.createQuery("select dep from Departamento dep order by dep.id", Departamento.class);
+        return q.getResultList();
+    }
+
+    public List<Municipio> listarmunicipios() {
+        Query q = em.createQuery("select mun from Municipio mun order by mun.codigoDepartamento asc, mun.codigoMunicipio asc", Municipio.class);
+        return q.getResultList();
+    }
+
+    public List<Municipio> listarmunicipiospordepartamento(String iddepartamento) {
+        Query q = em.createQuery("select mun from Municipio mun where mun.codigoDepartamento = '" + iddepartamento + "' order by mun.codigoDepartamento asc, mun.codigoMunicipio asc", Municipio.class);
+        return q.getResultList();
     }
 
 }

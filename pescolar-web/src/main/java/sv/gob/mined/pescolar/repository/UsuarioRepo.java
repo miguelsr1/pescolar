@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.Empresa;
+import sv.gob.mined.pescolar.model.Genero;
 import sv.gob.mined.pescolar.model.Persona;
 import sv.gob.mined.pescolar.model.TipoUsuario;
 import sv.gob.mined.pescolar.model.Usuario;
@@ -177,4 +178,24 @@ public class UsuarioRepo extends AbstractRepository<Usuario, Long> {
             return (Empresa) q.getSingleResult();
         }
     }
+
+    public List<Genero> listargenero() {
+        Query q = em.createQuery("select g from Genero g", Genero.class);
+        return q.getResultList();
+    }
+    
+    public List<Usuario> listarusuarioporpersona(Long id) {
+        Query  q = em.createQuery("select u from Usuario u "
+                + "where u.estadoEliminacion = 0 "
+                + "and u.idPersona.id = " + id, Usuario.class);
+        return q.getResultList();
+    }
+    
+    public Usuario usuarioporpersona(Long id) {
+        Query  q = em.createQuery("select u from Usuario u "
+                + "where u.estadoEliminacion = 0 "
+                + "and u.idPersona.id = " + id, Usuario.class);
+        return (Usuario) q.setMaxResults(1).getSingleResult();
+    }
+    
 }

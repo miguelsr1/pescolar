@@ -12,9 +12,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import lombok.Getter;
 import lombok.Setter;
 import sv.gob.mined.pescolar.model.Departamento;
@@ -68,16 +65,17 @@ public class RubroPorCeView implements Serializable {
     @Inject
     private RubroPorCeRepo rubroporceRepo;
 
-    @PersistenceContext(unitName = "paquetePU")
-    private EntityManager em;
+    //@PersistenceContext(unitName = "paquetePU")
+    //private EntityManager em;
 
     @PostConstruct
     public void init() {
         prepareEdit();
         listrubrosamostrarinteres = rubrosamostrarinteresrepo.getLstRubros();
         listentidadeseducativas.clear();
-        Query q = em.createQuery("select dep from Departamento dep order by dep.id", Departamento.class);
-        listdepartamento = q.getResultList();
+        //Query q = em.createQuery("select dep from Departamento dep order by dep.id", Departamento.class);
+        //listdepartamento = q.getResultList();
+        listdepartamento = rubroporceRepo.listardepartamentos();
         listmunicipio.clear();
         seleccionentidadEducativa.clear();
         tiposeleccion = "0";
@@ -155,15 +153,19 @@ public class RubroPorCeView implements Serializable {
         if (iddepartamento.equals("")) {
             idmunicipio = "";
         } else {
-            Query q, q2;
+            //Query q, q2;
             if (iddepartamento.equals("00")) {
-                q = em.createQuery("select mun from Municipio mun order by mun.codigoDepartamento asc, mun.codigoMunicipio asc", Municipio.class);
+                //q = em.createQuery("select mun from Municipio mun order by mun.codigoDepartamento asc, mun.codigoMunicipio asc", Municipio.class);
+                listmunicipio = rubroporceRepo.listarmunicipios();
             } else {
-                q = em.createQuery("select mun from Municipio mun where mun.codigoDepartamento = '" + iddepartamento + "' order by mun.codigoDepartamento asc, mun.codigoMunicipio asc", Municipio.class);
-                q2 = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.codigoDepartamento = '" + iddepartamento + "' order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
-                listentidadeseducativas = q2.getResultList();
+                //q = em.createQuery("select mun from Municipio mun where mun.codigoDepartamento = '" + iddepartamento + "' order by mun.codigoDepartamento asc, mun.codigoMunicipio asc", Municipio.class);
+                listmunicipio = rubroporceRepo.listarmunicipiospordepartamento(iddepartamento);
+
+                //q2 = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.codigoDepartamento = '" + iddepartamento + "' order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
+                //listentidadeseducativas = q2.getResultList();
+                listentidadeseducativas = entidadEducativaRepo.listarentidadeducativapordepartamento(iddepartamento);
             }
-            listmunicipio = q.getResultList();
+            //listmunicipio = q.getResultList();
         }
     }
 
@@ -184,15 +186,17 @@ public class RubroPorCeView implements Serializable {
             }
 
             if (!iddepartamento.equals("00") && !iddepartamento.equals("")) {
-                Query q;
-                q = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.codigoDepartamento = '" + iddepartamento + "' order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
-                listentidadeseducativas = q.getResultList();
+                //Query q;
+                //q = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.codigoDepartamento = '" + iddepartamento + "' order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
+                //listentidadeseducativas = q.getResultList();
+                listentidadeseducativas = entidadEducativaRepo.listarentidadeducativapordepartamento(iddepartamento);
             }
 
         } else {
-            Query q;
-            q = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.idMunicipio.id = " + idmunicipio + " order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
-            listentidadeseducativas = q.getResultList();
+            //Query q;
+            //q = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.idMunicipio.id = " + idmunicipio + " order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
+            //listentidadeseducativas = q.getResultList();
+            listentidadeseducativas = entidadEducativaRepo.listarentidadeducativapormunicipio(idmunicipio);
         }
     }
 
@@ -207,12 +211,13 @@ public class RubroPorCeView implements Serializable {
 
         if (!seleccionentidadEducativa.isEmpty()) {
             if (listcodigos.length() > 1) {
-                Query q;
-                q = em.createQuery("SELECT rpc "
-                        + "FROM RubroPorCe rpc "
-                        + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
-                        + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
-                listrubroporce = q.getResultList();
+                //Query q;
+                //q = em.createQuery("SELECT rpc "
+                //        + "FROM RubroPorCe rpc "
+                //        + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
+                //        + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
+                //listrubroporce = q.getResultList();
+                listrubroporce = rubroporceRepo.listarrubrosporrango(listcodigos.substring(1));
             }
 
         }
@@ -339,12 +344,13 @@ public class RubroPorCeView implements Serializable {
 
             if (!seleccionentidadEducativa.isEmpty()) {
                 if (listcodigos.length() > 1) {
-                    Query q;
-                    q = em.createQuery("SELECT rpc "
-                            + "FROM RubroPorCe rpc "
-                            + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
-                            + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
-                    listrubroporce = q.getResultList();
+                    //Query q;
+                    //q = em.createQuery("SELECT rpc "
+                    //        + "FROM RubroPorCe rpc "
+                    //        + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
+                    //        + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
+                    //listrubroporce = q.getResultList();
+                    rubroporceRepo.listarrubrosporrango(listcodigos.substring(1));
                 }
 
             }
@@ -376,12 +382,13 @@ public class RubroPorCeView implements Serializable {
 
                     if (!seleccionentidadEducativa.isEmpty()) {
                         if (listcodigos.length() > 1) {
-                            Query q;
-                            q = em.createQuery("SELECT rpc "
-                                    + "FROM RubroPorCe rpc "
-                                    + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
-                                    + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
-                            listrubroporce = q.getResultList();
+                            //Query q;
+                            //q = em.createQuery("SELECT rpc "
+                            //        + "FROM RubroPorCe rpc "
+                            //        + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
+                            //        + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
+                            //listrubroporce = q.getResultList();
+                            rubroporceRepo.listarrubrosporrango(listcodigos.substring(1));
                         }
 
                     }
@@ -423,12 +430,13 @@ public class RubroPorCeView implements Serializable {
 
                 if (!seleccionentidadEducativa.isEmpty()) {
                     if (listcodigos.length() > 1) {
-                        Query q;
-                        q = em.createQuery("SELECT rpc "
-                                + "FROM RubroPorCe rpc "
-                                + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
-                                + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
-                        listrubroporce = q.getResultList();
+                        //Query q;
+                        //q = em.createQuery("SELECT rpc "
+                        //        + "FROM RubroPorCe rpc "
+                        //        + "WHERE rpc.codigoEntidad.codigoEntidad in (" + listcodigos.substring(1) + ") "
+                        //        + "and rpc.estadoEliminacion = 0 ", RubroPorCe.class);
+                        //listrubroporce = q.getResultList();
+                        rubroporceRepo.listarrubrosporrango(listcodigos.substring(1));
                     }
 
                 }

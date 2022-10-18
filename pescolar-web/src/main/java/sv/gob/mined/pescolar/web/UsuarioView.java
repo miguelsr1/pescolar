@@ -13,8 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import org.primefaces.event.SelectEvent;
@@ -24,6 +22,8 @@ import sv.gob.mined.pescolar.model.Persona;
 import sv.gob.mined.pescolar.model.TipoUsuario;
 import sv.gob.mined.pescolar.model.Usuario;
 import sv.gob.mined.pescolar.repository.PersonaRepo;
+import sv.gob.mined.pescolar.repository.RubroPorCeRepo;
+import sv.gob.mined.pescolar.repository.TipoUsuarioRepo;
 import sv.gob.mined.pescolar.repository.UsuarioRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 
@@ -35,9 +35,8 @@ import sv.gob.mined.pescolar.utils.JsfUtil;
 @ViewScoped
 public class UsuarioView implements Serializable {
 
-    @PersistenceContext(unitName = "paquetePU")
-    private EntityManager em;
-
+    //@PersistenceContext(unitName = "paquetePU")
+    //private EntityManager em;
     private Persona personaObj = new Persona();
     private Persona personaseleccionada = new Persona();
     private Usuario usuarioObj = new Usuario();
@@ -80,18 +79,27 @@ public class UsuarioView implements Serializable {
     @Inject
     private UsuarioRepo usuariorepo;
 
+    @Inject
+    private RubroPorCeRepo rubroporceRepo;
+
+    @Inject
+    private TipoUsuarioRepo tipousuarioRepo;
+
     @PostConstruct
     public void init() {
         //prepareEdit();
-        Query q;
-        q = em.createQuery("select d from Departamento d order by d.id asc", Departamento.class);
-        listDepartamento = q.getResultList();
+        //Query q;
+        //q = em.createQuery("select d from Departamento d order by d.id asc", Departamento.class);
+        //listDepartamento = q.getResultList();
+        listDepartamento = rubroporceRepo.listardepartamentos();
 
-        q = em.createQuery("select tu from TipoUsuario tu", TipoUsuario.class);
-        listTipoUsuario = q.getResultList();
+        //q = em.createQuery("select tu from TipoUsuario tu", TipoUsuario.class);
+        //listTipoUsuario = q.getResultList();
+        listTipoUsuario = tipousuarioRepo.listartipousuario();
 
-        q = em.createQuery("select g from Genero g", Genero.class);
-        listGenero = q.getResultList();
+        //q = em.createQuery("select g from Genero g", Genero.class);
+        //listGenero = q.getResultList();
+        listGenero = usuariorepo.listargenero();
 
         nombrepersonabuscar = "";
         usuarioActivo = false;
@@ -220,8 +228,7 @@ public class UsuarioView implements Serializable {
             return false;
         }
 
-        Query q;
-
+        //Query q;
         if (personaObj.getId() == null) {
             if (password.isBlank()) {
                 JsfUtil.mensajeAlerta("Debe ingresar una contraseña");
@@ -238,18 +245,18 @@ public class UsuarioView implements Serializable {
                 }
             }
 
-            q = em.createQuery("select p from Persona p where p.numeroDui = '" + personaObj.getNumeroDui() + "' and p.estadoEliminacion = 0 ", Persona.class);
-            if (!q.getResultList().isEmpty()) {
+            //q = em.createQuery("select p from Persona p where p.numeroDui = '" + personaObj.getNumeroDui() + "' and p.estadoEliminacion = 0 ", Persona.class);
+            if (!personarepo.listarpersonapordui(personaObj.getNumeroDui()).isEmpty()) {
                 JsfUtil.mensajeAlerta("El número de DUI ya existe registrado en la lista de personas");
                 return false;
             }
-            q = em.createQuery("select p from Persona p where p.numeroNit='" + personaObj.getNumeroNit() + "' and p.estadoEliminacion = 0 ", Persona.class);
-            if (!q.getResultList().isEmpty()) {
+            //q = em.createQuery("select p from Persona p where p.numeroNit='" + personaObj.getNumeroNit() + "' and p.estadoEliminacion = 0 ", Persona.class);
+            if (!personarepo.listarpersonapornit(personaObj.getNumeroNit()).isEmpty()) {
                 JsfUtil.mensajeAlerta("El número de NIT ya existe registrado en la lista de personas");
                 return false;
             }
-            q = em.createQuery("select p from Persona p where p.usuario='" + personaObj.getUsuario() + "' and p.estadoEliminacion = 0 ", Persona.class);
-            if (!q.getResultList().isEmpty()) {
+            //q = em.createQuery("select p from Persona p where p.usuario='" + personaObj.getUsuario() + "' and p.estadoEliminacion = 0 ", Persona.class);
+            if (!personarepo.listarpersonaporusuario(personaObj.getUsuario()).isEmpty()) {
                 JsfUtil.mensajeAlerta("El Usuario ya existe registrado en la lista de personas");
                 return false;
             }
@@ -272,18 +279,18 @@ public class UsuarioView implements Serializable {
                 }
             }
 
-            q = em.createQuery("select p from Persona p where p.numeroDui = '" + personaObj.getNumeroDui() + "' and p.estadoEliminacion = 0 and p.id <> " + personaObj.getId(), Persona.class);
-            if (!q.getResultList().isEmpty()) {
+            //q = em.createQuery("select p from Persona p where p.numeroDui = '" + personaObj.getNumeroDui() + "' and p.estadoEliminacion = 0 and p.id <> " + personaObj.getId(), Persona.class);
+            if (!personarepo.listarpersonaporduiconotroid(personaObj.getNumeroDui(), personaObj.getId()).isEmpty()) {
                 JsfUtil.mensajeAlerta("El número de DUI ya existe registrado en la lista de personas");
                 return false;
             }
-            q = em.createQuery("select p from Persona p where p.numeroNit='" + personaObj.getNumeroNit() + "' and p.estadoEliminacion = 0 and p.id <> " + personaObj.getId(), Persona.class);
-            if (!q.getResultList().isEmpty()) {
+            //q = em.createQuery("select p from Persona p where p.numeroNit='" + personaObj.getNumeroNit() + "' and p.estadoEliminacion = 0 and p.id <> " + personaObj.getId(), Persona.class);
+            if (!personarepo.listarpersonapornitconotroid(personaObj.getNumeroNit(), personaObj.getId()).isEmpty()) {
                 JsfUtil.mensajeAlerta("El número de NIT ya existe registrado en la lista de personas");
                 return false;
             }
-            q = em.createQuery("select p from Persona p where p.usuario='" + personaObj.getUsuario() + "' and p.estadoEliminacion = 0 and p.id <> " + personaObj.getId(), Persona.class);
-            if (!q.getResultList().isEmpty()) {
+            //q = em.createQuery("select p from Persona p where p.usuario='" + personaObj.getUsuario() + "' and p.estadoEliminacion = 0 and p.id <> " + personaObj.getId(), Persona.class);
+            if (!personarepo.listarpersonaporusuarioconotroid(personaObj.getUsuario(), personaObj.getId()).isEmpty()) {
                 JsfUtil.mensajeAlerta("El Usuario ya existe registrado en la lista de personas");
                 return false;
             }
@@ -468,21 +475,23 @@ public class UsuarioView implements Serializable {
             }
 
             if (!buscaduinit.equals("")) {
-                q = em.createQuery("select p from Persona p where p.estadoEliminacion = 0 and (p.numeroDui = '" + buscaduinit + "' or p.numeroNit = '" + buscaduinit + "')", Persona.class);
+                //q = em.createQuery("select p from Persona p where p.estadoEliminacion = 0 and (p.numeroDui = '" + buscaduinit + "' or p.numeroNit = '" + buscaduinit + "')", Persona.class);
+                listPersona = personarepo.listarpersonapordocumentos(buscaduinit);
             } else {
                 String[] cadenabuscar = buscanombre.split(" ");
                 String mwhere = "";
                 for (int i = 0; i < cadenabuscar.length; i++) {
                     mwhere = mwhere + " upper(p.primerNombre) = '" + cadenabuscar[i].toUpperCase() + "' or upper(p.segundoNombre) = '" + cadenabuscar[i].toUpperCase() + "' or upper(p.primerApellido) = '" + cadenabuscar[i].toUpperCase() + "' or upper(p.segundoApellido) = '" + cadenabuscar[i].toUpperCase() + "' or upper(p.acasada) = '" + cadenabuscar[i].toUpperCase() + "' or upper(p.usuario) = '" + cadenabuscar[i].toUpperCase() + "' ";
                 }
-                q = em.createQuery("select p from Persona p "
-                        + "where p.estadoEliminacion = 0 "
-                        + "and ("
-                        + mwhere + ")", Persona.class);
+                //q = em.createQuery("select p from Persona p "
+                //        + "where p.estadoEliminacion = 0 "
+                //        + "and ("
+                //        + mwhere + ")", Persona.class);
+                listPersona = personarepo.listarpersonapornombresoapellidos(mwhere);
             }
 
             personaseleccionada = null;
-            listPersona = q.getResultList();
+            //listPersona = q.getResultList();
 
         } else {
             JsfUtil.mensajeAlerta("Debe ingresar un criterio de búsqueda");
@@ -517,15 +526,16 @@ public class UsuarioView implements Serializable {
     public void onItemSelect(SelectEvent event) {
         personaObj = (Persona) event.getObject();
         Query q;
-        q = em.createQuery("select u from Usuario u "
-                + "where u.estadoEliminacion = 0 "
-                + "and u.idPersona.id = " + personaObj.getId(), Usuario.class);
-        if (q.getResultList().isEmpty()) {
+        //q = em.createQuery("select u from Usuario u "
+        //        + "where u.estadoEliminacion = 0 "
+        //        + "and u.idPersona.id = " + personaObj.getId(), Usuario.class);
+        if (usuariorepo.listarusuarioporpersona(personaObj.getId()).isEmpty()) {
             usuarioObj = new Usuario();
             periodoDeAcceso = false;
             usuarioActivo = false;
         } else {
-            usuarioObj = (Usuario) q.setMaxResults(1).getSingleResult();
+            //usuarioObj = (Usuario) q.setMaxResults(1).getSingleResult();
+            usuarioObj = usuariorepo.usuarioporpersona(personaObj.getId());
             if (usuarioObj.getRangoFechaLogin() == 0) {
                 periodoDeAcceso = false;
             } else {
