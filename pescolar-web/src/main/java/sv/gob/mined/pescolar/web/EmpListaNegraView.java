@@ -10,13 +10,17 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.ListaNegraEmpresa;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.TipoSancion;
+import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.EmpListaNegraRepo;
 import sv.gob.mined.pescolar.repository.EmpresaRepo;
+import sv.gob.mined.pescolar.repository.EntidadEducativaRepo;
 import sv.gob.mined.pescolar.repository.TipoSancionRepo;
 import sv.gob.mined.pescolar.utils.Constantes;
 import sv.gob.mined.pescolar.utils.JsfUtil;
@@ -43,8 +47,10 @@ public class EmpListaNegraView implements Serializable {
     private String municipioDepartamento;
     private String domicilio;
     private String razonSocial;
+    private String codigoEntidad;
     private Boolean deshabilitado;
     private Boolean deshabilitadoGuardar = true;
+    private VwCatalogoEntidadEducativa entidadEducativa;
 
     @Inject
     private SessionView sessionView;
@@ -63,6 +69,9 @@ public class EmpListaNegraView implements Serializable {
 
     @Inject
     private CatalogoRepo catalogoRepo;
+
+    @Inject
+    private EntidadEducativaRepo entidadEducativaRepo;
 
     @PostConstruct
     public void init() {
@@ -94,18 +103,18 @@ public class EmpListaNegraView implements Serializable {
         }
     }
 
-
     public void guardar() {
 
         listaNegraEmpresa.setIdEmpresa(empresa);
+        listaNegraEmpresa.setCodigoEntidad(codigoEntidad);
         listaNegraEmpresa.setEstadoEliminacion((short) 0);
         listaNegraEmpresa.setFecha(new Date());
         listaNegraEmpresa.setUsuario(sessionView.getUsuario().getIdPersona().getUsuario());
 
         empListaNegraRepo.save(listaNegraEmpresa);
         listaNegraEmpresa = new ListaNegraEmpresa();
-        deshabilitadoGuardar= true;
-        
+        deshabilitadoGuardar = true;
+
         JsfUtil.mensajeInsert();
     }
 
@@ -114,6 +123,21 @@ public class EmpListaNegraView implements Serializable {
         listaNegraEmpresa.setEstadoEliminacion((short) 1);
         empListaNegraRepo.update(listaNegraEmpresa);
         JsfUtil.mensajeInformacion("El registro ha sido eliminado");
+    }
+
+    public void buscarEntidadEducativa() {
+        if (codigoEntidad != null && codigoEntidad.length() == 5) {
+            deshabilitadoGuardar = false;
+            entidadEducativa = entidadEducativaRepo.findByPk(codigoEntidad);
+            
+
+            if (entidadEducativa == null) {
+                JsfUtil.mensajeAlerta("No se encuentra el centro educativo con código: " + codigoEntidad);
+                deshabilitadoGuardar = true;
+            }
+            
+        }
+
     }
 
 }

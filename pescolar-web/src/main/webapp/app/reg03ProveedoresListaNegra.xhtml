@@ -36,6 +36,17 @@
                     <div class="card ui-fluid">
                         <div class="p-col-12 p-md-8">
                             <div class="p-field p-grid">
+                                <p:outputLabel value="Código Infraestructura:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:inputText style="margin-right: 10px;" id="txtCodigoEntidad" maxlength="5" 
+                                                 value="#{empListaNegraView.codigoEntidad}" size="4" 
+                                                 autocomplete="false" disabled="#{empListaNegraView.deshabilitado}" onkeyup="return this.value.length >= 5">
+                                        <p:ajax event="keyup" listener="#{empListaNegraView.buscarEntidadEducativa}" update="nombreCE menuBar"/>
+                                    </p:inputText>
+                                    <p:outputLabel id="nombreCE" value="#{empListaNegraView.entidadEducativa.nombre}" style="font-weight: bold" />
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
                                 <p:outputLabel value="Tipo de Sanción:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
                                 <div class="p-col-12 p-md-9">
                                     <p:selectOneMenu id="cboMuni" value="#{empListaNegraView.listaNegraEmpresa.idTipoSancion.idTipoSancion}">
