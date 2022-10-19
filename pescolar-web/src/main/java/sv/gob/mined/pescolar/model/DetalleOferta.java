@@ -15,6 +15,8 @@ public class DetalleOferta implements Serializable {
 
     @Id
     @Column(name = "ID_DETALLE_OFE", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "detalle_oferta")
+    @SequenceGenerator(name = "detalle_oferta", sequenceName = "SEQ_DET_OFERTA", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)

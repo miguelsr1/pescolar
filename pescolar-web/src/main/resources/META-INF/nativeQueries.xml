@@ -114,6 +114,63 @@
             ]]>
         </query>
     </named-native-query>
+    <named-native-query name="Contratacion.resguardoUtiles" 
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto">
+        <query>
+            <![CDATA[
+                select 
+                    vw.id_nivel_educativo as idNivelEducativo,
+                    vwr.id_producto       as idProducto,
+                    niv.descripcion_nivel as descripcionNivel, 
+                    vw.total,
+                    vwr.cantidad,
+                    vw.total-nvl(vwr.cantidad,0) as totalComprar 
+                from vw_estadistica_censo_utiles vw 
+                    inner join vw_resguardo_item vwr on vwr.id_nivel_educativo = vw.id_nivel_educativo and vwr.id_producto = vw.id_producto and vwr.codigo_entidad = vw.codigo_entidad
+                    inner join nivel_educativo niv on vw.id_nivel_educativo = niv.id_nivel_educativo
+                where vw.codigo_entidad = ? and vw.id_proceso_adq = ? and and vwr.id_rubro_adq = 2
+                order by niv.orden2
+            ]]>
+        </query>
+    </named-native-query>
+    <named-native-query name="Contratacion.resguardoZapatos" 
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto">
+        <query>
+            <![CDATA[
+                select 
+                    vw.id_nivel_educativo as idNivelEducativo,
+                    vwr.id_producto       as idProducto,
+                    niv.descripcion_nivel as descripcionNivel, 
+                    vw.total,
+                    vwr.cantidad,
+                    vw.total-nvl(vwr.cantidad,0) as totalComprar 
+                from vw_estadistica_censo_zapatos vw 
+                    inner join vw_resguardo_item vwr on vwr.id_nivel_educativo = vw.id_nivel_educativo and vwr.id_producto = vw.id_producto and vwr.codigo_entidad = vw.codigo_entidad
+                    inner join nivel_educativo niv on vw.id_nivel_educativo = niv.id_nivel_educativo
+                where vw.codigo_entidad = ? and vw.id_proceso_adq = ? and and vwr.id_rubro_adq = 3
+                order by niv.orden2
+            ]]>
+        </query>
+    </named-native-query>
+    <named-native-query name="Contratacion.resguardoUniformes" 
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto">
+        <query>
+            <![CDATA[
+                select 
+                    vw.id_nivel_educativo as idNivelEducativo,
+                    vwr.id_producto       as idProducto,
+                    niv.descripcion_nivel as descripcionNivel, 
+                    vw.total,
+                    vwr.cantidad,
+                    vw.total-nvl(vwr.cantidad,0) as totalComprar 
+                from vw_estadistica_censo_uniformes vw 
+                    inner join vw_resguardo_item vwr on vwr.id_nivel_educativo = vw.id_nivel_educativo and vwr.id_producto = vw.id_producto and vwr.codigo_entidad = vw.codigo_entidad
+                    inner join nivel_educativo niv on vw.id_nivel_educativo = niv.id_nivel_educativo
+                where vw.codigo_entidad = ? and vw.id_proceso_adq = ? and and vwr.id_rubro_adq = 4
+                order by niv.orden2
+            ]]>
+        </query>
+    </named-native-query>
     <named-native-query name="Proveedor.NotificacionOfertaProv" 
                         result-class="sv.gob.mined.pescolar.model.dto.NotificacionOfertaProvDto">
         <query>

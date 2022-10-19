@@ -68,6 +68,7 @@
     <class>sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto</class>
     <class>sv.gob.mined.pescolar.model.TipoSancion</class>
     <class>sv.gob.mined.pescolar.model.TipoUsuOpcMenu</class>
+    <class>sv.gob.mined.pescolar.model.OfertaResguardo</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
