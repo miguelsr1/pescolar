@@ -11,6 +11,8 @@ import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 public class OfertaBienesServicio implements Serializable {
     @Id
     @Column(name = "ID_OFERTA", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "oferta")
+    @SequenceGenerator(name = "oferta", sequenceName = "SEQ_OFERTA_BS", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
