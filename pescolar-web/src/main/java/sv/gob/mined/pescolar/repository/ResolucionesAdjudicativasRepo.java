@@ -1,11 +1,18 @@
 package sv.gob.mined.pescolar.repository;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.DetalleOferta;
@@ -18,11 +25,15 @@ import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
  * @author misanchez
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ResolucionesAdjudicativasRepo extends AbstractRepository<ResolucionesAdjudicativa, Long> {
 
     public ResolucionesAdjudicativasRepo() {
         super(ResolucionesAdjudicativa.class);
     }
+    
+    @EJB
+    private SaldosFacade saldoFacade;
 
     /*@Transactional
     public ResolucionesAdjudicativa findResolucionAdjudicativa(Long idParticipante) {
@@ -64,5 +75,33 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
             lstDetalleResguardo.add(det);
         }
         return lstDetalleResguardo;
+    }
+    
+    public Boolean validarCambioEstado(ResolucionesAdjudicativa resAdj, Long estadoReserva) {
+        Boolean resultado = false;
+        if ((resAdj.getIdEstadoReserva().getId().intValue() == 1 && estadoReserva.intValue() == 2) || (resAdj.getIdEstadoReserva().getId().intValue() == 3 && estadoReserva.intValue() == 2)) {
+            resultado = true;
+        } else //DIGITADA -> ANULADA y REVERTIDA -> ANULADA 
+        if ((resAdj.getIdEstadoReserva().getId().intValue() == 1 && estadoReserva.intValue() == 4) || (resAdj.getId().intValue() == 3 && estadoReserva.intValue() == 4)) {
+            resultado = true;
+        } else //APLICADA -> REVERTIDA
+        if (resAdj.getIdEstadoReserva().getId().intValue() == 2 && estadoReserva.intValue() == 3) {
+            resultado = true;
+        }
+        return resultado;
+    }
+    
+    @Lock(LockType.WRITE)
+    public HashMap<String, Object> aplicarReservaDeFondos(ResolucionesAdjudicativa resAdj,
+            Long estadoReserva, String codigoEntidad, String comentarioReversion, String usuario) {
+        Logger.getLogger(ResolucionesAdjudicativasRepo.class.getName()).log(Level.INFO, "Usuario que aplica reserva: {0} del CE: {1}", new Object[]{usuario, codigoEntidad});
+        HashMap<String, Object> param = new HashMap();
+        try {
+            param = saldoFacade.aplicarReservaDeFondos(resAdj, estadoReserva, codigoEntidad, comentarioReversion, usuario);
+        } catch (Exception e) {
+            Logger.getLogger(ResolucionesAdjudicativasRepo.class.getName()).log(Level.WARNING, "Es necesario volver aplicar la reserva: {0} del CE: {1}", new Object[]{usuario, codigoEntidad});
+            param.put("error", "Por favor, intenten nuevamente APLICAR la reserva.");
+        }
+        return param;
     }
 }

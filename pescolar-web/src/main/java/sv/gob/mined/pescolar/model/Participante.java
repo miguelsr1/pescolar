@@ -6,13 +6,17 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.hibernate.annotations.OrderBy;
@@ -23,6 +27,8 @@ public class Participante implements Serializable {
 
     @Id
     @Column(name = "ID_PARTICIPANTE", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participantes")
+    @SequenceGenerator(name = "participantes", sequenceName = "SEQ_PARTICIPANTES", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @JoinColumn(name = "ID_OFERTA", referencedColumnName = "ID_OFERTA")
@@ -63,11 +69,11 @@ public class Participante implements Serializable {
     @Column(name = "PORCENTAJE_PRECIO", precision = 10, scale = 2)
     private BigDecimal porcentajePrecio;
 
-    @OneToMany(mappedBy = "idParticipante", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "idParticipante", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OrderBy(clause = "to_number(noItem) asc")
     private List<DetalleOferta> detalleOfertasList;
 
-    @OneToMany(mappedBy = "idParticipante", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "idParticipante", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ResolucionesAdjudicativa> resolucionesAdjudicativaList;
 
     @Transient

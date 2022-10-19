@@ -53,10 +53,10 @@ public class DetalleOferta implements Serializable {
     private String usuarioModificacion;
 
     @Column(name = "FECHA_MODIFICACION")
-    private LocalDate fechaModificacion;
+    private LocalDateTime fechaModificacion;
 
     @Column(name = "FECHA_ELIMINACION")
-    private LocalDate fechaEliminacion;
+    private LocalDateTime fechaEliminacion;
 
     @Column(name = "ESTADO_ELIMINACION", nullable = false)
     private Long estadoEliminacion;
@@ -102,19 +102,19 @@ public class DetalleOferta implements Serializable {
         this.estadoEliminacion = estadoEliminacion;
     }
 
-    public LocalDate getFechaEliminacion() {
+    public LocalDateTime getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(LocalDate fechaEliminacion) {
+    public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 
-    public LocalDate getFechaModificacion() {
+    public LocalDateTime getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(LocalDate fechaModificacion) {
+    public void setFechaModificacion(LocalDateTime fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 

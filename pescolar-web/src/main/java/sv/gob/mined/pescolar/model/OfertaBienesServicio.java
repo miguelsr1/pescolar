@@ -3,6 +3,7 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 
@@ -39,16 +40,16 @@ public class OfertaBienesServicio implements Serializable {
     private String usuarioInsercion;
 
     @Column(name = "FECHA_INSERCION", nullable = false)
-    private LocalDate fechaInsercion;
+    private LocalDateTime fechaInsercion;
 
     @Column(name = "USUARIO_MODIFICACION", length = 25)
     private String usuarioModificacion;
 
     @Column(name = "FECHA_MODIFICACION")
-    private LocalDate fechaModificacion;
+    private LocalDateTime fechaModificacion;
 
     @Column(name = "FECHA_ELIMINACION")
-    private LocalDate fechaEliminacion;
+    private LocalDateTime fechaEliminacion;
 
     @Column(name = "ESTADO_ELIMINACION", nullable = false)
     private Long estadoEliminacion;
@@ -98,19 +99,19 @@ public class OfertaBienesServicio implements Serializable {
         this.estadoEliminacion = estadoEliminacion;
     }
 
-    public LocalDate getFechaEliminacion() {
+    public LocalDateTime getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(LocalDate fechaEliminacion) {
+    public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 
-    public LocalDate getFechaModificacion() {
+    public LocalDateTime getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(LocalDate fechaModificacion) {
+    public void setFechaModificacion(LocalDateTime fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
@@ -122,11 +123,11 @@ public class OfertaBienesServicio implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public LocalDate getFechaInsercion() {
+    public LocalDateTime getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(LocalDate fechaInsercion) {
+    public void setFechaInsercion(LocalDateTime fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 

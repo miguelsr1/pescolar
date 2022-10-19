@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +31,12 @@ import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.NivelEducativoRepo;
 import sv.gob.mined.pescolar.repository.OfertaRepo;
+import sv.gob.mined.pescolar.repository.OfertaResguardoRepo;
 import sv.gob.mined.pescolar.repository.ParticipanteRepo;
 import sv.gob.mined.pescolar.repository.PrecioRefRubroEmpRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
@@ -75,7 +78,7 @@ public class OfertaBienesServiciosView implements Serializable {
 
     private List<Participante> lstParticipantes = new ArrayList();
     private List<RubrosAmostrarInteres> lstRubros = new ArrayList();
-    //private List<RubrosAmostrarInteres> lstRubros = new ArrayList();
+    private List<ResguardoDto> lstResguardo = new ArrayList();
     private List<Filtro> params = new ArrayList();
 
     private List<ProveedorDisponibleDto> lstCapaEmpresas = new ArrayList();
@@ -98,6 +101,8 @@ public class OfertaBienesServiciosView implements Serializable {
     private NivelEducativoRepo nivelEducativoRepo;
     @Inject
     private OfertaRepo ofertaRepo;
+    @Inject
+    private OfertaResguardoRepo ofertaResguardoRepo;
 
     public OfertaBienesServiciosView() {
     }
@@ -121,6 +126,10 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getter-setter">
+    public List<ResguardoDto> getLstResguardo() {
+        return lstResguardo;
+    }
+
     public Empresa getEmpresaSeleccionada() {
         return empresaSeleccionada;
     }
@@ -285,8 +294,8 @@ public class OfertaBienesServiciosView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idOferta.idDetProcesoAdq.idRubroAdq.id", idRubro).build());
         lstParticipantes = (List<Participante>) catalogoRepo.findListByParam(Participante.class, params, "idOferta.id", Boolean.TRUE);
-        
-        if(lstParticipantes.isEmpty()){
+
+        if (lstParticipantes.isEmpty()) {
             JsfUtil.mensajeAlerta("No se encontraron datos.");
         }
     }
@@ -299,11 +308,11 @@ public class OfertaBienesServiciosView implements Serializable {
         } else {
 
             List<Long> lstNiveles = catalogoRepo.getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(sessionView.getIdProcesoAdq(), codigoEntidad);
-            if(lstNiveles.isEmpty()){
-                JsfUtil.mensajeAlerta("El centro escolar no tiene registrado la matricula para el año: "+ sessionView.getAnhoProceso());
+            if (lstNiveles.isEmpty()) {
+                JsfUtil.mensajeAlerta("El centro escolar no tiene registrado la matricula para el año: " + sessionView.getAnhoProceso());
                 return;
             }
-            
+
             nivelesEducativos = String.join(",", lstNiveles.stream().map(String::valueOf).collect(Collectors.toList()));
             cantidadAlumnos = nivelEducativoRepo.getCantidadTotalByCodEntAndIdProcesoAdq(nivelesEducativos, codigoEntidad, sessionView.getIdProcesoAdq());
 
@@ -498,5 +507,48 @@ public class OfertaBienesServiciosView implements Serializable {
                 i++;
             }
         }*/
+    }
+
+    public void guardarOferta() {
+        if (ofertaBienesServicio.getId() == null) {
+            //verificar existencia de resguardo
+            lstResguardo = ofertaResguardoRepo.getLstResguardoADisminuir(codigoEntidad, sessionView.getIdProcesoAdq(), idRubro);
+
+            //Si existe resguardo se restara de lo que el centro escolar contratará
+            if (!lstResguardo.isEmpty()) {
+
+            }
+
+            ofertaBienesServicio.setFechaInsercion(LocalDateTime.now());
+            ofertaBienesServicio.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
+
+            ofertaRepo.save(ofertaBienesServicio);
+        } else {
+
+            ofertaBienesServicio.setFechaModificacion(LocalDateTime.now());
+            ofertaBienesServicio.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
+
+            ofertaRepo.update(ofertaBienesServicio);
+        }
+    }
+
+    public String editarOfertaParticipante() {
+        String r = "";
+        boolean modificaciones = false;
+
+        for (Participante participante : ofertaBienesServicio.getParticipantesList()) {
+            if (participante.getId() == null) {
+                modificaciones = true;
+                break;
+            }
+        }
+
+        if (modificaciones == false) {
+            r = "reg02DetalleOferta?idParticipante=" + idParticipante;
+        } else {
+            JsfUtil.mensajeAlerta("Primero debe de guardar los cambios realizados.");
+        }
+
+        return r;
     }
 }

@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,10 +16,12 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang.math.NumberUtils;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.DetalleOferta;
+import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.EstadoReserva;
 import sv.gob.mined.pescolar.model.NivelEducativo;
 import sv.gob.mined.pescolar.model.OfertaBienesServicio;
@@ -31,6 +34,7 @@ import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.NivelEducativoRepo;
 import sv.gob.mined.pescolar.repository.OfertaRepo;
+import sv.gob.mined.pescolar.repository.ParticipanteRepo;
 import sv.gob.mined.pescolar.repository.PrecioRefRubroEmpRepo;
 import sv.gob.mined.pescolar.repository.ResolucionesAdjudicativasRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
@@ -70,6 +74,7 @@ public class DetalleOfertaView implements Serializable {
     private List<Filtro> params = new ArrayList();
 
     private CatalogoProducto item;
+    private DetalleProcesoAdq detalleProceso;
     private DetalleOferta detalleSeleccionado;
     private NivelEducativo nivel;
     private Participante participante;
@@ -84,6 +89,8 @@ public class DetalleOfertaView implements Serializable {
 
     @Inject
     private OfertaRepo ofertaRepo;
+    @Inject
+    private ParticipanteRepo participanteRepo;
     @Inject
     private ResolucionesAdjudicativasRepo resolucionRepo;
     @Inject
@@ -109,7 +116,7 @@ public class DetalleOfertaView implements Serializable {
             participante = catalogoRepo.findEntityByPk(Participante.class, Long.parseLong(parametros.get("idParticipante")));
 
             params.clear();
-            
+
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad", participante.getIdOferta().getCodigoEntidad().getCodigoEntidad()).build());
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq", participante.getIdOferta().getIdDetProcesoAdq()).build());
 
@@ -137,9 +144,10 @@ public class DetalleOfertaView implements Serializable {
             }
         }
     }
-    
-    public void editarOferta(){
+
+    public void editarOferta() {
         activarFiltro = true;
+        participante = new Participante();
     }
 
     private void crearReserva() {
@@ -152,7 +160,6 @@ public class DetalleOfertaView implements Serializable {
         params.add(new Filtro(TipoOperador.EQUALS, "idEmpresa.id", participante.getIdEmpresa().getId()));
         params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idRubroInteres.id", participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId()));
         params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idAnho.id", participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId()));*/
-
         //lstPreciosEmp = (List<PreciosRefRubroEmp>) catalogoRepo.findListByParam(PreciosRefRubroEmp.class, params);
         lstPreciosEmp = precioRefRubroEmpRepo.findPreciosByEmp(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
 
@@ -212,14 +219,16 @@ public class DetalleOfertaView implements Serializable {
                     }
                 }
             }
+
+            resolucionRepo.save(resAdj);
             verificarItemsEnResguardo();
         } else {
             //bandera para monstrar mensaje que el proveedor no tiene precios de referencia ingresados
             mostrarMsjPrecio = true;
         }
     }
-    
-    private void verificarItemsEnResguardo(){
+
+    private void verificarItemsEnResguardo() {
         lstDetalleResguaro = resolucionRepo.findItemsEnResguardo(codigoEntidad, sessionView.getIdAnho(), sessionView.getUsuario().getIdPersona().getUsuario());
     }
 
@@ -352,7 +361,7 @@ public class DetalleOfertaView implements Serializable {
 
         return cantidadTotal;
     }
-    
+
     public BigInteger getCantidadResguardo() {
         cantidadTotalResguardo = BigInteger.ZERO;
         if (resAdj != null && resAdj.getIdParticipante() != null) {
@@ -382,6 +391,21 @@ public class DetalleOfertaView implements Serializable {
         }
     }
 
+    private BigDecimal getMontoTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+        List<DetalleOferta> tmplista = participante.getDetalleOfertasList();
+        if (tmplista != null) {
+            for (DetalleOferta detalle : tmplista) {
+                if (detalle.getEstadoEliminacion().compareTo(0l) == 0) {
+                    if (detalle.getCantidad() != null && detalle.getPrecioUnitario() != null) {
+                        total = total.add(new BigDecimal(detalle.getCantidad()).multiply(detalle.getPrecioUnitario()));
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
     public String getMontoAdjudicado() {
         return "0.00";
     }
@@ -397,7 +421,7 @@ public class DetalleOfertaView implements Serializable {
     public void onItemSelect(SelectEvent event) {
 
     }
-    
+
     public List<VwCatalogoEntidadEducativa> completeCe(String query) {
         return repositorioAplicacionView.findAllEntidadesByCodigoEntidad(query);
     }
@@ -444,7 +468,7 @@ public class DetalleOfertaView implements Serializable {
                     editarNumeroDeItem(det, event.getRowIndex());
 
                     det.setUsuarioModificacion("");
-                    det.setFechaModificacion(LocalDate.now());
+                    det.setFechaModificacion(LocalDateTime.now());
                 }
             } else {
                 limpiarDetalleOferta(det);
@@ -591,5 +615,88 @@ public class DetalleOfertaView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq.idRubroAdq.id", idRubro).build());
 
         lstParticipantes = catalogoRepo.findByParam(OfertaBienesServicio.class, params).getParticipantesList();
+    }
+
+    public String guardarDetalleOferta() {
+        String urlRed = "reg02Contrato?includeViewParams=true&codigoEntidad=" + codigoEntidad + "&idParticipante=" + idParticipante;
+        Boolean isError = false;
+        Boolean isUtiles;
+
+        isUtiles = (detalleProceso.getIdRubroAdq().getId().intValue() == 2);
+
+        isError = (participante.getDetalleOfertasList() == null || participante.getDetalleOfertasList().isEmpty());
+
+        if (isError) {
+            JsfUtil.mensajeAlerta("Debe de agregar al menos un detalle a la oferta.");
+            return "";
+        }
+
+        for (DetalleOferta det : participante.getDetalleOfertasList()) {
+            if (det.getEstadoEliminacion().compareTo(0l) == 0) {
+                det.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
+                det.setFechaEliminacion(LocalDateTime.now());
+            } else {
+                if (det.getCantidad().compareTo(BigInteger.ZERO) == 0) {
+                    JsfUtil.mensajeAlerta("Al menos un detalle de la oferta tiene cantidad de ITEMS con valor de CERO.");
+                    return "";
+                }
+
+                if (det.getPrecioUnitario().compareTo(BigDecimal.ZERO) == 0) {
+                    JsfUtil.mensajeAlerta("Al menos un detalle de la oferta tiene precio unitario de con valor de CERO.");
+                    return "";
+                }
+            }
+        }
+
+        participanteRepo.update(participante);
+
+        switch (resAdj.getIdEstadoReserva().getId().intValue()) {
+            case 1://digitacion
+            case 3://revertida
+                resAdj.setValor(getMontoTotal());
+                resolucionRepo.update(resAdj);
+                break;
+            case 2:
+                JsfUtil.mensajeError("Reserva de fondos APLICADA. Primero debe revertir la reserva para aplicar estos cambios.");
+                urlRed = null;
+                break;
+            case 4:
+            case 5:
+                JsfUtil.mensajeError("La reserva de fondos se encuentra ANULADA/MODIFICADA, No se pueden aplicar cambios.");
+                urlRed = null;
+                break;
+        }
+
+        if (!resolucionRepo.validarCambioEstado(resAdj, idEstadoReserva)) {
+            JsfUtil.mensajeAlerta("Cambio de estado inválido");
+        } else {
+            switch (idEstadoReserva.intValue()) {
+                case 2:
+                    if (aplicarCambiosReserva()) {
+                        urlRed += "&idResAdj=" + resAdj.getId();
+                    } else {
+                        urlRed = null;
+                    }
+                    break;
+                case 3:
+                    PrimeFaces.current().executeScript("PF('dlgReversion').show();");
+                    break;
+            }
+        }
+
+        return urlRed;
+    }
+
+    private boolean aplicarCambiosReserva() {
+        HashMap<String, Object> param = resolucionRepo.aplicarReservaDeFondos(resAdj, idEstadoReserva, codigoEntidad, "Aplicación inicial", sessionView.getUsuario().getIdPersona().getUsuario());
+        Boolean exito = !param.containsKey("error");
+        if (sessionView.getUsuario().getIdPersona().getUsuario().equals("RMINERO")
+                || sessionView.getUsuario().getIdPersona().getUsuario().equals("RAFAARIAS")
+                || sessionView.getUsuario().getIdPersona().getUsuario().equals("CVILLEGAS") || exito) {
+        } else {
+            PrimeFaces.current().ajax().update("frmPrincipal");
+            JsfUtil.mensajeAlerta(param.get("error").toString());
+        }
+        return exito;
     }
 }

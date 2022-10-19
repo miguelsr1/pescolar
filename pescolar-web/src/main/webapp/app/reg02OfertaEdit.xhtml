@@ -13,7 +13,7 @@
                         <p:menuitem value="Nuevo" icon="pi pi-file-o" id="mtmNuevo" disabled="true"/>
                         <p:menuitem value="Modificar" icon="pi pi-pencil" id="mtmModificar" disabled="true"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{ofertaBienesServiciosView.guardarOferta()}"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
@@ -108,7 +108,7 @@
                             </p:column>
 
                             <p:column headerText="Ver Oferta" width="40" styleClass="centrado">
-                                <p:commandLink >
+                                <p:commandLink action="#{ofertaBienesServiciosView.editarOfertaParticipante}">
                                     <f:param name="idParticipante" value="#{participante.id}"/>
                                     <f:param name="txtCodigoEntidad" value="#{participante.idOferta.codigoEntidad.codigoEntidad}"/>
                                     <i class="fa fa-eye" style="font-size: 17px;"></i>

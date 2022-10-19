@@ -41,6 +41,8 @@ public class OfertaResguardo implements Serializable {
     private LocalDateTime fechaInsercion;
     @Column(name = "ESTADO_ELIMINACION", nullable = false)
     private Short estadoEliminacion;
+    @Column(name = "RESTADO", nullable = false)
+    private Short restado;
 
     public Long getIdOfertaResguardo() {
         return idOfertaResguardo;

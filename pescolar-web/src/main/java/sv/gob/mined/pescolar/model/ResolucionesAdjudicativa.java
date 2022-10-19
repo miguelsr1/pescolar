@@ -3,11 +3,13 @@ package sv.gob.mined.pescolar.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "RESOLUCIONES_ADJUDICATIVAS")
 @Entity
 public class ResolucionesAdjudicativa implements Serializable {
+
     @Id
     @Column(name = "ID_RESOLUCION_ADJ", nullable = false)
     private Long id;
@@ -27,19 +29,22 @@ public class ResolucionesAdjudicativa implements Serializable {
     private String usuarioInsercion;
 
     @Column(name = "FECHA_INSERCION", nullable = false)
-    private LocalDate fechaInsercion;
+    private LocalDateTime fechaInsercion;
 
     @Column(name = "USUARIO_MODIFICACION", length = 25)
     private String usuarioModificacion;
 
     @Column(name = "FECHA_MODIFICACION")
-    private LocalDate fechaModificacion;
+    private LocalDateTime fechaModificacion;
 
     @Column(name = "FECHA_ELIMINACION")
-    private LocalDate fechaEliminacion;
+    private LocalDateTime fechaEliminacion;
 
     @Column(name = "ESTADO_ELIMINACION", nullable = false)
     private Long estadoEliminacion;
+
+    @OneToMany(mappedBy = "idResolucionAdj", fetch = FetchType.LAZY)
+    private List<ContratosOrdenesCompra> contratosOrdenesComprasList;
 
     public Long getEstadoEliminacion() {
         return estadoEliminacion;
@@ -49,19 +54,19 @@ public class ResolucionesAdjudicativa implements Serializable {
         this.estadoEliminacion = estadoEliminacion;
     }
 
-    public LocalDate getFechaEliminacion() {
+    public LocalDateTime getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(LocalDate fechaEliminacion) {
+    public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 
-    public LocalDate getFechaModificacion() {
+    public LocalDateTime getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(LocalDate fechaModificacion) {
+    public void setFechaModificacion(LocalDateTime fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
@@ -73,11 +78,11 @@ public class ResolucionesAdjudicativa implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public LocalDate getFechaInsercion() {
+    public LocalDateTime getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(LocalDate fechaInsercion) {
+    public void setFechaInsercion(LocalDateTime fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 
@@ -119,5 +124,13 @@ public class ResolucionesAdjudicativa implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<ContratosOrdenesCompra> getContratosOrdenesComprasList() {
+        return contratosOrdenesComprasList;
+    }
+
+    public void setContratosOrdenesComprasList(List<ContratosOrdenesCompra> contratosOrdenesComprasList) {
+        this.contratosOrdenesComprasList = contratosOrdenesComprasList;
     }
 }

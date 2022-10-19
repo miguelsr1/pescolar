@@ -112,9 +112,10 @@
             <div class="p-grid dashboard">
                 <div class="p-col-12" style="padding-bottom: 1px;">
                     <p:menubar>
-                        <p:menuitem value="Nuevo"  icon="pi pi-plus" action="#{ofertaBienesServiciosView.nuevo()}"/>
+                        <p:menuitem value="Nuevo"  icon="pi pi-plus" disabled="true"/>
                         <p:menuitem value="Modificar" icon="pi pi-pencil" action="#{detalleOfertaView.editarOferta()}" update="dvDatos"/>
-                        <p:menuitem value="Buscar"  icon="pi pi-search" action="#{ofertaBienesServiciosView.buscar()}" />
+                        <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true" />
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{detalleOfertaView.guardarDetalleOferta()}"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true" />
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
                         
