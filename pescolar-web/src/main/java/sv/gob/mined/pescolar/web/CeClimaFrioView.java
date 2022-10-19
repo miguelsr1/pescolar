@@ -8,8 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleSelectEvent;
@@ -28,8 +26,7 @@ import sv.gob.mined.pescolar.utils.enums.TipoOperador;
  *
  * @author CQuintanilla
  */
-@Getter
-@Setter
+
 @Named
 @ViewScoped
 public class CeClimaFrioView implements Serializable {
@@ -136,5 +133,95 @@ public class CeClimaFrioView implements Serializable {
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoDepartamento.id", codigoDepartamento).build());
         return (List<Municipio>) catalogoRepo.findListByParam(Municipio.class, params, "id", false);
     }
+
+    public CeClimaFrio getEntidadEducativa() {
+        return entidadEducativa;
+    }
+
+    public void setEntidadEducativa(CeClimaFrio entidadEducativa) {
+        this.entidadEducativa = entidadEducativa;
+    }
+
+    public VwCeClimaFrio getEntidadBorrar() {
+        return entidadBorrar;
+    }
+
+    public void setEntidadBorrar(VwCeClimaFrio entidadBorrar) {
+        this.entidadBorrar = entidadBorrar;
+    }
+
+    public List<Filtro> getParams() {
+        return params;
+    }
+
+    public void setParams(List<Filtro> params) {
+        this.params = params;
+    }
+
+    public List<VwCeClimaFrio> getLstCheck() {
+        return lstCheck;
+    }
+
+    public void setLstCheck(List<VwCeClimaFrio> lstCheck) {
+        this.lstCheck = lstCheck;
+    }
+
+    public List<VwCeClimaFrio> getLstCeNoSeleccionados() {
+        return lstCeNoSeleccionados;
+    }
+
+    public void setLstCeNoSeleccionados(List<VwCeClimaFrio> lstCeNoSeleccionados) {
+        this.lstCeNoSeleccionados = lstCeNoSeleccionados;
+    }
+
+    public List<VwCeClimaFrio> getLstCeClimaFrio() {
+        return lstCeClimaFrio;
+    }
+
+    public void setLstCeClimaFrio(List<VwCeClimaFrio> lstCeClimaFrio) {
+        this.lstCeClimaFrio = lstCeClimaFrio;
+    }
+
+    public String getCodigoDepartamento() {
+        return codigoDepartamento;
+    }
+
+    public void setCodigoDepartamento(String codigoDepartamento) {
+        this.codigoDepartamento = codigoDepartamento;
+    }
+
+    public Long getIdMunicipio() {
+        return idMunicipio;
+    }
+
+    public void setIdMunicipio(Long idMunicipio) {
+        this.idMunicipio = idMunicipio;
+    }
+
+    public String getOrden() {
+        return orden;
+    }
+
+    public void setOrden(String orden) {
+        this.orden = orden;
+    }
+
+    public Boolean getDeshabilitado() {
+        return deshabilitado;
+    }
+
+    public void setDeshabilitado(Boolean deshabilitado) {
+        this.deshabilitado = deshabilitado;
+    }
+
+    public EntidadEducativaClimaFrio getEntidadCFRepo() {
+        return entidadCFRepo;
+    }
+
+    public void setEntidadCFRepo(EntidadEducativaClimaFrio entidadCFRepo) {
+        this.entidadCFRepo = entidadCFRepo;
+    }
+    
+    
 
 }

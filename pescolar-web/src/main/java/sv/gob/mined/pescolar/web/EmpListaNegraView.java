@@ -8,11 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Getter;
-import lombok.Setter;
-import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.ListaNegraEmpresa;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.TipoSancion;
@@ -31,8 +27,7 @@ import sv.gob.mined.pescolar.web.proveedor.interno.CargaGeneralView;
  *
  * @author CQuintanilla
  */
-@Getter
-@Setter
+
 @Named
 @ViewScoped
 public class EmpListaNegraView implements Serializable {
@@ -140,4 +135,124 @@ public class EmpListaNegraView implements Serializable {
 
     }
 
+    public ListaNegraEmpresa getListaNegraEmpresa() {
+        return listaNegraEmpresa;
+    }
+
+    public void setListaNegraEmpresa(ListaNegraEmpresa listaNegraEmpresa) {
+        this.listaNegraEmpresa = listaNegraEmpresa;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public List<Empresa> getLstEmpresas() {
+        return lstEmpresas;
+    }
+
+    public void setLstEmpresas(List<Empresa> lstEmpresas) {
+        this.lstEmpresas = lstEmpresas;
+    }
+
+    public List<TipoSancion> getLstSancion() {
+        return lstSancion;
+    }
+
+    public void setLstSancion(List<TipoSancion> lstSancion) {
+        this.lstSancion = lstSancion;
+    }
+
+    public String getRubroProveedor() {
+        return rubroProveedor;
+    }
+
+    public void setRubroProveedor(String rubroProveedor) {
+        this.rubroProveedor = rubroProveedor;
+    }
+
+    public String getNumeroNit() {
+        return numeroNit;
+    }
+
+    public void setNumeroNit(String numeroNit) {
+        this.numeroNit = numeroNit;
+    }
+
+    public String getMunicipioDepartamento() {
+        return municipioDepartamento;
+    }
+
+    public void setMunicipioDepartamento(String municipioDepartamento) {
+        this.municipioDepartamento = municipioDepartamento;
+    }
+
+    public String getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
+
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getCodigoEntidad() {
+        return codigoEntidad;
+    }
+
+    public void setCodigoEntidad(String codigoEntidad) {
+        this.codigoEntidad = codigoEntidad;
+    }
+
+    public Boolean getDeshabilitado() {
+        return deshabilitado;
+    }
+
+    public void setDeshabilitado(Boolean deshabilitado) {
+        this.deshabilitado = deshabilitado;
+    }
+
+    public Boolean getDeshabilitadoGuardar() {
+        return deshabilitadoGuardar;
+    }
+
+    public void setDeshabilitadoGuardar(Boolean deshabilitadoGuardar) {
+        this.deshabilitadoGuardar = deshabilitadoGuardar;
+    }
+
+    public VwCatalogoEntidadEducativa getEntidadEducativa() {
+        return entidadEducativa;
+    }
+
+    public void setEntidadEducativa(VwCatalogoEntidadEducativa entidadEducativa) {
+        this.entidadEducativa = entidadEducativa;
+    }
+
+    public SessionView getSessionView() {
+        return sessionView;
+    }
+
+    public void setSessionView(SessionView sessionView) {
+        this.sessionView = sessionView;
+    }
+
+    public EmpresaRepo getEmpresaRepo() {
+        return empresaRepo;
+    }
+
+    public void setEmpresaRepo(EmpresaRepo empresaRepo) {
+        this.empresaRepo = empresaRepo;
+    }
+    
 }
