@@ -70,6 +70,8 @@
     <class>sv.gob.mined.pescolar.model.TipoUsuOpcMenu</class>
     <class>sv.gob.mined.pescolar.model.OfertaResguardo</class>
     <class>sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto</class>
+    <class>sv.gob.mined.pescolar.model.HistorialCamEstResAdj</class>
+    <class>sv.gob.mined.pescolar.model.InfoGeneralContratacion</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
