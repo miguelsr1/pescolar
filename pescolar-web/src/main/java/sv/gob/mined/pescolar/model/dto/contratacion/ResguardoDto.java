@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @SqlResultSetMapping(name = "defaultResguadoDto",
-      entities = @EntityResult(entityClass = ResguardoDto.class))
+        entities = @EntityResult(entityClass = ResguardoDto.class))
 public class ResguardoDto implements Serializable {
 
     @Id
@@ -82,5 +82,5 @@ public class ResguardoDto implements Serializable {
     public void setIdNivelEducativo(Long idNivelEducativo) {
         this.idNivelEducativo = idNivelEducativo;
     }
-    
+
 }

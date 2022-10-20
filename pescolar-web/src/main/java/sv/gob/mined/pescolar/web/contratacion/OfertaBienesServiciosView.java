@@ -1,6 +1,5 @@
 package sv.gob.mined.pescolar.web.contratacion;
 
-import java.io.File;
 import sv.gob.mined.pescolar.model.OfertaBienesServicio;
 import sv.gob.mined.pescolar.model.Participante;
 
@@ -31,7 +30,7 @@ import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
-import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.NivelEducativoRepo;
@@ -78,7 +77,7 @@ public class OfertaBienesServiciosView implements Serializable {
 
     private List<Participante> lstParticipantes = new ArrayList();
     private List<RubrosAmostrarInteres> lstRubros = new ArrayList();
-    private List<ResguardoDto> lstResguardo = new ArrayList();
+    private List<ResguardoItemDto> lstResguardo = new ArrayList();
     private List<Filtro> params = new ArrayList();
 
     private List<ProveedorDisponibleDto> lstCapaEmpresas = new ArrayList();
@@ -126,7 +125,7 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getter-setter">
-    public List<ResguardoDto> getLstResguardo() {
+    public List<ResguardoItemDto> getLstResguardo() {
         return lstResguardo;
     }
 
@@ -410,7 +409,7 @@ public class OfertaBienesServiciosView implements Serializable {
         lstCapaEmpresasOtros.clear();
         lstCapaEmpresasOtros.addAll(lstEmpresasOtros);
 
-        if (lstEmpresas.isEmpty()) {
+        if (lstEmpresas.isEmpty() && lstEmpresasOtros.isEmpty()) {
             JsfUtil.mensajeInformacion("No se encontrarón proveedores para este centro escolar.");
         } else {
             PrimeFaces.current().executeScript("PF('dlgProveedor').show();");
@@ -512,17 +511,22 @@ public class OfertaBienesServiciosView implements Serializable {
     public void guardarOferta() {
         if (ofertaBienesServicio.getId() == null) {
             //verificar existencia de resguardo
-            lstResguardo = ofertaResguardoRepo.getLstResguardoADisminuir(codigoEntidad, sessionView.getIdProcesoAdq(), idRubro);
-
-            //Si existe resguardo se restara de lo que el centro escolar contratará
-            if (!lstResguardo.isEmpty()) {
-
-            }
+            Long idProcesoAdqAnt = catalogoRepo.getProcesoAnhoAnterior(sessionView.getIdAnho()).getId();
+            lstResguardo = ofertaResguardoRepo.getLstResguardoADisminuir(codigoEntidad, 
+                    sessionView.getIdProcesoAdq(), 
+                    idProcesoAdqAnt,
+                    idRubro);
 
             ofertaBienesServicio.setFechaInsercion(LocalDateTime.now());
             ofertaBienesServicio.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
 
-            ofertaRepo.save(ofertaBienesServicio);
+            //ofertaRepo.save(ofertaBienesServicio);
+            
+            //Si existe resguardo se restara de lo que el centro escolar contratará
+            if (!lstResguardo.isEmpty()) {
+                PrimeFaces.current().executeScript("PF('dlgResguardo').show();");
+                PrimeFaces.current().ajax().update("outResguardo");
+            }
         } else {
 
             ofertaBienesServicio.setFechaModificacion(LocalDateTime.now());

@@ -13,7 +13,7 @@
                         <p:menuitem value="Nuevo" icon="pi pi-file-o" id="mtmNuevo" disabled="true"/>
                         <p:menuitem value="Modificar" icon="pi pi-pencil" id="mtmModificar" disabled="true"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{ofertaBienesServiciosView.guardarOferta()}"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{ofertaBienesServiciosView.guardarOferta()}" update="outResguardo"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
@@ -77,8 +77,8 @@
                                 <i class="pi pi-list"></i>
                             </h5>
                             <div style="float: right; ">
-                            <p:commandButton id="btoExportar" value=" Exportar" icon="pi pi-upload" style="font-size: 12px;margin-right: 5px;"/>
-                            <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus" style="float: right; font-size: 12px;" action="#{ofertaBienesServiciosView.agregarProveedor()}" update="pnoCantidad"/>
+                                <p:commandButton id="btoExportar" value=" Exportar" icon="pi pi-upload" style="font-size: 12px;margin-right: 5px;"/>
+                                <p:commandButton id="btoAgregarProveedor" value=" Agregar" icon="pi pi-plus" style="float: right; font-size: 12px;" action="#{ofertaBienesServiciosView.agregarProveedor()}" update="pnoCantidad"/>
                             </div>
                         </div>
 
@@ -241,6 +241,32 @@
                 </h:panelGrid>
             </p:dialog>
 
+            <p:dialog id="dlgResguardo" widgetVar="dlgResguardo" width="800" header="Detalle de Resguardo">
+                <p:outputPanel >
+                    <span>
+                        El centro escolar tiene resguardo en bodega, estos serán descontados de la contratación para 2023
+                    </span>
+                    <br/>
+                    <br/>
+                    <p:dataTable id="outResguardo" value="#{ofertaBienesServiciosView.lstResguardo}" var="resguardo">
+                        <p:column headerText="Nivel Educativo" >
+                            <p:outputLabel value="#{resguardo.descripcionNivel}"/>
+                        </p:column>
+                        <p:column headerText="Producto">
+                            <p:outputLabel value="#{resguardo.nombreProducto}"/>
+                        </p:column>
+                        <p:column headerText="Demanda" width="100" style="text-align: right;">
+                            <p:outputLabel value="#{resguardo.total}"/>
+                        </p:column>
+                        <p:column headerText="Can.Resguardo" width="100" style="text-align: right;">
+                            <p:outputLabel value="#{resguardo.cantidad}"/>
+                        </p:column> 
+                        <p:column headerText="Total a comprar" width="100" style="text-align: right;">
+                            <p:outputLabel value="#{resguardo.totalComprar}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:outputPanel>
+            </p:dialog>
 
             <!--p:remoteCommand name="findEntidad" update="menuBar tblParticipantes nombreCE cldFechaApertura btoAgregarProveedor" actionListener="{ofertaMB.buscarEntidadEducativa}" /-->
             <!--p:remoteCommand name="findEmpresa" update="tbEmpresas:tblEmpresas" actionListener="{ofertaMB.filterProveedores()}" />

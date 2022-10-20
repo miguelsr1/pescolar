@@ -124,4 +124,12 @@ public class OfertaResguardo implements Serializable {
         this.estadoEliminacion = estadoEliminacion;
     }
 
+    public Short getRestado() {
+        return restado;
+    }
+
+    public void setRestado(Short restado) {
+        this.restado = restado;
+    }
+
 }

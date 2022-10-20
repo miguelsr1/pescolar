@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.OfertaResguardo;
 import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto;
 
 /**
  *
@@ -17,7 +18,7 @@ public class OfertaResguardoRepo extends AbstractRepository<OfertaResguardo, Lon
         super(OfertaResguardo.class);
     }
 
-    public List<ResguardoDto> getLstResguardoADisminuir(String codigoEntidad, Long idProcesoAdq, Long idRubroInteres) {
+    public List<ResguardoItemDto> getLstResguardoADisminuir(String codigoEntidad, Long idProcesoAdq, Long idProcesoAdqAnt, Long idRubroInteres) {
         String queryName;
 
         switch (idRubroInteres.intValue()) {
@@ -32,9 +33,10 @@ public class OfertaResguardoRepo extends AbstractRepository<OfertaResguardo, Lon
                 break;
         }
 
-        Query q = em.createNamedQuery(queryName, ResguardoDto.class);
+        Query q = em.createNamedQuery(queryName, ResguardoItemDto.class);
         q.setParameter(1, codigoEntidad);
         q.setParameter(2, idProcesoAdq);
+        q.setParameter(3, idProcesoAdqAnt);
         return q.getResultList();
     }
 }

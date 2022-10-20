@@ -22,9 +22,11 @@ import lombok.Setter;
 public class ResguardoItemDto implements Serializable {
 
     @Id
+    private Long idRow;
     private Long idNivelEducativo;
     private Long idProducto;
     private String descripcionNivel;
+    private String nombreProducto;
     private Long total;
     private Long cantidad;
     private Long totalComprar;

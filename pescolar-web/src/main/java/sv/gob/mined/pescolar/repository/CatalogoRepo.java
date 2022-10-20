@@ -25,6 +25,7 @@ import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.EstadisticaCenso;
 import sv.gob.mined.pescolar.model.EstadoReserva;
 import sv.gob.mined.pescolar.model.Municipio;
+import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.MunicipioDto;
 import sv.gob.mined.pescolar.model.dto.OpcionMenuUsuarioDto;
@@ -338,11 +339,17 @@ public class CatalogoRepo {
 
         return lst;
     }
-    
-    public List<RubrosAmostrarInteres> findRubrosByCe(String codigoEntidad, Long idProcesoAdq){
-        Query q = em.createNativeQuery("select rai.* from rubros_amostrar_interes rai inner join rubro_por_ce rce on rai.id_rubro_interes = rce.id_rubro_interes where rce.codigo_entidad = ?1 and rce.id_proceso_adq = ?2 and rce.estado_eliminacion = 0 order by rai.nombre_corto", RubrosAmostrarInteres.class);
-        q.setParameter(1, codigoEntidad);
-        q.setParameter(2, idProcesoAdq);
+
+    public List<RubrosAmostrarInteres> findRubrosByCe(String codigoEntidad, Long idProcesoAdq) {
+        Query q = em.createQuery("select r.idRubroInteres from RubroPorCe r WHERE r.codigoEntidad.codigoEntidad=:pCodigo and r.idProcesoAdq.id=:pIdPro and r.estadoEliminacion=0", RubrosAmostrarInteres.class);
+        q.setParameter("pCodigo", codigoEntidad);
+        q.setParameter("pIdPro", idProcesoAdq);
         return q.getResultList();
+    }
+
+    public ProcesoAdquisicion getProcesoAnhoAnterior(Long idAnho) {
+        Query q = em.createQuery("SELECT p FROM ProcesoAdquisicion p WHERE p.idAnho.id=:pIdAnho and p.padreIdProcesoAdq is null", ProcesoAdquisicion.class);
+        q.setParameter("pIdAnho", idAnho - 1);
+        return (ProcesoAdquisicion) q.getSingleResult();
     }
 }
