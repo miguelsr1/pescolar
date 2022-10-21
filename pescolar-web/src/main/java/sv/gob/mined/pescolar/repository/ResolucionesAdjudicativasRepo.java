@@ -1,5 +1,6 @@
 package sv.gob.mined.pescolar.repository;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
     public ResolucionesAdjudicativasRepo() {
         super(ResolucionesAdjudicativa.class);
     }
-    
+
     @EJB
     private SaldosFacade saldoFacade;
 
@@ -71,12 +72,12 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
             det.setIdProducto(cp);
             det.setNoItem(resguardoDto.getNoItem());
             det.setUsuarioInsercion(usuario);
-            
+
             lstDetalleResguardo.add(det);
         }
         return lstDetalleResguardo;
     }
-    
+
     public Boolean validarCambioEstado(ResolucionesAdjudicativa resAdj, Long estadoReserva) {
         Boolean resultado = false;
         if ((resAdj.getIdEstadoReserva().getId().intValue() == 1 && estadoReserva.intValue() == 2) || (resAdj.getIdEstadoReserva().getId().intValue() == 3 && estadoReserva.intValue() == 2)) {
@@ -90,7 +91,7 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
         }
         return resultado;
     }
-    
+
     @Lock(LockType.WRITE)
     public HashMap<String, Object> aplicarReservaDeFondos(ResolucionesAdjudicativa resAdj,
             Long estadoReserva, String codigoEntidad, String comentarioReversion, String usuario) {
@@ -103,5 +104,16 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
             param.put("error", "Por favor, intenten nuevamente APLICAR la reserva.");
         }
         return param;
+    }
+
+    public ResolucionesAdjudicativa findResolucionesAdjudicativasByIdParticipante(Long participante) {
+        Query q = em.createQuery("SELECT r FROM ResolucionesAdjudicativas r WHERE r.idParticipante.id=:participante and r.estadoEliminacion=0", ResolucionesAdjudicativa.class);
+        q.setParameter("participante", participante);
+        List<ResolucionesAdjudicativa> lst = q.getResultList();
+        if (lst.isEmpty()) {
+            return null;
+        } else {
+            return lst.get(0);
+        }
     }
 }

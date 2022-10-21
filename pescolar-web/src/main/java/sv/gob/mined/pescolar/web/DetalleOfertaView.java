@@ -3,13 +3,14 @@ package sv.gob.mined.pescolar.web;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -62,6 +63,7 @@ public class DetalleOfertaView implements Serializable {
     private Boolean editable = true;
     private Boolean mostrarMsjPrecio = false;
     private Boolean activarFiltro = false;
+    private Boolean mostrarMsj = false;
 
     private BigInteger cantidadTotal = BigInteger.ZERO;
     private BigInteger cantidadTotalResguardo = BigInteger.ZERO;
@@ -114,9 +116,10 @@ public class DetalleOfertaView implements Serializable {
             //recuperación de techo presupuestario del ce
             activarFiltro = true;
             participante = catalogoRepo.findEntityByPk(Participante.class, Long.parseLong(parametros.get("idParticipante")));
+            codigoEntidad = participante.getIdOferta().getCodigoEntidad().getCodigoEntidad();
+            detalleProceso = participante.getIdOferta().getIdDetProcesoAdq();
 
             params.clear();
-
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad", participante.getIdOferta().getCodigoEntidad().getCodigoEntidad()).build());
             params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq", participante.getIdOferta().getIdDetProcesoAdq()).build());
 
@@ -151,16 +154,16 @@ public class DetalleOfertaView implements Serializable {
     }
 
     private void crearReserva() {
+        editable = true;
         idEstadoReserva = 1l;
         resAdj = new ResolucionesAdjudicativa();
-        resAdj.setIdParticipante(new Participante(idParticipante));
-        resAdj.setIdEstadoReserva(new EstadoReserva(idEstadoReserva));
+        resAdj.setIdParticipante(participante);
+        resAdj.setValor(BigDecimal.ZERO);
+        resAdj.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
+        resAdj.setFechaInsercion(LocalDateTime.now());
+        resAdj.setEstadoEliminacion(0l);
+        resAdj.setIdEstadoReserva(catalogoRepo.findEntityByPk(EstadoReserva.class, 1l));
 
-        /*params.clear();
-        params.add(new Filtro(TipoOperador.EQUALS, "idEmpresa.id", participante.getIdEmpresa().getId()));
-        params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idRubroInteres.id", participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId()));
-        params.add(new Filtro(TipoOperador.EQUALS, "idMuestraInteres.idAnho.id", participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId()));*/
-        //lstPreciosEmp = (List<PreciosRefRubroEmp>) catalogoRepo.findListByParam(PreciosRefRubroEmp.class, params);
         lstPreciosEmp = precioRefRubroEmpRepo.findPreciosByEmp(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
 
         lstNiveles = NivelEducativoRepo.findNivelesByCodigoEntAndProcesoAdq(participante.getIdOferta().getCodigoEntidad().getCodigoEntidad(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getId());
@@ -174,7 +177,7 @@ public class DetalleOfertaView implements Serializable {
                         Long temIdNivel = 0l;
                         if (participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId().compareTo(1l) == 0) { //rubro uniforme
                             switch (idNivel.intValue()) {
-                                case 1:
+                                case 22:
                                 case 6:
                                 case 16:
                                 case 18:
@@ -220,7 +223,8 @@ public class DetalleOfertaView implements Serializable {
                 }
             }
 
-            resolucionRepo.save(resAdj);
+            participante.getResolucionesAdjudicativaList().add(resAdj);
+            participanteRepo.update(participante);
             verificarItemsEnResguardo();
         } else {
             //bandera para monstrar mensaje que el proveedor no tiene precios de referencia ingresados
@@ -635,7 +639,7 @@ public class DetalleOfertaView implements Serializable {
             if (det.getEstadoEliminacion().compareTo(0l) == 0) {
                 det.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
                 det.setFechaEliminacion(LocalDateTime.now());
-            } else {
+
                 if (det.getCantidad().compareTo(BigInteger.ZERO) == 0) {
                     JsfUtil.mensajeAlerta("Al menos un detalle de la oferta tiene cantidad de ITEMS con valor de CERO.");
                     return "";
@@ -669,6 +673,7 @@ public class DetalleOfertaView implements Serializable {
 
         if (!resolucionRepo.validarCambioEstado(resAdj, idEstadoReserva)) {
             JsfUtil.mensajeAlerta("Cambio de estado inválido");
+            return "";
         } else {
             switch (idEstadoReserva.intValue()) {
                 case 2:
@@ -698,5 +703,108 @@ public class DetalleOfertaView implements Serializable {
             JsfUtil.mensajeAlerta(param.get("error").toString());
         }
         return exito;
+    }
+
+    public void buscarItemsProveedor() {
+        mostrarMsj = false;
+        if (idParticipante != null && idParticipante.compareTo(0l) != 0) {
+            try {
+                detalleProceso = participante.getIdOferta().getIdDetProcesoAdq();
+
+                //verificar si el proveedor seleccionado posee precios de referencia
+                if (participanteRepo.isPrecioRef(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId())) {
+
+                    //verificar el estado de la resersolucion adjudicativa
+                    ResolucionesAdjudicativa res = resolucionRepo.findResolucionesAdjudicativasByIdParticipante(idParticipante);
+                    int idResolucion;
+
+                    if (res == null) {
+                        idResolucion = 1;
+                    } else {
+                        idResolucion = res.getIdEstadoReserva().getId().intValue();
+                    }
+
+                    switch (idResolucion) {
+                        case 1://digitacion
+                        case 3://revertida
+                            lstPreciosEmp = participanteRepo.findPreciosRefRubroEmpRubro(participante.getIdEmpresa(),
+                                    detalleProceso.getIdRubroAdq().getId(),
+                                    detalleProceso.getIdProcesoAdq().getIdAnho().getId());
+                            lstNiveles = ofertaRepo.getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(detalleProceso.getIdProcesoAdq().getId(), participante.getIdOferta().getCodigoEntidad().getCodigoEntidad());
+
+                            //en el momento de creación del detalle de oferta, se agregaran todos los items calificados del proveedor
+                            //seleccionado con el objetivo de facilitar el ingreso de esta información
+                            if (participante.getDetalleOfertasList().isEmpty()) {
+                                for (PreciosRefRubroEmp preRefEmp : lstPreciosEmp) {
+                                    if (preRefEmp.getIdProducto().getId().intValue() != 1) {
+                                        for (Long idNivel : lstNiveles) {
+                                            Long temIdNivel = 0l;
+                                            if (detalleProceso.getIdRubroAdq().getIdRubroUniforme().intValue() == 1) { //rubro uniforme
+                                                switch (idNivel.intValue()) {
+                                                    case 1:
+                                                    case 6:
+                                                    case 16:
+                                                    case 18:
+                                                        temIdNivel = idNivel;
+                                                        break;
+                                                    case 3://primer ciclo
+                                                    case 4://segundo ciclo
+                                                    case 5://tercer ciclo
+                                                    case 7://7o grado
+                                                    case 8://8o grado
+                                                    case 9://9o grado
+                                                    case 10://1o grado
+                                                    case 11://2o grado
+                                                    case 12://3o grado
+                                                    case 13://4o grado
+                                                    case 14://5o grado
+                                                    case 15://6o grado
+                                                        temIdNivel = 2l;
+                                                        break;
+                                                }
+                                            } else {//rubro de utiles o zapatos
+                                                temIdNivel = idNivel;
+                                            }
+
+                                            if (preRefEmp.getIdNivelEducativo().getId().compareTo(temIdNivel) == 0) {
+                                                DetalleOferta det = new DetalleOferta();
+                                                det.setNoItem(preRefEmp.getNoItem());
+                                                det.setIdNivelEducativo(preRefEmp.getIdNivelEducativo());
+                                                det.setIdProducto(preRefEmp.getIdProducto());
+                                                det.setConsolidadoEspTec(preRefEmp.getIdProducto().toString() + ", " + preRefEmp.getIdNivelEducativo().toString());
+                                                det.setCantidad(BigInteger.ZERO);
+                                                det.setPrecioUnitario(preRefEmp.getPrecioReferencia());
+                                                det.setEstadoEliminacion(0l);
+                                                det.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
+                                                det.setFechaInsercion(LocalDateTime.now());
+                                                det.setModificativa(0l);
+                                                det.setIdParticipante(participante);
+
+                                                participante.getDetalleOfertasList().add(det);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case 2:
+                            JsfUtil.mensajeInformacion("Reserva de fondos APLICADA. Primero debe REVERTIR la reserva para realizar cambios.");
+                            break;
+                        case 4:
+                        case 5:
+                            JsfUtil.mensajeInformacion("La reserva de fondos se encuentra ANULADA/MODIFICADA, No se pueden realizar cambios.");
+                            break;
+                    }
+                } else {
+                    //bandera para monstrar mensaje que el proveedor no tiene precios de referencia ingresados
+                    mostrarMsj = true;
+                }
+            } catch (Exception e) {
+                Logger.getLogger(DetalleOfertaView.class.getName()).log(Level.INFO, "Error obteniendo el participante {0}", idParticipante);
+                JsfUtil.mensajeError("Ah ocurrido un error");
+            }
+
+        }
     }
 }

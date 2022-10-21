@@ -12,6 +12,8 @@ public class ResolucionesAdjudicativa implements Serializable {
 
     @Id
     @Column(name = "ID_RESOLUCION_ADJ", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resolucion")
+    @SequenceGenerator(name = "resolucion", sequenceName = "SEQ_RESOLUCION_ADJ", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -13,7 +13,7 @@
                         <p:menuitem value="Nuevo" icon="pi pi-file-o" id="mtmNuevo" disabled="true"/>
                         <p:menuitem value="Modificar" icon="pi pi-pencil" id="mtmModificar" disabled="true"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
-                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{ofertaBienesServiciosView.guardarOferta()}" update="outResguardo"/>
+                        <p:menuitem value="Guardar" icon="pi pi-save" action="#{ofertaBienesServiciosView.guardarOferta()}" update="tblParticipantes"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
@@ -100,10 +100,13 @@
                             </p:column>
 
                             <p:column headerText="Eliminar" width="40" styleClass="centrado">
-                                <p:commandLink  process="@this" >
-                                    <p:outputLabel rendered="#{!participante.eliminar}"> <i class="fa fa-trash"></i></p:outputLabel>
-                                    <p:outputLabel rendered="#{participante.eliminar}"> <i class="fa fa-minus-circle"></i></p:outputLabel>
-                                    <f:viewParam name="idParticipante" value="#{participante.id}"/>
+                                <p:commandLink  oncomplete="PF('confirmDialog').show();" process="@this" >
+                                    <p:outputLabel rendered="#{!participante.eliminar}"> <i class="pi pi-trash"></i></p:outputLabel>
+                                    <p:outputLabel rendered="#{participante.eliminar}"> <i class="pi pi-minus-circle"></i></p:outputLabel>
+                                    <f:setPropertyActionListener value="#{participante}" target="#{ofertaBienesServiciosView.participanteSeleccionado}"/>  
+                                    <f:setPropertyActionListener value="#{rowId}" target="#{ofertaMB.rowEdit}"/>  
+
+                                    <f:viewParam name="idParticipante" value="#{participante.idParticipante}"/>
                                 </p:commandLink>
                             </p:column>
 
@@ -120,9 +123,12 @@
                 </div>
             </div>
 
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="400">
-                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+            <p:confirmDialog id="confirmDialog" message="¿Esta seguro de eliminar el proveedor seleccionado?" severity="alert" appendTo="@(body)" 
+                             header="Confirmación" widgetVar="confirmDialog" closable="false" showEffect="fade" hideEffect="fade">  
+                <p:commandButton id="confirm" value="Si" icon="fa fa-check-circle" ajax="true" process="@this" actionListener="#{ofertaBienesServiciosView.deleteParticipante}" 
+                                 update="tblParticipantes" oncomplete="PF('confirmDialog').hide();"/>  
+                <p:commandButton id="decline" value="No" onclick="PF('confirmDialog').hide();" type="button" icon="fa fa-times-circle"/>
+
             </p:confirmDialog>
 
 
@@ -210,7 +216,7 @@
                         </p:tab>
 
                         <p:tab title="Precios de Referencia">
-                            <p:dataTable id="tblDetallePrecio" widgetVar="tblDetallePrecio" value="#{ofertaMB.lstPrecios}" var="precio" 
+                            <p:dataTable id="tblDetallePrecio" widgetVar="tblDetallePrecio" value="#{ofertaMB.lstPrecios}" var="precio"
                                          emptyMessage="No se han registrado precios a este proveedor" styleClass="ui-datatable-borderless ui-datatable-reflow">
                                 <p:column headerText="Item" width="15" id="item" styleClass="centrado">
                                     <p:outputLabel value="#{precio.noItem}" />

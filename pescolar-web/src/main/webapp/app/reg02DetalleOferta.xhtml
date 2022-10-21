@@ -166,6 +166,7 @@
                                 <p:selectOneMenu id="cboProveedor" value="#{detalleOfertaView.participante}" rendered="#{not detalleOfertaView.activarFiltro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
                                     <f:selectItems value="#{detalleOfertaView.lstParticipantes}" var="par" itemValue="#{par}" itemLabel="#{par.idEmpresa.razonSocial}"/>
+                                    <p:ajax update="cboEst pnlSaldos tblDetalleOferta" listener="#{detalleOfertaView.buscarItemsProveedor}" />
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -272,7 +273,7 @@
                         </div>
 
 
-                        <p:dataTable id="tblDetalleOferta" value="#{detalleOfertaView.participante.detalleOfertasList}" lazy="true"
+                        <p:dataTable id="tblDetalleOferta" value="#{detalleOfertaView.participante.detalleOfertasList}" 
                                      var="detalle" reflow="true" editable="#{detalleOfertaView.editable}" editMode="cell" rowIndexVar="rowId"
                                      styleClass="ui-datatable-striped" widgetVar="tblDetalleOferta">
 
@@ -346,55 +347,7 @@
                             </f:facet>
                         </p:dataTable>
                         
-                        <p:dataTable id="tblDetalleResguardo" value="#{detalleOfertaView.lstDetalleResguaro}" lazy="true"
-                                     var="detalle" reflow="true" editable="false" editMode="cell" rowIndexVar="rowId"
-                                     styleClass="ui-datatable-striped" widgetVar="tblDetalleOferta">
-
-                            <p:column headerText="No." width="27" id="item">
-                                <p:cellEditor>
-                                    <f:facet name="output">
-                                        <p:outputLabel value="#{detalle.noItem}"/>
-                                    </f:facet>
-                                    <f:facet name="input">
-                                        <p:inputText id="txtNoItem" value="#{detalle.noItem}" style="width:100%"/>
-                                    </f:facet>
-                                </p:cellEditor>
-                            </p:column>
-
-                            <p:column headerText="Descripción" field="consolidadoEspTec" filterable="false" sortable="false"/>
-
-                            <p:column headerText="Cant." width="60" id="cantidad" style="text-align: right;">
-                                <p:cellEditor>
-                                    <f:facet name="output">
-                                        <p:outputLabel value="#{detalle.cantidadResguardo}"/>
-                                    </f:facet>
-                                    <f:facet name="input">
-                                        <p:inputNumber decimalPlaces="0" id="txtCantidad" value="#{detalle.cantidad}" style="width:100%;" inputStyle="text-align: right;">
-                                            <p:ajax event="keyup" update="tblDetalleOferta:#{rowId}:lblst" global="false"/>
-                                        </p:inputNumber>
-                                    </f:facet>
-                                </p:cellEditor>
-                            </p:column>
-
-                            <f:facet name="footer">
-                                <div class="invoice-summary">
-                                    <div class="invoice-notes">
-
-                                    </div>
-                                    <div>
-                                        <div class="invoice-details">
-                                            <div class="invoice-label">TOTAL</div>
-                                            <div class="invoice-value">
-                                                <p:outputLabel id="lblTotalCantidad" value="#{detalleOfertaView.cantidadResguardo}">
-                                                    <f:convertNumber pattern="#,###"/>
-                                                </p:outputLabel>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </f:facet>
-                        </p:dataTable>
-
+                        
                         <p:remoteCommand name="updDetalleOferta" update="tblDetalleOferta:lblTotalMonto tblDetalleOferta:lblTotalCantidad"/>
                     </div>
                 </div>

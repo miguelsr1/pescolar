@@ -20,6 +20,7 @@ import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Participante;
 import sv.gob.mined.pescolar.model.PorcentajeEvaluacion;
 import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
+import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 import sv.gob.mined.pescolar.model.dto.NotificacionOfertaProvDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
@@ -36,9 +37,9 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
     @Inject
     private CatalogoRepo catalogoRepo;
 
-    @Inject 
+    @Inject
     private ReportesRepo reporteRepo;
-    
+
     public ParticipanteRepo() {
         super(Participante.class);
     }
@@ -341,4 +342,20 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
         return notificacionOfertaProvDto;
     }
 
+    public ResolucionesAdjudicativa findResolucionByParticipante(Participante par) {
+        Query q = em.createQuery("SELECT r FROM ResolucionesAdjudicativa r WHERE r.idParticipante=:pIdPar", ResolucionesAdjudicativa.class);
+        q.setParameter("pIdPar", par);
+        return q.getResultList().isEmpty() ? null : (ResolucionesAdjudicativa) q.getResultList().get(0);
+    }
+    
+    public Boolean isPrecioRef(Long idEmpresa, Long idRubro, Long idAnho) {
+        Query query = em.createQuery("SELECT p FROM PreciosRefRubroEmp p WHERE p.estadoEliminacion=0 and p.idMuestraInteres.idEmpresa.id=:pIdEmpresa and p.idMuestraInteres.idRubroInteres.id=:pIdRubro and  p.idMuestraInteres.idAnho.id=:pIdAnho", PreciosRefRubroEmp.class);
+        query.setParameter("pIdEmpresa", idEmpresa);
+        query.setParameter("pIdRubro", idRubro);
+        query.setParameter("pIdAnho", idAnho);
+
+        List<PreciosRefRubroEmp> lstPrecios = query.getResultList();
+
+        return !lstPrecios.isEmpty();
+    }
 }

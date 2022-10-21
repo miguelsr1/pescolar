@@ -245,10 +245,11 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
         return mapItems;
     }
 
-    /*public OfertaBienesServicio findOfertaByCodEntAndRubro(String codigoEntidad, Long idRubro){
-        CriteriaQuery<OfertaBienesServicio> cq = em.getCriteriaBuilder().createQuery(OfertaBienesServicio.class);
-        Root<OfertaBienesServicio> root = cq.from(OfertaBienesServicio.class);
-        
-        
-    }*/
+    public List<Long> getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(Long idProcesoAdq, String codigoEntidad) {
+        Query q = em.createQuery("SELECT DISTINCT e.idNivelEducativo.id FROM EstadisticaCenso e WHERE e.idProcesoAdq.id=:idProAdq AND e.codigoEntidad=:codEnt AND (e.masculino >0 OR e.femenimo > 0) order by e.idNivelEducativo.id");
+        q.setParameter("idProAdq", idProcesoAdq);
+        q.setParameter("codEnt", codigoEntidad);
+        return q.getResultList();
+    }
+
 }

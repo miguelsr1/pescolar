@@ -10,7 +10,6 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +26,7 @@ import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Municipio;
+import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ProveedorDisponibleDto;
@@ -38,6 +38,7 @@ import sv.gob.mined.pescolar.repository.OfertaRepo;
 import sv.gob.mined.pescolar.repository.OfertaResguardoRepo;
 import sv.gob.mined.pescolar.repository.ParticipanteRepo;
 import sv.gob.mined.pescolar.repository.PrecioRefRubroEmpRepo;
+import sv.gob.mined.pescolar.repository.ResolucionesAdjudicativasRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.db.Filtro;
 import sv.gob.mined.pescolar.utils.enums.TipoOperacion;
@@ -66,6 +67,7 @@ public class OfertaBienesServiciosView implements Serializable {
     private Long cantidadAlumnos;
 
     private Empresa empresaSeleccionada;
+    private Participante participanteSeleccionado;
     private DetalleProcesoAdq detalleProceso;
     private OfertaBienesServicio ofertaBienesServicio;
     private VwCatalogoEntidadEducativa entidadEducativa;
@@ -102,6 +104,8 @@ public class OfertaBienesServiciosView implements Serializable {
     private OfertaRepo ofertaRepo;
     @Inject
     private OfertaResguardoRepo ofertaResguardoRepo;
+    @Inject
+    private ResolucionesAdjudicativasRepo resoRepo;
 
     public OfertaBienesServiciosView() {
     }
@@ -125,6 +129,14 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getter-setter">
+    public Participante getParticipanteSeleccionado() {
+        return participanteSeleccionado;
+    }
+
+    public void setParticipanteSeleccionado(Participante participanteSeleccionado) {
+        this.participanteSeleccionado = participanteSeleccionado;
+    }
+
     public List<ResguardoItemDto> getLstResguardo() {
         return lstResguardo;
     }
@@ -447,7 +459,7 @@ public class OfertaBienesServiciosView implements Serializable {
                                 Participante participante = new Participante();
 
                                 participante.setEstadoEliminacion(0l);
-                                participante.setFechaInsercion(LocalDate.now());
+                                participante.setFechaInsercion(LocalDateTime.now());
                                 participante.setIdEmpresa(empresaSeleccionada);
                                 participante.setIdOferta(getOferta());
                                 participante.setModificativa(0l);
@@ -511,28 +523,30 @@ public class OfertaBienesServiciosView implements Serializable {
     public void guardarOferta() {
         if (ofertaBienesServicio.getId() == null) {
             //verificar existencia de resguardo
-            Long idProcesoAdqAnt = catalogoRepo.getProcesoAnhoAnterior(sessionView.getIdAnho()).getId();
+            /*Long idProcesoAdqAnt = catalogoRepo.getProcesoAnhoAnterior(sessionView.getIdAnho()).getId();
             lstResguardo = ofertaResguardoRepo.getLstResguardoADisminuir(codigoEntidad, 
                     sessionView.getIdProcesoAdq(), 
                     idProcesoAdqAnt,
-                    idRubro);
+                    idRubro);*/
 
+            ofertaBienesServicio.setEstadoEliminacion(0l);
             ofertaBienesServicio.setFechaInsercion(LocalDateTime.now());
             ofertaBienesServicio.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
 
-            //ofertaRepo.save(ofertaBienesServicio);
-            
+            ofertaRepo.save(ofertaBienesServicio);
+            JsfUtil.mensajeInsert();
             //Si existe resguardo se restara de lo que el centro escolar contratará
-            if (!lstResguardo.isEmpty()) {
+            /*if (!lstResguardo.isEmpty()) {
                 PrimeFaces.current().executeScript("PF('dlgResguardo').show();");
                 PrimeFaces.current().ajax().update("outResguardo");
-            }
+            }*/
         } else {
 
             ofertaBienesServicio.setFechaModificacion(LocalDateTime.now());
             ofertaBienesServicio.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
 
             ofertaRepo.update(ofertaBienesServicio);
+            JsfUtil.mensajeUpdate();
         }
     }
 
@@ -554,5 +568,49 @@ public class OfertaBienesServiciosView implements Serializable {
         }
 
         return r;
+    }
+
+    public void deleteParticipante() {
+        if (participanteSeleccionado.getId() == null) {
+            ofertaBienesServicio.getParticipantesList().remove(participanteSeleccionado);
+        } else {
+            ResolucionesAdjudicativa res = participanteRepo.findResolucionByParticipante(participanteSeleccionado);
+            if (res != null) {
+                //El proveedor seleccionado tiene un reserva de fondos
+                switch (res.getIdEstadoReserva().getId().intValue()) {
+                    case 1:
+                    case 3:
+                        res.setEstadoEliminacion(1l);
+                        try {
+                            res.setFechaModificacion(LocalDateTime.now());
+                            res.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
+                            resoRepo.update(res);
+                            participanteSeleccionado.setEstadoEliminacion(1l);
+                            participanteSeleccionado.setFechaEliminacion(LocalDateTime.now());
+                            participanteSeleccionado.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
+
+                        } catch (Exception ex) {
+                            JsfUtil.mensajeError("Ocurrio un error en la operación.\n" + ex.getMessage());
+                        }
+                        break;
+                    case 2:
+                    case 4:
+                    case 5:
+                        JsfUtil.mensajeAlerta("No se puede eliminar este participante, "
+                                + "porque se encuentra en una reserva de fondos con estado: " + res.getIdEstadoReserva().getDescripcionReserva());
+                        break;
+                }
+            } else {
+                //El proveedor seleccionado NO tiene reserva de fondos
+                try {
+                    participanteSeleccionado.setEstadoEliminacion(1l);
+                    participanteSeleccionado.setFechaEliminacion(LocalDateTime.now());
+                    participanteSeleccionado.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
+                    ofertaRepo.update(ofertaBienesServicio);
+                } catch (Exception ex) {
+                    JsfUtil.mensajeError("Ocurrio un error en la eliminación del participante.");
+                }
+            }
+        }
     }
 }

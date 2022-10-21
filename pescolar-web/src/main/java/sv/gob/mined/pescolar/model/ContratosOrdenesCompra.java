@@ -4,12 +4,15 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Table(name = "CONTRATOS_ORDENES_COMPRAS")
 @Entity
 public class ContratosOrdenesCompra implements Serializable {
     @Id
     @Column(name = "ID_CONTRATO", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contrato")
+    @SequenceGenerator(name = "contrato", sequenceName = "SEQ_CONTRATO", allocationSize = 1, initialValue = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -56,16 +59,16 @@ public class ContratosOrdenesCompra implements Serializable {
     private String usuarioModificacion;
 
     @Column(name = "FECHA_MODIFICACION")
-    private LocalDate fechaModificacion;
+    private LocalDateTime fechaModificacion;
 
     @Column(name = "FECHA_ELIMINACION")
-    private LocalDate fechaEliminacion;
+    private LocalDateTime fechaEliminacion;
 
     @Column(name = "ESTADO_ELIMINACION", nullable = false)
     private Long estadoEliminacion;
 
     @Column(name = "FECHA_ORDEN_INICIO")
-    private LocalDate fechaOrdenInicio;
+    private LocalDateTime fechaOrdenInicio;
 
     @Column(name = "MIEMBRO_FIRMA", length = 200)
     private String miembroFirma;
@@ -100,11 +103,11 @@ public class ContratosOrdenesCompra implements Serializable {
         this.miembroFirma = miembroFirma;
     }
 
-    public LocalDate getFechaOrdenInicio() {
+    public LocalDateTime getFechaOrdenInicio() {
         return fechaOrdenInicio;
     }
 
-    public void setFechaOrdenInicio(LocalDate fechaOrdenInicio) {
+    public void setFechaOrdenInicio(LocalDateTime fechaOrdenInicio) {
         this.fechaOrdenInicio = fechaOrdenInicio;
     }
 
@@ -116,19 +119,19 @@ public class ContratosOrdenesCompra implements Serializable {
         this.estadoEliminacion = estadoEliminacion;
     }
 
-    public LocalDate getFechaEliminacion() {
+    public LocalDateTime getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(LocalDate fechaEliminacion) {
+    public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 
-    public LocalDate getFechaModificacion() {
+    public LocalDateTime getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(LocalDate fechaModificacion) {
+    public void setFechaModificacion(LocalDateTime fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
