@@ -53,7 +53,7 @@ public class ContratosOrdenesCompra implements Serializable {
     private String usuarioInsercion;
 
     @Column(name = "FECHA_INSERCION", nullable = false)
-    private LocalDate fechaInsercion;
+    private LocalDateTime fechaInsercion;
 
     @Column(name = "USUARIO_MODIFICACION", length = 25)
     private String usuarioModificacion;
@@ -143,11 +143,11 @@ public class ContratosOrdenesCompra implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public LocalDate getFechaInsercion() {
+    public LocalDateTime getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(LocalDate fechaInsercion) {
+    public void setFechaInsercion(LocalDateTime fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 

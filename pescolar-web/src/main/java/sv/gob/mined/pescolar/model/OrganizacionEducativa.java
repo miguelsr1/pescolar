@@ -1,7 +1,7 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,7 +50,7 @@ public class OrganizacionEducativa implements Serializable {
     @Column(name = "USUARIO_INSERCION")
     private String usuarioInsercion;
     @Column(name = "FECHA_INSERCION")
-    private LocalDate fechaInsercion;
+    private LocalDateTime fechaInsercion;
     @Column(name = "USUARIO_MODIFICACION")
     private String usuarioModificacion;
     @Column(name = "TEL_DIRECTOR")
@@ -60,9 +60,9 @@ public class OrganizacionEducativa implements Serializable {
     @Column(name = "NUMERO_DUI")
     private String numeroDui;
     @Column(name = "FECHA_MODIFICACION")
-    private LocalDate fechaModificacion;
+    private LocalDateTime fechaModificacion;
     @Column(name = "FECHA_ELIMINACION")
-    private LocalDate fechaEliminacion;
+    private LocalDateTime fechaEliminacion;
     @Column(name = "ESTADO_ELIMINACION")
     private Long estadoEliminacion;
     @Column(name = "CORREO_ELECTRONICO")
@@ -70,7 +70,7 @@ public class OrganizacionEducativa implements Serializable {
 
     public OrganizacionEducativa() {
         estadoEliminacion = 0l;
-        fechaInsercion = LocalDate.now();
+        fechaInsercion = LocalDateTime.now();
     }
 
     public OrganizacionEducativa(Long idOrganizacionEducativa) {
@@ -125,11 +125,11 @@ public class OrganizacionEducativa implements Serializable {
         this.usuarioInsercion = usuarioInsercion;
     }
 
-    public LocalDate getFechaInsercion() {
+    public LocalDateTime getFechaInsercion() {
         return fechaInsercion;
     }
 
-    public void setFechaInsercion(LocalDate fechaInsercion) {
+    public void setFechaInsercion(LocalDateTime fechaInsercion) {
         this.fechaInsercion = fechaInsercion;
     }
 
@@ -141,19 +141,19 @@ public class OrganizacionEducativa implements Serializable {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public LocalDate getFechaModificacion() {
+    public LocalDateTime getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(LocalDate fechaModificacion) {
+    public void setFechaModificacion(LocalDateTime fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
-    public LocalDate getFechaEliminacion() {
+    public LocalDateTime getFechaEliminacion() {
         return fechaEliminacion;
     }
 
-    public void setFechaEliminacion(LocalDate fechaEliminacion) {
+    public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
         this.fechaEliminacion = fechaEliminacion;
     }
 

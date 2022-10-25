@@ -2,6 +2,7 @@ package sv.gob.mined.pescolar.repository;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -128,7 +129,7 @@ public class EntidadEducativaRepo extends AbstractRepository<VwCatalogoEntidadEd
         if (organizacionEducativa.getIdOrganizacionEducativa() == null) {
             em.persist(organizacionEducativa);
         } else {
-            organizacionEducativa.setFechaModificacion(LocalDate.now());
+            organizacionEducativa.setFechaModificacion(LocalDateTime.now());
             em.merge(organizacionEducativa);
         }
     }

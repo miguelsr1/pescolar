@@ -1,6 +1,7 @@
 package sv.gob.mined.pescolar.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.OrganizacionEducativa;
@@ -22,7 +23,7 @@ public class EntidadEducativaClimaFrio extends AbstractRepository<VwCeClimaFrio,
         if (organizacionEducativa.getIdOrganizacionEducativa() == null) {
             em.persist(organizacionEducativa);
         } else {
-            organizacionEducativa.setFechaModificacion(LocalDate.now());
+            organizacionEducativa.setFechaModificacion(LocalDateTime.now());
             em.merge(organizacionEducativa);
         }
     }
