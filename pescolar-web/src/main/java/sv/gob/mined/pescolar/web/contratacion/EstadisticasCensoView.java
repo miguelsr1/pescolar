@@ -93,14 +93,17 @@ public class EstadisticasCensoView implements Serializable {
     private DetalleProcesoAdq detProAdqUti;
     private DetalleProcesoAdq detProAdqZap;
     //private DetalleProcesoAdq detProAdqMascarilla;
-    private EstadisticaCenso estaditicaPar = new EstadisticaCenso();
+    //private EstadisticaCenso estaditicaPar = new EstadisticaCenso();
     private EstadisticaCenso estaditicaIniPar = new EstadisticaCenso();
+    private EstadisticaCenso estaditicaPar4 = new EstadisticaCenso();
+    private EstadisticaCenso estaditicaPar5 = new EstadisticaCenso();
+    private EstadisticaCenso estaditicaPar6 = new EstadisticaCenso();
     private EstadisticaCenso estaditicaCiclo1 = new EstadisticaCenso();
     private EstadisticaCenso estaditicaCiclo2 = new EstadisticaCenso();
     private EstadisticaCenso estaditicaCiclo3 = new EstadisticaCenso();
     private EstadisticaCenso estaditicaCiclo3MF = new EstadisticaCenso();
-    private EstadisticaCenso estInicial1grado = new EstadisticaCenso();
     private EstadisticaCenso estInicial2grado = new EstadisticaCenso();
+    private EstadisticaCenso estInicial3grado = new EstadisticaCenso();
     private EstadisticaCenso est1grado = new EstadisticaCenso();
     private EstadisticaCenso est2grado = new EstadisticaCenso();
     private EstadisticaCenso est3grado = new EstadisticaCenso();
@@ -193,6 +196,30 @@ public class EstadisticasCensoView implements Serializable {
         }
     }
 
+    public EstadisticaCenso getEstaditicaPar4() {
+        return estaditicaPar4;
+    }
+
+    public void setEstaditicaPar4(EstadisticaCenso estaditicaPar4) {
+        this.estaditicaPar4 = estaditicaPar4;
+    }
+
+    public EstadisticaCenso getEstaditicaPar5() {
+        return estaditicaPar5;
+    }
+
+    public void setEstaditicaPar5(EstadisticaCenso estaditicaPar5) {
+        this.estaditicaPar5 = estaditicaPar5;
+    }
+
+    public EstadisticaCenso getEstaditicaPar6() {
+        return estaditicaPar6;
+    }
+
+    public void setEstaditicaPar6(EstadisticaCenso estaditicaPar6) {
+        this.estaditicaPar6 = estaditicaPar6;
+    }
+
     public String getNombreTesorero() {
         return nombreTesorero;
     }
@@ -233,20 +260,20 @@ public class EstadisticasCensoView implements Serializable {
         this.estaditicaCiclo3MF = estaditicaCiclo3MF;
     }
 
-    public EstadisticaCenso getEstInicial1grado() {
-        return estInicial1grado;
-    }
-
-    public void setEstInicial1grado(EstadisticaCenso estInicial1grado) {
-        this.estInicial1grado = estInicial1grado;
-    }
-
     public EstadisticaCenso getEstInicial2grado() {
         return estInicial2grado;
     }
 
-    public void setEstInicial2grado(EstadisticaCenso estInicial2grado) {
-        this.estInicial2grado = estInicial2grado;
+    public void setEstInicial2grado(EstadisticaCenso estInicial1grado) {
+        this.estInicial2grado = estInicial1grado;
+    }
+
+    public EstadisticaCenso getEstInicial3grado() {
+        return estInicial3grado;
+    }
+
+    public void setEstInicial3grado(EstadisticaCenso estInicial2grado) {
+        this.estInicial3grado = estInicial2grado;
     }
 
     public EstadisticaCenso getEstaditicaBacMF() {
@@ -550,13 +577,13 @@ public class EstadisticasCensoView implements Serializable {
         this.organizacionEducativa = organizacionEducativa;
     }
 
-    public EstadisticaCenso getEstaditicaPar() {
+    /*public EstadisticaCenso getEstaditicaPar() {
         return estaditicaPar;
     }
 
     public void setEstaditicaPar(EstadisticaCenso estaditicaPar) {
         this.estaditicaPar = estaditicaPar;
-    }
+    }*/
 
     public EstadisticaCenso getEstaditicaCiclo1() {
         return estaditicaCiclo1;
@@ -861,7 +888,7 @@ public class EstadisticasCensoView implements Serializable {
         ceClimaFrio = false;
         entidadEducativa = new VwCatalogoEntidadEducativa();
         organizacionEducativa = new OrganizacionEducativa();
-        estaditicaPar = new EstadisticaCenso();
+        //estaditicaPar = new EstadisticaCenso();
         estaditicaCiclo1 = new EstadisticaCenso();
         estaditicaCiclo2 = new EstadisticaCenso();
         estaditicaCiclo3 = new EstadisticaCenso();
@@ -963,13 +990,15 @@ public class EstadisticasCensoView implements Serializable {
 
         if (lstEstadistica.isEmpty()) {
             if (procesoAdquisicion.getIdAnho().getId().intValue() >= 9) {
-                estInicial1grado = crearEstadistica(25l);
-                estInicial2grado = crearEstadistica(26l);
+                estInicial2grado = crearEstadistica(25l);
+                estInicial3grado = crearEstadistica(26l);
                 estaditicaIniPar = crearEstadistica(22l);
+                estaditicaPar4 = crearEstadistica(28l);
+                estaditicaPar5 = crearEstadistica(29l);
+                estaditicaPar6 = crearEstadistica(30l);
                 estaditicaCiclo3MF = crearEstadistica(23l);
                 estaditicaBacMF = crearEstadistica(24l);
             }
-            estaditicaPar = crearEstadistica(1l);
             estaditicaCiclo1 = crearEstadistica(3l);
             estaditicaCiclo2 = crearEstadistica(4l);
             estaditicaCiclo3 = crearEstadistica(5l);
@@ -989,13 +1018,16 @@ public class EstadisticasCensoView implements Serializable {
             est3media = crearEstadistica(18l);
         } else {
             if (procesoAdquisicion.getIdAnho().getId().intValue() >= 9) {
-                estInicial1grado = getEstadisticaCenso(lstEstadistica, 25l);
-                estInicial2grado = getEstadisticaCenso(lstEstadistica, 26l);
+                estInicial2grado = getEstadisticaCenso(lstEstadistica, 25l);
+                estInicial3grado = getEstadisticaCenso(lstEstadistica, 26l);
                 estaditicaIniPar = getEstadisticaCenso(lstEstadistica, 22l);
+                estaditicaPar4 = getEstadisticaCenso(lstEstadistica, 28l);
+                estaditicaPar5 = getEstadisticaCenso(lstEstadistica, 29l);
+                estaditicaPar6 = getEstadisticaCenso(lstEstadistica, 30l);
                 estaditicaCiclo3MF = getEstadisticaCenso(lstEstadistica, 23l);
                 estaditicaBacMF = getEstadisticaCenso(lstEstadistica, 24l);
             }
-            estaditicaPar = getEstadisticaCenso(lstEstadistica, 1l);
+            //estaditicaPar = getEstadisticaCenso(lstEstadistica, 1l);
             estaditicaCiclo1 = getEstadisticaCenso(lstEstadistica, 3l);
             estaditicaCiclo2 = getEstadisticaCenso(lstEstadistica, 4l);
             estaditicaCiclo3 = getEstadisticaCenso(lstEstadistica, 5l);
@@ -1095,7 +1127,7 @@ public class EstadisticasCensoView implements Serializable {
         EstadisticaCenso estC;
         try {
             estC = lstEstadistica.stream()
-                    .filter(est -> est.getIdNivelEducativo().getId().intValue() == idNivel).findAny().get();
+                    .filter(est -> est.getIdNivelEducativo().getId().intValue() == idNivel).findAny().orElse(new EstadisticaCenso());
         } catch (NoSuchElementException e) {
             estC = null;
         }
@@ -1144,8 +1176,8 @@ public class EstadisticasCensoView implements Serializable {
         Boolean isSegundoUniforme = false;
 
         if (procesoAdquisicion.getIdAnho().getId().intValue() > 8) {
-            estaditicaIniPar.setFemenimo(estInicial1grado.getFemenimo().add(estInicial2grado.getFemenimo()).add(estaditicaPar.getFemenimo()));
-            estaditicaIniPar.setMasculino(estInicial1grado.getMasculino().add(estInicial2grado.getMasculino()).add(estaditicaPar.getMasculino()));
+            estaditicaIniPar.setFemenimo(estInicial2grado.getFemenimo().add(estInicial3grado.getFemenimo()).add(estaditicaPar4.getFemenimo()).add(estaditicaPar5.getFemenimo()).add(estaditicaPar6.getFemenimo()));
+            estaditicaIniPar.setMasculino(estInicial2grado.getMasculino().add(estInicial3grado.getMasculino()).add(estaditicaPar4.getMasculino()).add(estaditicaPar5.getMasculino()).add(estaditicaPar6.getMasculino()));
         }
 
         estaditicaCiclo1.setFemenimo(est1grado.getFemenimo().add(est2grado.getFemenimo()).add(est3grado.getFemenimo()));
@@ -1172,23 +1204,33 @@ public class EstadisticasCensoView implements Serializable {
             String msjInfo = "Se guardaron los niveles:<br/>";
 
             if (procesoAdquisicion.getIdAnho().getId().intValue() > 8) {
-                if (entidadEducativaRepo.guardarEstadistica(estInicial1grado, sessionView.getUsuario().getIdPersona().getUsuario())) {
+                if (entidadEducativaRepo.guardarEstadistica(estInicial2grado, sessionView.getUsuario().getIdPersona().getUsuario())) {
                     msjError += "Inicial 1, ";
                 } else {
                     msjInfo += "Inicial 1, ";
                 }
 
-                if (entidadEducativaRepo.guardarEstadistica(estInicial2grado, sessionView.getUsuario().getIdPersona().getUsuario())) {
+                if (entidadEducativaRepo.guardarEstadistica(estInicial3grado, sessionView.getUsuario().getIdPersona().getUsuario())) {
                     msjError += "Inicial 2, ";
                 } else {
                     msjInfo += "Inicial 2, ";
                 }
             }
 
-            if (entidadEducativaRepo.guardarEstadistica(estaditicaPar, sessionView.getUsuario().getIdPersona().getUsuario())) {
-                msjError += "Parvularia, ";
+            if (entidadEducativaRepo.guardarEstadistica(estaditicaPar4, sessionView.getUsuario().getIdPersona().getUsuario())) {
+                msjError += "Parvularia 4, ";
             } else {
-                msjInfo += "Parvularia<br/>";
+                msjInfo += "Parvularia 4, ";
+            }
+            if (entidadEducativaRepo.guardarEstadistica(estaditicaPar5, sessionView.getUsuario().getIdPersona().getUsuario())) {
+                msjError += "Parvularia 5, ";
+            } else {
+                msjInfo += "Parvularia 5, ";
+            }
+            if (entidadEducativaRepo.guardarEstadistica(estaditicaPar6, sessionView.getUsuario().getIdPersona().getUsuario())) {
+                msjError += "Parvularia 6, ";
+            } else {
+                msjInfo += "Parvularia 6<br/>";
             }
             if (procesoAdquisicion.getIdAnho().getId().intValue() > 8) {
                 if (entidadEducativaRepo.guardarEstadistica(estaditicaIniPar, sessionView.getUsuario().getIdPersona().getUsuario())) {
@@ -1466,8 +1508,8 @@ public class EstadisticasCensoView implements Serializable {
                 break;
         }
 
-        presupuesto = presupuesto.add(preParTemp.getPrecioMaxMas().multiply(new BigDecimal(estaditicaPar.getMasculino())).multiply(num));
-        presupuesto = presupuesto.add(preParTemp.getPrecioMaxFem().multiply(new BigDecimal(estaditicaPar.getFemenimo())).multiply(num));
+        presupuesto = presupuesto.add(preParTemp.getPrecioMaxMas().multiply(new BigDecimal(estaditicaIniPar.getMasculino())).multiply(num));
+        presupuesto = presupuesto.add(preParTemp.getPrecioMaxFem().multiply(new BigDecimal(estaditicaIniPar.getFemenimo())).multiply(num));
 
         presupuesto = presupuesto.add(preCiclo1Temp.getPrecioMaxMas().multiply(new BigDecimal(estaditicaCiclo1.getMasculino())).multiply(num));
         presupuesto = presupuesto.add(preCiclo1Temp.getPrecioMaxFem().multiply(new BigDecimal(estaditicaCiclo1.getFemenimo())).multiply(num));
@@ -1517,16 +1559,16 @@ public class EstadisticasCensoView implements Serializable {
             switch (idRubro) {
                 case 4:
                 case 5:
-                    presupuesto = presupuesto.add(new BigDecimal(estInicial1grado.getMasculino()).multiply(preParUni.getPrecioMaxMas()).add(new BigDecimal(estInicial1grado.getFemenimo()).multiply(preParUni.getPrecioMaxFem())));
                     presupuesto = presupuesto.add(new BigDecimal(estInicial2grado.getMasculino()).multiply(preParUni.getPrecioMaxMas()).add(new BigDecimal(estInicial2grado.getFemenimo()).multiply(preParUni.getPrecioMaxFem())));
+                    presupuesto = presupuesto.add(new BigDecimal(estInicial3grado.getMasculino()).multiply(preParUni.getPrecioMaxMas()).add(new BigDecimal(estInicial3grado.getFemenimo()).multiply(preParUni.getPrecioMaxFem())));
                     break;
                 case 2:
-                    presupuesto = presupuesto.add(new BigDecimal(estInicial1grado.getMasculino().add(estInicial1grado.getFemenimo())).multiply(preParUti.getPrecioMaxMas()));
                     presupuesto = presupuesto.add(new BigDecimal(estInicial2grado.getMasculino().add(estInicial2grado.getFemenimo())).multiply(preParUti.getPrecioMaxMas()));
+                    presupuesto = presupuesto.add(new BigDecimal(estInicial3grado.getMasculino().add(estInicial3grado.getFemenimo())).multiply(preParUti.getPrecioMaxMas()));
                     break;
                 case 3:
-                    presupuesto = presupuesto.add(new BigDecimal(estInicial1grado.getMasculino().add(estInicial1grado.getFemenimo())).multiply(preParZap.getPrecioMaxMas()));
                     presupuesto = presupuesto.add(new BigDecimal(estInicial2grado.getMasculino().add(estInicial2grado.getFemenimo())).multiply(preParZap.getPrecioMaxMas()));
+                    presupuesto = presupuesto.add(new BigDecimal(estInicial3grado.getMasculino().add(estInicial3grado.getFemenimo())).multiply(preParZap.getPrecioMaxMas()));
                     break;
             }
         }
