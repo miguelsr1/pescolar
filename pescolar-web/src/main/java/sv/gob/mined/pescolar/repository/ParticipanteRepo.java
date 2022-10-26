@@ -18,6 +18,7 @@ import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.Participante;
+import sv.gob.mined.pescolar.model.Persona;
 import sv.gob.mined.pescolar.model.PorcentajeEvaluacion;
 import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
@@ -357,5 +358,26 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
         List<PreciosRefRubroEmp> lstPrecios = query.getResultList();
 
         return !lstPrecios.isEmpty();
+    }
+    
+    public String getRespresentanteLegalEmp(Long idPersona) {
+        Persona persona = em.find(Persona.class, idPersona);
+        String representante;
+
+        representante = persona.getPrimerNombre();
+
+        if (persona.getSegundoNombre() != null) {
+            representante = representante.concat(" ").concat(persona.getSegundoNombre());
+        }
+        representante = representante.concat(" ").concat(persona.getPrimerApellido());
+
+        if (persona.getSegundoApellido() != null) {
+            if (persona.getAcasada() != null) {
+                representante = representante.concat(" ").concat(persona.getAcasada());
+            } else {
+                representante = representante.concat(" ").concat(persona.getSegundoApellido());
+            }
+        }
+        return representante;
     }
 }

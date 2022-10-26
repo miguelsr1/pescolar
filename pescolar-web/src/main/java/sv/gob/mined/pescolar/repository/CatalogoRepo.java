@@ -25,6 +25,7 @@ import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.EstadisticaCenso;
 import sv.gob.mined.pescolar.model.EstadoReserva;
 import sv.gob.mined.pescolar.model.Municipio;
+import sv.gob.mined.pescolar.model.OrganizacionEducativa;
 import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.MunicipioDto;
@@ -352,4 +353,6 @@ public class CatalogoRepo {
         q.setParameter("pIdAnho", idAnho - 1);
         return (ProcesoAdquisicion) q.getSingleResult();
     }
+    
+    
 }

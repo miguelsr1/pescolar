@@ -16,6 +16,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
+import sv.gob.mined.pescolar.model.ContratosOrdenesCompra;
 import sv.gob.mined.pescolar.model.DetalleOferta;
 import sv.gob.mined.pescolar.model.NivelEducativo;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
@@ -115,5 +116,15 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
         } else {
             return lst.get(0);
         }
+    }
+
+    public List<ContratosOrdenesCompra> findContratoByResolucion(ResolucionesAdjudicativa resolucion) {
+        Query q = em.createQuery("SELECT c FROM ContratosOrdenesCompra c WHERE c.estadoEliminacion = 0 and c.idResolucionAdj=:resolucion", ContratosOrdenesCompra.class);
+        q.setParameter("resolucion", resolucion);
+        return q.getResultList();
+    }
+
+    public ContratosOrdenesCompra editContrato(ContratosOrdenesCompra contratosOrdenesCompras) {
+        return em.merge(contratosOrdenesCompras);
     }
 }

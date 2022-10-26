@@ -5,14 +5,11 @@
 package sv.gob.mined.pescolar.web.contratacion;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +17,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
@@ -37,12 +33,18 @@ import sv.gob.mined.pescolar.model.DetalleOferta;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.HistorialCamEstResAdj;
+import sv.gob.mined.pescolar.model.Municipio;
 import sv.gob.mined.pescolar.model.OfertaBienesServicio;
 import sv.gob.mined.pescolar.model.OrganizacionEducativa;
 import sv.gob.mined.pescolar.model.Participante;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 import sv.gob.mined.pescolar.model.RptDocumentos;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
+import sv.gob.mined.pescolar.repository.CatalogoRepo;
+import sv.gob.mined.pescolar.repository.ContratoRepo;
+import sv.gob.mined.pescolar.repository.EntidadEducativaRepo;
+import sv.gob.mined.pescolar.repository.ParticipanteRepo;
+import sv.gob.mined.pescolar.repository.ResolucionesAdjudicativasRepo;
 import sv.gob.mined.pescolar.utils.JsfUtil;
 import sv.gob.mined.pescolar.utils.RecuperarProcesoUtil;
 import sv.gob.mined.pescolar.web.SessionView;
@@ -92,21 +94,20 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     private List<Integer> lstSelectDocumentosImp = new ArrayList();
     private List<SelectItem> lstDocumentosImp = new ArrayList();
     private List<HistorialCamEstResAdj> lstHistorialCambios = new ArrayList();
-    /*@EJB
-    private OfertaBienesServiciosEJB ofertaBienesServiciosEJB;
-    @EJB
-    private EntidadEducativaEJB entidadEducativaEJB;
-    @EJB
-    private ProveedorEJB proveedorEJB;
-    @EJB
-    private ResolucionAdjudicativaEJB resolucionAdjudicativaEJB;
-    @EJB
-    private ReportesEJB reportesEJB;
-    @EJB
-    private UtilEJB utilEJB;*/
+
+    @Inject
+    private CatalogoRepo catalogoRepo;
+    @Inject
+    private ResolucionesAdjudicativasRepo resoRepo;
+    @Inject
+    private ContratoRepo contratoRepo;
+    @Inject
+    private ParticipanteRepo participanteRepo;
+    @Inject
+    private EntidadEducativaRepo entidadRepo;
 
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("Bundle");
-    
+
     @Inject
     private SessionView sessionView;
 
@@ -126,7 +127,6 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
         /*if (VarSession.getIdMunicipioSession() != null) {
             idMunicipio = VarSession.getIdMunicipioSession();
         }*/
-
         if (params.containsKey("txtCodigoEntidad")) {
             if (detalleProceso != null) {
                 cargaInicialDeDatos(params);
@@ -359,7 +359,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
 
     public void setTipoRpt(int tipoRpt) {
         this.tipoRpt = tipoRpt;
-        VarSession.setVariableSession("tipoRpt", tipoRpt);
+        sessionView.setVariableSession("tipoRpt", tipoRpt);
     }
 
     public Boolean getShowGarantiaUsoTela() {
@@ -386,8 +386,8 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     private void cargaInicialDeDatos(Map<String, String> params) {
         if (params.containsKey("txtCodigoEntidad")) {
             codigoEntidad = params.get("txtCodigoEntidad");
-            entidadEducativa = entidadEducativaEJB.getEntidadEducativa(codigoEntidad);
-            resolucionAdj = resolucionAdjudicativaEJB.findResolucionesAdjudicativasByPk((BigDecimal) VarSession.getVariableSession("idRes"));
+            entidadEducativa = catalogoRepo.findEntityByPk(VwCatalogoEntidadEducativa.class, codigoEntidad);
+            resolucionAdj = resoRepo.findByPk((Long) sessionView.getVariableSession("idRes"));
             continuar = false;
             deshabilitado = false;
             if (resolucionAdj.getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getDescripcionRubro().contains("UNIFORME")) {
@@ -405,11 +405,11 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     }
 
     private void cargarDocumentoLegal() {
-        List<ContratosOrdenesCompra> lst = resolucionAdjudicativaEJB.findContratoByResolucion(resolucionAdj);
+        List<ContratosOrdenesCompra> lst = resoRepo.findContratoByResolucion(resolucionAdj);
 
         if (lst.size() > 1) {
             JsfUtil.mensajeError("Existe un problema con el contrato seleccionado, por favor reportarlo al administrador del sistema.");
-            resolucionAdjudicativaEJB.enviarCorreoDeError(resolucionAdj.getId(), JsfUtil.getSessionMailG("2"));
+            //resolucionAdjudicativaEJB.enviarCorreoDeError(resolucionAdj.getId(), JsfUtil.getSessionMailG("2"));
         } else {
             ContratosOrdenesCompra contratoOrd = null;
 
@@ -418,9 +418,9 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
             }
 
             razonSocial = resolucionAdj.getIdParticipante().getIdEmpresa().getRazonSocial();
-            representanteLegal = proveedorEJB.getRespresentanteLegalEmp(resolucionAdj.getIdParticipante().getIdEmpresa().getIdPersona().getId());
-            representanteCe = entidadEducativaEJB.getPresidenteOrganismoEscolar(codigoEntidad);
-            nombreEncargadoCompra = entidadEducativaEJB.getMiembro(codigoEntidad, "ENCARGADO DE COMPRA").getNombreMiembro();
+            representanteLegal = participanteRepo.getRespresentanteLegalEmp(resolucionAdj.getIdParticipante().getIdEmpresa().getIdPersona().getId());
+            representanteCe = entidadRepo.getPresidenteOrganismoEscolar(codigoEntidad);
+            nombreEncargadoCompra = entidadRepo.getMiembro(codigoEntidad, "ENCARGADO DE COMPRA").getNombreMiembro();
 
             soloLectura = (resolucionAdj.getIdEstadoReserva().getId().intValue() == 2);
 
@@ -428,7 +428,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                 current = new ContratosOrdenesCompra();
 
                 if (idMunicipio != null) {
-                    current.setCiudadFirma(VarSession.getNombreMunicipioSession());
+                    current.setCiudadFirma(catalogoRepo.findEntityByPk(Municipio.class, sessionView.getIdMunicipio()).getNombreMunicipio());
                     current.setAnhoContrato(resolucionAdj.getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getAnho());
 
                     setPlazoPrevistoEntrega();
@@ -446,7 +446,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                  */
                 if (current.getPlazoPrevistoEntrega() == null) {
                     setPlazoPrevistoEntrega();
-                    resolucionAdjudicativaEJB.editContrato(current);
+                    resoRepo.editContrato(current);
                 }
             }
         }
@@ -521,7 +521,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                         representanteCe.setNombreMiembro(current.getMiembroFirma());
                         representanteCe.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
 
-                        entidadEducativaEJB.create(representanteCe);
+                        entidadRepo.create(representanteCe);
                     }
                 }
                 current.setModificativa(false);
@@ -531,7 +531,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                 current.setEstadoEliminacion(0l);
                 current.setIdResolucionAdj(resolucionAdj);
 
-                current = resolucionAdjudicativaEJB.createContrato(current);
+                current = contratoRepo.createContrato(current);
                 JsfUtil.mensajeInsert();
             }
         } catch (Exception e) {
@@ -574,7 +574,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
 
             current.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
             current.setFechaModificacion(LocalDateTime.now());
-            current = resolucionAdjudicativaEJB.editContrato(current);
+            current = contratoRepo.editContrato(current);
 
             JsfUtil.mensajeUpdate();
         } catch (Exception e) {
@@ -606,7 +606,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                         JsfUtil.mensajeError("No existe un proceso de contratación para este centro escolar.");
                     }
                 } else {
-                    if (VarSession.getDepartamentoUsuarioSession() != null) {
+                    if (sessionView.getDepartamentoUsuarioSession() != null) {
                         String dep = getRecuperarProceso().getDepartamento();
                         entidadEducativa = oferta.getCodigoEntidad();
 
@@ -706,9 +706,9 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                                 resolucionAdj = null;
 
                             } else {
-                                 if ((VarSession.getVariableSessionUsuario().equals("MSANCHEZ") || 
-                                         VarSession.getVariableSessionUsuario().equals("RAFAARIAS")) &&
-                                         resolucionAdj.getIdEstadoReserva().getId().compareTo(5l) == 0) {
+                                if ((VarSession.getVariableSessionUsuario().equals("MSANCHEZ")
+                                        || VarSession.getVariableSessionUsuario().equals("RAFAARIAS"))
+                                        && resolucionAdj.getIdEstadoReserva().getId().compareTo(5l) == 0) {
                                     buscarHistorialCambios();
                                     PrimeFaces.current().ajax().update("dlgHistorialCambiosReserva");
                                     JsfUtil.mensajeAlerta("Esta reserva de fondo se encuentra en estado de " + resolucionAdj.getIdEstadoReserva().getDescripcionReserva()
@@ -716,8 +716,8 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                                     current = contratoOrd;
                                     continuar = true;
                                     deshabilitado = true;
-                                }else if (resolucionAdj.getIdEstadoReserva().getId().compareTo(2l) == 0 ||
-                                        resolucionAdj.getIdEstadoReserva().getId().compareTo(5l) == 0) {
+                                } else if (resolucionAdj.getIdEstadoReserva().getId().compareTo(2l) == 0
+                                        || resolucionAdj.getIdEstadoReserva().getId().compareTo(5l) == 0) {
                                     switch (resolucionAdj.getIdEstadoReserva().getId().intValue()) {
                                         case 2:
                                         case 5:

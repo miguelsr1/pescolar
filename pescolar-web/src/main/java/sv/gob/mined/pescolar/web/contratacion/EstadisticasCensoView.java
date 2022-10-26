@@ -3,7 +3,7 @@ package sv.gob.mined.pescolar.web.contratacion;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1441,7 +1441,7 @@ public class EstadisticasCensoView implements Serializable {
             org.setCargo(cargo);
             org.setFirmaContrato(0l);
         } else {
-            org.setFechaModificacion(LocalDate.now());
+            org.setFechaModificacion(LocalDateTime.now());
             org.setUsuarioModificacion(sessionView.getUsuario().getIdPersona().getUsuario());
         }
     }

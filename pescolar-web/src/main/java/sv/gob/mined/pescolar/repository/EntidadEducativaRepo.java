@@ -272,10 +272,13 @@ public class EntidadEducativaRepo extends AbstractRepository<VwCatalogoEntidadEd
         Query q = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.codigoDepartamento = '" + iddepartamento + "' order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
         return q.getResultList();
     }
-    
+
     public List<VwCatalogoEntidadEducativa> listarentidadeducativapormunicipio(String idmunicipio) {
-       Query q = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.idMunicipio.id = " + idmunicipio + " order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
+        Query q = em.createQuery("select vw from VwCatalogoEntidadEducativa vw where vw.idMunicipio.id = " + idmunicipio + " order by vw.codigoDepartamento asc, vw.codigoMunicipio asc, vw.codigoCanton asc", VwCatalogoEntidadEducativa.class);
         return q.getResultList();
     }
 
+    public void create(OrganizacionEducativa organizacionEducativa) {
+        em.persist(organizacionEducativa);
+    }
 }

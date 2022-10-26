@@ -8,6 +8,32 @@ import java.time.LocalDateTime;
 
 @Table(name = "CONTRATOS_ORDENES_COMPRAS")
 @Entity
+
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(
+            name = "SP_ADD_RESUMEN_CE_PROCESADO",
+            procedureName = "SP_ADD_RESUMEN_CE_PROCESADO",
+            parameters = {
+                @StoredProcedureParameter(name = "P_ID_DET_PROCESO_ADQ", mode = ParameterMode.IN, type = Integer.class),
+                @StoredProcedureParameter(name = "P_CODIGO_ENTIDAD", mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(name = "P_CODIGO_DEPARTAMENTO", mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(name = "P_CODIGO_MUNICIPIO", mode = ParameterMode.IN, type = String.class)
+            }
+    ),
+    @NamedStoredProcedureQuery(
+            name = "SP_ADD_RESUMEN_ADJ_EMP",
+            procedureName = "SP_ADD_RESUMEN_ADJ_EMP",
+            parameters = {
+                @StoredProcedureParameter(name = "P_ID_DET_PROCESO_ADQ", mode = ParameterMode.IN, type = Integer.class),
+                @StoredProcedureParameter(name = "P_ID_EMPRESA", mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(name = "P_ID_TIPO_EMPRESA", mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(name = "P_CODIGO_DEPARTAMENTO", mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(name = "P_CODIGO_ENTIDAD", mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(name = "P_SUBTOTAL", mode = ParameterMode.IN, type = String.class),
+                @StoredProcedureParameter(name = "P_CANTIDAD", mode = ParameterMode.IN, type = String.class)
+            }
+    )
+})
 public class ContratosOrdenesCompra implements Serializable {
     @Id
     @Column(name = "ID_CONTRATO", nullable = false)
