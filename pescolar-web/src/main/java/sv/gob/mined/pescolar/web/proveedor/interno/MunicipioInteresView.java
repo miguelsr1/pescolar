@@ -231,7 +231,7 @@ public class MunicipioInteresView implements Serializable {
             }
 
             if (!jasperPrintList.isEmpty()) {
-                Reportes.generarReporte(jasperPrintList, "oferta_global_" + cargaGeneralView.getEmpresa().getNumeroNit());
+                reportes.generarReporte(jasperPrintList, "oferta_global_" + cargaGeneralView.getEmpresa().getNumeroNit());
 
             }
         } catch (JRException | IOException ex) {

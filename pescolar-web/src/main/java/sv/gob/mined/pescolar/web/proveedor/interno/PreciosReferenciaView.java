@@ -226,7 +226,7 @@ public class PreciosReferenciaView implements Serializable {
             }
 
             if (!jasperPrintList.isEmpty()) {
-                Reportes.generarReporte(jasperPrintList, "oferta_global_" + cargaGeneralView.getEmpresa().getNumeroNit());
+                reportes.generarReporte(jasperPrintList, "oferta_global_" + cargaGeneralView.getEmpresa().getNumeroNit());
             }
         } catch (JRException | IOException ex) {
             Logger.getLogger(PreciosReferenciaView.class.getName()).log(Level.SEVERE, null, ex);

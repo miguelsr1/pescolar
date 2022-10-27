@@ -12,11 +12,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import sv.gob.mined.pescolar.model.CapaInstPorRubro;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.Departamento;
 import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.Empresa;
+import sv.gob.mined.pescolar.model.OfertaBienesServicio;
 import sv.gob.mined.pescolar.model.Participante;
 import sv.gob.mined.pescolar.model.Persona;
 import sv.gob.mined.pescolar.model.PorcentajeEvaluacion;
@@ -379,5 +381,56 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
             }
         }
         return representante;
+    }
+    
+    public DetRubroMuestraIntere findDetByNitAndIdAnho(String nit, String anho) {
+        Query q = em.createQuery("SELECT d FROM DetRubroMuestraIntere d WHERE d.idEmpresa.numeroNit=:nit and d.idAnho.anho=:anho", DetRubroMuestraIntere.class);
+        q.setParameter("nit", nit);
+        q.setParameter("anho", anho);
+
+        return q.getResultList().isEmpty() ? null : (DetRubroMuestraIntere) q.getResultList().get(0);
+
+    }
+    
+    public <T extends Object> T findDetProveedor(DetRubroMuestraIntere detRubro, Long idPro, Class clase) {
+        Query q = em.createQuery("SELECT d FROM " + clase.getSimpleName() + " d WHERE d.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idMuestraInteres.idAnho.id=:pIdAnho and d.idMuestraInteres.idEmpresa=:idEmpresa and d.estadoEliminacion=0 and d.idMuestraInteres.estadoEliminacion=0 " + (clase.equals(CapaInstPorRubro.class) ? " and d.idProcesoAdq.id=:pIdPro " : "") + " ORDER BY d.id", clase);
+        q.setParameter("pIdRubro", detRubro.getIdRubroInteres().getId());
+        q.setParameter("pIdAnho", detRubro.getIdAnho().getId());
+        q.setParameter("idEmpresa", detRubro.getIdEmpresa());
+        if (clase.equals(CapaInstPorRubro.class)) {
+            q.setParameter("pIdPro", idPro);
+        }
+
+        if (q.getResultList().isEmpty()) {
+            return null;
+        } else {
+            return (T) q.getResultList().get(0);
+        }
+    }
+    
+    public List<ProveedorDisponibleDto> getLstProveedorPorcentajeEval(OfertaBienesServicio oferta) {
+        String sql = "select \n"
+                + "    rownum                   as idRow,\n"
+                + "    emp.razon_social         as razonSocial,\n"
+                + "    par.porcentaje_precio    as porcentajePrecio,\n"
+                + "    par.porcentaje_geo       as porcentajeGeo,\n"
+                + "    par.porcentaje_capacidad as porcentajeCapacidad,\n"
+                + "    par.porcentaje_precio+par.porcentaje_geo+par.porcentaje_capacidad+nvl((npz.nota_zapato_nina + npz.nota_zapato_nino),0) as porcentajeEvaluacion,\n"
+                + "    nvl((npz.nota_zapato_nina + npz.nota_zapato_nino),0) as porcentajeCalificacion \n"
+                + "from participantes par \n"
+                + "    inner join empresa emp on par.id_empresa = emp.id_empresa\n"
+                + "    inner join oferta_bienes_servicios ofe on par.id_oferta = ofe.id_oferta\n"
+                + "    inner join det_rubro_muestra_interes det on emp.id_empresa = det.id_empresa\n"
+                + "    left join nota_pruebas_zapatero npz on npz.id_muestra_interes = det.id_muestra_interes\n"
+                + "where \n"
+                + "    par.estado_eliminacion = 0 and\n"
+                + "    ofe.estado_eliminacion = 0 and\n"
+                + "    ofe.id_oferta =" + oferta.getId() + " and\n"
+                + "    det.id_anho = " + oferta.getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId() + " and\n"
+                + "    det.id_rubro_interes = " + oferta.getIdDetProcesoAdq().getIdRubroAdq().getId() + "\n"
+                + "order by\n"
+                + "    (par.porcentaje_precio+par.porcentaje_geo+par.porcentaje_capacidad+nvl((npz.nota_zapato_nina + npz.nota_zapato_nino),0)) asc";
+        Query q = em.createNativeQuery(sql, ProveedorDisponibleDto.class);
+        return q.getResultList();
     }
 }

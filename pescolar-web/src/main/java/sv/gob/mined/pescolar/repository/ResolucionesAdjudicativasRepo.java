@@ -1,6 +1,5 @@
 package sv.gob.mined.pescolar.repository;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,22 +7,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.ContratosOrdenesCompra;
 import sv.gob.mined.pescolar.model.DetalleOferta;
+import sv.gob.mined.pescolar.model.HistorialCamEstResAdj;
 import sv.gob.mined.pescolar.model.NivelEducativo;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
+import sv.gob.mined.pescolar.model.RptDocumentos;
 import sv.gob.mined.pescolar.model.dto.DetalleItemDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ContratoDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ParticipanteDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.VwRptContratoJurCabecera;
+import sv.gob.mined.pescolar.model.dto.contratacion.VwRptPagare;
 
 /**
  *
@@ -39,6 +44,8 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
 
     @EJB
     private SaldosFacade saldoFacade;
+    @Inject
+    private ParticipanteRepo participanteRepo;
 
     /*@Transactional
     public ResolucionesAdjudicativa findResolucionAdjudicativa(Long idParticipante) {
@@ -130,7 +137,7 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
     public ContratosOrdenesCompra editContrato(ContratosOrdenesCompra contratosOrdenesCompras) {
         return em.merge(contratosOrdenesCompras);
     }
-    
+
     public List<ContratoDto> generarRptActaAdjudicacion(Long idResolucion) {
         List<ContratoDto> lst;
 
@@ -152,8 +159,8 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
         }
         return lst;
     }
-    
-    public List<ContratoDto> generarRptNotaAdjudicacion(BigDecimal idResolucion) {
+
+    public List<ContratoDto> generarRptNotaAdjudicacion(Long idResolucion) {
         Query query = em.createNamedQuery("Contratacion.RptNotaAdjudicacionBean", ContratoDto.class);
         query.setParameter(1, idResolucion);
 
@@ -177,5 +184,96 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
         }
 
         return lstNotaAdj;
+    }
+
+    public List<VwRptPagare> generarRptGarantia(Long idResolucion, Long idContrato) {
+        try {
+            Query query = em.createNamedQuery("Contratacion.VwRptPagare", VwRptPagare.class);
+            query.setParameter(1, idResolucion);
+            query.setParameter(2, idContrato);
+
+            return query.getResultList();
+        } finally {
+        }
+    }
+
+    public List<RptDocumentos> getDocumentosAImprimir(Integer idDetProcesoAdq, List<Integer> lstNumDoc) {
+        Query q = em.createQuery("SELECT r FROM RptDocumentos r WHERE r.idDetProcesoAdq.id=:idDet and r.idTipoRpt.idTipoRpt in :lst ORDER BY r.orden", RptDocumentos.class);
+        q.setParameter("idDet", idDetProcesoAdq);
+        q.setParameter("lst", lstNumDoc);
+
+        return q.getResultList();
+    }
+
+    public List<HistorialCamEstResAdj> findHistorialByIdResolucionAdj(Long idResolucionAdj) {
+        Query q = em.createQuery("SELECT h FROM HistorialCamEstResAdj h WHERE h.idResolucionAdj.id=:idResolucionAdj ORDER BY h.idHistorialCam", HistorialCamEstResAdj.class);
+        q.setParameter("idResolucionAdj", idResolucionAdj);
+        return q.getResultList();
+    }
+
+    public List<VwRptContratoJurCabecera> generarContrato(ContratosOrdenesCompra idContrato, Long idRubro) {
+        List<VwRptContratoJurCabecera> lstContrato;
+        List<DetalleItemDto> lst;
+        try {
+            Query query = em.createNamedQuery("Contratacion.VwRptContratoJurCabecera", VwRptContratoJurCabecera.class);
+            query.setParameter(1, idContrato.getId());
+
+            lstContrato = query.getResultList();
+
+            if (!lstContrato.isEmpty()) {
+                query = em.createQuery("SELECT DISTINCT c.idResolucionAdj.idParticipante.idEmpresa.idPersoneria.idPersoneria, c.idResolucionAdj.idParticipante.idEmpresa.distribuidor FROM ContratosOrdenesCompras c WHERE c.idResolucionAdj=:idResolucion and c.estadoEliminacion=0");
+                query.setParameter("idResolucion", idContrato.getIdResolucionAdj());
+
+                Object idPersoneria = query.getSingleResult();
+                Object[] datos = (Object[]) idPersoneria;
+
+                if (datos[1].toString().equals("1")) {
+                    //DISTRIBUIDOR
+                    query = em.createNamedQuery("Contratacion.RptNotaAdjudicacionBeanDetalleItemDist", DetalleItemDto.class);
+                } else {
+                    //FABRICANTE
+                    query = em.createNamedQuery("Contratacion.RptNotaAdjudicacionBeanDetalleItemFab", DetalleItemDto.class);
+                }
+
+                query.setParameter(1, idContrato.getIdResolucionAdj().getId());
+                lst = query.getResultList();
+
+                List<DetalleItemDto> lstDetalle = new ArrayList();
+                List<DetalleItemDto> lstDetalleBac = new ArrayList();
+
+                lstDetalleBac.addAll(lst.stream().filter(d -> idRubro.compareTo(1l) == 0 && d.getConsolidadoEspTec().contains("BACHILLERATO")).collect(Collectors.toList()));
+                lstDetalle.addAll(lst.stream().filter(d -> idRubro.compareTo(1l) != 0 || !d.getConsolidadoEspTec().contains("BACHILLERATO")).collect(Collectors.toList()));
+
+                lstContrato.get(0).setLstDetalleItems(lstDetalle);
+                lstContrato.get(0).setLstDetalleItemsBac(lstDetalleBac);
+            }
+
+            return lstContrato;
+        } finally {
+        }
+    }
+
+    public List<ContratoDto> generarRptActaRecomendacion(Long idResolucion) {
+        List<ContratoDto> lst;
+
+        ResolucionesAdjudicativa res = findByPk(idResolucion);
+
+        Query query = em.createNamedQuery("Contratacion.RptActaAdjudicacion", ContratoDto.class);
+        query.setParameter(1, res.getIdParticipante().getIdOferta().getId());
+        lst = query.getResultList();
+        if (lst.isEmpty()) {
+            return new ArrayList();
+        } else {
+            query = em.createNamedQuery("Contratacion.RptActaAdjudicacionParticipantes", ParticipanteDto.class);
+            query.setParameter(1, res.getIdParticipante().getIdOferta().getId());
+            lst.get(0).setLstParticipantes(query.getResultList());
+
+            query = em.createNamedQuery("Contratacion.RptActaAdjudicacionItems", DetalleItemDto.class);
+            query.setParameter(1, res.getIdParticipante().getIdOferta().getId());
+            lst.get(0).setLstDetalleItem(query.getResultList());
+
+            lst.get(0).setLstPorcentajeEval(participanteRepo.getLstProveedorPorcentajeEval(res.getIdParticipante().getIdOferta()));
+        }
+        return lst;
     }
 }

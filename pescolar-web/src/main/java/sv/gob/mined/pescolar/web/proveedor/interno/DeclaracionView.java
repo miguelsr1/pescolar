@@ -215,7 +215,7 @@ public class DeclaracionView implements Serializable {
                 jasperPrintList.add(reportes.getReporteAImprimir("sv/gob/mined/apps/reportes/declaracion" + File.separator + "rptDeclaracionJurAceptacionPerProvJur" + anho.getAnho(), param, new JRBeanCollectionDataSource(reportes.getDeclaracionJurada(empresa, cargaGeneralView.getDetRubroMuestraInteres().getIdRubroInteres().getId(), anho.getId(), muni))));
             }
 
-            Reportes.generarReporte(jasperPrintList, "oferta_global_" + getEmpresa().getNumeroNit());
+            reportes.generarReporte(jasperPrintList, "oferta_global_" + getEmpresa().getNumeroNit());
 
         } catch (IOException | JRException ex) {
             Logger.getLogger(DeclaracionView.class

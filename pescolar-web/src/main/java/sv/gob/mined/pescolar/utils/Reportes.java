@@ -215,7 +215,7 @@ public class Reportes {
      * @throws IOException
      * @throws JRException
      */
-    public static void generarReporte(List<JasperPrint> jasperPrintList, String nombreRpt) throws IOException, JRException {
+    public void generarReporte(List<JasperPrint> jasperPrintList, String nombreRpt) throws IOException, JRException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JRPdfExporter exporter = new JRPdfExporter();

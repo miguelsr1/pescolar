@@ -2,8 +2,14 @@ package sv.gob.mined.pescolar.repository;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,7 +19,10 @@ import sv.gob.mined.pescolar.model.DetalleOferta;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.OfertaBienesServicio;
 import sv.gob.mined.pescolar.model.Participante;
+import sv.gob.mined.pescolar.model.dto.contratacion.Bean;
+import sv.gob.mined.pescolar.model.dto.contratacion.ReportPOIBean;
 import sv.gob.mined.pescolar.model.dto.contratacion.VwCotizacion;
+import sv.gob.mined.pescolar.utils.Constantes;
 
 /**
  *
@@ -331,5 +340,98 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
         }
 
         return lstCotizacion;
+    }
+    
+    public List<Object> getDatosRptAnalisisEconomico(String codigoEntidad, DetalleProcesoAdq idDetProceso) {
+        String query = "";
+        ReportPOIBean reportPOIBean = null;
+        List<Object> listadoAExportar = new LinkedList<>();
+        try {
+            Connection conn = em.unwrap(java.sql.Connection.class);
+
+            switch (idDetProceso.getIdRubroAdq().getId().intValue()) {
+                case 1:
+                case 4:
+                case 5:
+                    String idDetProcesos = getIdDetalleProcesoPadre(idDetProceso);
+
+                    query = String.format(Constantes.QUERY_CONTRATACION_ANALISIS_ECONOMICO_UNIFORME, idDetProcesos, codigoEntidad, idDetProceso.getId());
+                    break;
+                case 2:
+                    query = String.format(Constantes.QUERY_CONTRATACION_ANALISIS_ECONOMICO_UTILES, codigoEntidad, idDetProceso.getId());
+                    break;
+                case 3:
+                    query = String.format(Constantes.QUERY_CONTRATACION_ANALISIS_ECONOMICO_ZAPATOS, codigoEntidad, idDetProceso.getId());
+                    break;
+            }
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            LinkedHashMap<String, Integer> mapaItems = new LinkedHashMap<>();
+            LinkedHashMap<String, String> mapaItemsIndex = new LinkedHashMap<>();
+            LinkedHashMap<String, Integer> mapaRazonSocial = new LinkedHashMap<>();
+            LinkedHashMap<String, Integer> mapaCantidades = new LinkedHashMap<>();
+
+            Integer itemIndex = 0;
+            Integer razonSocialIndex = 0;
+            while (rs.next()) {
+                if (!mapaItems.containsKey(rs.getString("descripcion_item"))) {
+                    mapaItems.put(rs.getString("descripcion_item"), itemIndex);
+                    mapaItemsIndex.put(rs.getString("descripcion_item"), rs.getString("no_item"));
+                    mapaCantidades.put(rs.getString("descripcion_item"), rs.getInt("num_alumno"));
+                    itemIndex++;
+                }
+                if (!mapaRazonSocial.containsKey(rs.getString("razon_social"))) {
+                    mapaRazonSocial.put(rs.getString("razon_social"), razonSocialIndex);
+                    razonSocialIndex++;
+                }
+            }
+            Bean[][] datos = new Bean[mapaItems.size()][mapaRazonSocial.size()];
+            rs.beforeFirst();
+            while (rs.next()) {
+                int x = mapaItems.get(rs.getString("descripcion_item"));
+                int y = mapaRazonSocial.get(rs.getString("razon_social"));
+                Bean bean = new Bean();
+                bean.setCantidadOfertada(rs.getInt("num_alumno"));
+                bean.setPrecioUnitario(rs.getDouble("precio_referencia"));
+                bean.setCantidadAdjudicada(rs.getInt("adjudicada"));
+                datos[x][y] = bean;
+            }
+            listadoAExportar.add(mapaItems);
+            listadoAExportar.add(mapaRazonSocial);
+            listadoAExportar.add(datos);
+            listadoAExportar.add(mapaItemsIndex);
+            listadoAExportar.add(mapaCantidades);
+
+            listadoAExportar.add(reportPOIBean);
+
+            return listadoAExportar;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertaResguardoRepo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listadoAExportar;
+    }
+
+    private String getIdDetalleProcesoPadre(DetalleProcesoAdq idDetProceso) {
+        String ids = "";
+        Query q = em.createNativeQuery("select det.id_det_proceso_adq \n"
+                + "from detalle_proceso_Adq det\n"
+                + "    inner join proceso_adquisicion pro on pro.id_proceso_adq = det.id_proceso_adq\n"
+                + "    inner join anho     on pro.id_anho = anho.id_anho\n"
+                + "where anho.anho = ?1 and det.id_rubro_adq = ?2");
+        q.setParameter(1, idDetProceso.getIdProcesoAdq().getIdAnho().getAnho());
+        q.setParameter(2, idDetProceso.getIdRubroAdq().getId());
+        List<Integer> lst = q.getResultList();
+        for (Integer id : lst) {
+            if (ids.isEmpty()) {
+                ids = id.toString();
+            } else {
+                ids = ids + "," + id.toString();
+            }
+        }
+
+        return ids;
     }
 }

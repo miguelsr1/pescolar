@@ -4,7 +4,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import sv.gob.mined.pescolar.model.OfertaResguardo;
-import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto;
 
 /**
@@ -39,4 +38,7 @@ public class OfertaResguardoRepo extends AbstractRepository<OfertaResguardo, Lon
         q.setParameter(3, idProcesoAdqAnt);
         return q.getResultList();
     }
+
+    
+
 }

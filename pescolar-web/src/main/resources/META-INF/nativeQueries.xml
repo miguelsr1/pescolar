@@ -203,5 +203,239 @@
             ]]>
         </query>
     </named-native-query>
+    <named-native-query name="Contratacion.VwCotizacion" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.VwCotizacion">
+        <query>
+            <![CDATA[
+            select 
+                rownum              as idRow,
+                fecha_apertura      as fechaApertura,
+                razon_social        as razonSocial,
+                iniciales_modalidad as modalidadAdministrativa,
+                nombre              as nombreCe,
+                codigo_entidad      as codigoEntidad,
+                direccion_ce        as direccionCe,
+                nombre_presentante  as nombreRespresenanteEmp,
+                nombre_miembro      as nombreRepresentanteCe,
+                usuario_insercion   as usuarioInsercion 
+            from 
+                vw_cabecera_cotizacion 
+            where 
+                codigo_entidad = ?1 and 
+                id_det_proceso_adq = ?2 and 
+                id_participante = ?3
+            ]]>
+        </query>
+    </named-native-query>
     
+    <named-native-query name="Contratacion.RptActaAdjudicacion" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.ContratoDto">
+        <query>
+            <![CDATA[
+            SELECT 
+                rownum              as idRow,
+                NOMBRE              as nombreCe, 
+                CODIGO_ENTIDAD      as codigoEntidad, 
+                INICIALES_MODALIDAD as modalidadAdministrativa,
+                FECHA_APERTURA      as fechaApertura, 
+                HORA_APERTURA       as horaRegistro, 
+                MINUTO_APERTURA     as minutoRegistro, 
+                DESCRIPCION_RUBRO   as descripcionRubro, 
+                JUSTIFICACION       as justificacion, 
+                USUARIO_INSERCION   as usuarioInsercion
+            FROM 
+                VW_RPT_ACTA_CABECERA 
+            WHERE 
+                ID_OFERTA = ?1
+            ]]>
+        </query>
+    </named-native-query>
+    
+    <named-native-query name="Contratacion.RptActaAdjudicacionParticipantes" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.ParticipanteDto">
+        <query>
+            <![CDATA[
+            select 
+                rownum              as idRow,
+                emp.RAZON_SOCIAL    as razonSocial
+            from OFERTA_BIENES_SERVICIOS ofe
+                inner join PARTICIPANTES par    on par.ID_OFERTA = ofe.ID_OFERTA
+                inner join EMPRESA emp          on par.ID_EMPRESA = emp.ID_EMPRESA
+            where 
+                ofe.ID_OFERTA = ?1 and
+                par.ESTADO_ELIMINACION = 0
+            ]]>
+        </query>
+    </named-native-query>
+    
+    <named-native-query name="Contratacion.RptActaAdjudicacionItems" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.DetalleItemDto">
+        <query>
+            <![CDATA[
+            select 
+                rownum              as idRow,
+                NO_ITEM             as noItem,
+                CONSOLIDADO_ESP_TEC as consolidadoEspTec,
+                RAZON_SOCIAL        as razonSocial,
+                PROVEEDOR           as nombreProveedor,
+                cantidad            as cantidad,
+                PRECIO_UNITARIO     as precioUnitario,
+                SUB_TOTAL           as subTotal
+            from 
+                VW_RPT_ACTA_ITEMS 
+            where 
+                ID_OFERTA = ?1
+            order by 
+                TO_NUMBER(NO_ITEM)
+            ]]>
+        </query>
+    </named-native-query>
+    
+    <named-native-query name="Contratacion.RptNotaAdjudicacionBean" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.ContratoDto">
+        <query>
+            <![CDATA[
+            SELECT 
+                rownum                  as idRow,
+                INICIALES_MODALIDAD     as modalidadAdministrativa, 
+                NOMBRE                  as nombreCe, 
+                NOMBRE_MUNICIPIO        as nombreMunicipio, 
+                NOMBRE_DEPARTAMENTO     as nombreDepartamento, 
+                CODIGO_ENTIDAD          as codigoEntidad, 
+                HORA_APERTURA           as horaRegistro, 
+                MINUTO_APERTURA         as minutoRegistro, 
+                FECHA_APERTURA          as fechaApertura, 
+                NOMBRE_REPRESENTANTE    as nombreRepresentante, 
+                NUMERO_DUI              as numeroDui, 
+                ID_RESOLUCION_ADJ       as idResolucionAdj, 
+                DISTRIBUIDOR            as distribuidor, 
+                USUARIO_INSERCION       as usuarioInsercion, 
+                RAZON_SOCIAL            as razonSocial, 
+                NOMBRE_MIEMBRO          as nombreMiembro
+            FROM 
+                VW_RPT_CABECERA_NOTA_ADJ 
+            WHERE 
+                ID_RESOLUCION_ADJ = ?1
+            ]]>
+        </query>
+    </named-native-query>
+    
+    <named-native-query name="Contratacion.RptNotaAdjudicacionBeanDetalleItemFab" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.DetalleItemDto">
+        <query>
+            <![CDATA[
+            select 
+                rownum              as idRow,
+                NO_ITEM             as noItem, 
+                CONSOLIDADO_ESP_TEC as consolidadoEspTec, 
+                NOMBRE_PROVEEDOR    as nombreProveedor, 
+                CANTIDAD            as cantidad, 
+                PRECIO_UNITARIO     as precioUnitario, 
+                SUB_TOTAL           as subTotal, 
+                ID_CONTRATO         as idContrato, 
+                ID_RESOLUCION_ADJ   as idResolucionAdj
+            from 
+                VW_RPT_DET_ITEMS_FAB 
+            where 
+                ID_RESOLUCION_ADJ = ?1
+            ORDER BY 
+                TO_NUMBER(NO_ITEM)
+            ]]>
+        </query>
+    </named-native-query>
+    
+    <named-native-query name="Contratacion.RptNotaAdjudicacionBeanDetalleItemDist" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.DetalleItemDto">
+        <query>
+            <![CDATA[
+            SELECT 
+                rownum              as idRow,
+                NO_ITEM             as noItem,
+                CONSOLIDADO_ESP_TEC as consolidadoEspTec,
+                NOMBRE_PRODUCTO     as nombreProducto,
+                CANTIDAD            as cantidad,
+                PRECIO_UNITARIO     as precioUnitario,
+                SUB_TOTAL           as subTotal,
+                ID_CONTRATO         as idContrato,
+                ID_RESOLUCION_ADJ   as idResolucionAdj
+            FROM 
+                VW_RPT_DET_ITEMS_DIST 
+            WHERE 
+                ID_RESOLUCION_ADJ =  ?
+            ORDER BY 
+                TO_NUMBER(NO_ITEM)
+            ]]>
+        </query>
+    </named-native-query>
+    <named-native-query name="Contratacion.VwRptPagare" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.VwRptPagare">
+        <query>
+            <![CDATA[
+            SELECT 
+                rownum              as idRow,
+                CIUDAD_FIRMA        as ciudadFirma,
+                FECHA_EMISION       as fechaEmision,
+                ID_CONTRATO         as idContrato,
+                INICIALES_MODALIDAD as inicialesModalidad,
+                VALOR               as valor,
+                DESCRIPCION_RUBRO   as descripcionRubro,
+                NUMERO_CONTRATO     as numeroContrato,
+                NOMBRE              as nombre,
+                NOMBRE_REPRESENTANTE    as nombreRepresentante,
+                DOMICILIO_REPRESENTANTE as domicilioRepresentante,
+                NUMERO_TELEFONO         as numeroTelefono,
+                NUMERO_DUI              as numeroDui,
+                NUMERO_NIT              as numeroNit,
+                USUARIO_INSERCION       as usuarioInsercion,
+                ID_RESOLUCION_ADJ       as idResolucionAdj,
+                RAZON_SOCIAL            as razonSocial,
+                ANHO_CONTRATO           as anhoContrato,
+                ID_PERSONERIA
+            FROM 
+                vw_rpt_pagare 
+            WHERE 
+                id_resolucion_adj=?1 and id_contrato=?2
+            ]]>
+        </query>
+    </named-native-query>
+    <named-native-query name="Contratacion.VwRptContratoJurCabecera" 
+                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.VwRptContratoJurCabecera">
+        <query>
+            <![CDATA[
+            SELECT 
+                rownum                  as idRow,
+                VALOR                   as valor,
+                NUMERO_CONTRATO         as numeroContrato,
+                RAZON_SOCIAL            as razonSocial,
+                DESCRIPCION_RUBRO       as descripcionRubro,
+                NOMBRE_MIEMBRO          as nombreMiembro,
+                INICIALES_MODALIDAD     as inicialesModalidad,
+                NOMBRE                  as nombre,
+                PLAZO_PREVISTO_ENTREGA  as plazoPrevistoEntrega,
+                CIUDAD_FIRMA            as ciudadFirma,
+                DIRECCION_CE            as direccionCe,
+                TELEFONO_CE             as telefonoCe,
+                FAX_CE                  as faxCe,
+                DIRECCION_EMP           as direccionEmp,
+                TELEFONO_EMP            as telefonoEmp,
+                CELULAR_EMP             as celularEmp,
+                FAX_EMP                 as faxEmp,
+                NUMERO_NIT              as numeroNit,
+                USUARIO_INSERCION       as usuarioInsercion,
+                ANHO_CONTRATO           as anhoContrato,
+                FECHA_EMISION           as fechaEmision,
+                NOMBRE_PRESENTANTE      as nombreePresentante,
+                CODIGO_ENTIDAD          as codigoEntidad,
+                ID_CONTRATO             as idContrato,
+                DISTRIBUIDOR            as distribuidor,
+                MOSTRAR_LEYENDA         as mostrarLeyenda,
+                NOMBRE_DEPARTAMENTO     as nombreDepartamento,
+                NOMBRE_MUNICIPIO        as nombreMunicipio,
+                NUMERO_DUI              as numeroDui
+            FROM 
+                VW_RPT_CONTRATO_JUR_CABECERA  
+            WHERE ID_CONTRATO=?1
+            ]]>
+        </query>
+    </named-native-query>
 </entity-mappings>
