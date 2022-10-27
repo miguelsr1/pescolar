@@ -20,6 +20,9 @@ import sv.gob.mined.pescolar.model.ContratosOrdenesCompra;
 import sv.gob.mined.pescolar.model.DetalleOferta;
 import sv.gob.mined.pescolar.model.NivelEducativo;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
+import sv.gob.mined.pescolar.model.dto.DetalleItemDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.ContratoDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.ParticipanteDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
 
 /**
@@ -126,5 +129,53 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
 
     public ContratosOrdenesCompra editContrato(ContratosOrdenesCompra contratosOrdenesCompras) {
         return em.merge(contratosOrdenesCompras);
+    }
+    
+    public List<ContratoDto> generarRptActaAdjudicacion(Long idResolucion) {
+        List<ContratoDto> lst;
+
+        ResolucionesAdjudicativa res = findByPk(idResolucion);
+
+        Query query = em.createNamedQuery("Contratacion.RptActaAdjudicacion", ContratoDto.class);
+        query.setParameter(1, res.getIdParticipante().getIdOferta().getId());
+        lst = query.getResultList();
+        if (lst.isEmpty()) {
+            return new ArrayList();
+        } else {
+            query = em.createNamedQuery("Contratacion.RptActaAdjudicacionParticipantes", ParticipanteDto.class);
+            query.setParameter(1, res.getIdParticipante().getIdOferta().getId());
+            lst.get(0).setLstParticipantes(query.getResultList());
+
+            query = em.createNamedQuery("Contratacion.RptActaAdjudicacionItems", DetalleItemDto.class);
+            query.setParameter(1, res.getIdParticipante().getIdOferta().getId());
+            lst.get(0).setLstDetalleItem(query.getResultList());
+        }
+        return lst;
+    }
+    
+    public List<ContratoDto> generarRptNotaAdjudicacion(BigDecimal idResolucion) {
+        Query query = em.createNamedQuery("Contratacion.RptNotaAdjudicacionBean", ContratoDto.class);
+        query.setParameter(1, idResolucion);
+
+        List<ContratoDto> lstNotaAdj = query.getResultList();
+        if (!lstNotaAdj.isEmpty()) {
+            query = em.createQuery("SELECT r.idParticipante.idEmpresa.idPersoneria.id, r.idParticipante.idEmpresa.distribuidor FROM ResolucionesAdjudicativa r WHERE r.id=:idResolucion");
+            query.setParameter("idResolucion", idResolucion);
+
+            Object idPersoneria = query.getSingleResult();
+            Object lstD[] = (Object[]) idPersoneria;
+
+            if (lstD[1].toString().equals("0")) {
+                //FABRICANTES
+                query = em.createNamedQuery("Contratacion.RptNotaAdjudicacionBeanDetalleItemFab", DetalleItemDto.class);
+            } else {
+                //DISTRIBUIDORES
+                query = em.createNamedQuery("Contratacion.RptNotaAdjudicacionBeanDetalleItemDist", DetalleItemDto.class);
+            }
+            query.setParameter(1, idResolucion);
+            lstNotaAdj.get(0).setLstDetalleItem(query.getResultList());
+        }
+
+        return lstNotaAdj;
     }
 }

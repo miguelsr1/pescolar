@@ -25,7 +25,6 @@ import sv.gob.mined.pescolar.model.EntidadFinanciera;
 import sv.gob.mined.pescolar.model.EstadisticaCenso;
 import sv.gob.mined.pescolar.model.EstadoReserva;
 import sv.gob.mined.pescolar.model.Municipio;
-import sv.gob.mined.pescolar.model.OrganizacionEducativa;
 import sv.gob.mined.pescolar.model.ProcesoAdquisicion;
 import sv.gob.mined.pescolar.model.RubrosAmostrarInteres;
 import sv.gob.mined.pescolar.model.dto.MunicipioDto;
@@ -50,6 +49,9 @@ public class CatalogoRepo {
     public EntityManager entityManager() {
         return em;
     }
+
+    private final List<SelectItem> lstDocumentosImp = new ArrayList<>();
+    private final SelectItem garantiaUsoTela = new SelectItem(6, "Garantía  de buen uso y resguardo de la tela");
 
     public <T extends Object> T findEntityByPk(Class<T> clazz, Object pk) {
         return entityManager().find(clazz, pk);
@@ -353,6 +355,31 @@ public class CatalogoRepo {
         q.setParameter("pIdAnho", idAnho - 1);
         return (ProcesoAdquisicion) q.getSingleResult();
     }
-    
-    
+
+    public List<SelectItem> getLstDocumentosImp(Boolean uniforme, Integer idAnho) {
+        if (lstDocumentosImp.isEmpty()) {
+            //Id son los mismos que estan el la tabla TIPO_RPT
+            lstDocumentosImp.add(new SelectItem(7, "Contrato"));
+            lstDocumentosImp.add(new SelectItem(5, "Garantía Contrato"));
+            lstDocumentosImp.add(new SelectItem(4, "Nota Adjudicación"));
+            lstDocumentosImp.add(new SelectItem(3, "Acta Adjudicación"));
+            if (idAnho != 10) {
+                lstDocumentosImp.add(new SelectItem(12, "Orden de Inicio"));
+            }
+            lstDocumentosImp.add(new SelectItem(10, "Declaración Adjudicatorio"));
+            lstDocumentosImp.add(new SelectItem(13, "Acta de Recomendación"));
+            lstDocumentosImp.add(new SelectItem(2, "Cotización"));
+            lstDocumentosImp.add(new SelectItem(11, "Oferta Global del Proveedor"));
+
+        }
+        if (uniforme) {
+            if (!lstDocumentosImp.contains(garantiaUsoTela)) {
+                lstDocumentosImp.add(garantiaUsoTela);
+            }
+        } else {
+            lstDocumentosImp.remove(garantiaUsoTela);
+        }
+
+        return lstDocumentosImp;
+    }
 }

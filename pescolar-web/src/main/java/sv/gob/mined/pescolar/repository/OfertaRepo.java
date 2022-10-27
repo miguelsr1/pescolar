@@ -1,12 +1,19 @@
 package sv.gob.mined.pescolar.repository;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import sv.gob.mined.pescolar.model.DetalleOferta;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
 import sv.gob.mined.pescolar.model.OfertaBienesServicio;
+import sv.gob.mined.pescolar.model.Participante;
+import sv.gob.mined.pescolar.model.dto.contratacion.VwCotizacion;
 
 /**
  *
@@ -252,4 +259,77 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
         return q.getResultList();
     }
 
+    public OfertaBienesServicio getOfertaByProcesoCodigoEntidad(String codigoEntidad, DetalleProcesoAdq proceso) {
+        Query q = em.createQuery("SELECT o FROM OfertaBienesServicio o WHERE o.codigoEntidad.codigoEntidad=:codigoEntidad and o.idDetProcesoAdq=:proceso and o.estadoEliminacion = 0", OfertaBienesServicio.class);
+        q.setParameter("codigoEntidad", codigoEntidad);
+        q.setParameter("proceso", proceso);
+        if (!q.getResultList().isEmpty()) {
+            return (OfertaBienesServicio) q.getSingleResult();
+        } else {
+            return null;
+        }
+    }
+    
+    
+    public List<VwCotizacion> getLstCotizacion(String municipio, String codigoEntidad, DetalleProcesoAdq idProceso, Participante participante) {
+        List<VwCotizacion> lstCotizacion= new ArrayList();
+        try {
+            Query q = em.createNamedQuery("Contratacion.VwCotizacion", VwCotizacion.class);
+            q.setParameter(1, codigoEntidad);
+            q.setParameter(2, idProceso.getId());
+            q.setParameter(3, participante.getId());
+
+            lstCotizacion = q.getResultList();
+
+            VwCotizacion v = lstCotizacion.get(0);
+
+            v.setLstDetalleOferta(new ArrayList());
+            v.setLstDetalleOfertaLibros(new ArrayList());
+            v.setLugarFecha(municipio.concat(",").concat(v.getFechaApertura()));
+
+            String nombreVista = "";
+
+            switch (idProceso.getIdRubroAdq().getId().intValue()) {
+                case 1:
+                case 4:
+                case 5:
+                    nombreVista = "VW_COTIZACION_UNIFORME";
+                    break;
+                case 2:
+                    nombreVista = "VW_COTIZACION_UTILES";
+                    break;
+                case 3:
+                    nombreVista = "VW_COTIZACION_ZAPATOS";
+                    break;
+            }
+
+            q = em.createNativeQuery("select distinct * FROM " + nombreVista + " WHERE id_empresa=?1 and codigo_entidad=?2 and id_proceso_estadistica=?3 and (id_proceso_precio=?4 or id_proceso_precio=?5) and num_alumno is not null order by to_number(no_item), id_nivel_educativo");
+            q.setParameter(1, participante.getIdEmpresa().getId());
+            q.setParameter(2, codigoEntidad);
+            q.setParameter(3, idProceso.getIdProcesoAdq().getId());
+            q.setParameter(4, idProceso.getIdProcesoAdq().getId());
+            q.setParameter(5, idProceso.getIdProcesoAdq().getPadreIdProcesoAdq() == null ? null : idProceso.getIdProcesoAdq().getPadreIdProcesoAdq().getId());
+
+            List lst2 = q.getResultList();
+
+            lst2.forEach((object1) -> {
+                Object[] datos1 = (Object[]) object1;
+                DetalleOferta det = new DetalleOferta();
+                det.setNoItem(datos1[9].toString());
+                det.setConsolidadoEspTec(datos1[0].toString().concat(", ").concat(datos1[1].toString()));
+                det.setCantidad(new BigInteger(datos1[2].toString()));
+                det.setPrecioUnitario(new BigDecimal(datos1[3].toString()));
+
+                if (det.getConsolidadoEspTec().contains("Libro")) {
+                    v.getLstDetalleOfertaLibros().add(det);
+                } else {
+                    v.getLstDetalleOferta().add(det);
+                }
+            });
+        } catch (Exception e) {
+            Logger.getLogger(OfertaRepo.class.getName()).log(Level.WARNING, "Error en la generacion de la cotizacion {0} {1} {2}", new Object[]{codigoEntidad, participante, idProceso});
+        }
+
+        return lstCotizacion;
+    }
 }

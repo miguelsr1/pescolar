@@ -281,4 +281,10 @@ public class EntidadEducativaRepo extends AbstractRepository<VwCatalogoEntidadEd
     public void create(OrganizacionEducativa organizacionEducativa) {
         em.persist(organizacionEducativa);
     }
+    
+    
+    public OrganizacionEducativa edit(OrganizacionEducativa organizacionEducativa) {
+        return em.merge(organizacionEducativa);
+    }
+
 }
