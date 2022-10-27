@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
-import sv.gob.mined.pescolar.model.dto.DetalleItemDto;
 
 /**
  *

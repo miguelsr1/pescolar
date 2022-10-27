@@ -23,7 +23,7 @@ import sv.gob.mined.pescolar.model.HistorialCamEstResAdj;
 import sv.gob.mined.pescolar.model.NivelEducativo;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 import sv.gob.mined.pescolar.model.RptDocumentos;
-import sv.gob.mined.pescolar.model.dto.DetalleItemDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.DetalleItemDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ContratoDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ParticipanteDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;

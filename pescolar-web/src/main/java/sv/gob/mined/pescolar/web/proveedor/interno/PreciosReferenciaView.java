@@ -34,7 +34,7 @@ import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.NivelEducativo;
 import sv.gob.mined.pescolar.model.PreciosRefRubro;
 import sv.gob.mined.pescolar.model.PreciosRefRubroEmp;
-import sv.gob.mined.pescolar.model.dto.DetalleItemDto;
+import sv.gob.mined.pescolar.model.dto.contratacion.DetalleItemDto;
 import sv.gob.mined.pescolar.model.dto.OfertaGlobal;
 import sv.gob.mined.pescolar.repository.CatalogoRepo;
 import sv.gob.mined.pescolar.repository.ParticipanteRepo;

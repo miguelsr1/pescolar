@@ -34,7 +34,7 @@
 
                 calcularTotales();
             }
-            
+
             function calcularSubTotalMatriculaNivelEdu(val1, val2, val3, lblVal, lblNivel) {
                 var val1M = $("#" + val1 + "_input").val();
                 var val2M = $("#" + val2 + "_input").val();
@@ -59,7 +59,7 @@
 
                 calcularTotales();
             }
-            
+
             function calcularSubTotalMatricula(fem, mas, lbl) {
                 var femM = $("#" + fem + "_input").val();
                 var masM = $("#" + mas + "_input").val();
@@ -160,15 +160,16 @@
                     ini = 0;
                     mf = 0;
                 } else {
-                    ini = Number($("#lblIni2Uti").val()) + Number($("#lblIni3Uti").val());
+                    ini = 0;
                     mf = Number($("#lblCIIIMFUti").val()) + Number($("#lblBacMFUti").val());
                 }
 
 
                 $("#lblTotalMatricula").text(Number(matIni2) + Number(matIni3) + Number(matPar4) + Number(matPar5) + Number(matPar6) + Number(matCI) + Number(matCII) + Number(matCIII) + Number(matCIIIMF) + Number(matBac) + Number(matBacMF));
+                $("#lblDistriLibro").text((0.50 * (Number(matIni2) + Number(matIni3) + Number(matPar4) + Number(matPar5) + Number(matPar6) + Number(matCI) + Number(matCII) + Number(matCIII) + Number(matCIIIMF) + Number(matBac) + Number(matBacMF))));
 
                 var montoTotalUni = Number($("#lblIPUni").val()) + Number($("#lblCIUni").val()) + Number($("#lblCIIUni").val()) + Number($("#lblCIIIUni").val()) + Number($("#lblBacUni").val());
-                var montoTotalUti = ini + Number($("#lblIPUti").val()) + Number($("#lblCIUti").val()) + Number($("#lblCIIUti").val()) + Number($("#lblCIIIUti").val()) + Number($("#lblBacUti").val()) + mf + Number($("#lblG1Uti").val()) + Number($("#lblG2Uti").val()) + Number($("#lblG3Uti").val()) + Number($("#lblG4Uti").val()) + Number($("#lblG5Uti").val()) + Number($("#lblG6Uti").val()) + Number($("#lblG7Uti").val()) + Number($("#lblG8Uti").val()) + Number($("#lblG9Uti").val()) + Number($("#lblB1Uti").val()) + Number($("#lblB2Uti").val());
+                var montoTotalUti = ini + Number($("#lblIPUti").val()) + Number($("#lblCIUti").val()) + Number($("#lblCIIUti").val()) + Number($("#lblCIIIUti").val()) + Number($("#lblBacUti").val()) + mf + Number($("#lblG1Uti").val()) + Number($("#lblG2Uti").val()) + Number($("#lblG3Uti").val()) + Number($("#lblG4Uti").val()) + Number($("#lblG5Uti").val()) + Number($("#lblG6Uti").val()) + Number($("#lblG7Uti").val()) + Number($("#lblG8Uti").val()) + Number($("#lblG9Uti").val()) + Number($("#lblB1Uti").val()) + Number($("#lblB2Uti").val()) + Number($("#lblDistriLibro").val());
                 var montoTotalZap = Number($("#lblIPZap").val()) + Number($("#lblCIZap").val()) + Number($("#lblCIIZap").val()) + Number($("#lblCIIIZap").val()) + Number($("#lblBacZap").val());
 
                 $("#lblTotalUni").text(intlRound(montoTotalUni));
@@ -409,7 +410,7 @@
                                         </p:column>
                                     </p:row>
 
-                                  
+
                                     <p:row rendered="#{estadisticasCensoView.mostrarInicial}">
                                         <p:column style="background-color: #86b8f0;">Edu. Inicial + Parvularia</p:column>
                                         <p:column style="background-color: #86b8f0;"><p:inputText id="txtIPFem" readonly="true" styleClass="numero" size="4" value="#{estadisticasCensoView.estaditicaIniPar.femenimo}"/></p:column>
@@ -716,6 +717,24 @@
                                             <p:inputText id="lblBacMFUti" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtBacMFPreUtiFem" style="display: none;" value="#{estadisticasCensoView.preBacMFUti.precioMaxFem}"/>
                                             <p:inputText id="txtBacMFPreUtiMas" style="display: none;" value="#{estadisticasCensoView.preBacMFUti.precioMaxMas}"/>
+                                        </p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText value="0" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row style="background-color: #86b8f0;" >
+                                        <p:column>Costo total de entrega de libros</p:column>
+                                        <p:column><p:inputNumber emptyValue="zero" disabled="true" styleClass="numero" size="4" value="0" decimalPlaces="0" minValue="0" inputStyle="text-align: right;"/></p:column>
+                                        <p:column><p:inputNumber emptyValue="zero" disabled="true" styleClass="numero" size="4" value="0" decimalPlaces="0" minValue="0" inputStyle="text-align: right;"/></p:column>
+                                        <p:column styleClass="numero"><p:outputLabel value="0"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
+
+                                        <p:column styleClass="numero">
+                                            <p:inputText value="0" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
+                                        <p:column styleClass="numero">
+                                            <p:outputLabel id="lblDistriLibro" styleClass="numero">
+                                                <f:convertNumber pattern="$ #,##0.00"/>
+                                            </p:outputLabel>
                                         </p:column>
                                         <p:column styleClass="numero">
                                             <p:inputText value="0" size="5" readonly="true" styleClass="numero"/>

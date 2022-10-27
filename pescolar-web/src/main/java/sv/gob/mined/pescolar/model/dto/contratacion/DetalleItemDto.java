@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package sv.gob.mined.pescolar.model.dto;
+package sv.gob.mined.pescolar.model.dto.contratacion;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

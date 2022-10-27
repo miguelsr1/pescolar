@@ -5,10 +5,7 @@
 package sv.gob.mined.pescolar.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -59,10 +56,8 @@ public class RecepcionBienesServicios implements Serializable {
     @Column(name = "USUARIO_MODIFICACION")
     private String usuarioModificacion;
     @Column(name = "FECHA_MODIFICACION")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime fechaModificacion;
     @Column(name = "FECHA_ELIMINACION")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime fechaEliminacion;
     @Basic(optional = false)
     @Column(name = "ESTADO_ELIMINACION")

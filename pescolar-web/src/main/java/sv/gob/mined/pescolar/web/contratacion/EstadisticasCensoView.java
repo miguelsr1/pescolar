@@ -82,6 +82,7 @@ public class EstadisticasCensoView implements Serializable {
     private BigDecimal preUniformes = BigDecimal.ZERO;
     private BigDecimal preUtiles = BigDecimal.ZERO;
     private BigDecimal preZapatos = BigDecimal.ZERO;
+    private BigDecimal preDistribucionLibros = new BigDecimal(0.50); //0.50 diferente municipio y 0.45 mismo municipio
     private VwCatalogoEntidadEducativa entidadEducativa;
     private ProcesoAdquisicion procesoAdquisicion = new ProcesoAdquisicion();
     private OrganizacionEducativa organizacionEducativa;
@@ -155,14 +156,6 @@ public class EstadisticasCensoView implements Serializable {
     private TechoRubroEntEdu techoUti = new TechoRubroEntEdu();
     private TechoRubroEntEdu techoZap = new TechoRubroEntEdu();
 
-    /*@EJB
-    private EntidadEducativaEJB entidadEducativaEJB;
-    @EJB
-    private PreciosReferenciaEJB preciosReferenciaEJB;
-    @EJB
-    private ReportesEJB reportesEJB;
-    @EJB
-    private EMailEJB eMailEJB;*/
     @Inject
     private SessionView sessionView;
     @Inject
@@ -194,6 +187,10 @@ public class EstadisticasCensoView implements Serializable {
             mostrarInicial = (procesoAdquisicion.getIdAnho().getId() > 8);
             mostrarModFlex = (procesoAdquisicion.getIdAnho().getId() > 8);
         }
+    }
+
+    public BigDecimal getPreDistribucionLibros() {
+        return preDistribucionLibros;
     }
 
     public EstadisticaCenso getEstaditicaPar4() {
@@ -1471,6 +1468,7 @@ public class EstadisticasCensoView implements Serializable {
     }
 
     private BigDecimal calcularPresupuesto(int idRubro) {
+        BigInteger totalMat = BigInteger.ZERO;
         BigDecimal num = BigDecimal.ONE;
         BigDecimal presupuesto = BigDecimal.ZERO;
         PreciosRefRubro preParTemp, preCiclo1Temp, preCiclo2Temp, preCiclo3Temp, preBacTemp;
@@ -1523,38 +1521,6 @@ public class EstadisticasCensoView implements Serializable {
         presupuesto = presupuesto.add(preBacTemp.getPrecioMaxFem().multiply(new BigDecimal(estaditicaBac.getFemenimo())).multiply(num));
         presupuesto = presupuesto.add(preBacTemp.getPrecioMaxMas().multiply(new BigDecimal(estaditicaBac.getMasculino())).multiply(num));
 
-        //Presupuesto de libros
-        /*if (idRubro == 2 && procesoAdquisicion.getIdAnho().getId().intValue() >= 6) { //mayor o igual de anho 2018
-
-            switch (procesoAdquisicion.getIdAnho().getId().intValue()) {
-                case 6:
-                case 7:
-                    //este calculo es comun para años 2018 y 2019
-                    presupuesto = presupuesto.add(new BigDecimal(est7grado.getMasculino().add(est7grado.getFemenimo())).multiply(preGrado7Uti.getPrecioMaxMas()));
-                    presupuesto = presupuesto.add(new BigDecimal(est8grado.getMasculino().add(est8grado.getFemenimo())).multiply(preGrado8Uti.getPrecioMaxMas()));
-                    presupuesto = presupuesto.add(new BigDecimal(est9grado.getMasculino().add(est9grado.getFemenimo())).multiply(preGrado9Uti.getPrecioMaxMas()));
-
-                    if (procesoAdquisicion.getIdAnho().getId().intValue() == 7) {//2019 libros desde 1 grado a 2 año de bachillerato
-                        presupuesto = presupuesto.add(new BigDecimal(est1grado.getMasculino().add(est1grado.getFemenimo())).multiply(preGrado1Uti.getPrecioMaxMas()));
-                        presupuesto = presupuesto.add(new BigDecimal(est2grado.getMasculino().add(est2grado.getFemenimo())).multiply(preGrado2Uti.getPrecioMaxMas()));
-                        presupuesto = presupuesto.add(new BigDecimal(est3grado.getMasculino().add(est3grado.getFemenimo())).multiply(preGrado3Uti.getPrecioMaxMas()));
-                        presupuesto = presupuesto.add(new BigDecimal(est4grado.getMasculino().add(est4grado.getFemenimo())).multiply(preGrado4Uti.getPrecioMaxMas()));
-                        presupuesto = presupuesto.add(new BigDecimal(est5grado.getMasculino().add(est5grado.getFemenimo())).multiply(preGrado5Uti.getPrecioMaxMas()));
-                        presupuesto = presupuesto.add(new BigDecimal(est6grado.getMasculino().add(est6grado.getFemenimo())).multiply(preGrado6Uti.getPrecioMaxMas()));
-
-                        presupuesto = presupuesto.add(new BigDecimal(est1media.getMasculino().add(est1media.getFemenimo())).multiply(preBachi1Uti.getPrecioMaxMas()));
-                        presupuesto = presupuesto.add(new BigDecimal(est2media.getMasculino().add(est2media.getFemenimo())).multiply(preBachi2Uti.getPrecioMaxMas()));
-                    }
-                    break;
-                case 9:
-                case 10://incluye inicial 1, 2 y modalidades flexibles en los niveles de 3er ciclo y media
-                    presupuesto = presupuesto.add(new BigDecimal(estInicial1grado.getMasculino().add(estInicial1grado.getFemenimo())).multiply(preParUti.getPrecioMaxMas()));
-                    presupuesto = presupuesto.add(new BigDecimal(estInicial2grado.getMasculino().add(estInicial2grado.getFemenimo())).multiply(preParUti.getPrecioMaxMas()));
-                    presupuesto = presupuesto.add(new BigDecimal(estaditicaCiclo3MF.getMasculino().add(estaditicaCiclo3MF.getFemenimo())).multiply(preCicloIIIMFUti.getPrecioMaxMas()));
-                    presupuesto = presupuesto.add(new BigDecimal(estaditicaBacMF.getMasculino().add(estaditicaBacMF.getFemenimo())).multiply(preBacMFUti.getPrecioMaxMas()));
-                    break;
-            }
-        } else */
         if (procesoAdquisicion.getIdAnho().getId().intValue() >= 9) { //mayor o igual de anho 2018
             switch (idRubro) {
                 case 4:
@@ -1563,8 +1529,14 @@ public class EstadisticasCensoView implements Serializable {
                     presupuesto = presupuesto.add(new BigDecimal(estInicial3grado.getMasculino()).multiply(preParUni.getPrecioMaxMas()).add(new BigDecimal(estInicial3grado.getFemenimo()).multiply(preParUni.getPrecioMaxFem())));
                     break;
                 case 2:
+                    totalMat = estaditicaIniPar.getFemenimo().add(estaditicaIniPar.getMasculino()).add(estaditicaCiclo1.getFemenimo()).add(estaditicaCiclo1.getMasculino())
+                            .add(estaditicaCiclo2.getFemenimo()).add(estaditicaCiclo2.getMasculino()).add(estaditicaCiclo3.getFemenimo()).add(estaditicaCiclo3.getMasculino())
+                            .add(estaditicaBac.getFemenimo()).add(estaditicaBac.getMasculino()).add(estaditicaCiclo3MF.getFemenimo()).add(estaditicaCiclo3MF.getMasculino())
+                            .add(estaditicaBacMF.getFemenimo()).add(estaditicaBacMF.getMasculino());
+                    
                     presupuesto = presupuesto.add(new BigDecimal(estInicial2grado.getMasculino().add(estInicial2grado.getFemenimo())).multiply(preParUti.getPrecioMaxMas()));
                     presupuesto = presupuesto.add(new BigDecimal(estInicial3grado.getMasculino().add(estInicial3grado.getFemenimo())).multiply(preParUti.getPrecioMaxMas()));
+                    presupuesto = presupuesto.add(new BigDecimal("0.5").multiply(new BigDecimal(totalMat)));
                     break;
                 case 3:
                     presupuesto = presupuesto.add(new BigDecimal(estInicial2grado.getMasculino().add(estInicial2grado.getFemenimo())).multiply(preParZap.getPrecioMaxMas()));

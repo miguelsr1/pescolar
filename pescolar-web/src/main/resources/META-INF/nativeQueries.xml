@@ -204,7 +204,7 @@
         </query>
     </named-native-query>
     <named-native-query name="Contratacion.VwCotizacion" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.VwCotizacion">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.VwCotizacion">
         <query>
             <![CDATA[
             select 
@@ -229,7 +229,7 @@
     </named-native-query>
     
     <named-native-query name="Contratacion.RptActaAdjudicacion" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.ContratoDto">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.ContratoDto">
         <query>
             <![CDATA[
             SELECT 
@@ -252,7 +252,7 @@
     </named-native-query>
     
     <named-native-query name="Contratacion.RptActaAdjudicacionParticipantes" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.ParticipanteDto">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.ParticipanteDto">
         <query>
             <![CDATA[
             select 
@@ -269,7 +269,7 @@
     </named-native-query>
     
     <named-native-query name="Contratacion.RptActaAdjudicacionItems" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.DetalleItemDto">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.DetalleItemDto">
         <query>
             <![CDATA[
             select 
@@ -292,7 +292,7 @@
     </named-native-query>
     
     <named-native-query name="Contratacion.RptNotaAdjudicacionBean" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.ContratoDto">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.ContratoDto">
         <query>
             <![CDATA[
             SELECT 
@@ -321,7 +321,7 @@
     </named-native-query>
     
     <named-native-query name="Contratacion.RptNotaAdjudicacionBeanDetalleItemFab" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.DetalleItemDto">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.DetalleItemDto">
         <query>
             <![CDATA[
             select 
@@ -345,7 +345,7 @@
     </named-native-query>
     
     <named-native-query name="Contratacion.RptNotaAdjudicacionBeanDetalleItemDist" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.DetalleItemDto">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.DetalleItemDto">
         <query>
             <![CDATA[
             SELECT 
@@ -368,7 +368,7 @@
         </query>
     </named-native-query>
     <named-native-query name="Contratacion.VwRptPagare" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.VwRptPagare">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.VwRptPagare">
         <query>
             <![CDATA[
             SELECT 
@@ -399,7 +399,7 @@
         </query>
     </named-native-query>
     <named-native-query name="Contratacion.VwRptContratoJurCabecera" 
-                        result-class="sv.gob.mined.paquescolar.model.pojos.contratacion.VwRptContratoJurCabecera">
+                        result-class="sv.gob.mined.pescolar.model.dto.contratacion.VwRptContratoJurCabecera">
         <query>
             <![CDATA[
             SELECT 

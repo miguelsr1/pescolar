@@ -49,7 +49,6 @@
     <class>sv.gob.mined.pescolar.model.Usuario</class>
     <class>sv.gob.mined.pescolar.model.UsuarioEntidadFinanciera</class>
     <class>sv.gob.mined.pescolar.model.dto.DeclaracionJurada</class>
-    <class>sv.gob.mined.pescolar.model.dto.DetalleItemDto</class>
     <class>sv.gob.mined.pescolar.model.dto.MunicipioDto</class>
     <class>sv.gob.mined.pescolar.model.dto.OfertaGlobal</class>
     <class>sv.gob.mined.pescolar.model.dto.contratacion.PrecioReferenciaEmpresaDto</class>
@@ -72,6 +71,17 @@
     <class>sv.gob.mined.pescolar.model.dto.contratacion.ResguardoItemDto</class>
     <class>sv.gob.mined.pescolar.model.HistorialCamEstResAdj</class>
     <class>sv.gob.mined.pescolar.model.InfoGeneralContratacion</class>
+    <class>sv.gob.mined.pescolar.model.DetalleRecepcion</class>
+    <class>sv.gob.mined.pescolar.model.EstadoSeguimiento</class>
+    <class>sv.gob.mined.pescolar.model.RecepcionBienesServicios</class>
+    <class>sv.gob.mined.pescolar.model.RptDocumentos</class>
+    <class>sv.gob.mined.pescolar.model.TipoRpt</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.ContratoDto</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.ParticipanteDto</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.VwCotizacion</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.VwRptContratoJurCabecera</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.VwRptPagare</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.DetalleItemDto</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
