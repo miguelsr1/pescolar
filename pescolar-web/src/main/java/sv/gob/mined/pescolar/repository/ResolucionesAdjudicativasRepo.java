@@ -118,7 +118,7 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
     }
 
     public ResolucionesAdjudicativa findResolucionesAdjudicativasByIdParticipante(Long participante) {
-        Query q = em.createQuery("SELECT r FROM ResolucionesAdjudicativas r WHERE r.idParticipante.id=:participante and r.estadoEliminacion=0", ResolucionesAdjudicativa.class);
+        Query q = em.createQuery("SELECT r FROM ResolucionesAdjudicativa r WHERE r.idParticipante.id=:participante and r.estadoEliminacion=0", ResolucionesAdjudicativa.class);
         q.setParameter("participante", participante);
         List<ResolucionesAdjudicativa> lst = q.getResultList();
         if (lst.isEmpty()) {

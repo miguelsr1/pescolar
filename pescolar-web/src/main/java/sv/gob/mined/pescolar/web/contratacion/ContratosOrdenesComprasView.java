@@ -33,6 +33,7 @@ import sv.gob.mined.pescolar.model.ContratosOrdenesCompra;
 import sv.gob.mined.pescolar.model.DetRubroMuestraIntere;
 import sv.gob.mined.pescolar.model.DetalleOferta;
 import sv.gob.mined.pescolar.model.DetalleProcesoAdq;
+import sv.gob.mined.pescolar.model.DiasPlazoContrato;
 import sv.gob.mined.pescolar.model.Empresa;
 import sv.gob.mined.pescolar.model.HistorialCamEstResAdj;
 import sv.gob.mined.pescolar.model.Municipio;
@@ -92,6 +93,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     private Long idMunicipio;
 
     private DetalleProcesoAdq detalleProceso = new DetalleProcesoAdq();
+    private DiasPlazoContrato diasPlazo = new DiasPlazoContrato();
     private OfertaBienesServicio oferta;
     private Participante participante;
     private OrganizacionEducativa representanteCe;
@@ -112,11 +114,11 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     private ParticipanteRepo participanteRepo;
     @Inject
     private EntidadEducativaRepo entidadRepo;
-    @Inject 
+    @Inject
     private OfertaRepo ofertaRepo;
     @Inject
     private ReportesRepo reporteRepo;
-    @Inject 
+    @Inject
     private Reportes reportes;
 
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("Bundle");
@@ -133,18 +135,18 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     @PostConstruct
     public void ini() {
         rubro = sessionView.getIdRubro();
+        idMunicipio = sessionView.getIdMunicipio();
 
-        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        detalleProceso = JsfUtil.findDetalleByRubroAndAnho(sessionView.getProceso(), rubro, sessionView.getIdAnho());
-
-        /*if (VarSession.getIdMunicipioSession() != null) {
-            idMunicipio = VarSession.getIdMunicipioSession();
-        }*/
-        if (params.containsKey("txtCodigoEntidad")) {
-            if (detalleProceso != null) {
-                cargaInicialDeDatos(params);
-                lstDocumentosImp = null; //utilEJB.getLstDocumentosImp(rubro.intValueExact() == 1 || rubro.intValueExact() == 4 || rubro.intValueExact() == 5, detalleProceso.getIdProcesoAdq().getIdAnho().getIdAnho().intValue());
-                seleccionarDocumentosAImprimir();
+        if (rubro != null) {
+            Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            detalleProceso = JsfUtil.findDetalleByRubroAndAnho(sessionView.getProceso(), rubro, sessionView.getIdAnho());
+            idMunicipio = sessionView.getIdMunicipio();
+            if (params.containsKey("txtCodigoEntidad")) {
+                if (detalleProceso != null) {
+                    cargaInicialDeDatos(params);
+                    lstDocumentosImp = null; //utilEJB.getLstDocumentosImp(rubro.intValueExact() == 1 || rubro.intValueExact() == 4 || rubro.intValueExact() == 5, detalleProceso.getIdProcesoAdq().getIdAnho().getIdAnho().intValue());
+                    seleccionarDocumentosAImprimir();
+                }
             }
         }
     }
@@ -152,6 +154,10 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     // <editor-fold defaultstate="collapsed" desc="getter-setter">
     public List<HistorialCamEstResAdj> getLstHistorialCambios() {
         return lstHistorialCambios;
+    }
+
+    public DiasPlazoContrato getDiasPlazo() {
+        return diasPlazo;
     }
 
     public void setLstHistorialCambios(List<HistorialCamEstResAdj> lstHistorialCambios) {
@@ -403,6 +409,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
             resolucionAdj = resoRepo.findByPk((Long) sessionView.getVariableSession("idRes"));
             continuar = false;
             deshabilitado = false;
+            diasPlazo = contratoRepo.findDiasPlazoPorRubro(rubro, sessionView.getIdAnho());
             if (resolucionAdj.getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getDescripcionRubro().contains("UNIFORME")) {
                 showGarantiaUsoTela = true;
                 showFechaOrdenInicio = false;
@@ -428,6 +435,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
 
             if (lst.size() == 1) {
                 contratoOrd = lst.get(0);
+                contratoOrd.setPlazoPrevistoEntrega(diasPlazo.getDiasPlazo().longValue());
             }
 
             razonSocial = resolucionAdj.getIdParticipante().getIdEmpresa().getRazonSocial();
@@ -444,7 +452,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                     current.setCiudadFirma(catalogoRepo.findEntityByPk(Municipio.class, sessionView.getIdMunicipio()).getNombreMunicipio());
                     current.setAnhoContrato(resolucionAdj.getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getAnho());
 
-                    setPlazoPrevistoEntrega();
+                    current.setPlazoPrevistoEntrega(diasPlazo.getDiasPlazo().longValue());
 
                     if (representanteCe != null) {
                         current.setMiembroFirma(representanteCe.getNombreMiembro());
@@ -458,7 +466,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                  * seleccionado tenga asignado el plazo previsto de entrega
                  */
                 if (current.getPlazoPrevistoEntrega() == null) {
-                    setPlazoPrevistoEntrega();
+                    current.setPlazoPrevistoEntrega(diasPlazo.getDiasPlazo().longValue());
                     resoRepo.editContrato(current);
                 }
             }
@@ -553,6 +561,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     }
 
     public String prepareEdit() {
+        idMunicipio = sessionView.getIdMunicipio();
         if (idMunicipio != null) {
             //actualizar anho y detalle proceso adquisicion
             limpiarCampos();
@@ -697,7 +706,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                                     if (current != null) {
                                         if (representanteCe != null) {
                                             current.setAnhoContrato(resolucionAdj.getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getAnho());
-                                            setPlazoPrevistoEntrega();
+                                            current.setPlazoPrevistoEntrega(diasPlazo.getDiasPlazo().longValue());
 
                                             current.setMiembroFirma(representanteCe.getNombreMiembro());
                                             seleccionarDocumentosAImprimir();
@@ -738,7 +747,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                                             soloLectura = (resolucionAdj.getIdEstadoReserva().getId().intValue() == 5);
                                             continuar = false;
                                             if (current.getPlazoPrevistoEntrega() == null) {
-                                                setPlazoPrevistoEntrega();
+                                                current.setPlazoPrevistoEntrega(diasPlazo.getDiasPlazo().longValue());
                                             }
                                             seleccionarDocumentosAImprimir();
                                             break;
@@ -774,26 +783,26 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
         }
     }
 
-    private void setPlazoPrevistoEntrega() {
-        switch (detalleProceso.getIdRubroAdq().getId().intValue()) {
-            case 1:
-            case 4:
-            case 5:
-                current.setPlazoPrevistoEntrega(60l);
-                break;
-            case 2:
-                if (detalleProceso.getIdProcesoAdq().getDescripcionProcesoAdq().contains("MODALIDADES FLEXIBLES")) {
-                    current.setPlazoPrevistoEntrega(15l);
-
-                } else {
-                    current.setPlazoPrevistoEntrega(30l);
-                }
-                break;
-            case 3:
-                current.setPlazoPrevistoEntrega(60l);
-                break;
-        }
-    }
+//    private void setPlazoPrevistoEntrega() {
+//        switch (detalleProceso.getIdRubroAdq().getId().intValue()) {
+//            case 1:
+//            case 4:
+//            case 5:
+//                current.setPlazoPrevistoEntrega(60l);
+//                break;
+//            case 2:
+//                if (detalleProceso.getIdProcesoAdq().getDescripcionProcesoAdq().contains("MODALIDADES FLEXIBLES")) {
+//                    current.setPlazoPrevistoEntrega(15l);
+//
+//                } else {
+//                    current.setPlazoPrevistoEntrega(30l);
+//                }
+//                break;
+//            case 3:
+//                current.setPlazoPrevistoEntrega(60l);
+//                break;
+//        }
+//    }
 
     public List<JasperPrint> imprimirDesdeModificativa(List<RptDocumentos> lstRptDocumentos, Boolean perNatural, ContratosOrdenesCompra resolucionAdj, String codigoEnt) {
         representanteCe = entidadRepo.getPresidenteOrganismoEscolar(codigoEnt);
@@ -1039,7 +1048,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                     break;
             }
         }
-        
+
         return lstRptAImprimir;
     }
 

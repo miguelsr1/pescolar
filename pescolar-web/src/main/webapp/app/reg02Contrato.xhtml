@@ -4,158 +4,167 @@
     template="/WEB-INF/template.xhtml"
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:h="http://xmlns.jcp.org/jsf/html">
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
     <ui:define name="content">
-        <p:menubar id="mbMenu"> 
-            <p:menuitem value="Nuevo" icon="pi pi-file-o" update="dvFiltro pnlContrato pnlCentroEscolar"
-                        action="#{contratosOrdenesComprasView.prepareCreate}" process="@this"/>
-            <p:menuitem value="Modificar" icon="pi pi-edit" update="dvFiltro pnlContrato dvOrganismo dvDocumentos"
-                        action="#{contratosOrdenesComprasView.prepareEdit}" ajax="true" process="@this"/>
-            <p:menuitem id="mGuardar" value="Guardar" icon="pi pi-save" actionListener="#{contratosOrdenesComprasView.guardar}" disabled="#{menuController.usuarioSoloLectura or contratosOrdenesComprasView.soloLectura} "  update="pnlContrato pnlCentroEscolar"/>
-            <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false" action="#{contratosOrdenesComprasView.impDocumentos}" />
-            <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/inicial.mined"/>
+        <h:form id="form" prependId="false">
+            <div class="p-grid dashboard">
+                <div class="p-col-12" style="padding-bottom: 1px;">
+                    <p:menubar id="mbMenu"> 
+                        <p:menuitem value="Nuevo" icon="pi pi-file-o" update="dvFiltro pnlContrato pnlCentroEscolar"
+                                    action="#{contratosOrdenesComprasView.prepareCreate}" process="@this"/>
+                        <p:menuitem value="Modificar" icon="pi pi-pencil" update="dvFiltro pnlContrato dvOrganismo dvDocumentos"
+                                    action="#{contratosOrdenesComprasView.prepareEdit}" process="@this"/>
+                        <p:menuitem id="mGuardar" value="Guardar" icon="pi pi-save" actionListener="#{contratosOrdenesComprasView.guardar}" disabled="#{menuController.usuarioSoloLectura or contratosOrdenesComprasView.soloLectura} "  update="pnlContrato pnlCentroEscolar"/>
+                        <p:menuitem value="Imprimir" icon="pi pi-print" ajax="false" action="#{contratosOrdenesComprasView.impDocumentos}" />
+                        <p:menuitem value="Principal" icon="pi pi-home" url="#{request.contextPath}/app/inicial.mined"/>
 
-            <f:facet  name="options" >  
-                <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{sessionView.logout}"/>
-            </f:facet>  
-        </p:menubar>
-        <p:blockUI block="mbMenu" trigger="mGuardar" />
+                        <f:facet  name="options" >  
+                            <p:commandButton icon="fa fa-sign-out" value="Salir" action="#{sessionView.logout}"/>
+                        </f:facet>  
+                    </p:menubar>
+                    <p:blockUI block="mbMenu" trigger="mGuardar" />
 
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">
-                    <h:panelGroup id="dvFiltro" style="display:#{(contratosOrdenesComprasView.continuar)?'block':'none'}">
-                        <h1>
-                            <i class="fa fa-filter blue" style="font-size: 16px;"></i>
-                            <p:spacer width="10" height="8"/>
-                            <p:outputLabel value="Filtro de busqueda"/>
-                        </h1>
+                </div>
+                <div class="p-col-12">
+                    <div class="card ui-fluid overview-box" jsf:id="dvDatos">
+                        <h5 id="tituloDatos" class="blue">
+                            <i class="pi pi-filter" style="font-weight: bold;"></i>
+                            Filtro de busqueda:
+                        </h5>
+                        <h:panelGroup id="dvFiltro" style="display:#{(contratosOrdenesComprasView.continuar)?'block':'none'}">
+                            <div class="p-field p-grid" jsf:id="pnlFiltro">
+                                <p:outputLabel value="#{bundle['compra.rubroAdq']}:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu id="cboRubro" value="#{contratosOrdenesComprasView.rubro}" onkeydown="setaFoco(this);" disabled="#{contratosOrdenesComprasView.deshabilitado}">
+                                        <f:selectItem itemLabel="Seleccione un rubro" itemValue="" />  
+                                        <f:selectItems value="#{sessionView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}" />
+                                        <p:ajax update="pnlFiltro " />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="#{bundle['ce.codEnt']}:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:outputPanel id="codigoEntidad" >
+                                        <p:inputText maxlength="5" value="#{contratosOrdenesComprasView.codigoEntidad}" size="6" autocomplete="off" 
+                                                     disabled="#{contratosOrdenesComprasView.deshabilitado}" onkeyup="return this.value.length >= 5">
+                                            <p:ajax event="keyup" update="cboRubro nombreCE cboProveedor" listener="#{contratosOrdenesComprasView.buscarEntidadEducativa}" />
+                                        </p:inputText>
+                                        <p:spacer width="10"/>
+                                        <p:outputLabel id="nombreCE" value="#{contratosOrdenesComprasView.entidadEducativa.nombre}" style="font-weight: bold"/>
+                                    </p:outputPanel>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Proveedor:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu id="cboProveedor" value="#{contratosOrdenesComprasView.idParticipante}" 
+                                                     disabled="#{contratosOrdenesComprasView.deshabilitado}" >
+                                        <f:selectItem itemLabel="Seleccione un proveedor" itemValue="" />  
+                                        <f:selectItems value="#{contratosOrdenesComprasView.oferta.participantesList}" var="par" itemValue="#{par.id}" itemLabel="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(par.id)):par.idEmpresa.razonSocial}" />
+                                        <p:ajax listener="#{contratosOrdenesComprasView.buscarDocumentoLegal}" update="dvFiltro pnlContrato dvOrganismo dvDocumentos" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </h:panelGroup>
 
-                        <p:panelGrid id="pnlFiltro" columns="2" columnClasses="col2_label,col10"
-                                     style="width: 100%; border:0px none; background-color:transparent;"
-                                     styleClass="form-group ui-panelgrid-blank">
-                            <p:outputLabel value="#{bundle['compra.rubroAdq']}:" />
-                            <p:selectOneMenu id="cboRubro" value="#{contratosOrdenesComprasView.rubro}" onkeydown="setaFoco(this);" disabled="#{contratosOrdenesComprasView.deshabilitado}">
-                                <f:selectItem itemLabel="Seleccione un rubro" itemValue="" />  
-                                <f:selectItems value="#{parametrosMB.lstRubros}" var="rubro" itemValue="#{rubro.idRubroInteres}" itemLabel="#{rubro.descripcionRubro}" />
-                                <p:ajax update="pnlFiltro " listener="#{ofertaMB.limpiarFiltros}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel value="#{bundle['ce.codEnt']}:" />
-                            <p:outputPanel id="codigoEntidad" >
-                                <p:inputText maxlength="5" value="#{contratosOrdenesComprasView.codigoEntidad}" size="6" autocomplete="off" 
-                                             disabled="#{contratosOrdenesComprasView.deshabilitado}" onkeyup="return this.value.length >= 5">
-                                    <p:ajax event="keyup" update="cboRubro nombreCE cboProveedor" listener="#{contratosOrdenesComprasView.buscarEntidadEducativa}" />
-                                </p:inputText>
-                                <p:spacer width="10"/>
-                                <p:outputLabel id="nombreCE" value="#{contratosOrdenesComprasView.entidadEducativa.nombre}" style="font-weight: bold"/>
-                            </p:outputPanel>
+                        <h:panelGroup id="pnlContrato" style="display:#{(!contratosOrdenesComprasView.continuar)?'block':'none'}">
+                            <h3>
+                                <i class="fa fa-home acua" style="font-size: 16px;"></i>
+                                <p:spacer width="10" height="8"/>
+                                <p:outputLabel value="Datos relativos al contrato"/>
 
-                            <p:outputLabel value="Proveedor:" />
-                            <p:selectOneMenu id="cboProveedor" value="#{contratosOrdenesComprasView.idParticipante}" 
-                                             disabled="#{contratosOrdenesComprasView.deshabilitado}" >
-                                <f:selectItem itemLabel="Seleccione un proveedor" itemValue="" />  
-                                <f:selectItems value="#{contratosOrdenesComprasView.oferta.participantesList}" var="par" itemValue="#{par.idParticipante}" itemLabel="#{menuController.isUsuarioDigitador?('PROVE-'.concat(par.idParticipante)):par.idEmpresa.razonSocial}" />
-                                <p:ajax listener="#{contratosOrdenesComprasView.buscarDocumentoLegal}" update="dvFiltro pnlContrato dvOrganismo dvDocumentos" />
-                            </p:selectOneMenu>
-                        </p:panelGrid>
-                    </h:panelGroup>
+                                <p:outputPanel style="float: right;" rendered="false" >
+                                    <p:commandButton value="Ver historial" onclick="PF('dlgHistorialCambiosReserva').show();"/>
+                                </p:outputPanel>
+                            </h3>
 
-                    <h:panelGroup id="pnlContrato" style="display:#{(!contratosOrdenesComprasView.continuar)?'block':'none'}">
-                        <h3>
-                            <i class="fa fa-home acua" style="font-size: 16px;"></i>
-                            <p:spacer width="10" height="8"/>
-                            <p:outputLabel value="Datos relativos al contrato"/>
+                            <p:panelGrid columns="1" style="margin-bottom:10px" layout="grid" styleClass="form-group ui-panelgrid-blank">
+                                <p:panelGrid columns="6" columnClasses="col2_label,col2,col2_label,col2,col2_label,col2"
+                                             style="width: 100%; border:0px none; background-color:transparent;"
+                                             styleClass="form-group ui-panelgrid-blank">
+                                    <p:outputLabel value="Id Contrato: " />
+                                    <p:inputText id="txtIdContrato" disabled="true" size="6" value="#{contratosOrdenesComprasView.selected.id}"/>
+                                    <p:outputLabel value="Num. Contrato: " for="txtNumContrato"  />
+                                    <p:inputText id="txtNumContrato" disabled="true" size="10" value="#{contratosOrdenesComprasView.selected.numeroContrato}"/>
+                                    <p:outputLabel value="Año:" for="txtAnyo"/>
+                                    <p:inputText id="txtAnyo" size="6" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.anhoContrato}"/>
 
-                            <p:outputPanel style="float: right;" rendered="false" >
-                                <p:commandButton value="Ver historial" onclick="PF('dlgHistorialCambiosReserva').show();"/>
-                            </p:outputPanel>
-                        </h3>
+                                    <p:outputLabel value="Fecha Contrato: " for="cldFechaContrato" />
+                                    <p:calendar id="cldFechaContrato" pattern="dd/MM/yyyy" size="12" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.fechaEmision}" locale="es" showOn="button" navigator="true"/>
+                                    <p:outputLabel value="Fecha Orden Inicio: " for="cldOrdenInicio" rendered="#{contratosOrdenesComprasView.showFechaOrdenInicio}" />
+                                    <p:calendar id="cldOrdenInicio" pattern="dd/MM/yyyy" size="12" navigator="true" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.fechaOrdenInicio}" rendered="#{contratosOrdenesComprasView.showFechaOrdenInicio}" locale="es"/>
+                                    <p:outputLabel value="Plazo de entrega: " for="txtPlazo"/>
+                                    <p:inputText id="txtPlazo" size="3" maxlength="2" readonly="true" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.plazoPrevistoEntrega}"/>
+                                </p:panelGrid>
 
-                        <p:panelGrid columns="1" style="margin-bottom:10px" layout="grid" styleClass="form-group ui-panelgrid-blank">
-                            <p:panelGrid columns="6" columnClasses="col2_label,col2,col2_label,col2,col2_label,col2"
-                                         style="width: 100%; border:0px none; background-color:transparent;"
-                                         styleClass="form-group ui-panelgrid-blank">
-                                <p:outputLabel value="Id Contrato: " />
-                                <p:inputText id="txtIdContrato" disabled="true" size="6" value="#{contratosOrdenesComprasView.selected.idContrato}"/>
-                                <p:outputLabel value="Num. Contrato: " for="txtNumContrato"  />
-                                <p:inputText id="txtNumContrato" disabled="true" size="10" value="#{contratosOrdenesComprasView.selected.numeroContrato}"/>
-                                <p:outputLabel value="Año:" for="txtAnyo"/>
-                                <p:inputText id="txtAnyo" size="6" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.anhoContrato}"/>
-
-                                <p:outputLabel value="Fecha Contrato: " for="cldFechaContrato" />
-                                <p:calendar id="cldFechaContrato" pattern="dd/MM/yyyy" size="12" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.fechaEmision}" locale="es" showOn="button" navigator="true"/>
-                                <p:outputLabel value="Fecha Orden Inicio: " for="cldOrdenInicio" rendered="#{contratosOrdenesComprasView.showFechaOrdenInicio}" />
-                                <p:calendar id="cldOrdenInicio" pattern="dd/MM/yyyy" size="12" navigator="true" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.fechaOrdenInicio}" rendered="#{contratosOrdenesComprasView.showFechaOrdenInicio}" locale="es"/>
-                                <p:outputLabel value="Plazo de entrega: " for="txtPlazo"/>
-                                <p:inputText id="txtPlazo" size="3" maxlength="2" readonly="true" onkeypress="soloNumeros(event);" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.plazoPrevistoEntrega}"/>
+                                <p:panelGrid columns="2" columnClasses="col2_label,col10"
+                                             style="width: 100%; border:0px none; background-color:transparent;"
+                                             styleClass="form-group ui-panelgrid-blank">
+                                    <p:outputLabel value="Ciudad de Firma: "  for="txtCiudadFirma"/>
+                                    <h:panelGrid columns="2">
+                                        <p:inputText id="txtCiudadFirma" size="70" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.ciudadFirma}" 
+                                                     readonly="#{!contratosOrdenesComprasView.cambiarCiudadFirma}" required="true" requiredMessage="Ciudad de firma"/>
+                                        <p:selectBooleanCheckbox value="#{contratosOrdenesComprasView.cambiarCiudadFirma}" >
+                                            <p:ajax update="txtCiudadFirma" async="true"/>
+                                        </p:selectBooleanCheckbox>
+                                    </h:panelGrid>
+                                    <p:outputLabel value="Proveedor: " />
+                                    <p:inputText id="txtProveedor" size="70" disabled="#{contratosOrdenesComprasView.deshabilitado}" 
+                                                 value="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(contratosOrdenesComprasView.participante.idEmpresa.id)):contratosOrdenesComprasView.participante.idEmpresa.razonSocial}" readonly="true"/>
+                                </p:panelGrid>
                             </p:panelGrid>
-
-                            <p:panelGrid columns="2" columnClasses="col2_label,col10"
-                                         style="width: 100%; border:0px none; background-color:transparent;"
-                                         styleClass="form-group ui-panelgrid-blank">
-                                <p:outputLabel value="Ciudad de Firma: "  for="txtCiudadFirma"/>
-                                <h:panelGrid columns="2">
-                                    <p:inputText id="txtCiudadFirma" size="70" disabled="#{contratosOrdenesComprasView.deshabilitado}" value="#{contratosOrdenesComprasView.selected.ciudadFirma}" 
-                                                 readonly="#{!contratosOrdenesComprasView.cambiarCiudadFirma}" required="true" requiredMessage="Ciudad de firma"/>
-                                    <p:selectBooleanCheckbox value="#{contratosOrdenesComprasView.cambiarCiudadFirma}" >
-                                        <p:ajax update="txtCiudadFirma" async="true"/>
-                                    </p:selectBooleanCheckbox>
-                                </h:panelGrid>
-                                <p:outputLabel value="Proveedor: " />
-                                <p:inputText id="txtProveedor" size="70" disabled="#{contratosOrdenesComprasView.deshabilitado}" 
-                                             value="#{menuController.isUsuarioDigitador?('PROVE-'.concat(contratosOrdenesComprasView.participante.idEmpresa.idEmpresa)):contratosOrdenesComprasView.participante.idEmpresa.razonSocial}" readonly="true"/>
-                            </p:panelGrid>
+                        </h:panelGroup>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-lg-5 ui-fluid">
+                    <p:panel id="dvOrganismo" style="display:#{(contratosOrdenesComprasView.continuar)?'none':'block'}">
+                        <f:facet name="header">
+                            <i class="fa fa-user naranja" style="font-size: 16px;"></i>
+                            <p:spacer width="10" height="8"/>
+                            <p:outputLabel value="Otros Datos" />
+                        </f:facet>
+                        <p:panelGrid id="pnlCentroEscolar" columns="1" style="margin-bottom:10px" layout="grid" styleClass="form-group ui-panelgrid-blank card-w-title ">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Representante del O.A.E." for="txtPresidente" />
+                                <p:selectBooleanCheckbox value="#{contratosOrdenesComprasView.cambiarRepreCe}">
+                                    <p:ajax update="txtPresidente" async="true"/>
+                                </p:selectBooleanCheckbox>
+                            </h:panelGrid>
+                            <p:inputText id="txtPresidente" disabled="#{contratosOrdenesComprasView.deshabilitado}" 
+                                         value="#{contratosOrdenesComprasView.selected.miembroFirma}" readonly="#{!contratosOrdenesComprasView.cambiarRepreCe}" styleClass="textMayuscula" onkeyup="return cUpper(this);" required="true" requiredMessage="Representante del Organismo de Administración Escolar"/>
+                            <p:outputLabel value="Representante legal del Proveedor: " />
+                            <p:inputText id="txtRepresentante" disabled="#{contratosOrdenesComprasView.deshabilitado}" 
+                                         value="#{contratosOrdenesComprasView.representanteLegal}" readonly="true"/>
                         </p:panelGrid>
-                    </h:panelGroup>
+                    </p:panel>
+
+                </div>
+                <div class="ui-g-12 ui-lg-7">
+                    <p:panel id="dvDocumentos" style="display:#{(contratosOrdenesComprasView.continuar)?'none':'block'}">
+                        <f:facet name="header">
+                            <i class="fa fa-file-text-o rosa" style="font-size: 16px;"></i>
+                            <p:spacer width="10" height="8"/>
+                            <p:outputLabel value="Documentos contractuales" />
+                        </f:facet>
+
+                        <p:selectManyCheckbox value="#{contratosOrdenesComprasView.lstSelectDocumentosImp}" layout="responsive" columns="2" >
+                            <f:selectItems value="#{contratosOrdenesComprasView.lstDocumentosImp}" var="doc" itemValue="#{doc.value}" itemLabel="#{doc.label}"/>
+                        </p:selectManyCheckbox>
+
+                        <p:separator/>
+
+                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="2">
+                            <p:outputLabel for="@next" value="Análisis Técnico y Económico: " />
+                            <h:commandLink style="float:right;" action="#{contratosOrdenesComprasView.imprimirAnalisisEconomico}">
+                                <i class="fa fa-download"></i>
+                            </h:commandLink>
+                        </h:panelGrid>
+                    </p:panel>
                 </div>
             </div>
-            <div class="ui-g-12 ui-lg-5 ui-fluid">
-                <p:panel id="dvOrganismo" style="display:#{(contratosOrdenesComprasView.continuar)?'none':'block'}">
-                    <f:facet name="header">
-                        <i class="fa fa-user naranja" style="font-size: 16px;"></i>
-                        <p:spacer width="10" height="8"/>
-                        <p:outputLabel value="Otros Datos" />
-                    </f:facet>
-                    <p:panelGrid id="pnlCentroEscolar" columns="1" style="margin-bottom:10px" layout="grid" styleClass="form-group ui-panelgrid-blank card-w-title ">
-                        <h:panelGrid columns="2">
-                            <p:outputLabel value="Representante del O.A.E." for="txtPresidente" />
-                            <p:selectBooleanCheckbox value="#{contratosOrdenesComprasView.cambiarRepreCe}">
-                                <p:ajax update="txtPresidente" async="true"/>
-                            </p:selectBooleanCheckbox>
-                        </h:panelGrid>
-                        <p:inputText id="txtPresidente" disabled="#{contratosOrdenesComprasView.deshabilitado}" 
-                                     value="#{contratosOrdenesComprasView.selected.miembroFirma}" readonly="#{!contratosOrdenesComprasView.cambiarRepreCe}" styleClass="textMayuscula" onkeyup="return cUpper(this);" required="true" requiredMessage="Representante del Organismo de Administración Escolar"/>
-                        <p:outputLabel value="Representante legal del Proveedor: " />
-                        <p:inputText id="txtRepresentante" disabled="#{contratosOrdenesComprasView.deshabilitado}" 
-                                     value="#{contratosOrdenesComprasView.representanteLegal}" readonly="true"/>
-                    </p:panelGrid>
-                </p:panel>
-
-            </div>
-            <div class="ui-g-12 ui-lg-7">
-                <p:panel id="dvDocumentos" style="display:#{(contratosOrdenesComprasView.continuar)?'none':'block'}">
-                    <f:facet name="header">
-                        <i class="fa fa-file-text-o rosa" style="font-size: 16px;"></i>
-                        <p:spacer width="10" height="8"/>
-                        <p:outputLabel value="Documentos contractuales" />
-                    </f:facet>
-
-                    <p:selectManyCheckbox value="#{contratosOrdenesComprasView.lstSelectDocumentosImp}" layout="responsive" columns="2" >
-                        <f:selectItems value="#{contratosOrdenesComprasView.lstDocumentosImp}" var="doc" itemValue="#{doc.value}" itemLabel="#{doc.label}"/>
-                    </p:selectManyCheckbox>
-
-                    <p:separator/>
-
-                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="2">
-                        <p:outputLabel for="@next" value="Análisis Técnico y Económico: " />
-                        <h:commandLink style="float:right;" action="#{contratosOrdenesComprasView.imprimirAnalisisEconomico}">
-                            <i class="fa fa-download"></i>
-                        </h:commandLink>
-                    </h:panelGrid>
-                </p:panel>
-            </div>
-        </div>
-
+        </h:form>
 
         <p:dialog id="dlgHistorialCambiosReserva" widgetVar="dlgHistorialCambiosReserva" modal="true" draggable="false" width="900" resizable="false" header="Historial de Cambios a Reserva de Fondos">
             <p:panel>

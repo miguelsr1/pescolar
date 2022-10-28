@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import sv.gob.mined.pescolar.model.ContratosOrdenesCompra;
+import sv.gob.mined.pescolar.model.DiasPlazoContrato;
 import sv.gob.mined.pescolar.model.InfoGeneralContratacion;
 import sv.gob.mined.pescolar.model.ResolucionesAdjudicativa;
 
@@ -115,5 +116,12 @@ public class ContratoRepo extends AbstractRepository<ContratosOrdenesCompra, Lon
         }
 
         return em.merge(contratosOrdenesCompras);
+    }
+
+    public DiasPlazoContrato findDiasPlazoPorRubro(Long idRubro, Long idAnho) {
+        Query q = em.createQuery("SELECT d FROM DiasPlazoContrato d wHERE d.idAnho.id:pIdAnho and d.idRubroInteres.id=:pIdRubro", DiasPlazoContrato.class);
+        q.setParameter("pIdAnho", idAnho);
+        q.setParameter("pIdRubro", idRubro);
+        return q.getResultList().isEmpty() ? null : (DiasPlazoContrato) q.getResultList().get(0);
     }
 }

@@ -165,7 +165,7 @@
                                 
                                 <p:selectOneMenu id="cboProveedor" value="#{detalleOfertaView.participante}" rendered="#{not detalleOfertaView.activarFiltro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
-                                    <f:selectItems value="#{detalleOfertaView.lstParticipantes}" var="par" itemValue="#{par}"  itemLabel="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(par.idParticipante)):par.idEmpresa}"/>
+                                    <f:selectItems value="#{detalleOfertaView.lstParticipantes}" var="par" itemValue="#{par}"  itemLabel="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(par.id)):par.idEmpresa}"/>
                                     <p:ajax update="cboEst pnlSaldos tblDetalleOferta" listener="#{detalleOfertaView.buscarItemsProveedor}" />
                                 </p:selectOneMenu>
                             </div>
