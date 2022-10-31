@@ -151,6 +151,9 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
                         noItems += (noItems.isEmpty() ? "" : " , ") + "'8','9'";
                     }
                     break;
+                case 10:
+                case 11:
+                case 12:
                 case 3: //PRIMER CICLO
                     idNivelesCe += idNivelesCe.isEmpty() ? "3" : ",3";
                     switch (detProcesoAdq.getIdRubroAdq().getId().intValue()) {
@@ -173,6 +176,9 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
                             break;
                     }
                     break;
+                case 13:
+                case 14:
+                case 15:
                 case 4: //SEGUNDO CICLO
                     idNivelesCe += idNivelesCe.isEmpty() ? "4" : ",4";
                     switch (detProcesoAdq.getIdRubroAdq().getId().intValue()) {
@@ -195,6 +201,9 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
                             break;
                     }
                     break;
+                case 7:
+                case 8:
+                case 9:
                 case 5: //TERCER CICLO
                     idNivelesCe += idNivelesCe.isEmpty() ? "5" : ",5";
                     switch (detProcesoAdq.getIdRubroAdq().getId().intValue()) {
@@ -217,6 +226,9 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
                             break;
                     }
                     break;
+                case 16: 
+                case 17: 
+                case 18: 
                 case 6: //MEDIA
                     idNivelesCe += idNivelesCe.isEmpty() ? "6" : ",6";
                     switch (detProcesoAdq.getIdRubroAdq().getId().intValue()) {
