@@ -246,7 +246,7 @@
                                     <div class="p-field p-grid">
                                         <p:outputLabel for="txtCapacidadAdj" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Capacidad Adjudicada:</p:outputLabel>
                                         <div class="p-col-12 p-md-10">
-                                            <p:inputNumber id="txtCapacidadAdj" value="#{datosGeneralesView.capacidadInst.capacidadAdjudicada}" decimalPlaces="0" size="10" readonly="true" inputStyle="text-align: right"/>
+                                            <p:inputNumber id="txtCapacidadAdj" value="#{datosGeneralesView.capacidadInst.capacidadAdjudicada}" decimalPlaces="0" size="10" disabled="#{not sessionView.isUsuarioAdministrador}" inputStyle="text-align: right"/>
                                         </div>
                                     </div>
                                     <div class="p-field p-grid">

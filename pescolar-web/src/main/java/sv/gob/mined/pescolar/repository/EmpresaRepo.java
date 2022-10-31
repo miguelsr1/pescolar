@@ -346,4 +346,11 @@ public class EmpresaRepo extends AbstractRepository<Empresa, Long> {
         em.persist(emp);
     }
 
+    public void generarTodosLosItems(){
+        Query q = em.createQuery("SELECT d FROM DetRubroMuestraIntere d WHERE d.idAnho.id=11 and d.idRubroInteres.id in (2,3,4)", DetRubroMuestraIntere.class);
+        for (Object object : q.getResultList()) {
+            DetRubroMuestraIntere det = (DetRubroMuestraIntere)object;
+            calcularNoItems(det.getId());
+        }
+    }
 }

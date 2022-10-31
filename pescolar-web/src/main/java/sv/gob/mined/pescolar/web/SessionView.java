@@ -118,6 +118,10 @@ public class SessionView implements Serializable {
         return idRubro;
     }
 
+    public void setIdRubro(Long idRubro) {
+        this.idRubro = idRubro;
+    }
+    
     public String getAnhoProceso() {
         return anhoProceso;
     }

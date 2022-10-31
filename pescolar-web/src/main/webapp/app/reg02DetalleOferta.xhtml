@@ -141,8 +141,10 @@
                                                 var="entidad" itemLabel="#{entidad}" itemValue="#{entidad}"
                                                 converter="#{entidadEducativaConvert}" effect="fade" scrollHeight="250"
                                                 rendered="#{not detalleOfertaView.activarFiltro}" forceSelection="true">
-                                    <p:ajax event="itemSelect" listener="#{detalleOfertaView.onItemSelect}"/>
+                                    <p:ajax event="itemSelect" listener="#{detalleOfertaView.onItemSelect}" update="txtCodigoEntidad"/>
                                 </p:autoComplete>
+                                
+                                <h:inputHidden id="txtCodigoEntidad" value="#{detalleOfertaView.codigoEntidad}"/>
                             </div>
                         </div>
 
@@ -154,7 +156,7 @@
                                 <p:selectOneMenu id="cboRubro" value="#{detalleOfertaView.idRubro}" rendered="#{not detalleOfertaView.activarFiltro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
                                     <f:selectItems value="#{sessionView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
-                                    <p:ajax listener="#{detalleOfertaView.cargarParticipantes}" update="cboProveedor"/>
+                                    <p:ajax listener="#{detalleOfertaView.cargarParticipantes}" update="cboProveedor lblMontoAdj lblMontoContrato lblMontoSaldo lblMontoPresupuestado"/>
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -163,10 +165,10 @@
                             <div class="p-col-12 p-md-9" style="font-weight: bold;">
                                 <p:outputLabel rendered="#{detalleOfertaView.activarFiltro}">#{detalleOfertaView.participante.idEmpresa.razonSocial}</p:outputLabel>
                                 
-                                <p:selectOneMenu id="cboProveedor" value="#{detalleOfertaView.participante}" rendered="#{not detalleOfertaView.activarFiltro}">
+                                <p:selectOneMenu id="cboProveedor" value="#{detalleOfertaView.idParticipante}" rendered="#{not detalleOfertaView.activarFiltro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
-                                    <f:selectItems value="#{detalleOfertaView.lstParticipantes}" var="par" itemValue="#{par}"  itemLabel="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(par.id)):par.idEmpresa}"/>
-                                    <p:ajax update="cboEst pnlSaldos tblDetalleOferta" listener="#{detalleOfertaView.buscarItemsProveedor}" />
+                                    <f:selectItems value="#{detalleOfertaView.lstParticipantes}" var="par" itemValue="#{par.id}"  itemLabel="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(par.id)):par.idEmpresa.razonSocial}"/>
+                                    <p:ajax update="tblDetalleOferta lblMontoAdj lblMontoContrato lblMontoSaldo cboEst" listener="#{detalleOfertaView.buscarItemsProveedor}" />
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -187,14 +189,14 @@
                             <i class="pi pi-dollar" style="font-weight: bold;"></i>
                             Presupuesto del C.E.:
                         </h5>
-                        <p:panelGrid id="pnlSaldos" columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank" >
+                        <p:panelGrid columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank" >
                             <p:panelGrid styleClass="companyHeaderGrid" style="margin: 0 auto !important;">
                                 <p:row>
                                     <p:column styleClass="numero">
                                         <p:outputLabel value="a. Montol total asignado:  $"/>
                                     </p:column>
                                     <p:column style="text-align: right">
-                                        <p:outputLabel value="#{detalleOfertaView.techo.montoPresupuestado}">
+                                        <p:outputLabel id="lblMontoPresupuestado" value="#{detalleOfertaView.techo.montoPresupuestado}">
                                             <f:convertNumber pattern="#,###.00"/>
                                         </p:outputLabel>
                                     </p:column>
@@ -205,7 +207,7 @@
                                         <p:outputLabel value="b. Adjudicación acumulada:  $" />
                                     </p:column>
                                     <p:column style="text-align: right">
-                                        <p:outputLabel value="#{detalleOfertaView.techo.montoAdjudicado}">
+                                        <p:outputLabel id="lblMontoAdj" value="#{detalleOfertaView.techo.montoAdjudicado}">
                                             <f:convertNumber pattern="#,###.00"/>
                                         </p:outputLabel>
                                     </p:column>
@@ -216,7 +218,7 @@
                                         <p:outputLabel value="c. Adjudicacion actual:  $" />
                                     </p:column>
                                     <p:column style="text-align: right">
-                                        <p:outputLabel value="#{detalleOfertaView.resAdj.idParticipante.monto}">
+                                        <p:outputLabel id="lblMontoContrato" value="#{detalleOfertaView.montoContrato}">
                                             <f:convertNumber pattern="#,###.00"/>
                                         </p:outputLabel>
                                     </p:column>
@@ -232,7 +234,7 @@
                                         <p:outputLabel value="d. Saldo:  $"/>
                                     </p:column>
                                     <p:column style="text-align: right; font-weight: bold">
-                                        <p:outputLabel value="#{detalleOfertaView.montoSaldo}">
+                                        <p:outputLabel id="lblMontoSaldo" value="#{detalleOfertaView.montoSaldo}">
                                             <f:convertNumber pattern="#,###.00"/>
                                         </p:outputLabel>
                                     </p:column>
@@ -277,7 +279,7 @@
                                      var="detalle" reflow="true" editable="#{detalleOfertaView.editable}" editMode="cell" rowIndexVar="rowId"
                                      styleClass="ui-datatable-striped" widgetVar="tblDetalleOferta">
 
-                            <p:ajax id="event" event="cellEdit" listener="#{detalleOfertaView.onCellEdit}" onsuccess="updDetalleOferta();"/>
+                            <p:ajax event="cellEdit" listener="#{detalleOfertaView.onCellEdit}" onsuccess="updDetalleOferta();"/>
 
                             <p:column headerText="No." width="27" id="item">
                                 <p:cellEditor>
@@ -290,7 +292,9 @@
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Descripción" field="consolidadoEspTec" filterable="false" sortable="false"/>
+                            <p:column headerText="Descripción" >
+                                <h:outputText value="#{detalle.consolidadoEspTec}" id="descripcionItem" />
+                            </p:column>
 
                             <p:column headerText="Cant." width="60" id="cantidad" style="text-align: right;">
                                 <p:cellEditor>
@@ -299,18 +303,18 @@
                                     </f:facet>
                                     <f:facet name="input">
                                         <p:inputNumber decimalPlaces="0" id="txtCantidad" value="#{detalle.cantidad}" style="width:100%;" inputStyle="text-align: right;">
-                                            <p:ajax event="keyup" update="tblDetalleOferta:#{rowId}:lblst" global="false"/>
+                                            
                                         </p:inputNumber>
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
                             <p:column headerText="Pre.Uni." width="60" style="text-align: right;">
-                                <p:outputLabel value="#{detalle.precioUnitario}">
-                                    <f:convertNumber pattern="#,###.00"/>
+                                <p:outputLabel value="#{detalle.precioUnitario}" id="precioUnitario" >
+                                    <f:convertNumber pattern="#,##0.00"  />
                                 </p:outputLabel>
                             </p:column>
                             <p:column headerText="Sub.Total" width="60" style="text-align: right;">
-                                <p:outputLabel id="lblst" value="#{detalle.precioUnitario*detalle.cantidad}">
+                                <p:outputLabel id="subTotal" value="#{detalle.precioUnitario*detalle.cantidad}">
                                     <f:convertNumber pattern="#,###.00"/>
                                 </p:outputLabel>
                             </p:column>
@@ -348,7 +352,7 @@
                         </p:dataTable>
                         
                         
-                        <p:remoteCommand name="updDetalleOferta" update="tblDetalleOferta:lblTotalMonto tblDetalleOferta:lblTotalCantidad"/>
+                        <p:remoteCommand name="updDetalleOferta" action="#{detalleOfertaView.updateFilaDetalle()}" />
                     </div>
                 </div>
             </div>

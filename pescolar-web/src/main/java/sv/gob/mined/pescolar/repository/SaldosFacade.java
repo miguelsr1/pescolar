@@ -171,11 +171,11 @@ public class SaldosFacade {
                         capaInst.setCapacidadAdjudicada(getAdjParticipante(res.getIdParticipante()) - cantidadAdjudicada);
                         break;
                     case 4: //anular
-                        res.setIdEstadoReserva(new EstadoReserva(idEstadoReserva));
+                        res.setIdEstadoReserva(em.find(EstadoReserva.class, idEstadoReserva));
                         break;
                 }
 
-                res.setIdEstadoReserva(new EstadoReserva(idEstadoReserva));
+                res.setIdEstadoReserva(em.find(EstadoReserva.class, idEstadoReserva));
                 res.setUsuarioModificacion(usuario);
                 res.setFechaModificacion(LocalDateTime.now());
 

@@ -407,6 +407,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
             codigoEntidad = params.get("txtCodigoEntidad");
             entidadEducativa = catalogoRepo.findEntityByPk(VwCatalogoEntidadEducativa.class, codigoEntidad);
             resolucionAdj = resoRepo.findByPk((Long) sessionView.getVariableSession("idRes"));
+            sessionView.removeVariableSession("idRes");
             continuar = false;
             deshabilitado = false;
             diasPlazo = contratoRepo.findDiasPlazoPorRubro(rubro, sessionView.getIdAnho());
@@ -606,6 +607,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
     }
 
     public void buscarEntidadEducativa() {
+        diasPlazo = contratoRepo.findDiasPlazoPorRubro(rubro, sessionView.getIdAnho());
         limpiarCampos();
         if (codigoEntidad.length() == 5) {
             /**

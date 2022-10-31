@@ -579,10 +579,11 @@ public class DatosGeneralesView implements Serializable {
     }
 
     public void generarItems() {
-        if (departamentoCalif != null && departamentoCalif.getId() != null) {
+        empresaRepo.generarTodosLosItems();
+        /*if (departamentoCalif != null && departamentoCalif.getId() != null) {
             empresaRepo.calcularNoItems(departamentoCalif.getIdMuestraInteres().getId());
         } else {
             JsfUtil.mensajeAlerta("No posee oferta 2023");
-        }
+        }*/
     }
 }

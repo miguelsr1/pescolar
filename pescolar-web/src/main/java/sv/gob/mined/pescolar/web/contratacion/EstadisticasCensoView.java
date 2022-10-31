@@ -83,6 +83,7 @@ public class EstadisticasCensoView implements Serializable {
     private BigDecimal preUtiles = BigDecimal.ZERO;
     private BigDecimal preZapatos = BigDecimal.ZERO;
     private BigDecimal preDistribucionLibros = new BigDecimal(0.50); //0.50 diferente municipio y 0.45 mismo municipio
+    private BigDecimal presupuestoLibros = BigDecimal.ZERO;
     private VwCatalogoEntidadEducativa entidadEducativa;
     private ProcesoAdquisicion procesoAdquisicion = new ProcesoAdquisicion();
     private OrganizacionEducativa organizacionEducativa;
@@ -187,6 +188,14 @@ public class EstadisticasCensoView implements Serializable {
             mostrarInicial = (procesoAdquisicion.getIdAnho().getId() > 8);
             mostrarModFlex = (procesoAdquisicion.getIdAnho().getId() > 8);
         }
+    }
+
+    public BigDecimal getPresupuestoLibros() {
+        return presupuestoLibros;
+    }
+
+    public void setPresupuestoLibros(BigDecimal presupuestoLibros) {
+        this.presupuestoLibros = presupuestoLibros;
     }
 
     public BigDecimal getPreDistribucionLibros() {
@@ -1367,9 +1376,9 @@ public class EstadisticasCensoView implements Serializable {
             if (techoUti != null) {
                 techoUti.setMontoPresupuestado(calcularPresupuesto(2));
                 if (techoUti.getMontoAdjudicado().compareTo(BigDecimal.ZERO) == 0) {
-                    techoUti.setMontoDisponible(techoUti.getMontoPresupuestado());
+                    techoUti.setMontoDisponible(techoUti.getMontoPresupuestado().add(presupuestoLibros));
                 } else {
-                    techoUti.setMontoDisponible(techoUti.getMontoPresupuestado().add(techoUti.getMontoAdjudicado().negate()));
+                    techoUti.setMontoDisponible(techoUti.getMontoPresupuestado().add(presupuestoLibros).add(techoUti.getMontoAdjudicado().negate()));
                 }
             }
             if (techoZap != null) {

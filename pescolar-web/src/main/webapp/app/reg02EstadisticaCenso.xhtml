@@ -8,13 +8,14 @@
     <ui:define name="head">
         <script type="text/javascript">
             function calcularSubTotalMatriculaIniPar(val1, val2, val3, val4, val5, lblVal, lblNivel) {
+                let costoLibro = 0.5;
+                
                 var val1M = $("#" + val1 + "_input").val();
                 var val2M = $("#" + val2 + "_input").val();
                 var val3M = $("#" + val3 + "_input").val();
                 var val4M = $("#" + val4 + "_input").val();
                 var val5M = $("#" + val5 + "_input").val();
                 //lblUni, lblUti, lblZap
-                console.log(val5M);
                 $("#" + lblVal).val(Number(val1M) + Number(val2M) + Number(val3M) + Number(val4M) + Number(val5M));
 
                 var matFem = $("#txt" + lblNivel + "Fem").val();
@@ -31,11 +32,14 @@
                 $("#lbl" + lblNivel + "Uni").val(intlRound((matFem * preUniF) + (matMas * preUniM)));
                 $("#lbl" + lblNivel + "Uti").val(intlRound((matFem * preUtiF) + (matMas * preUtiM)));
                 $("#lbl" + lblNivel + "Zap").val(intlRound((matFem * preZapF) + (matMas * preZapM)));
+                $("#lbl" + lblNivel + "Lib").val(intlRound((matFem * costoLibro) + (matMas * costoLibro)));
 
                 calcularTotales();
             }
 
             function calcularSubTotalMatriculaNivelEdu(val1, val2, val3, lblVal, lblNivel) {
+                let costoLibro = 0.5;
+                
                 var val1M = $("#" + val1 + "_input").val();
                 var val2M = $("#" + val2 + "_input").val();
                 var val3M = $("#" + val3 + "_input").val();
@@ -56,6 +60,7 @@
                 $("#lbl" + lblNivel + "Uni").val(intlRound((matFem * preUniF) + (matMas * preUniM)));
                 $("#lbl" + lblNivel + "Uti").val(intlRound((matFem * preUtiF) + (matMas * preUtiM)));
                 $("#lbl" + lblNivel + "Zap").val(intlRound((matFem * preZapF) + (matMas * preZapM)));
+                $("#lbl" + lblNivel + "Lib").val(intlRound((matFem * costoLibro) + (matMas * costoLibro)));
 
                 calcularTotales();
             }
@@ -75,6 +80,7 @@
             function calcularMontoPorNivel(fem, mas, lblNivel) {
                 var femM = $("#" + fem + "_input").val();
                 var masM = $("#" + mas + "_input").val();
+                let costoLibro = 0.5;
 
                 $("#lblMat" + lblNivel).text(Number(femM) + Number(masM));
 
@@ -88,6 +94,7 @@
                 $("#lbl" + lblNivel + "Uni").val(intlRound((femM * preUniF) + (masM * preUniM)));
                 $("#lbl" + lblNivel + "Uti").val(intlRound((femM * preUtiF) + (masM * preUtiM)));
                 $("#lbl" + lblNivel + "Zap").val(intlRound((femM * preZapF) + (masM * preZapM)));
+                $("#lbl" + lblNivel + "Lib").val(intlRound((femM * costoLibro) + (masM * costoLibro)));
             }
 
             function intlRound(numero) {
@@ -166,15 +173,16 @@
 
 
                 $("#lblTotalMatricula").text(Number(matIni2) + Number(matIni3) + Number(matPar4) + Number(matPar5) + Number(matPar6) + Number(matCI) + Number(matCII) + Number(matCIII) + Number(matCIIIMF) + Number(matBac) + Number(matBacMF));
-                $("#lblDistriLibro").text((0.50 * (Number(matIni2) + Number(matIni3) + Number(matPar4) + Number(matPar5) + Number(matPar6) + Number(matCI) + Number(matCII) + Number(matCIII) + Number(matCIIIMF) + Number(matBac) + Number(matBacMF))));
 
                 var montoTotalUni = Number($("#lblIPUni").val()) + Number($("#lblCIUni").val()) + Number($("#lblCIIUni").val()) + Number($("#lblCIIIUni").val()) + Number($("#lblBacUni").val());
-                var montoTotalUti = ini + Number($("#lblIPUti").val()) + Number($("#lblCIUti").val()) + Number($("#lblCIIUti").val()) + Number($("#lblCIIIUti").val()) + Number($("#lblBacUti").val()) + mf + Number($("#lblG1Uti").val()) + Number($("#lblG2Uti").val()) + Number($("#lblG3Uti").val()) + Number($("#lblG4Uti").val()) + Number($("#lblG5Uti").val()) + Number($("#lblG6Uti").val()) + Number($("#lblG7Uti").val()) + Number($("#lblG8Uti").val()) + Number($("#lblG9Uti").val()) + Number($("#lblB1Uti").val()) + Number($("#lblB2Uti").val()) + Number($("#lblDistriLibro").val());
+                var montoTotalUti = Number($("#lblIPUti").val()) + Number($("#lblCIUti").val()) + Number($("#lblCIIUti").val()) + Number($("#lblCIIIUti").val()) + Number($("#lblBacUti").val());
                 var montoTotalZap = Number($("#lblIPZap").val()) + Number($("#lblCIZap").val()) + Number($("#lblCIIZap").val()) + Number($("#lblCIIIZap").val()) + Number($("#lblBacZap").val());
+                var montoTotalLib = Number($("#lblIPLib").val()) + Number($("#lblCILib").val()) + Number($("#lblCIILib").val()) + Number($("#lblCIIILib").val()) + Number($("#lblBacLib").val());
 
                 $("#lblTotalUni").text(intlRound(montoTotalUni));
                 $("#lblTotalUti").text(intlRound(montoTotalUti));
                 $("#lblTotalZap").text(intlRound(montoTotalZap));
+                $("#lblTotalLib").val(intlRound(montoTotalLib));
             }
         </script>
 
@@ -279,7 +287,7 @@
                                             <p:column rowspan="2">Nivel y Ciclo</p:column>
                                             <p:column colspan="2">No de Alumnos</p:column>
                                             <p:column rowspan="2">Total</p:column>
-                                            <p:column colspan="3">Presupuesto</p:column>
+                                            <p:column colspan="4">Presupuesto</p:column>
                                         </p:row>
                                         <p:row>
                                             <p:column>Fem.</p:column>
@@ -293,6 +301,11 @@
                                             <p:column>
                                                 <p:spacer width="1"/>
                                                 <p:outputLabel value="Zapatos"/>
+                                                <p:spacer width="1"/>
+                                            </p:column>
+                                            <p:column>
+                                                <p:spacer width="1"/>
+                                                <p:outputLabel value="Ent.Libros"/>
                                                 <p:spacer width="1"/>
                                             </p:column>
                                         </p:row>
@@ -318,6 +331,9 @@
                                             <p:inputText id="txtIni2PreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
                                             <p:inputText id="txtIni2PreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblIni2Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row rendered="#{estadisticasCensoView.mostrarInicial}">
                                         <p:column styleClass="numero">Inicial 3</p:column>
@@ -339,6 +355,9 @@
                                             <p:inputText id="lblIni3Zap" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtIni3PreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
                                             <p:inputText id="txtIni3PreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
+                                        </p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblIni3Lib" size="5" readonly="true" styleClass="numero"/>
                                         </p:column>
                                     </p:row>
 
@@ -364,6 +383,9 @@
                                             <p:inputText id="txtPar4PreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
                                             <p:inputText id="txtPar4PreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblPar4Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row rendered="#{estadisticasCensoView.mostrarInicial}">
                                         <p:column styleClass="numero">Parvularia 5</p:column>
@@ -386,6 +408,9 @@
                                             <p:inputText id="txtPar5PreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
                                             <p:inputText id="txtPar5PreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblPar5Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row rendered="#{estadisticasCensoView.mostrarInicial}">
                                         <p:column styleClass="numero">Parvularia 6</p:column>
@@ -407,6 +432,9 @@
                                             <p:inputText id="lblPar6Zap" size="5" readonly="true" styleClass="numero"/>
                                             <p:inputText id="txtPar6PreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
                                             <p:inputText id="txtPar6PreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
+                                        </p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblPar6Lib" size="5" readonly="true" styleClass="numero"/>
                                         </p:column>
                                     </p:row>
 
@@ -432,6 +460,9 @@
                                             <p:inputText id="txtIPPreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxFem}"/>
                                             <p:inputText id="txtIPPreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preParZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
+                                            <p:inputText id="lblIPLib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
 
                                     <p:row>
@@ -447,6 +478,9 @@
                                             <p:inputText id="txtG1PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado1Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG1Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">2do Grado</p:column>
@@ -461,6 +495,9 @@
                                             <p:inputText id="txtG2PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado2Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG2Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">3er Grado</p:column>
@@ -475,6 +512,9 @@
                                             <p:inputText id="txtG3PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado3Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG3Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column style="background-color: #86b8f0;">I Ciclo</p:column>
@@ -497,6 +537,9 @@
                                             <p:inputText id="txtCIPreZapFem" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIZap.precioMaxFem}"/>
                                             <p:inputText id="txtCIPreZapMas" size="4" style="display: none;" value="#{estadisticasCensoView.preCicloIZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
+                                            <p:inputText id="lblCILib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">4to Grado</p:column>
@@ -511,6 +554,9 @@
                                             <p:inputText id="txtG4PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado4Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG4Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">5to Grado</p:column>
@@ -525,6 +571,9 @@
                                             <p:inputText id="txtG5PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado5Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG5Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">6to Grado</p:column>
@@ -539,6 +588,9 @@
                                             <p:inputText id="txtG6PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado6Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG6Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column style="background-color: #86b8f0;">II Ciclo</p:column>
@@ -561,6 +613,9 @@
                                             <p:inputText id="txtCIIPreZapFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIZap.precioMaxFem}"/>
                                             <p:inputText id="txtCIIPreZapMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
+                                            <p:inputText id="lblCIILib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">7mo Grado</p:column>
@@ -575,6 +630,9 @@
                                             <p:inputText id="txtG7PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado7Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG7Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">8vo Grado</p:column>
@@ -589,6 +647,9 @@
                                             <p:inputText id="txtG8PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado8Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG8Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">9no Grado</p:column>
@@ -603,6 +664,9 @@
                                             <p:inputText id="txtG9PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preGrado9Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblG9Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column style="background-color: #86b8f0;">III Ciclo</p:column>
@@ -625,6 +689,9 @@
                                             <p:inputText id="txtCIIIPreZapFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIIZap.precioMaxFem}"/>
                                             <p:inputText id="txtCIIIPreZapMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIIZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
+                                            <p:inputText id="lblCIIILib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row rendered="#{estadisticasCensoView.mostrarModFlex}">
                                         <p:column>Modalidad Flexible (Todos los niveles Nocturna y 3er Ciclo Distancia)</p:column>
@@ -640,9 +707,8 @@
                                             <p:inputText id="txtCIIIMFPreUtiFem" style="display: none;" value="#{estadisticasCensoView.preCicloIIIMFUti.precioMaxFem}"/>
                                             <p:inputText id="txtCIIIMFPreUtiMas" style="display: none;" value="#{estadisticasCensoView.preCicloIIIMFUti.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
-                                            <p:inputText value="0" size="5" readonly="true" styleClass="numero"/>
-                                        </p:column>
+                                        <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">1er año bachillerato</p:column>
@@ -657,6 +723,9 @@
                                             <p:inputText id="txtB1PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preBachi1Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblB1Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">2do año bachillerato</p:column>
@@ -671,6 +740,9 @@
                                             <p:inputText id="txtB2PreUtiMas" style="display: none;" value="#{estadisticasCensoView.preBachi2Uti.precioMaxMas}"/>
                                         </p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
+                                        <p:column styleClass="numero">
+                                            <p:inputText id="lblB2Lib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row>
                                         <p:column styleClass="numero">3er año bachillerato</p:column>
@@ -678,6 +750,7 @@
                                         <p:column><p:inputNumber id="txt3bmas" emptyValue="zero" onclick="this.setSelectionRange(0, this.value.length);" disabled="#{estadisticasCensoView.isProcesoAdq}" styleClass="numero" size="4" value="#{estadisticasCensoView.est3media.masculino}" onkeyup="calcularMontoPorNivel('txt3bfem', 'txt3bmas', 'B3');calcularSubTotalMatriculaNivelEdu('txt1bmas', 'txt2bmas', 'txt3bmas', 'txtBacMas', 'Bac');" decimalPlaces="0" minValue="0" inputStyle="text-align: right;"/></p:column>
                                         <p:column styleClass="numero"><p:outputLabel id="lblMatB3"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
 
+                                        <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
                                         <p:column styleClass="numero"><p:outputLabel value="0.00"/></p:column>
@@ -703,6 +776,9 @@
                                             <p:inputText id="txtBacPreZapFem" style="display: none;" value="#{estadisticasCensoView.preBacZap.precioMaxFem}"/>
                                             <p:inputText id="txtBacPreZapMas" style="display: none;" value="#{estadisticasCensoView.preBacZap.precioMaxMas}"/>
                                         </p:column>
+                                        <p:column style="background-color: #86b8f0;" styleClass="numero">
+                                            <p:inputText id="lblBacLib" size="5" readonly="true" styleClass="numero"/>
+                                        </p:column>
                                     </p:row>
                                     <p:row style="background-color: #86b8f0;" rendered="#{estadisticasCensoView.mostrarModFlex}">
                                         <p:column>Media - Modalidad Flexible (Distancia)</p:column>
@@ -718,27 +794,8 @@
                                             <p:inputText id="txtBacMFPreUtiFem" style="display: none;" value="#{estadisticasCensoView.preBacMFUti.precioMaxFem}"/>
                                             <p:inputText id="txtBacMFPreUtiMas" style="display: none;" value="#{estadisticasCensoView.preBacMFUti.precioMaxMas}"/>
                                         </p:column>
-                                        <p:column styleClass="numero">
-                                            <p:inputText value="0" size="5" readonly="true" styleClass="numero"/>
-                                        </p:column>
-                                    </p:row>
-                                    <p:row style="background-color: #86b8f0;" >
-                                        <p:column>Costo total de entrega de libros</p:column>
-                                        <p:column><p:inputNumber emptyValue="zero" disabled="true" styleClass="numero" size="4" value="0" decimalPlaces="0" minValue="0" inputStyle="text-align: right;"/></p:column>
-                                        <p:column><p:inputNumber emptyValue="zero" disabled="true" styleClass="numero" size="4" value="0" decimalPlaces="0" minValue="0" inputStyle="text-align: right;"/></p:column>
-                                        <p:column styleClass="numero"><p:outputLabel value="0"><f:convertNumber pattern="#,#00"/></p:outputLabel></p:column>
-
-                                        <p:column styleClass="numero">
-                                            <p:inputText value="0" size="5" readonly="true" styleClass="numero"/>
-                                        </p:column>
-                                        <p:column styleClass="numero">
-                                            <p:outputLabel id="lblDistriLibro" styleClass="numero">
-                                                <f:convertNumber pattern="$ #,##0.00"/>
-                                            </p:outputLabel>
-                                        </p:column>
-                                        <p:column styleClass="numero">
-                                            <p:inputText value="0" size="5" readonly="true" styleClass="numero"/>
-                                        </p:column>
+                                        <p:column styleClass="numero"><p:inputText value="0" size="5" readonly="true" styleClass="numero"/></p:column>
+                                        <p:column styleClass="numero"><p:inputText value="0" size="5" readonly="true" styleClass="numero"/></p:column>
                                     </p:row>
                                     <f:facet name="footer">
                                         <p:row>
@@ -747,6 +804,7 @@
                                             <p:column styleClass="numero"><h:outputText id="lblTotalUni"><f:convertNumber pattern="#,#00.00"/></h:outputText></p:column>
                                             <p:column styleClass="numero"><h:outputText id="lblTotalUti"><f:convertNumber pattern="#,#00.00"/></h:outputText></p:column>
                                             <p:column styleClass="numero"><h:outputText id="lblTotalZap"><f:convertNumber pattern="#,#00.00"/></h:outputText></p:column>
+                                            <p:column styleClass="numero"><p:inputText size="5" readonly="true" id="lblTotalLib" value="#{estadisticasCensoView.presupuestoLibros}" style="text-align: right;"><f:convertNumber pattern="#,#00.00"/></p:inputText></p:column>
                                         </p:row>
                                     </f:facet>
                                 </p:panelGrid>

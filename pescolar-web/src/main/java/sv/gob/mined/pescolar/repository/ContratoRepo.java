@@ -41,7 +41,7 @@ public class ContratoRepo extends AbstractRepository<ContratosOrdenesCompra, Lon
     }
 
     public ContratosOrdenesCompra createContrato(ContratosOrdenesCompra contratosOrdenesCompras) {
-        String numeroContrato = getNumContrato(contratosOrdenesCompras.getIdResolucionAdj().getIdParticipante().getIdOferta().getCodigoEntidad().getCodigoEntidad(), contratosOrdenesCompras.getIdResolucionAdj().getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId().intValue());
+        String numeroContrato = getNumContrato(contratosOrdenesCompras.getIdResolucionAdj().getIdParticipante().getIdOferta().getCodigoEntidad().getCodigoEntidad(), contratosOrdenesCompras.getIdResolucionAdj().getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
         contratosOrdenesCompras.setNumeroContrato(numeroContrato.length() == 1 ? "0" + numeroContrato : numeroContrato);
         em.persist(contratosOrdenesCompras);
 
@@ -60,7 +60,7 @@ public class ContratoRepo extends AbstractRepository<ContratosOrdenesCompra, Lon
 
         em.persist(info);
 
-        agregarDatosAResumen(contratosOrdenesCompras);
+        //agregarDatosAResumen(contratosOrdenesCompras);
 
         return contratosOrdenesCompras;
     }
@@ -92,7 +92,7 @@ public class ContratoRepo extends AbstractRepository<ContratosOrdenesCompra, Lon
      * @param idDetProcesoAdq
      * @return
      */
-    private synchronized String getNumContrato(String codigoEntidad, Integer idAnho) {
+    private synchronized String getNumContrato(String codigoEntidad, Long idAnho) {
         Query q = em.createQuery("SELECT COUNT(c.id)+1 FROM ContratosOrdenesCompra c WHERE c.idResolucionAdj.idParticipante.idOferta.codigoEntidad.codigoEntidad=:codigoEntidad AND c.idResolucionAdj.idParticipante.idOferta.idDetProcesoAdq.idProcesoAdq.idAnho.id=:idAnho AND c.estadoEliminacion=0 AND c.idResolucionAdj.estadoEliminacion=0 AND c.idResolucionAdj.idParticipante.estadoEliminacion=0 AND c.idResolucionAdj.idParticipante.idOferta.estadoEliminacion=0");
         q.setParameter("codigoEntidad", codigoEntidad);
         q.setParameter("idAnho", idAnho);
@@ -119,7 +119,7 @@ public class ContratoRepo extends AbstractRepository<ContratosOrdenesCompra, Lon
     }
 
     public DiasPlazoContrato findDiasPlazoPorRubro(Long idRubro, Long idAnho) {
-        Query q = em.createQuery("SELECT d FROM DiasPlazoContrato d wHERE d.idAnho.id:pIdAnho and d.idRubroInteres.id=:pIdRubro", DiasPlazoContrato.class);
+        Query q = em.createQuery("SELECT d FROM DiasPlazoContrato d wHERE d.idAnho.id=:pIdAnho and d.idRubroInteres.id=:pIdRubro", DiasPlazoContrato.class);
         q.setParameter("pIdAnho", idAnho);
         q.setParameter("pIdRubro", idRubro);
         return q.getResultList().isEmpty() ? null : (DiasPlazoContrato) q.getResultList().get(0);
