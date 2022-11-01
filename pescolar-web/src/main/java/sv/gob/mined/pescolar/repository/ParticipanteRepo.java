@@ -170,10 +170,10 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
                 + "    porcentaje_geo          as porcentajeGeo,\n"
                 + "    porcentaje_capacidad    as porcentajeCapacidad,\n"
                 + "    porcentaje_capacidad_i  as porcentajeCapacidadItem,\n"
-                + "    porcentaje_precio+porcentaje_geo+porcentaje_capacidad_i+porcentaje_capacidad" + ((idAnho.intValue() == 10 && idRubro == 3) ? "+porcentaje_nota" : "") + " as porcentajeEvaluacion,\n"
+                + "    porcentaje_precio+porcentaje_geo+porcentaje_capacidad_i+porcentaje_capacidad" + ((idAnho.intValue() == 11 && idRubro == 3) ? "+porcentaje_nota" : "") + " as porcentajeEvaluacion,\n"
                 + "    0                       as porcentajeCalificacion,\n"
                 + "    ((capacidad_adjudicada*100)/capacidad_acreditada) porcentajeAdjudicacion,\n"
-                + ((idAnho.intValue() == 10 && idRubro == 3) ? " porcentaje_nota as porcentajeNota\n" : " 0 as porcentajeNota\n")
+                + ((idAnho.intValue() == 11 && idRubro == 3) ? " porcentaje_nota as porcentajeNota\n" : " 0 as porcentajeNota\n")
                 + "from (select \n"
                 + "        emp.id_empresa,\n"
                 + "        det.id_muestra_interes,\n"
@@ -182,16 +182,16 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
                 + "        mun_e.nombre_municipio,\n"
                 + "        dep_e.nombre_departamento,\n"
                 + "        tbl.precio_promedio,\n"
-                + "        round((((min( distinct tbl.precio_promedio) OVER (order by tbl.precio_promedio))*100)/tbl.precio_promedio)*" + (idAnho.intValue() > 9 ? "0.4" : (porPrecio.intValue() / 100)) + ",2) as porcentaje_precio,\n"
+                + "        round((((min( distinct tbl.precio_promedio) OVER (order by tbl.precio_promedio))*100)/tbl.precio_promedio)*" + (porPrecio.intValue() / 100) + ",2) as porcentaje_precio,\n"
                 + "        mun_e.id_municipio,\n"
                 + "        mun_e.codigo_departamento,\n"
                 + "        emp.codigo_canton,\n"
-                + "        " + (idAnho.intValue() > 8 ? "0" : "tbl.porcentaje_capacidad") + " as porcentaje_capacidad_i,\n"
+                + "        tbl.porcentaje_capacidad as porcentaje_capacidad_i,\n"
                 + "        " + getParteSelectUbicacion(idRubro, codCanton, idMunicipio, codDep, idMunicipios, porUbicacionLocal, porMunAledanhos, porUbicacionOtros) + "\n"
-                + ((idAnho.intValue() == 10 && idRubro == 3) ? " ,(nota.nota_zapato_nino+nota.nota_zapato_nina) porcentaje_nota " : "")
+                + ((idAnho.intValue() == 11 && idRubro == 3) ? " ,(nota.nota_zapato_nino+nota.nota_zapato_nina) porcentaje_nota " : "")
                 + "    from det_rubro_muestra_interes det\n"
                 + "        inner join empresa emp                  on emp.id_empresa = det.id_empresa\n"
-                + ((idAnho.intValue() == 10 && idRubro == 3) ? " inner join nota_pruebas_zapatero nota on nota.id_muestra_interes = det.id_muestra_interes " : "")
+                + ((idAnho.intValue() == 11 && idRubro == 3) ? " inner join nota_pruebas_zapatero nota on nota.id_muestra_interes = det.id_muestra_interes " : "")
                 + "        inner join municipio mun_e              on mun_e.id_municipio = emp.id_municipio\n"
                 + "        inner join departamento dep_e           on mun_e.codigo_departamento = dep_e.codigo_departamento\n"
                 + "        inner join (select pre.id_muestra_interes,pre.id_empresa, round(avg(precio_referencia),3) precio_promedio,((count(pre.id_empresa)*100)/" + noItems.split(",").length + ")*" + getPorcentajePorItems(idRubro) + " porcentaje_capacidad\n"
@@ -221,7 +221,7 @@ public class ParticipanteRepo extends AbstractRepository<Participante, Long> {
                 + "    id_municipio " + (municipioIgual ? "=" : "<>") + " (select id_municipio from municipio where codigo_municipio = '" + codMun + "' and codigo_departamento = '" + codDep + "') \n"
                 + "    " + (idRubro == 2 ? " and codigo_departamento = '" + codDep + "' " : "")
                 + "order by\n"
-                + "    (porcentaje_precio+porcentaje_geo+porcentaje_capacidad_i+porcentaje_capacidad" + ((idAnho.intValue() == 10 && idRubro == 3) ? "+porcentaje_nota" : "") + ") desc,((capacidad_adjudicada*100)/capacidad_acreditada) asc";
+                + "    (porcentaje_precio+porcentaje_geo+porcentaje_capacidad_i+porcentaje_capacidad" + ((idAnho.intValue() == 11 && idRubro == 3) ? "+porcentaje_nota" : "") + ") desc,((capacidad_adjudicada*100)/capacidad_acreditada) asc";
 
         return sql;
     }
