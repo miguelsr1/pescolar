@@ -48,10 +48,10 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
 
         if (isUniforme) {
             sql = "select id_nivel, sum(masculino) mas, sum(femenimo) fem\n"
-                    + "from (select case when id_nivel_educativo = 1 then 1 when id_nivel_educativo in (3,4,5) then 2 when id_nivel_educativo = 6 then 6 end id_nivel,\n"
+                    + "from (select case when id_nivel_educativo in (25,26,28,29,30) then 22 when id_nivel_educativo in (10,11,12,13,14,15,7,8,9) then 2 when id_nivel_educativo in (16,17,18) then 6 end id_nivel,\n"
                     + "        masculino, femenimo\n"
                     + "    from estadistica_censo \n"
-                    + "    where id_proceso_adq = ?1 and id_nivel_educativo in (1,3,4,5,6) and codigo_entidad = ?2 and (masculino <> 0 or femenimo <> 0))\n"
+                    + "    where id_proceso_adq = ?1 and codigo_entidad = ?2 and (masculino <> 0 or femenimo <> 0))\n"
                     + "group by id_nivel";
         } else {
             sql = "select "

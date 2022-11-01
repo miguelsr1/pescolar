@@ -28,93 +28,24 @@
         <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
             <p:autoUpdate />
         </p:growl>
-        <div class="login-panel ui-fluid fadeIn container">
-            <div class="p-grid p-nogutter">
-                <div class="p-col-12 logo-container">
-                    <h:panelGrid columns="2" width="100%">
-                        <p:graphicImage name="logo_mined.png" library="images" width="200"/>
-                        <p:outputLabel style="font-size: 2rem;">Paquete Escolar</p:outputLabel>
-                    </h:panelGrid>
-                </div>
-                <div class="p-col-12" style="padding: 0 0 !important">
-                    <div class="container" id="container">
-                        <div class="form-container sign-up-container">
-                            <h:form prependId="false">
-                                <h2 style="margin-bottom: 1rem;">
-                                    <i class="pi pi-id-card" style="font-size: 1.5rem;"></i>
-                                    Proveedor
-                                </h2>
 
-                                <p:inputMask id="txtDui" value="#{loginView.duiPro}" mask="99999999-9" validateMask="true" placeholder="DUI" style="margin-bottom: 1rem"/>
-                                <p:password id="txtPassPro" value="#{loginView.claveAccesoPro}" placeholder="Clave de acceso" />
+        <h:form>
+            <h2 style="margin-bottom: 1rem;">
+                <i class="pi pi-user" style="font-size: 1.5rem;"></i>
+                Usuario
+            </h2>
 
-                                <p:commandLink value="¿Olvidó su clave de acceso?" onclick="showDlgCambiarClaveDeAcceso('DUI o NIT (Con guiones)');" style="float: right; margin-right: 10px" process="@this"/>
+            <p:inputText id="txtUser" value="#{loginView.usuario}" placeholder="Usuario" style="margin-bottom: 1rem;"/>
+            <p:password id="txtPass" value="#{loginView.claveAcceso}" placeholder="Clave de acceso" />
 
-                                <p:commandButton id="btnIngresarEmp" process="@this,txtDui,txtPassPro" value="Ingresar" styleClass="blue-btn raised-btn" 
-                                                 action="#{loginView.validarProveedor()}" style="margin-top: 1.5rem;" update="@form" ajax="false"/>
-                                <p:blockUI block="btnIngresarEmp" trigger="btnIngresarEmp"  />
-                            </h:form>
-                        </div>
-                        <div class="form-container sign-in-container">
-                            <h:form>
-                                <h2 style="margin-bottom: 1rem;">
-                                    <i class="pi pi-user" style="font-size: 1.5rem;"></i>
-                                    Usuario
-                                </h2>
-
-                                <p:inputText id="txtUser" value="#{loginView.usuario}" placeholder="Usuario" style="margin-bottom: 1rem;"/>
-                                <p:password id="txtPass" value="#{loginView.claveAcceso}" placeholder="Clave de acceso" />
-
-                                <p:commandLink value="¿Olvidó su clave de acceso?" onclick="showDlgCambiarClaveDeAcceso('USUARIO');" style="float: right; margin-right: 10px" process="@this"/>
-                                <p:commandButton id="submit" value="Ingresar" styleClass="ui-button-info ui-button-raised" 
-                                                 action="#{loginView.validarUsuario()}" update="@form" ajax="false" style="margin-top: 1.5rem;"/>
-                                <p:blockUI block="submit" trigger="submit" />
-                            </h:form>
-                        </div>
-                        <div class="overlay-container">
-                            <div class="overlay">
-                                <div class="overlay-panel overlay-left">
-                                    <h2>¿No es Proveedor?</h2>
-                                    <p>Para personal administrativo MINED Central, Departamental y para usuarios de Entidades Financieras</p>
-                                    <button class="ghost" id="signIn">Ingresa aca</button>
-                                </div>
-                                <div class="overlay-panel overlay-right">
-                                    <h2>¿Es proveedor?</h2>
-                                    <p>Para proveedores con Personería Jurídica o Natural</p>
-                                    <button class="ghost" id="signUp" >Ingresa aca</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h:form prependId="false">
-            <p:dialog header="Olvidé mi clave de acceso" id="dlgClave" widgetVar="dlgClave" width="400" draggable="false" minimizable="false" modal="true">
-                <p:panel>
-                    <p>Se enviará un correo con un enlace para poder cambiar la contraseña, su usuario estará inactivo hasta que asigne una nueva contraseña</p>
-
-                    <div class="grid">
-                        <div class="col-5 flex align-items-center justify-content-center">
-                            <div class="ui-fluid">
-                                <div class="field">
-                                    <p:outputLabel id="lblUsuarioRecuperar" value="Usuario:"/>
-                                    <p:inputText id="txtUser" value="#{loginView.usuario}" style="margin-top: 0.5rem;"/>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </p:panel>
-
-
-                <f:facet name="footer">
-                    <p:commandButton value="Aceptar" action="#{loginView.asignarNuevaClave()}" style="margin-right: 0.5rem;" process="@this, txtUser"/>
-                    <p:commandButton value="Cancelar" ajax="true" onclick="PF('dlgClave').hide();" process="@this"/>
-                </f:facet>
-            </p:dialog>
+            <p:commandLink value="¿Olvidó su clave de acceso?" onclick="showDlgCambiarClaveDeAcceso('USUARIO');" style="float: right; margin-right: 10px" process="@this"/>
+            <p:commandButton id="submit" value="Ingresar" styleClass="ui-button-info ui-button-raised" 
+                             action="#{loginView.validarUsuario()}" update="@form" ajax="false" style="margin-top: 1.5rem;"/>
+            <p:blockUI block="submit" trigger="submit" />
         </h:form>
+
+
+
     </h:body>
 
     <h:outputStylesheet name="login.css" library="css"/>
