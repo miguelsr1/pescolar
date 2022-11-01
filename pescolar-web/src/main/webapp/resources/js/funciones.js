@@ -43,7 +43,8 @@ function submitform() {
 }
 
 function onClick(nombreBoton) {
-    $('#' + nombreBoton)[0].click()
+    console.log(nombreBoton);
+    $('#' + nombreBoton)[0].click();
     //return true;
 }
 

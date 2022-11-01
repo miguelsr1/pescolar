@@ -448,10 +448,10 @@ public class DetalleOfertaView implements Serializable {
         det.setCantidad(BigInteger.ZERO);
         det.setPrecioUnitario(BigDecimal.ZERO);
         det.setFechaInsercion(LocalDateTime.now());
-        det.setIdParticipante(resAdj.getIdParticipante());
+        det.setIdParticipante(participante);
         det.setUsuarioInsercion("ADMIN");
 
-        resAdj.getIdParticipante().getDetalleOfertasList().add(det);
+        participante.getDetalleOfertasList().add(det);
     }
 
     public void onCellEdit(CellEditEvent event) {

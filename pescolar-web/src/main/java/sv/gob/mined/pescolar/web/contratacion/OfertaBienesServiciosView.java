@@ -61,6 +61,7 @@ public class OfertaBienesServiciosView implements Serializable {
     private String nivelesEducativos;
     private String nombre;
 
+    private int rowEdit = 0;
     private Long idParticipante;
     private Long idRubro;
     private Long idMunicipio;
@@ -129,6 +130,14 @@ public class OfertaBienesServiciosView implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getter-setter">
+    public int getRowEdit() {
+        return rowEdit;
+    }
+
+    public void setRowEdit(int rowEdit) {
+        this.rowEdit = rowEdit;
+    }
+
     public Participante getParticipanteSeleccionado() {
         return participanteSeleccionado;
     }
@@ -361,7 +370,9 @@ public class OfertaBienesServiciosView implements Serializable {
             ofertaBienesServicio = ofertaRepo.findEntityByParam(params);
 
             if (ofertaBienesServicio != null) {
-                PrimeFaces.current().executeScript("onClick('btnModificarOferta')");
+                //editarOferta();
+                cargaItemsPorCe();
+                //PrimeFaces.current().executeScript("onClick('btnModificarOferta')");
             } else {
                 ofertaBienesServicio = new OfertaBienesServicio();
                 ofertaBienesServicio.setIdDetProcesoAdq(detalleProceso);
@@ -523,12 +534,6 @@ public class OfertaBienesServiciosView implements Serializable {
 
     public void guardarOferta() {
         if (ofertaBienesServicio.getId() == null) {
-            //verificar existencia de resguardo
-            /*Long idProcesoAdqAnt = catalogoRepo.getProcesoAnhoAnterior(sessionView.getIdAnho()).getId();
-            lstResguardo = ofertaResguardoRepo.getLstResguardoADisminuir(codigoEntidad, 
-                    sessionView.getIdProcesoAdq(), 
-                    idProcesoAdqAnt,
-                    idRubro);*/
 
             ofertaBienesServicio.setEstadoEliminacion(0l);
             ofertaBienesServicio.setFechaInsercion(LocalDateTime.now());
@@ -536,11 +541,6 @@ public class OfertaBienesServiciosView implements Serializable {
 
             ofertaRepo.save(ofertaBienesServicio);
             JsfUtil.mensajeInsert();
-            //Si existe resguardo se restara de lo que el centro escolar contratará
-            /*if (!lstResguardo.isEmpty()) {
-                PrimeFaces.current().executeScript("PF('dlgResguardo').show();");
-                PrimeFaces.current().ajax().update("outResguardo");
-            }*/
         } else {
 
             ofertaBienesServicio.setFechaModificacion(LocalDateTime.now());
@@ -549,6 +549,7 @@ public class OfertaBienesServiciosView implements Serializable {
             ofertaRepo.update(ofertaBienesServicio);
             JsfUtil.mensajeUpdate();
         }
+        ofertaBienesServicio = ofertaRepo.findByPk(ofertaBienesServicio.getId());
     }
 
     public String editarOfertaParticipante() {

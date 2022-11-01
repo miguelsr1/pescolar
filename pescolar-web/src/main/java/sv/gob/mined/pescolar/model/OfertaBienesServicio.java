@@ -5,10 +5,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.hibernate.annotations.Where;
 import sv.gob.mined.pescolar.model.view.VwCatalogoEntidadEducativa;
 
 @Table(name = "OFERTA_BIENES_SERVICIOS")
 @Entity
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class OfertaBienesServicio implements Serializable {
     @Id
     @Column(name = "ID_OFERTA", nullable = false)

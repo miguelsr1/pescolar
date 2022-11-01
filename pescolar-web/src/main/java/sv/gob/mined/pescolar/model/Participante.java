@@ -20,9 +20,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.hibernate.annotations.OrderBy;
+import org.hibernate.annotations.Where;
 
 @Table(name = "PARTICIPANTES")
 @Entity
+@Where(clause = "ESTADO_ELIMINACION = 0")
 public class Participante implements Serializable {
 
     @Id
