@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,10 +49,16 @@ public class ReportesRepo {
      * @return
      */
     public JasperPrint getRpt(HashMap map, InputStream input) {
+        JasperPrint jp = null;
         try {
             try (input) {
-                Connection conn = em.unwrap(java.sql.Connection.class);
-                return JasperFillManager.fillReport(input, map, conn);
+                try ( Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@//localhost:1521/xe", "PAQUETES", "mined2012")) {
+                    jp = JasperFillManager.fillReport(input, map, conn);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReportesRepo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                return jp;
             }
         } catch (JRException | IOException ex) {
             Logger.getLogger(ReportesRepo.class.getName()).log(Level.SEVERE, null, ex);
@@ -314,7 +322,7 @@ public class ReportesRepo {
         }
         return lstDeclaracion.isEmpty() ? new ArrayList() : lstDeclaracion;
     }
-    
+
     public List<OfertaGlobal> getLstOfertaGlobal(String nit, Long idRubro, Long idAnho) {
 
         List<OfertaGlobal> lstRpt;
@@ -332,7 +340,7 @@ public class ReportesRepo {
 
         return lstRpt;
     }
-    
+
     public List<DetItemOfertaGlobal> getLstItemOfertaGlobal(String nit, Long idRubro, Long idAnho) {
         PreciosRefRubroEmp preTem;
         List<DetItemOfertaGlobal> lst = new ArrayList();
@@ -518,7 +526,7 @@ public class ReportesRepo {
         }
         return lst;
     }
-    
+
     public List<DetMunIntOfertaGlobal> getLstMunIntOfertaGlobal(String nit, Long idRubro, Long idAnho) {
         List<DetMunIntOfertaGlobal> lst = new ArrayList();
         Query q = em.createQuery("SELECT d FROM DisMunicipioIntere d WHERE d.estadoEliminacion=0 and d.idCapaDistribucion.idMuestraInteres.idEmpresa.numeroNit=:nit and d.idCapaDistribucion.idMuestraInteres.idRubroInteres.id=:pIdRubro and d.idCapaDistribucion.idMuestraInteres.idAnho.id=:pIdAnho ORDER BY d.idMunicipio.codigoDepartamento.id, d.idMunicipio.codigoMunicipio ASC", DisMunicipioIntere.class);
@@ -538,6 +546,5 @@ public class ReportesRepo {
         }
         return lst;
     }
-    
-    
+
 }

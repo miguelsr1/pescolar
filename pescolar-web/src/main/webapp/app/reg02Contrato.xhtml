@@ -112,7 +112,7 @@
                                     </h:panelGrid>
                                     <p:outputLabel value="Proveedor: " />
                                     <p:inputText id="txtProveedor" size="70" disabled="#{contratosOrdenesComprasView.deshabilitado}" 
-                                                 value="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(contratosOrdenesComprasView.participante.idEmpresa.id)):contratosOrdenesComprasView.participante.idEmpresa.razonSocial}" readonly="true"/>
+                                                 value="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(contratosOrdenesComprasView.participante.id)):contratosOrdenesComprasView.participante.idEmpresa.razonSocial}" readonly="true"/>
                                 </p:panelGrid>
                             </p:panelGrid>
                         </h:panelGroup>

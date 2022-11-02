@@ -121,10 +121,7 @@
                                 <p:outputLabel value="#{participante.idOferta.idDetProcesoAdq.idRubroAdq.descripcionRubro}"/>
                             </p:column>
                             <p:column headerText="Proveedor">
-                                <p:outputLabel value="#{participante.idEmpresa.razonSocial}"/>
-                            </p:column>
-                            <p:column headerText="¿Contrato?">
-                                <p:outputLabel value="#{participante.idEmpresa.razonSocial}"/>
+                                <p:outputLabel value="#{sessionView.isUsuarioDigitador?'PROVE-'.concat(participante.id):participante.idEmpresa.razonSocial}"/>
                             </p:column>
                             <p:column exportable="false" width="80">
                                 <p:commandButton icon="pi pi-pencil" action="#{ofertaBienesServiciosView.editarDetalleOferta()}"

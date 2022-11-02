@@ -163,7 +163,7 @@
                         <div class="p-field p-grid">
                             <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0">Proveedor</p:outputLabel>
                             <div class="p-col-12 p-md-9" style="font-weight: bold;">
-                                <p:outputLabel rendered="#{detalleOfertaView.activarFiltro}">#{detalleOfertaView.participante.idEmpresa.razonSocial}</p:outputLabel>
+                                <p:outputLabel rendered="#{detalleOfertaView.activarFiltro}">#{sessionView.isUsuarioDigitador?'PROVE-'.concat(detalleOfertaView.participante.id):detalleOfertaView.participante.idEmpresa.razonSocial}</p:outputLabel>
                                 
                                 <p:selectOneMenu id="cboProveedor" value="#{detalleOfertaView.idParticipante}" rendered="#{not detalleOfertaView.activarFiltro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>

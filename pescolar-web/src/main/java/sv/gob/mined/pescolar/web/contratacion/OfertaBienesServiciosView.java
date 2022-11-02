@@ -354,11 +354,11 @@ public class OfertaBienesServiciosView implements Serializable {
 
     public void validacionCodigoEntidadByRubro() {
         sessionView.setIdRubro(idRubro);
-        params.clear();
+        /*params.clear();
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
-        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro).build());
+        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro).build());*/
 
-        detalleProceso = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
+        detalleProceso = JsfUtil.findDetalleByRubroAndAnho(sessionView.getProceso(), idRubro, sessionView.getIdAnho());
 
         if (entidadEducativa.getCodigoDepartamento().getId().equals(sessionView.getUsuario().getCodigoDepartamento().getId()) || sessionView.getUsuario().getIdTipoUsuario().getIdTipoUsuario().compareTo(1l) == 0) {
             params.clear();

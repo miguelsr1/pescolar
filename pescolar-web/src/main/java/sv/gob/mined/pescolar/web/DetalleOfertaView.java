@@ -666,22 +666,6 @@ public class DetalleOfertaView implements Serializable {
             }
         }
 
-        /*switch (resAdj.getIdEstadoReserva().getId().intValue()) {
-            case 1://digitacion
-            case 3://revertida
-                resAdj.setValor(getMontoTotal());
-                resolucionRepo.update(resAdj);
-                break;
-            case 2:
-                JsfUtil.mensajeError("Reserva de fondos APLICADA. Primero debe revertir la reserva para aplicar estos cambios.");
-                urlRed = null;
-                break;
-            case 4:
-            case 5:
-                JsfUtil.mensajeError("La reserva de fondos se encuentra ANULADA/MODIFICADA, No se pueden aplicar cambios.");
-                urlRed = null;
-                break;
-        }*/
         if (!resolucionRepo.validarCambioEstado(resAdj, idEstadoReserva)) {
             JsfUtil.mensajeAlerta("Cambio de estado inválido");
             return "";

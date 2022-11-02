@@ -192,7 +192,7 @@
                 </f:facet>
             </p:dialog>
 
-            <p:dialog id="dlgDetalleProveedor" header="#{sessionView.isUsuarioDigitador?('PROVE-'+concat(ofertaBienesServiciosView.empresaSeleccionada.id)):ofertaBienesServiciosView.empresaSeleccionada.razonSocial}"
+            <p:dialog id="dlgDetalleProveedor" header="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(ofertaBienesServiciosView.empresaSeleccionada.id)):ofertaBienesServiciosView.empresaSeleccionada.razonSocial}"
                       widgetVar="dlgDetalleProveedor" width="670" height="550"  
                       modal="true" position="center center" onShow="PF('dlgDetalleProveedor').initPosition()"
                       dynamic="true" responsive="true" resizable="false" hideEffect="fade" showEffect="fade">

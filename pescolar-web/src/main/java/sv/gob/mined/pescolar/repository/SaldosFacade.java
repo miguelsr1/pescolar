@@ -60,9 +60,9 @@ public class SaldosFacade {
                         param = aplicarSaldos(resAdj, techoCE, estadoReserva, comentarioReversion, usuario, param);
 
                         //Si ya existe un contrato para esta reserva de fondos, se actualizan los datos del resumen de contrataciones
-                        if (!resAdj.getContratosOrdenesComprasList().isEmpty() || resAdj.getIdEstadoReserva().getId().intValue() == 3) {
+                        /*if (!resAdj.getContratosOrdenesComprasList().isEmpty() || resAdj.getIdEstadoReserva().getId().intValue() == 3) {
                             agregarDatosAResumen(resAdj.getContratosOrdenesComprasList().get(0));
-                        }
+                        }*/
                     }
                 } else //DIGITADA -> ANULADA y REVERTIDA -> ANULADA 
                 if ((resAdj.getIdEstadoReserva().getId().intValue() == 1 && estadoReserva.intValue() == 4)

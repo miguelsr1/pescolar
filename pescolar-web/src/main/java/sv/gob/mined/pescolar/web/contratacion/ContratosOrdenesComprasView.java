@@ -730,7 +730,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                                 resolucionAdj = null;
 
                             } else {
-                                if ((sessionView.getUsuario().getIdPersona().getUsuario().equals("MSANCHEZ")
+                                if ((sessionView.getUsuario().getIdPersona().getUsuario().equals("MISANCHEZ")
                                         || sessionView.getUsuario().getIdPersona().getUsuario().equals("RAFAARIAS"))
                                         && resolucionAdj.getIdEstadoReserva().getId().compareTo(5l) == 0) {
                                     buscarHistorialCambios();
@@ -783,6 +783,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
         if (showGarantiaUsoTela) {
             lstSelectDocumentosImp.add(6);
         }
+        PrimeFaces.current().ajax().update("dvDocumentos");
     }
 
 //    private void setPlazoPrevistoEntrega() {
@@ -930,7 +931,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
 //                            }
 
                             param.put("SUBREPORT_DIR", JsfUtil.getPathReportes().concat(Reportes.PATH_REPORTES + "contratos") + File.separator);
-                            param.put("idContrato", current.getId());
+                            param.put("idContrato", new BigDecimal(current.getId()));
                             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
                             param.put("telDirector", (representanteCe.getTelDirector() == null ? "" : representanteCe.getTelDirector()));
                             if (!getSelected().getIdResolucionAdj().getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getDescripcionRubro().contains("UNIFORME")) {
@@ -976,7 +977,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                 case 1://DSConnection SQL
                     switch (rptDoc.getIdTipoRpt().getIdTipoRpt()) {
                         case 10://Declaracion adjudicatorio
-                            param.put("idContrato", current.getId());
+                            param.put("idContrato", new BigDecimal(current.getId()));
                             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
                             param.put("pAnho", detalleProceso.getIdProcesoAdq().getIdAnho().getAnho());
 
@@ -1018,12 +1019,12 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                             }
 
                             param.put("SUBREPORT_DIR", JsfUtil.getPathReportes().concat(Reportes.PATH_REPORTES + "contratos") + File.separator);
-                            param.put("idContrato", current.getId());
+                            param.put("idContrato", new BigDecimal(current.getId()));
                             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
                             param.put("telDirector", (representanteCe.getTelDirector() == null ? "" : representanteCe.getTelDirector()));
                             param.put("bachillerato", bachillerato);
                             param.put("libros", libros);
-                            param.put("idResolucion", resolucionAdj.getId());
+                            param.put("idResolucion", new BigDecimal(resolucionAdj.getId()));
                             if (!getSelected().getIdResolucionAdj().getIdParticipante().getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getDescripcionRubro().contains("UNIFORME")) {
                                 if (getSelected().getFechaOrdenInicio() != null) {
                                     param.put("P_FECHA_INICIO", Herramientas.getNumDia(getSelected().getFechaOrdenInicio()) + " días del mes de " + Herramientas.getNomMes(getSelected().getFechaOrdenInicio()) + " del año  " + Herramientas.getNumAnyo(getSelected().getFechaOrdenInicio()));
@@ -1041,7 +1042,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                             lstRptAImprimir.add(rptTemp);
                             break;
                         case 12:
-                            param.put("pIdContrato", current.getId());
+                            param.put("pIdContrato", new BigDecimal(current.getId()));
                             rptTemp = reporteRepo.getRpt(param, reportes.getPathReporte(rptDoc.getNombreRpt() + ".jasper"));
 
                             lstRptAImprimir.add(rptTemp);

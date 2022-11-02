@@ -198,9 +198,13 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
     }
 
     public List<RptDocumentos> getDocumentosAImprimir(Integer idDetProcesoAdq, List<Integer> lstNumDoc) {
+        List<Short> lst = new ArrayList();
+        lstNumDoc.stream().forEach(val -> {
+            lst.add(val.shortValue());
+        });
         Query q = em.createQuery("SELECT r FROM RptDocumentos r WHERE r.idDetProcesoAdq.id=:idDet and r.idTipoRpt.idTipoRpt in :lst ORDER BY r.orden", RptDocumentos.class);
         q.setParameter("idDet", idDetProcesoAdq);
-        q.setParameter("lst", lstNumDoc);
+        q.setParameter("lst", lst);
 
         return q.getResultList();
     }
