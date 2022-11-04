@@ -72,7 +72,7 @@ public class DetalleOfertaView implements Serializable {
     private BigDecimal montoTotal = BigDecimal.ZERO;
     private BigDecimal saldoActual = BigDecimal.ZERO;
 
-    private List<BigDecimal> lstNiveles = new ArrayList();
+    private List<Long> lstNiveles = new ArrayList();
 
     private List<Filtro> params = new ArrayList();
 
@@ -88,7 +88,7 @@ public class DetalleOfertaView implements Serializable {
 
     private List<PreciosRefRubroEmp> lstPreciosEmp = new ArrayList<>();
     private List<Participante> lstParticipantes = new ArrayList<>();
-    private List<DetalleOferta> lstDetalle = new ArrayList<>();
+    //private List<DetalleOferta> lstDetalle = new ArrayList<>();
 
     @Inject
     private OfertaRepo ofertaRepo;
@@ -120,42 +120,54 @@ public class DetalleOfertaView implements Serializable {
             codigoEntidad = participante.getIdOferta().getCodigoEntidad().getCodigoEntidad();
             detalleProceso = participante.getIdOferta().getIdDetProcesoAdq();
 
-            params.clear();
-            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad", participante.getIdOferta().getCodigoEntidad().getCodigoEntidad()).build());
-            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq", participante.getIdOferta().getIdDetProcesoAdq()).build());
+            lstNiveles = ofertaRepo.getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(detalleProceso.getIdProcesoAdq().getId(), codigoEntidad);
 
-            List<TechoRubroEntEdu> lstTecho = (List<TechoRubroEntEdu>) catalogoRepo.findListByParam(TechoRubroEntEdu.class, params);
-            if (lstTecho.isEmpty()) {
-                JsfUtil.mensajeAlerta("No hay presupuesto para este Centro Educativo");
-                return;
-            }
-            techo = (TechoRubroEntEdu) catalogoRepo.findListByParam(TechoRubroEntEdu.class, params).get(0);
+            if (!lstNiveles.isEmpty()) {
+                params.clear();
+                params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad", participante.getIdOferta().getCodigoEntidad().getCodigoEntidad()).build());
+                params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idDetProcesoAdq", participante.getIdOferta().getIdDetProcesoAdq()).build());
 
-            //recuperando reserva de fondos
-            params.clear();
-            params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idParticipante.id", Long.parseLong(parametros.get("idParticipante"))).build());
-
-            resAdj = catalogoRepo.findByParam(ResolucionesAdjudicativa.class, params);
-            if (resAdj == null) {
-                crearReserva();
-            } else {
-                lstPreciosEmp = precioRefRubroEmpRepo.findPreciosByEmp(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
-
-                idEstadoReserva = resAdj.getIdEstadoReserva().getId();
-
-                switch (resAdj.getIdEstadoReserva().getId().intValue()) {
-                    case 1:
-                    case 3:
-                        editable = true;
-                        lstNiveles = ofertaRepo.getIdNivelesItem(participante.getIdOferta().getCodigoEntidad().getCodigoEntidad(), detalleProceso.getIdProcesoAdq().getId(), detalleProceso.getIdRubroAdq().getIdRubroUniforme().equals(1l));
-                        if (participante.getDetalleOfertasList().isEmpty()) {
-                            agregarTodosLosItems();
-                        }
-                        break;
-                    default:
-                        editable = false;
-                        break;
+                List<TechoRubroEntEdu> lstTecho = (List<TechoRubroEntEdu>) catalogoRepo.findListByParam(TechoRubroEntEdu.class, params);
+                if (lstTecho.isEmpty()) {
+                    JsfUtil.mensajeAlerta("No hay presupuesto para este Centro Educativo");
+                    return;
                 }
+                techo = (TechoRubroEntEdu) catalogoRepo.findListByParam(TechoRubroEntEdu.class, params).get(0);
+
+                if (techo != null && techo.getId() != null) {
+                    //recuperando reserva de fondos
+                    params.clear();
+                    params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idParticipante.id", Long.parseLong(parametros.get("idParticipante"))).build());
+
+                    resAdj = catalogoRepo.findByParam(ResolucionesAdjudicativa.class, params);
+                    lstPreciosEmp = precioRefRubroEmpRepo.findPreciosByEmp(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
+                    
+                    if (resAdj == null) {
+                        crearReserva();
+                    } else {
+
+                        idEstadoReserva = resAdj.getIdEstadoReserva().getId();
+
+                        switch (resAdj.getIdEstadoReserva().getId().intValue()) {
+                            case 1:
+                            case 3:
+                                editable = true;
+                                if (participante.getDetalleOfertasList().isEmpty()) {
+                                    agregarTodosLosItems();
+                                }
+                                break;
+                            default:
+                                editable = false;
+                                break;
+                        }
+                    }
+                } else {
+                    msjError = "Este centro no tiene prespuesto asignado";
+                    mostrarMsj = true;
+                }
+            } else {
+                msjError = "Este centro no tiene matricula registrada";
+                mostrarMsj = true;
             }
         }
     }
@@ -168,20 +180,17 @@ public class DetalleOfertaView implements Serializable {
     }
 
     private void crearReserva() {
+        mostrarMsjPrecio = false;
+        mostrarMsj = false;
         editable = true;
-        idEstadoReserva = 1l;
+        idEstadoReserva = 1l; //digitada
         resAdj = new ResolucionesAdjudicativa();
         resAdj.setIdParticipante(participante);
         resAdj.setValor(BigDecimal.ZERO);
         resAdj.setUsuarioInsercion(sessionView.getUsuario().getIdPersona().getUsuario());
         resAdj.setFechaInsercion(LocalDateTime.now());
         resAdj.setEstadoEliminacion(0l);
-        resAdj.setIdEstadoReserva(catalogoRepo.findEntityByPk(EstadoReserva.class, 1l));
-
-        lstPreciosEmp = precioRefRubroEmpRepo.findPreciosByEmp(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
-
-        //lstNiveles = NivelEducativoRepo.findNivelesByCodigoEntAndProcesoAdq(participante.getIdOferta().getCodigoEntidad().getCodigoEntidad(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getId());
-        lstNiveles = ofertaRepo.getIdNivelesItem(participante.getIdOferta().getCodigoEntidad().getCodigoEntidad(), detalleProceso.getIdProcesoAdq().getId(), detalleProceso.getIdRubroAdq().getIdRubroUniforme().equals(1l));
+        resAdj.setIdEstadoReserva(catalogoRepo.findEntityByPk(EstadoReserva.class, idEstadoReserva));
 
         //en el momento de creación del detalle de oferta, se agregaran todos los items calificados del proveedor
         //seleccionado con el objetivo de facilitar el ingreso de esta información
@@ -191,7 +200,6 @@ public class DetalleOfertaView implements Serializable {
             }
             participante.getResolucionesAdjudicativaList().add(resAdj);
             participanteRepo.update(participante);
-            //verificarItemsEnResguardo();
         } else {
             //bandera para monstrar mensaje que el proveedor no tiene precios de referencia ingresados
             mostrarMsjPrecio = true;
@@ -201,8 +209,8 @@ public class DetalleOfertaView implements Serializable {
     private void agregarTodosLosItems() {
         for (PreciosRefRubroEmp preRefEmp : lstPreciosEmp) {
             if (preRefEmp.getIdProducto().getId().intValue() != 1) {
-                for (BigDecimal idNivel : lstNiveles) {
-                    Long temIdNivel = idNivel.longValue();
+                for (Long idNivel : lstNiveles) {
+                    Long temIdNivel = idNivel;
 
                     if (preRefEmp.getIdNivelEducativo().getId().compareTo(temIdNivel) == 0) {
                         DetalleOferta det = new DetalleOferta();
@@ -226,16 +234,20 @@ public class DetalleOfertaView implements Serializable {
         }
     }
 
+    public String getMsjError() {
+        return msjError;
+    }
+
+    public Boolean getMostrarMsj() {
+        return mostrarMsj;
+    }
+
     public Long getIdParticipante() {
         return idParticipante;
     }
 
     public void setIdParticipante(Long idParticipante) {
         this.idParticipante = idParticipante;
-    }
-
-    private void cargarReserva() {
-
     }
 
     public String getComentarioReversion() {
@@ -258,9 +270,9 @@ public class DetalleOfertaView implements Serializable {
         return lstParticipantes;
     }
 
-    public List<DetalleOferta> getLstDetalle() {
+    /*public List<DetalleOferta> getLstDetalle() {
         return lstDetalle;
-    }
+    }*/
 
     public void setLstParticipantes(List<Participante> lstParticipantes) {
         this.lstParticipantes = lstParticipantes;
@@ -490,7 +502,7 @@ public class DetalleOfertaView implements Serializable {
             item = precio.getIdProducto();
             nivel = precio.getIdNivelEducativo();
 
-            for (BigDecimal idNivel : lstNiveles) {
+            for (Long idNivel : lstNiveles) {
                 switch (idNivel.intValue()) {
                     case 1:
                     case 22:
@@ -599,6 +611,7 @@ public class DetalleOfertaView implements Serializable {
 
     public void cargarParticipantes() {
         sessionView.setIdRubro(idRubro);
+        mostrarMsj = false;
 
         params.clear();
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad.codigoEntidad", entidadEducativa.getCodigoEntidad()).build());
@@ -607,11 +620,20 @@ public class DetalleOfertaView implements Serializable {
 
         lstParticipantes = catalogoRepo.findByParam(OfertaBienesServicio.class, params).getParticipantesList();
 
-        params.clear();
+        /*params.clear();
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro).build());
 
-        detalleProceso = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);
+        detalleProceso = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);*/
+        detalleProceso = JsfUtil.findDetalleByRubroAndAnho(sessionView.getProceso(), idRubro, sessionView.getIdAnho());
+
+        lstNiveles = ofertaRepo.getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(detalleProceso.getIdProcesoAdq().getId(), codigoEntidad);
+
+        if (lstNiveles.isEmpty()) {
+            msjError = "Este centro no tiene matricula registrada";
+            mostrarMsj = true;
+            return;
+        }
 
         params.clear();
         params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "codigoEntidad", entidadEducativa.getCodigoEntidad()).build());
@@ -689,18 +711,17 @@ public class DetalleOfertaView implements Serializable {
 
     public void buscarItemsProveedor() {
         participante = lstParticipantes.stream().filter(par -> par.getId().compareTo(idParticipante) == 0l).findAny().orElse(null);
-
         mostrarMsj = false;
+        
         if (idParticipante != null && idParticipante.compareTo(0l) != 0) {
             try {
-                detalleProceso = participante.getIdOferta().getIdDetProcesoAdq();
-
                 //verificar si el proveedor seleccionado posee precios de referencia
-                if (participanteRepo.isPrecioRef(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId())) {
+                lstPreciosEmp = precioRefRubroEmpRepo.findPreciosByEmp(participante.getIdEmpresa().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdRubroAdq().getId(), participante.getIdOferta().getIdDetProcesoAdq().getIdProcesoAdq().getIdAnho().getId());
+                
+                if (!lstPreciosEmp.isEmpty()) {
 
                     //verificar el estado de la resersolucion adjudicativa
                     resAdj = resolucionRepo.findResolucionesAdjudicativasByIdParticipante(idParticipante);
-                    //int idResolucion;
 
                     if (resAdj == null) {
                         crearReserva();
@@ -712,18 +733,11 @@ public class DetalleOfertaView implements Serializable {
                     switch (idEstadoReserva.intValue()) {
                         case 1://digitacion
                         case 3://revertida
-                            lstDetalle = participante.getDetalleOfertasList();
-
-                            lstPreciosEmp = participanteRepo.findPreciosRefRubroEmpRubro(participante.getIdEmpresa(),
-                                    detalleProceso.getIdRubroAdq().getId(),
-                                    detalleProceso.getIdProcesoAdq().getIdAnho().getId());
-                            lstNiveles = ofertaRepo.getIdNivelesItem(codigoEntidad, detalleProceso.getIdProcesoAdq().getId(), detalleProceso.getIdRubroAdq().getIdRubroUniforme().equals(1l));
-                            /*lstNiveles = ofertaRepo.getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(detalleProceso.getIdProcesoAdq().getId(), participante.getIdOferta().getCodigoEntidad().getCodigoEntidad());
                             //en el momento de creación del detalle de oferta, se agregaran todos los items calificados del proveedor
                             //seleccionado con el objetivo de facilitar el ingreso de esta información
                             if (participante.getDetalleOfertasList().isEmpty()) {
                                 agregarTodosLosItems();
-                            }*/
+                            }
                             break;
                         case 2:
                             JsfUtil.mensajeInformacion("Reserva de fondos APLICADA. Primero debe REVERTIR la reserva para realizar cambios.");
@@ -735,7 +749,7 @@ public class DetalleOfertaView implements Serializable {
                     }
                 } else {
                     //bandera para monstrar mensaje que el proveedor no tiene precios de referencia ingresados
-                    mostrarMsj = true;
+                    mostrarMsjPrecio = true;
                 }
             } catch (Exception e) {
                 Logger.getLogger(DetalleOfertaView.class.getName()).log(Level.INFO, "Error obteniendo el participante {0}", idParticipante);

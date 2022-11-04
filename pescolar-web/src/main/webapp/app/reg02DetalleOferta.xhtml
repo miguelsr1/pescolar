@@ -130,6 +130,10 @@
                             <i class="pi pi-home" style="font-weight: bold;"></i>
                             Datos Generales:
                         </h5>
+                        
+                        <div class="p-col-12" style="display: #{detalleOfertaView.mostrarMsj?'block':'none'}">
+                            <p:staticMessage severity="warn" summary="Alerta" detail="#{detalleOfertaView.msjError}" style="width: 100%"/>
+                        </div>
 
                         <div class="p-field p-grid">
                             <p:outputLabel styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0" for="@next">Centro educativo</p:outputLabel>
@@ -156,7 +160,7 @@
                                 <p:selectOneMenu id="cboRubro" value="#{detalleOfertaView.idRubro}" rendered="#{not detalleOfertaView.activarFiltro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
                                     <f:selectItems value="#{sessionView.lstRubros}" var="rubro" itemValue="#{rubro.id}" itemLabel="#{rubro.descripcionRubro}"/>
-                                    <p:ajax listener="#{detalleOfertaView.cargarParticipantes}" update="cboProveedor lblMontoAdj lblMontoContrato lblMontoSaldo lblMontoPresupuestado"/>
+                                    <p:ajax listener="#{detalleOfertaView.cargarParticipantes}" update="dvDatos cboProveedor lblMontoAdj lblMontoContrato lblMontoSaldo lblMontoPresupuestado"/>
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -168,7 +172,7 @@
                                 <p:selectOneMenu id="cboProveedor" value="#{detalleOfertaView.idParticipante}" rendered="#{not detalleOfertaView.activarFiltro}">
                                     <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="false"/>
                                     <f:selectItems value="#{detalleOfertaView.lstParticipantes}" var="par" itemValue="#{par.id}"  itemLabel="#{sessionView.isUsuarioDigitador?('PROVE-'.concat(par.id)):par.idEmpresa.razonSocial}"/>
-                                    <p:ajax update="tblDetalleOferta lblMontoAdj lblMontoContrato lblMontoSaldo cboEst" listener="#{detalleOfertaView.buscarItemsProveedor}" />
+                                    <p:ajax update="dvDetalleOfe tblDetalleOferta lblMontoAdj lblMontoContrato lblMontoSaldo cboEst" listener="#{detalleOfertaView.buscarItemsProveedor}" />
                                 </p:selectOneMenu>
                             </div>
                         </div>
@@ -251,7 +255,7 @@
                         </p:panelGrid>
                     </div>
                 </div>
-                <div class="p-col-12" style="padding-top: 0.1rem">
+                <div class="p-col-12" style="padding-top: 0.1rem" jsf:id="dvDetalleOfe">
                     <div class="card ui-fluid">
                         <div class="card-header overview-box orange">
                             <h5>
@@ -277,7 +281,7 @@
 
                         <p:dataTable id="tblDetalleOferta" value="#{detalleOfertaView.participante.detalleOfertasList}" var="detalle" 
                                      editable="true" editMode="cell" emptyMessage="No hay registros" sortBy="#{detalle.estadoEliminacion}"
-                                     rowKey="#{detalle.id}" widgetVar="tblDetalleOferta" rowIndexVar="rowId"
+                                     rowKey="#{detalle.id}" widgetVar="tblDetalleOferta" rowIndexVar="rowId" lazy="false"
                                      rowStyleClass="#{detalle.estadoEliminacion eq 1 ? 'filaEliminada' : null}"
                                      styleClass="ui-datatable-striped">
 

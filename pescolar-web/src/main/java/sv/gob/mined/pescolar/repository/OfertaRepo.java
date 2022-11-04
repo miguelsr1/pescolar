@@ -280,14 +280,6 @@ public class OfertaRepo extends AbstractRepository<OfertaBienesServicio, Long> {
         return q.getResultList();
     }
     
-    public List<BigDecimal> getIdNivelesItem(String codigoEntidad, Long idProcesoAdq, boolean isUniforme){
-        String sql = isUniforme?Constantes.QUERY_NIVEL_UNI:Constantes.QUERY_NIVEL_UTI_ZAP;
-        Query q = em.createNativeQuery(sql);
-        q.setParameter(1, codigoEntidad);
-        q.setParameter(2, idProcesoAdq);
-        return q.getResultList();
-    }
-
     public OfertaBienesServicio getOfertaByProcesoCodigoEntidad(String codigoEntidad, DetalleProcesoAdq proceso) {
         Query q = em.createQuery("SELECT o FROM OfertaBienesServicio o WHERE o.codigoEntidad.codigoEntidad=:codigoEntidad and o.idDetProcesoAdq=:proceso and o.estadoEliminacion = 0", OfertaBienesServicio.class);
         q.setParameter("codigoEntidad", codigoEntidad);
