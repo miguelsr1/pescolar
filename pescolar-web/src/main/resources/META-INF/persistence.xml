@@ -82,6 +82,8 @@
     <class>sv.gob.mined.pescolar.model.dto.contratacion.VwRptContratoJurCabecera</class>
     <class>sv.gob.mined.pescolar.model.dto.contratacion.VwRptPagare</class>
     <class>sv.gob.mined.pescolar.model.dto.contratacion.DetalleItemDto</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.ActaRecomendacionDto</class>
+    <class>sv.gob.mined.pescolar.model.dto.contratacion.PorcentajesProveDto</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>

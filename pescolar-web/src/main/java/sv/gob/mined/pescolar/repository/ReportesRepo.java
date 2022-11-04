@@ -52,7 +52,7 @@ public class ReportesRepo {
         JasperPrint jp = null;
         try {
             try (input) {
-                try ( Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@//localhost:1521/xe", "PAQUETES", "mined2012")) {
+                try ( Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@//192.168.20.50:1521/mined", "PAQUETES", "mined2012")) {
                     jp = JasperFillManager.fillReport(input, map, conn);
                 } catch (SQLException ex) {
                     Logger.getLogger(ReportesRepo.class.getName()).log(Level.SEVERE, null, ex);

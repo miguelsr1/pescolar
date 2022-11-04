@@ -546,6 +546,23 @@ public class Constantes {
             + "    liq.estado_liquidacion,\n"
             + "    liq.fecha_liquidacion,\n"
             + "    liq.fecha_recepcion";
+    public static final String QUERY_NIVEL_UTI_ZAP = "select nvl(id_nivel_educativo,0) as id_nivel_educativo from (select distinct\n"
+            + "    case \n"
+            + "        when id_nivel_educativo in (25,26,28,29) then 22\n"
+            + "        when id_nivel_educativo in (10,11,12) then 3\n"
+            + "        when id_nivel_educativo in (13,14,15) then 4\n"
+            + "        when id_nivel_educativo in (7,8,9) then 5\n"
+            + "        when id_nivel_educativo in (16,17,18) then 6\n"
+            + "    end id_nivel_educativo\n"
+            + "from estadistica_censo where codigo_entidad = ?1 AND id_proceso_Adq=?2 and (masculino >0 OR femenimo > 0))";
+    public static final String QUERY_NIVEL_UNI = "select nvl(id_nivel_educativo,0) as id_nivel_educativo\n"
+            + "from (select distinct\n"
+            + "    case \n"
+            + "        when id_nivel_educativo in (25,26,28,29) then 22\n"
+            + "        when id_nivel_educativo in (10,11,12,13,14,15,7,8,9) then 2\n"
+            + "        when id_nivel_educativo in (16,17,18) then 6\n"
+            + "    end id_nivel_educativo\n"
+            + "from estadistica_censo where codigo_entidad = ?1 AND id_proceso_Adq=?2 and (masculino >0 OR femenimo > 0))";
     public static final String QUERY_LIQUIDACION_MODIF = "select     con.id_contrato      as idContrato, \n"
             + "    vw.codigo_entidad    as codigoEntidad,\n"
             + "    vw.nombre,\n"

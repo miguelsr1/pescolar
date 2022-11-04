@@ -1625,36 +1625,4 @@ public class EstadisticasCensoView implements Serializable {
         }
     }
 
-    /*public void enviarCorreos() {
-        String titulo = "Validacion de matricula y resguardo de bienes";
-        String mensaje = UTIL_CORREO.getString("contratacion.estadistica.correo.cuerpo");
-
-        List<OrganizacionEducativa> lst = entidadEducativaRepo.lstCorreosDirectores();
-        HashMap<String, String> archivos = new HashMap<>();
-        archivos.put("PDF", "DeclaraciónJuradaDirectores.pdf");
-        archivos.put("XLXS", "FormatoValidación.xlsx");
-
-        List<String> to = new ArrayList();
-        List<String> cc = new ArrayList();
-
-        to.add("miguel.sanchez@mined.gob.sv");
-
-        lst.forEach((org) -> {
-            to.add(org.getCorreoElectronico());
-        });
-
-        to.add("rafael.arias@mined.gob.sv");
-
-        to.forEach((string) -> {
-            List<String> lista = new ArrayList();
-            lista.add(string);
-
-            mailRepo.enviarMail(titulo,
-                    mensaje,
-                    lista,
-                    cc,
-                    new ArrayList());
-            Logger.getLogger(EstadisticasCensoView.class.getName()).log(Level.INFO, "Correo enviado a: {0}", string);
-        });
-    }*/
 }

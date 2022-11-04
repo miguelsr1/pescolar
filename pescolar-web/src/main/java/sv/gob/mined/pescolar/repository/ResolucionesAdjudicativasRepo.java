@@ -16,6 +16,9 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.Query;
+import org.jdbi.v3.core.Handle;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
 import sv.gob.mined.pescolar.model.CatalogoProducto;
 import sv.gob.mined.pescolar.model.ContratosOrdenesCompra;
 import sv.gob.mined.pescolar.model.DetalleOferta;
@@ -29,6 +32,7 @@ import sv.gob.mined.pescolar.model.dto.contratacion.ParticipanteDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.ResguardoDto;
 import sv.gob.mined.pescolar.model.dto.contratacion.VwRptContratoJurCabecera;
 import sv.gob.mined.pescolar.model.dto.contratacion.VwRptPagare;
+import sv.gob.mined.pescolar.model.dto.contratacion.ActaRecomendacionDto;
 
 /**
  *
@@ -163,7 +167,7 @@ public class ResolucionesAdjudicativasRepo extends AbstractRepository<Resolucion
     public List<ContratoDto> generarRptNotaAdjudicacion(Long idResolucion) {
         Query query = em.createNamedQuery("Contratacion.RptNotaAdjudicacionBean", ContratoDto.class);
         query.setParameter(1, idResolucion);
-
+        
         List<ContratoDto> lstNotaAdj = query.getResultList();
         if (!lstNotaAdj.isEmpty()) {
             query = em.createQuery("SELECT r.idParticipante.idEmpresa.idPersoneria.id, r.idParticipante.idEmpresa.distribuidor FROM ResolucionesAdjudicativa r WHERE r.id=:idResolucion");

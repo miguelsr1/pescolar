@@ -11,111 +11,37 @@ import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.Id;
 import javax.persistence.SqlResultSetMapping;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author misanchez
  */
+@Setter
+@Getter
 @Entity
-@XmlRootElement
 @SqlResultSetMapping(name = "defaultDetalleItemDto",
         entities = @EntityResult(entityClass = DetalleItemDto.class))
 public class DetalleItemDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    private Long idRow;
-    private String razonSocial;
+    private BigDecimal idRow;
+    @Transient
     private String noItem;
+    @Transient
     private String consolidadoEspTec;
+    @Transient
+    private String razonSocial;
+    @Transient
     private String nombreProveedor;
+    @Transient
     private BigInteger cantidad;
+    @Transient
     private BigDecimal precioUnitario;
+    @Transient
     private BigDecimal subTotal;
-    private Long idContrato;
-    private Long idResolucionAdj;
 
-    public DetalleItemDto() {
-    }
-
-    public Long getIdRow() {
-        return idRow;
-    }
-
-    public void setIdRow(Long idRow) {
-        this.idRow = idRow;
-    }
-
-    public String getRazonSocial() {
-        return razonSocial;
-    }
-
-    public void setRazonSocial(String razonSocial) {
-        this.razonSocial = razonSocial;
-    }
-
-    public String getNoItem() {
-        return noItem;
-    }
-
-    public void setNoItem(String noItem) {
-        this.noItem = noItem;
-    }
-
-    public String getConsolidadoEspTec() {
-        return consolidadoEspTec;
-    }
-
-    public void setConsolidadoEspTec(String consolidadoEspTec) {
-        this.consolidadoEspTec = consolidadoEspTec;
-    }
-
-    public String getNombreProveedor() {
-        return nombreProveedor;
-    }
-
-    public void setNombreProveedor(String nombreProveedor) {
-        this.nombreProveedor = nombreProveedor;
-    }
-
-    public BigInteger getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigInteger cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    public BigDecimal getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(BigDecimal subTotal) {
-        this.subTotal = subTotal;
-    }
-
-    public Long getIdContrato() {
-        return idContrato;
-    }
-
-    public void setIdContrato(Long idContrato) {
-        this.idContrato = idContrato;
-    }
-
-    public Long getIdResolucionAdj() {
-        return idResolucionAdj;
-    }
-
-    public void setIdResolucionAdj(Long idResolucionAdj) {
-        this.idResolucionAdj = idResolucionAdj;
-    }
 }

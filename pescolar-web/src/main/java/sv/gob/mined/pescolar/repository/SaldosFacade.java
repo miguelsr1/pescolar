@@ -71,7 +71,7 @@ public class SaldosFacade {
                 } else //APLICADA -> REVERTIDA
                 if (resAdj.getIdEstadoReserva().getId().intValue() == 2 && estadoReserva.intValue() == 3) {
                     param = aplicarSaldos(resAdj, techoCE, estadoReserva, comentarioReversion, usuario, param);
-                    removerDatosResumen(resAdj);
+                    //removerDatosResumen(resAdj);
                 }
             } else {
                 param.put("error", "Se ha generado un error en la aplicación de fondos.");
@@ -178,6 +178,7 @@ public class SaldosFacade {
                 res.setIdEstadoReserva(em.find(EstadoReserva.class, idEstadoReserva));
                 res.setUsuarioModificacion(usuario);
                 res.setFechaModificacion(LocalDateTime.now());
+                res.setValor(res.getIdParticipante().getMonto());
 
                 em.merge(techoCE);
                 res = em.merge(res);

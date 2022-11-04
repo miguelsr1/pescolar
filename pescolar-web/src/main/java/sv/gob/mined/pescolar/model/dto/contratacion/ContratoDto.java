@@ -7,28 +7,26 @@ package sv.gob.mined.pescolar.model.dto.contratacion;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.Id;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author DesarrolloPc
  */
 @Entity
-@XmlRootElement
 @SqlResultSetMapping(name = "defaultRptContrato",
         entities = @EntityResult(entityClass = ContratoDto.class))
 public class ContratoDto implements Serializable {
 
     @Id
-    private Long idRow;
+    private BigDecimal idRow;
     private BigDecimal montoContratoModif;
     private String descripcionRubro;
     private String numeroContrato;
@@ -56,14 +54,14 @@ public class ContratoDto implements Serializable {
     private BigInteger idResolucionAdj;
     private BigInteger distribuidor;
 
-    private LocalDateTime fechaOrdenInicio;
-    private LocalDateTime fechaCreacionModif;
-    private LocalDateTime fechaContratoModif;
-    private LocalDateTime fechaNota;
-    private LocalDateTime fechaSolicitud;
-    private LocalDateTime fechaResolucion;
-    private LocalDateTime fechaInicio;
-    private LocalDateTime fechaFin;
+    private Date fechaOrdenInicio;
+    private Date fechaCreacionModif;
+    private Date fechaContratoModif;
+    private Date fechaNota;
+    private Date fechaSolicitud;
+    private Date fechaResolucion;
+    private Date fechaInicio;
+    private Date fechaFin;
 
     @Transient
     private List<DetalleItemDto> lstDetalleOld = new ArrayList();
@@ -77,11 +75,11 @@ public class ContratoDto implements Serializable {
     public ContratoDto() {
     }
 
-    public Long getIdRow() {
+    public BigDecimal getIdRow() {
         return idRow;
     }
 
-    public void setIdRow(Long idRow) {
+    public void setIdRow(BigDecimal idRow) {
         this.idRow = idRow;
     }
 
@@ -93,11 +91,11 @@ public class ContratoDto implements Serializable {
         this.descripcionRubro = DescripcionRubro;
     }
 
-    public LocalDateTime getFechaCreacionModif() {
+    public Date getFechaCreacionModif() {
         return fechaCreacionModif;
     }
 
-    public void setFechaCreacionModif(LocalDateTime fechaCreacionModif) {
+    public void setFechaCreacionModif(Date fechaCreacionModif) {
         this.fechaCreacionModif = fechaCreacionModif;
     }
 
@@ -133,11 +131,11 @@ public class ContratoDto implements Serializable {
         this.modalidadAdministrativa = modalidadAdministrativa;
     }
 
-    public LocalDateTime getFechaContratoModif() {
+    public Date getFechaContratoModif() {
         return fechaContratoModif;
     }
 
-    public void setFechaContratoModif(LocalDateTime fechaContratoModif) {
+    public void setFechaContratoModif(Date fechaContratoModif) {
         this.fechaContratoModif = fechaContratoModif;
     }
 
@@ -157,11 +155,11 @@ public class ContratoDto implements Serializable {
         this.plazoContrato = plazoContrato;
     }
 
-    public LocalDateTime getFechaOrdenInicio() {
+    public Date getFechaOrdenInicio() {
         return fechaOrdenInicio;
     }
 
-    public void setFechaOrdenInicio(LocalDateTime fechaOrdenInicio) {
+    public void setFechaOrdenInicio(Date fechaOrdenInicio) {
         this.fechaOrdenInicio = fechaOrdenInicio;
     }
 
@@ -270,43 +268,43 @@ public class ContratoDto implements Serializable {
         this.minutoRegistro = minutoRegistro;
     }
 
-    public LocalDateTime getFechaNota() {
+    public Date getFechaNota() {
         return fechaNota;
     }
 
-    public void setFechaNota(LocalDateTime fechaNota) {
+    public void setFechaNota(Date fechaNota) {
         this.fechaNota = fechaNota;
     }
 
-    public LocalDateTime getFechaSolicitud() {
+    public Date getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public void setFechaSolicitud(LocalDateTime fechaSolicitud) {
+    public void setFechaSolicitud(Date fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
 
-    public LocalDateTime getFechaResolucion() {
+    public Date getFechaResolucion() {
         return fechaResolucion;
     }
 
-    public void setFechaResolucion(LocalDateTime fechaResolucion) {
+    public void setFechaResolucion(Date fechaResolucion) {
         this.fechaResolucion = fechaResolucion;
     }
 
-    public LocalDateTime getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(LocalDateTime fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public LocalDateTime getFechaFin() {
+    public Date getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(LocalDateTime fechaFin) {
+    public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
 

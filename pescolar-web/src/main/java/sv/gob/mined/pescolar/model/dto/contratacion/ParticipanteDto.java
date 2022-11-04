@@ -5,25 +5,26 @@
 package sv.gob.mined.pescolar.model.dto.contratacion;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.Id;
 import javax.persistence.SqlResultSetMapping;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.Transient;
 
 /**
  *
  * @author misanchez
  */
 @Entity
-@XmlRootElement
 @SqlResultSetMapping(name = "defaultParticipanteDto",
         entities = @EntityResult(entityClass = ParticipanteDto.class))
 public class ParticipanteDto implements Serializable {
 
     @Id
-    private Long idRow;
+    private BigDecimal idRow;
     private String razonSocial;
+    @Transient
     private int id;
 
     public ParticipanteDto() {
@@ -32,11 +33,11 @@ public class ParticipanteDto implements Serializable {
     public ParticipanteDto(int i, String p) {
     }
 
-    public Long getIdRow() {
+    public BigDecimal getIdRow() {
         return idRow;
     }
 
-    public void setIdRow(Long idRow) {
+    public void setIdRow(BigDecimal idRow) {
         this.idRow = idRow;
     }
 

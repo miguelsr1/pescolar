@@ -48,7 +48,7 @@
                         <p:menuitem value="Guardar" icon="pi pi-save" disabled="true"/>
                         <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
-                        
+
                         <f:facet  name="options">  
                             <p:commandButton icon="pi pi-sign-out" value="Salir" action="#{sessionView.logout()}" process="@this"/>
                         </f:facet>
@@ -129,8 +129,14 @@
                                     <f:setPropertyActionListener value="#{participante.id}" target="#{ofertaBienesServiciosView.idParticipante}" />
                                 </p:commandButton>
                                 <p:spacer width="10"/>
-                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this" >
-                                    <f:setPropertyActionListener value="#{product}" target="#{crudDemoView.selectedProduct}" />
+
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this" oncomplete="PF('confirmDialog').show();">
+                                    <p:outputLabel rendered="#{!participante.eliminar}"> <i class="fa fa-trash"></i></p:outputLabel>
+                                    <p:outputLabel rendered="#{participante.eliminar}"> <i class="fa fa-minus-circle"></i></p:outputLabel>
+                                    <f:setPropertyActionListener value="#{participante}" target="#{ofertaBienesServiciosView.participanteSeleccionado}"/>  
+                                    <f:setPropertyActionListener value="#{rowId}" target="#{ofertaBienesServiciosView.rowEdit}"/>  
+
+                                    <f:viewParam name="idParticipante" value="#{participante.id}"/>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
@@ -138,6 +144,15 @@
                 </div>
             </div>
         </h:form>
+
+        <p:confirmDialog id="confirmDialog" message="¿Esta seguro de eliminar el proveedor seleccionado?" severity="alert" appendTo="@(body)" 
+                         header="Confirmación" widgetVar="confirmDialog" closable="false" showEffect="fade" hideEffect="fade">  
+            <p:commandButton id="confirm" value="Si" icon="fa fa-check-circle" ajax="true" process="@this" actionListener="#{ofertaBienesServiciosView.deleteParticipante}" 
+                             update="tblParticipantes" oncomplete="PF('confirmDialog').hide();"/>  
+            <p:commandButton id="decline" value="No" onclick="PF('confirmDialog').hide();" type="button" icon="fa fa-times-circle"/>
+
+        </p:confirmDialog>
+
         <h:outputStylesheet name="personalizadas.css" library="css"/>
     </ui:define>
 </ui:composition>

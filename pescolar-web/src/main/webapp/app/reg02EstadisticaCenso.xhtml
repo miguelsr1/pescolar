@@ -9,7 +9,7 @@
         <script type="text/javascript">
             function calcularSubTotalMatriculaIniPar(val1, val2, val3, val4, val5, lblVal, lblNivel) {
                 let costoLibro = 0.5;
-                
+
                 var val1M = $("#" + val1 + "_input").val();
                 var val2M = $("#" + val2 + "_input").val();
                 var val3M = $("#" + val3 + "_input").val();
@@ -39,7 +39,7 @@
 
             function calcularSubTotalMatriculaNivelEdu(val1, val2, val3, lblVal, lblNivel) {
                 let costoLibro = 0.5;
-                
+
                 var val1M = $("#" + val1 + "_input").val();
                 var val2M = $("#" + val2 + "_input").val();
                 var val3M = $("#" + val3 + "_input").val();
@@ -118,7 +118,7 @@
                 calcularMontoPorNivel('txtPar6F', 'txtPar6M', 'Par6');
 
                 calcularSubTotalMatriculaIniPar('txtIni2F', 'txtIni3F', 'txtPar4F', 'txtPar5F', 'txtPar6F', 'txtIPFem', 'IP');
-                calcularSubTotalMatriculaIniPar('txtIni2M', 'txtIni3M', 'txtPar4M', 'txtPar5F', 'txtPar6F', 'txtIPMas', 'IP');
+                calcularSubTotalMatriculaIniPar('txtIni2M', 'txtIni3M', 'txtPar4M', 'txtPar5M', 'txtPar6M', 'txtIPMas', 'IP');
 
                 //calcularMontoPorNivel('txtParF', 'txtParM', 'Par');
                 calcularMontoPorNivel('txt1gfem', 'txt1gmas', 'G1');
@@ -234,7 +234,7 @@
                         <p:menuitem value="Modificar" icon="pi pi-pencil" disabled="true"/>
                         <p:menuitem value="Buscar"  icon="pi pi-search" disabled="true"/>
                         <p:menuitem value="Guardar" icon="pi pi-save" action="#{estadisticasCensoView.guardar}" disabled="#{sessionView.usuarioSoloLectura}"/>
-                        <p:menuitem value="Imprimir" icon="pi pi-print" disabled="true"/>
+                        <p:menuitem value="Imprimir" icon="pi pi-print" ajax="true" onclick="PF('dlgImprimir').show();" disabled="true"/>
                         <p:menuitem value="Principal" icon="pi pi-home" action="#{sessionView.gotoPrincipalPage()}" actionListener="#{guestPreferences.ocultarMenu()}"/>
 
                         <f:facet  name="options">  
@@ -869,6 +869,26 @@
                     </div>
                 </div>
             </div>
+
+            <p:dialog id="dlgImprimir" widgetVar="dlgImprimir" header="Tipo de documento" modal="true" >
+                <p:panel>
+                    <p:outputLabel value="Seleccione los rubros de los cuales desea genera la Certificación Presupuestaria" escape="false"/>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Confección de uniformes"/>
+                        <p:selectBooleanCheckbox value="#{estadisticasCensoView.uniformes}"/>
+                        <p:outputLabel value="Páquete de útiles escolares"/>
+                        <p:selectBooleanCheckbox value="#{estadisticasCensoView.utiles}"/>
+                        <p:outputLabel value="Zapatos escolares"/>
+                        <p:selectBooleanCheckbox value="#{estadisticasCensoView.zapatos}"/>
+                        <p:outputLabel value="Declaración Jurada"/>
+                        <p:selectBooleanCheckbox value="#{estadisticasCensoView.declaracion}"/>
+                    </h:panelGrid>
+                </p:panel>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" onclick="PF('dlgImprimir').hide();" ajax="false" action="#{estadisticasCensoView.imprimir}"/>
+                    <p:commandButton value="Cancelar" ajax="true" onclick="PF('dlgImprimir').hide();"/>
+                </f:facet>
+            </p:dialog>
         </h:form>
         <h:outputStylesheet name="personalizadas.css" library="css"/>
     </ui:define>

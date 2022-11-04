@@ -412,7 +412,7 @@ public class OfertaBienesServiciosView implements Serializable {
     public void agregarProveedor() {
         Long cantidad;
         String idMunicipios;
-        municipioCe = entidadEducativa.getIdMunicipio().getNombreMunicipio().concat((entidadEducativa.getNombreCanton() == null ? "" : entidadEducativa.getNombreCanton()));
+        municipioCe = entidadEducativa.getIdMunicipio().getNombreMunicipio().concat((entidadEducativa.getNombreCanton() == null ? ", " : entidadEducativa.getNombreCanton()));
 
         if (detalleProceso.getIdRubroAdq().getIdRubroUniforme() == 1l) {
             cantidad = cantidadAlumnos * 2l; //dos piezas por uniforme
