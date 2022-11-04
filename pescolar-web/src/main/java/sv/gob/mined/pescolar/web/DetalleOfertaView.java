@@ -622,11 +622,6 @@ public class DetalleOfertaView implements Serializable {
         if (oferta != null) {
             lstParticipantes = oferta.getParticipantesList();
 
-            /*params.clear();
-        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idProcesoAdq.id", sessionView.getIdProcesoAdq()).build());
-        params.add(Filtro.builder().crearFiltro(TipoOperador.EQUALS, "idRubroAdq.id", idRubro).build());
-
-        detalleProceso = catalogoRepo.findByParam(DetalleProcesoAdq.class, params);*/
             detalleProceso = JsfUtil.findDetalleByRubroAndAnho(sessionView.getProceso(), idRubro, sessionView.getIdAnho());
 
             lstNiveles = ofertaRepo.getLstNivelesConMatriculaReportadaByIdProcesoAdqAndCodigoEntidad(detalleProceso.getIdProcesoAdq().getId(), codigoEntidad);
