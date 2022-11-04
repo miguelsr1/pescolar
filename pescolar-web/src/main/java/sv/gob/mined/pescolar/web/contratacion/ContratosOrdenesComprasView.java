@@ -893,42 +893,12 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                             }
 
                             break;
-                        case 3://Acta Adjudicacion
-//                            if (detalleProceso.getIdProcesoAdq().getDescripcionProcesoAdq().contains("MODALIDADES FLEXIBLES")) {
-//                                param.put("descripcionRubro", "SUMINISTRO DE LIBROS DE MATEMÁTICA");
-//                            }
-
-                            param.put("SUBREPORT_DIR", JsfUtil.getPathReportes().concat(Reportes.PATH_REPORTES + "notasactas") + File.separator);
-                            param.put("pPorcentajeCapa", detalleProceso.getIdRubroAdq().getIdRubroUniforme().intValue() == 1 ? "25" : "35");
-                            param.put("pPorcentajeGeo", detalleProceso.getIdRubroAdq().getIdRubroUniforme().intValue() == 1 ? "35" : "25");
-                            param.put("pPorcentajePrecio", detalleProceso.getIdRubroAdq().getId().intValue() == 2 ? "45" : "40");
-                            rptTemp = reporteRepo.getRpt(param, reportes.getPathReporte(rptDoc.getNombreRpt() + ".jasper"), resoRepo.generarRptActaAdjudicacion(current.getIdResolucionAdj().getId()));
-
-                            lstRptAImprimir.add(rptTemp);
-                            break;
-                        case 4://Nota Adjudicacion
-//                            if (detalleProceso.getIdProcesoAdq().getDescripcionProcesoAdq().contains("MODALIDADES FLEXIBLES")) {
-//                                param.put("descripcionRubro", "SUMINISTRO DE LIBROS DE MATEMÁTICA");
-//                            }
-
-                            param.put("SUBREPORT_DIR", JsfUtil.getPathReportes().concat(Reportes.PATH_REPORTES + "notasactas") + File.separator);
-                            rptTemp = reporteRepo.getRpt(param, reportes.getPathReporte(rptDoc.getNombreRpt() + ".jasper"), resoRepo.generarRptNotaAdjudicacion(current.getIdResolucionAdj().getId()));
-
-                            lstRptAImprimir.add(rptTemp);
-                            lstRptAImprimir.add(rptTemp);
-                            break;
+                        
                         case 5://Garantia Cumplimiento
                         case 6://Garantia Uso Tela
-//                            if (detalleProceso.getIdProcesoAdq().getDescripcionProcesoAdq().contains("MODALIDADES FLEXIBLES")) {
-//                                param.put("descripcionRubro", "SUMINISTRO DE LIBROS DE MATEMÁTICA");
-//                            }
-
                             lstRptAImprimir.add(reporteRepo.getRpt(param, reportes.getPathReporte(rptDoc.getNombreRpt() + ".jasper"), resoRepo.generarRptGarantia(current.getIdResolucionAdj().getId(), current.getId())));
                             break;
                         case 7://Contrato
-//                            if (detalleProceso.getIdProcesoAdq().getDescripcionProcesoAdq().contains("MODALIDADES FLEXIBLES")) {
-//                                param.put("descripcionRubro", "SUMINISTRO DE LIBROS DE MATEMÁTICA");
-//                            }
 
                             param.put("SUBREPORT_DIR", JsfUtil.getPathReportes().concat(Reportes.PATH_REPORTES + "contratos") + File.separator);
                             param.put("idContrato", new BigDecimal(current.getId()));
@@ -976,6 +946,26 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                     break;
                 case 1://DSConnection SQL
                     switch (rptDoc.getIdTipoRpt().getIdTipoRpt()) {
+                        case 3://Acta Adjudicacion
+
+                            param.put("SUBREPORT_DIR", JsfUtil.getPathReportes().concat(Reportes.PATH_REPORTES + "notasactas") + File.separator);
+                            param.put("pPorcentajeCapa", detalleProceso.getIdRubroAdq().getIdRubroUniforme().intValue() == 1 ? "25" : "35");
+                            param.put("pPorcentajeGeo", detalleProceso.getIdRubroAdq().getIdRubroUniforme().intValue() == 1 ? "35" : "25");
+                            param.put("pPorcentajePrecio", detalleProceso.getIdRubroAdq().getId().intValue() == 2 ? "45" : "40");
+                            param.put("pIdOferta", current.getIdResolucionAdj().getIdParticipante().getIdOferta().getId());
+                            rptTemp = reporteRepo.getRpt(param, reportes.getPathReporte(rptDoc.getNombreRpt() + ".jasper"));
+
+                            lstRptAImprimir.add(rptTemp);
+                            break;
+                        case 4://Nota Adjudicacion
+
+                            param.put("SUBREPORT_DIR", JsfUtil.getPathReportes().concat(Reportes.PATH_REPORTES + "notasactas") + File.separator);
+                            param.put("pIdResolucionAdj", current.getIdResolucionAdj().getId());
+                            rptTemp = reporteRepo.getRpt(param, reportes.getPathReporte(rptDoc.getNombreRpt() + ".jasper"));
+
+                            lstRptAImprimir.add(rptTemp);
+                            lstRptAImprimir.add(rptTemp);
+                            break;
                         case 10://Declaracion adjudicatorio
                             param.put("idContrato", new BigDecimal(current.getId()));
                             param.put("ubicacionImagenes", ctx.getRealPath(Reportes.PATH_IMAGENES) + File.separator);
@@ -1032,9 +1022,7 @@ public class ContratosOrdenesComprasView extends RecuperarProcesoUtil implements
                                     param.put("P_FECHA_INICIO", "SIN DEFINIR");
                                 }
                             }
-//                            if (detalleProceso.getIdProcesoAdq().getDescripcionProcesoAdq().contains("MODALIDADES FLEXIBLES")) {
-//                                param.put("descripcionRubro", "SUMINISTRO DE LIBROS DE MATEMÁTICA");
-//                            }
+                            
                             nombreRpt = rptDoc.getNombreRpt().concat(perNatural ? "Nat" : "Jur");
                             rptTemp = reporteRepo.getRpt(param, reportes.getPathReporte(nombreRpt + ".jasper"));
 
