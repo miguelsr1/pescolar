@@ -329,7 +329,8 @@ public class RubroPorCeView implements Serializable {
                 } else {
                     rubroporce = new RubroPorCe();
                     rubroporce.setCodigoEntidad(seleccionentidadEducativa.get(i));
-                    rubroporce.setIdProcesoAdq(null);
+                    //rubroporce.setIdProcesoAdq(null); //comentado OAM 04Nov2022
+                    rubroporce.setIdProcesoAdq(sessionView.getProceso()); //agregado OAM 04Nov2022
                     rubroporce.setIdRubroInteres(rubrosamostrarinteresrepo.listarrubroporid(codigoRubro));
                     rubroporce.setFecha(LocalDate.now());
                     rubroporce.setEstadoEliminacion(Boolean.FALSE);
